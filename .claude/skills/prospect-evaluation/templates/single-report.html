@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{Business Name}} — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  /* Banner */
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  /* TOC */
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  /* Chips */
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  /* Simple inline SVG bar chart container */
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>{{Business Name}} — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        {{YYYY-MM-DD}} &nbsp;·&nbsp;
+        Lead source: {{lead source}}
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict pass">Buy Box: PASS</span>
+      <!-- Replace "pass" with "conditional" or "fail" and update label as needed -->
+      <div class="score-badge">
+        <div class="num">{{XX}}</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals & Leadership</a></li>
+      <li><a href="#products">4. Products & Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers & Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook & Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue & profit growth</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>{{evidence}}</td></tr>
+          <tr><td>6</td><td>DSCR > 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>5</td><td>FF&E value</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>9</td><td>Business address</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>{{}} <span class="est">(est.)</span></td><td>{{}}</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>{{}} <span class="est">(est.)</span></td><td>{{}}</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>{{}}</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>{{}}</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>{{}}</td><td>{{}}</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td><a href="{{}}">{{}}</a></td><td>{{}}</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>{{XX}} / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>{{}}</td><td>20</td><td>{{}}</td></tr>
+          <tr><td>EBITDA tier</td><td>{{}}</td><td>15</td><td>{{}}</td></tr>
+          <tr><td>Years in business ≥10</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>Recurring revenue</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>{{}}</td><td>5</td><td>{{}}</td></tr>
+          <tr><td>Employees ≥10</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>Valuation multiple</td><td>{{}}</td><td>15</td><td>{{}}</td></tr>
+          <tr><td>Low owner dependence</td><td>{{}}</td><td>5</td><td>{{}}</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>{{XX}}</strong></td><td><strong>100</strong></td><td></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> {{}}</li>
+        <li><strong>Financial highlights:</strong> {{}}</li>
+        <li><strong>Buy Box summary:</strong> {{}}</li>
+        <li><strong>Why pursue (or not):</strong> {{}}</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p>{{Background, ownership, milestones, org structure.}}</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals & Leadership</h2>
+      <h3>{{Name}} — {{Title}}</h3>
+      <p>{{Background, contact, notable activities.}}</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products & Services</h2>
+      <p>{{Descriptions, pricing model, differentiators.}}</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p>{{Industry size/trends, drivers, barriers, peer benchmarks.}}</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers & Revenue Model</h2>
+      <p>{{Segments, retention, recurring/one-time split, top customer %.}}</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>{{}}</td><td>{{}}</td><td>{{}}</td><td>—</td></tr>
+          <tr><td>2023</td><td>{{}}</td><td>{{}}</td><td>{{}}</td><td>{{%}}</td></tr>
+          <tr><td>2024</td><td>{{}}</td><td>{{}}</td><td>{{}}</td><td>{{%}}</td></tr>
+          <tr><td>2025 (annualized)</td><td>{{}}</td><td>{{}}</td><td>{{}}</td><td>{{%}}</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <!-- Hand-roll an inline SVG bar chart from the year data; example scaffold: -->
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M)</text>
+          </g>
+          <!-- Replace bars + labels with real data at render time -->
+          <g fill="#5aa7ff">
+            <rect x="60"  y="120" width="60" height="40" rx="3" />
+            <rect x="160" y="100" width="60" height="60" rx="3" />
+            <rect x="260" y="70"  width="60" height="90" rx="3" />
+            <rect x="360" y="50"  width="60" height="110" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="175">2022</text>
+            <text x="190" y="175">2023</text>
+            <text x="290" y="175">2024</text>
+            <text x="390" y="175">2025</text>
+          </g>
+        </svg>
+      </div>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>{{X.Xx}}</strong>. Biffrey's ceiling is 4.0x with negotiation tolerance up to 5.5x.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul><li>{{}}</li></ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul><li>{{}}</li></ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul><li>{{}}</li></ul></div>
+        <div class="cell"><h4>Threats</h4><ul><li>{{}}</li></ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> {{}}</li>
+        <li><strong>Financial:</strong> {{}}</li>
+        <li><strong>Operational:</strong> {{}}</li>
+        <li><strong>Regulatory / legal:</strong> {{}}</li>
+        <li><strong>Deal conditions:</strong> {{e.g., negotiate to ≤4.0x EBITDA}}</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook & Growth Opportunities</h2>
+      <p>{{Expansion potential, operational upside, strategic plays, 100-day plan sketch.}}</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul><li><a href="{{}}">{{URL}}</a> — {{what it provided}}</li></ul>
+      <h3>B. Assumptions</h3>
+      <ul><li>{{}}</li></ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #{{X}} — {{Field Name}}</strong> — Estimated at {{value}}.<br>
+         Method: {{step-by-step math}}.<br>
+         Sources: {{URLs}}.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul><li>{{path/to/file}} — {{notes}}</li></ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul><li>{{}}</li></ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources.</footer>
+</div>
+</body>
+</html>
