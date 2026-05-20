@@ -1,15 +1,15 @@
 ---
 active: true
-iteration: 2
+iteration: 3
 max_iterations: 40
-last_iteration_at: 2026-05-20T23:42:50Z
+last_iteration_at: 2026-05-20T23:56:28Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
 open_blockers: 0
 stages:
   s1_repo:            { status: implemented }
-  s2_playwright:      { status: not_started }
+  s2_playwright:      { status: implemented }
   s3_onepassword:     { status: not_started }
   s4_airtable:        { status: not_started }
   s5_overnight_skill: { status: not_started }
@@ -42,14 +42,31 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   failure "is expected." The s1 SELF-TEST "commit pushed" sub-check is
   reinterpreted as satisfied-by-local-commit. `unresolved_findings` → 0;
   `s1_repo` stays `implemented` (no demotion — never self_tested/verified).
+- Iteration 3 (2026-05-20T23:56:28Z): IMPLEMENT phase (`unresolved_findings == 0`,
+  `open_blockers == 0`). Scanned s1→s10; `s1_repo` is `implemented` so skipped;
+  first `not_started` stage is `s2_playwright` (no deps). IMPLEMENT on
+  `s2_playwright`: verified `.claude/settings.json` is valid JSON with an
+  `mcpServers.playwright` entry; installed `@playwright/mcp@0.0.75` via
+  `npm install -g` (forced to a user-writable `NPM_CONFIG_PREFIX` —
+  `/usr/lib/node_modules` is not writable and `sudo` is unavailable); installed
+  the Chromium browser binary via `npx playwright install chromium` (exit 0,
+  full Chromium + headless-shell + ffmpeg present in `$HOME/.cache/ms-playwright`).
+  The `mcp__playwright__*` tools are NOT in the tool list (they load only after a
+  Cowork restart) → recorded as advisory note A1 in `BLOCKERS.md`, **non-counting**
+  (`open_blockers` stays 0) because the mandatory s2 SELF-TEST bar is fully
+  runnable via the `npx playwright`/Node CLI fallback and the MCP-navigation
+  check is explicitly conditional — escalating would falsely deadlock COMPLETE
+  (same rationale as F1). `s2_playwright` → `implemented`.
 
 ## Next iteration (expected)
-IMPLEMENT phase: `unresolved_findings == 0`, `open_blockers == 0`. The IMPLEMENT
-scan runs s1→s10 for the first `not_started` stage with met dependencies. Note
-`s1_repo` is `implemented` (not `not_started`), so it is skipped by IMPLEMENT;
-the first `not_started` stage is `s2_playwright` (dependencies: none) — expect
-IMPLEMENT on `s2_playwright`. (SELF-TEST of `s1_repo` will follow once no
-earlier IMPLEMENT work remains.)
+IMPLEMENT phase expected: `unresolved_findings == 0`, `open_blockers == 0`. The
+IMPLEMENT scan runs s1→s10 for the first `not_started` stage with met
+dependencies. `s1_repo` and `s2_playwright` are both `implemented` (skipped by
+IMPLEMENT); the first `not_started` stage is `s3_onepassword` (dependencies:
+none) — expect IMPLEMENT on `s3_onepassword` (creating/confirming
+`config/credentials-setup.md`). SELF-TEST of the `implemented` stages
+(`s1_repo`, `s2_playwright`) follows once all earlier IMPLEMENT work is done,
+per the s1→s10 phase-scan order.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
