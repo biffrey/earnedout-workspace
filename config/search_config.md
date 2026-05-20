@@ -71,8 +71,8 @@
 ## Credential Retrieval
 
 ```bash
-op read "op://Private/DealStream/username"
-op read "op://Private/DealStream/password"
+op read "op://Personal/dealstream.com/username"
+op read "op://Personal/dealstream.com/password"
 ```
 
 ## Search Platforms
@@ -111,6 +111,9 @@ Per `references/industries-and-geography.md`:
 | Precious Metals | platinum refining, palladium recycling, PGM refining, catalytic converter recycling |
 | Organ Transport | medical courier, transplant organ logistics, specimen transport |
 | Home Services | garage door, locksmith, HVAC, plumbing |
+| Sign Language / Translation & Interpretation | ASL interpretation, sign language interpreting, VRI, CART, realtime captioning, deaf services, translation agency, foreign-language interpreting (NAICS 541930) — roll-up add-on for Applied Development |
+| Commercial Waste | roll-off dumpster rental, C&D waste hauling, construction debris recycling, demolition cleanup, commercial dumpster service — roll-up add-on for Fambro Waste |
+| SBIC | SBIC, Small Business Investment Company, SBA-licensed fund, SBIC management company, SBIC general partner |
 
 ## Geography
 

@@ -12,16 +12,19 @@
 | # | Criterion | Status | Evidence |
 |---|-----------|:------:|----------|
 | 1 | ≥ 10 full-time employees | ✅ / ❌ / ⚠️ | {{e.g., "LinkedIn shows 24 employees"}} |
-| 2 | EBITDA $1M–$4M / year | ✅ / ❌ / ⚠️ | {{e.g., "CIM: $2.3M EBITDA FY24"}} |
+| 2 | EBITDA ≥ $1M / year | ✅ / ❌ / ⚠️ | {{e.g., "CIM: $2.3M EBITDA FY24"}} |
 | 3 | 10+ years in business | ✅ / ❌ / ⚠️ | {{e.g., "TX SOS registration 2009"}} |
 | 4 | 3+ yrs YoY revenue and profit growth | ✅ / ❌ / ⚠️ | {{e.g., "FY22→23→24: $8.1M→$9.4M→$11.2M; EBITDA $1.6M→$1.9M→$2.3M"}} |
 | 5 | Asking price ≤ 4.0x EBITDA | ✅ / ❌ / ⚠️ | {{e.g., "Listed at $9.2M ≈ 4.0x EBITDA"}} |
 | 6 | DSCR > 1.4 (informational only) | ✅ / ❌ / ⚠️ | {{e.g., "Proforma DSCR 1.6 at 70% LTV, 8% rate, 10yr am"}} |
 
-**Overall Buy Box:** **PASS / CONDITIONAL / FAIL**
-**Lead Score:** **{{XX}} / 100**
+**Overall Buy Box:** **PASS / CONDITIONAL / CONDITIONAL (add-on) / FAIL**
+**Lead Score:** **{{XX}} / {{100 or 110}}**
+{{If roll-up add-on: **Roll-up add-on for: {{Applied Development or Fambro Waste Management}}** — Applied Development add-ons have no size floor; Fambro Waste add-ons use relaxed floors (≥5 FTE / ≥$500K EBITDA / ≥5 yrs).}}
+{{If SBIC: **SBIC target** — screened on SBA license good standing; standard financial criteria and the 0–100 score are informational only.}}
 
 {{If CONDITIONAL: one-line summary of what's conditional and how to resolve it.}}
+{{If CONDITIONAL (add-on): "Does not meet standalone thresholds but qualifies as a roll-up add-on for {{platform company}}."}}
 {{If FAIL: one-line summary of the deal-killer(s).}}
 
 ---
@@ -74,9 +77,11 @@
 | Employees ≥10 | {{}} | 10 | {{}} |
 | Valuation multiple | {{}} | 15 | {{e.g., "3.8x → full 15 pts"}} |
 | Low owner dependence | {{}} | 5 | {{}} |
-| **Total** | **{{XX}}** | **100** | |
+| Roll-up / add-on strategic fit (BONUS) | {{0, 5, or 10}} | 10 | {{e.g., "Direct add-on for Applied Development" or "N/A — standalone target"}} |
+| **Total** | **{{XX}}** | **{{100 or 110}}** | |
 
 {{If valuation line is in the 4.0–5.5x band (7 pts), state explicitly: "Deal requires negotiation to ≤4.0x EBITDA as a closing condition."}}
+{{If roll-up add-on and total denominator is 110: "Scored as roll-up add-on for {{platform company}}. Relaxed thresholds applied."}}
 
 ---
 

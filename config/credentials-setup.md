@@ -24,16 +24,16 @@
 The overnight-search skill retrieves DealStream credentials at runtime using:
 
 ```bash
-op read "op://Private/DealStream/username"
-op read "op://Private/DealStream/password"
+op read "op://Personal/dealstream.com/username"
+op read "op://Personal/dealstream.com/password"
 ```
 
 ### Expected 1Password Item
 
 | Field | Value |
 |-------|-------|
-| Vault | `Private` |
-| Item name | `DealStream` |
+| Vault | `Personal` |
+| Item name | `dealstream.com` |
 | Username field | DealStream login email |
 | Password field | DealStream login password |
 
@@ -44,5 +44,5 @@ If `op` is not installed or not signed in, the skill will **fail loudly** with a
 ## Troubleshooting
 
 - **"not signed in" error:** Run `op signin` and follow the biometric/password prompt.
-- **"item not found" error:** Verify the item exists at the expected vault/path: `op item get DealStream --vault Private`
+- **"item not found" error:** Verify the item exists at the expected vault/path: `op item get dealstream.com --vault Personal`
 - **CLI not found:** Ensure `brew install --cask 1password-cli` completed and your shell PATH includes `/usr/local/bin` or the Homebrew equivalent.

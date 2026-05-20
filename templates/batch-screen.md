@@ -2,20 +2,22 @@
 
 **Prepared for:** Biffrey Braxton / EarnedOut
 **Candidates reviewed:** {{N}}
-**Screening basis:** EarnedOut Buy Box + 0–100 lead score rubric
+**Screening basis:** EarnedOut Buy Box + 0–100 lead score rubric (up to 110 for roll-up add-ons)
+**Platform companies:** Applied Development (sign language/CART) · Fambro Waste Management (commercial waste)
 
 ---
 
 ## Ranked results
 
-Sorted by Lead Score (descending). Buy Box = PASS / CONDITIONAL / FAIL / EXCLUDED.
+Sorted by Lead Score (descending). Buy Box = PASS / CONDITIONAL / COND (add-on) / FAIL / EXCLUDED.
 
-| Rank | Company | Industry | State | FTE | EBITDA | Mult | Buy Box | Score | Flag |
-|:---:|---|---|:---:|:---:|:---:|:---:|:---:|:---:|---|
-| 1 | {{}} | {{}} | {{}} | {{}} | {{}} | {{}}x | ✅ PASS | {{XX}} | {{}} |
-| 2 | {{}} | {{}} | {{}} | {{}} | {{}} | {{}}x | ⚠️ COND | {{XX}} | {{negotiate to 4x}} |
-| 3 | {{}} | {{}} | {{}} | {{}} | {{}} | {{}}x | ❌ FAIL | {{XX}} | {{<10 FTE}} |
-| 4 | {{}} | {{}} | {{}} | {{}} | {{}} | {{}}x | 🚫 EXCL | — | {{restaurant — excluded}} |
+| Rank | Company | Industry | State | FTE | EBITDA | Mult | Buy Box | Score | Add-on | Flag |
+|:---:|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|---|
+| 1 | {{}} | ASL interpreting | {{}} | {{}} | {{}} | {{}}x | ⚠️ COND (add-on) | {{XX}}/110 | Applied Dev | {{}} |
+| 2 | {{}} | C&D waste hauling | {{}} | {{}} | {{}} | {{}}x | ⚠️ COND (add-on) | {{XX}}/110 | Fambro | {{}} |
+| 3 | {{}} | Aerospace MRO | {{}} | {{}} | {{}} | {{}}x | ✅ PASS | {{XX}}/100 | — | {{}} |
+| 4 | {{}} | {{}} | {{}} | {{}} | {{}} | {{}}x | ❌ FAIL | {{XX}}/100 | — | {{<10 FTE}} |
+| 5 | {{}} | {{}} | {{}} | {{}} | {{}} | {{}}x | 🚫 EXCL | — | — | {{restaurant — excluded}} |
 
 *(Extend rows as needed. Mark values `(est.)` where applicable.)*
 

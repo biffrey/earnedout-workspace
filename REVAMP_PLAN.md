@@ -240,7 +240,7 @@ Subject: NDA & CIM request — Listing [LISTING_ID] | Biffrey Braxton Group
 Hi [BROKER_NAME],
 
 I'm Biffrey Braxton, Co-Founder & Chairman of Applied Development and 
-co-founder of other firms, such as Inno-Native, FlexFly, and P3 Innovation.
+co-founder of other firms, such as Inno-Native, FlexFly, and Intiendo.
 
 My upcoming liquidity event will free capital that I plan to redeploy 
 immediately into lower-middle-market acquisitions.
@@ -248,9 +248,9 @@ immediately into lower-middle-market acquisitions.
 Your listing **[LISTING_ID] / "[BUSINESS_NAME]"** fits my buy-box:
 
 * 10+ yrs operating history
-* EBITDA $1-5 MM
+* EBITDA $1+ MM
 * < 4× EBITDA pricing
-* Team of 10-50
+* Team of >10 FTEs
 
 Because timing is critical, I would like to:
 

@@ -17,8 +17,8 @@ You are running the EarnedOut overnight published-listing search pipeline. This 
 
 ### 1Password credential retrieval
 ```bash
-op read "op://Private/DealStream/username"
-op read "op://Private/DealStream/password"
+op read "op://Personal/dealstream.com/username"
+op read "op://Personal/dealstream.com/password"
 ```
 If `op` fails (not installed or not signed in), **stop immediately** with a clear error. Do not proceed without credentials.
 

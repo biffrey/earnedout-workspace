@@ -115,9 +115,10 @@
     <div style="display:flex; align-items:center; gap:14px;">
       <span class="verdict pass">Buy Box: PASS</span>
       <!-- Replace "pass" with "conditional" or "fail" and update label as needed -->
+      <!-- For roll-up add-ons, add: <span class="verdict conditional">Add-on: Applied Development</span> or Fambro Waste -->
       <div class="score-badge">
         <div class="num">{{XX}}</div>
-        <div class="label">Lead Score / 100</div>
+        <div class="label">Lead Score / {{100 or 110}}</div>
       </div>
     </div>
   </header>
@@ -150,7 +151,7 @@
         <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
         <tbody>
           <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
-          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>2</td><td>EBITDA ≥ $1M / year</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
           <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
           <tr><td>4</td><td>3+ yrs YoY revenue & profit growth</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
           <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>{{evidence}}</td></tr>
@@ -208,7 +209,8 @@
           <tr><td>Employees ≥10</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
           <tr><td>Valuation multiple</td><td>{{}}</td><td>15</td><td>{{}}</td></tr>
           <tr><td>Low owner dependence</td><td>{{}}</td><td>5</td><td>{{}}</td></tr>
-          <tr><td><strong>Total</strong></td><td><strong>{{XX}}</strong></td><td><strong>100</strong></td><td></td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>{{}}</td><td>10</td><td>{{e.g., "Direct add-on for Applied Development" or "N/A — standalone"}}</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>{{XX}}</strong></td><td><strong>{{100 or 110}}</strong></td><td></td></tr>
         </tbody>
       </table>
     </section>
