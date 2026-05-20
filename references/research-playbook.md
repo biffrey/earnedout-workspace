@@ -168,7 +168,7 @@ Always show the math in the Appendix when estimating.
 - **SBA SBIC Program Office** — the SBA licenses and regulates SBICs; use SBA records to confirm the SBIC license exists, is active, and is **in good standing**. This good-standing confirmation is the central screening step. (Verify the current SBA SBIC directory / licensee-lookup URL — the SBA reorganizes its site periodically.)
 - **SBIC license number** — confirm against SBA records; note license type and issue date.
 - **SBA enforcement / capital-impairment status** — check for any SBA enforcement action, transfer-of-control restriction, or capital impairment that would break "good standing".
-- **SBA annual financial reporting (SBA Form 468)** — SBICs file annual financials with the SBA. Verify the current form number/format against SBA guidance; use it (if obtainable) for fund-level financials. (Informational.)
+- **SBA Form 468** — the SBIC's audited annual financial report, which includes the independent public accountant's report on the audited annual financial statements. Use it for fund-level financials. (Informational.)
 - **Form ADV / SEC IAPD** — if the management entity is also a registered investment adviser, its Form ADV (SEC Investment Adviser Public Disclosure database) discloses AUM, ownership, and disciplinary history. (Informational.)
 - **Outstanding SBA leverage** — amount and tier of SBA-guaranteed debentures; relevant to the change-of-control analysis. (Informational.)
 - **Change-of-control review** — confirm with SBA counsel that a buyer can obtain SBA approval to transfer control of the license; this is a closing condition.

@@ -24,7 +24,7 @@ The three **TOP PRIORITY** industries below are co-equal. The first two are **ro
 - Spoken/foreign-language translation and interpreting agencies, and localization firms (all of NAICS 541930)
 
 **Not allowed:** Hearing aid retailers, audiologist practices (not interpretation/translation businesses).
-**Notes:** Primary code is NAICS 541930 (Translation and Interpretation Services). CART / realtime captioning may also be classified under court reporting / stenotype services (NAICS 561492 — verify the exact code); treat CART providers as in-scope regardless of which code they file under. For sign-language staff, verify RID (Registry of Interpreters for the Deaf) certification or state licensure. Check for government/education contracts (schools, courts, hospitals) — these indicate recurring revenue. Valuation is scored on the standard bands (≤4x / 4.0–5.5x / >5.5x) — unchanged for this category.
+**Notes:** The entire category sits under NAICS 541930 (Translation and Interpretation Services) — CART / realtime captioning is classified there alongside sign-language interpreting. For sign-language staff, verify RID (Registry of Interpreters for the Deaf) certification or state licensure. Check for government/education contracts (schools, courts, hospitals) — these indicate recurring revenue. Valuation is scored on the standard bands (≤4x / 4.0–5.5x / >5.5x) — unchanged for this category.
 
 ### Commercial Waste Management — TOP PRIORITY (Roll-up add-on for Fambro Waste Management)
 **Platform company:** Fambro Waste Management — construction trash management firm.
