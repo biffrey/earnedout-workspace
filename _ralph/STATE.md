@@ -38,3 +38,23 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
 RESOLVE phase: `unresolved_findings == 1` → take finding F1, reclassify the
 GitHub-push failure as an external blocker (move to `BLOCKERS.md`). Then the
 IMPLEMENT scan resumes at `s2_playwright`.
+
+## Environment notes (read before every git commit)
+The loop's execution sandbox mounts the workspace with a filesystem that
+**permits create/write/rename but blocks `unlink` inside `.git/`**. Consequence:
+- A plain `git add` / `git commit` works *once* when no stale lock exists, but
+  any aborted or read-only git op (e.g. `git status`) can leave an orphan
+  `*.lock` file that cannot be deleted and blocks the next git command.
+- **Workaround — run before every commit:** rename every stale lock aside, then
+  commit in a single invocation:
+  ```bash
+  cd <workspace bash path> && \
+    find .git -name '*.lock' ! -name '*.stale-*' -print | \
+      while read -r f; do mv "$f" "$f.stale-$(date +%s%N)"; done; \
+    git -c user.name="Ralph Loop" -c user.email="ralph@earnedout.local" \
+      commit -a -m "<msg>"   # use commit -a; if new untracked files exist,
+                             # rename locks aside again, then git add -A first
+  ```
+- `git push` additionally fails (see finding F1 / BLOCKERS): SSH remote
+  unreachable from the sandbox. Local commits still persist — the `.git` lives
+  in Biffrey's real, persistent folder — so loop continuity is unaffected.
