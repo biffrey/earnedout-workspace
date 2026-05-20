@@ -5,7 +5,7 @@ max_iterations: 40
 last_iteration_at: 2026-05-20T23:32:12Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 0
+unresolved_findings: 1
 open_blockers: 0
 stages:
   s1_repo:            { status: implemented }
@@ -29,4 +29,12 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
 
 ## Iteration history
 - Iteration 1 (2026-05-20T23:32:12Z): Bootstrapped `_ralph/`. Ran IMPLEMENT on
-  `s1_repo`. See `IMPLEMENTATION_LOG.md`.
+  `s1_repo` — workspace tree + prospect-evaluation skill migration + git origin
+  verified; local commit `780edfe` succeeded. `git push` failed (sandbox cannot
+  reach the SSH remote) → recorded as finding F1. `s1_repo` → `implemented`,
+  `unresolved_findings` → 1. See `IMPLEMENTATION_LOG.md` / `FINDINGS.md`.
+
+## Next iteration (expected)
+RESOLVE phase: `unresolved_findings == 1` → take finding F1, reclassify the
+GitHub-push failure as an external blocker (move to `BLOCKERS.md`). Then the
+IMPLEMENT scan resumes at `s2_playwright`.
