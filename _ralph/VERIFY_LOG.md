@@ -839,3 +839,78 @@ does not qualify and is recorded here for transparency only.
 Both Appendix A Stage 8 SELF-TEST checks were independently confirmed by the
 critic against the real `templates/daily-dashboard.html` file.
 **`s8_dashboard` → `verified`.**
+
+---
+
+## Iteration 42 — s3_onepassword verify
+
+Phase: VERIFY. Stage: `s3_onepassword`. Run at 2026-05-21T14:57:30Z.
+Selection: Step 1 blocker re-check — B1 already RESOLVED (2026-05-21 operator
+manual review), `open_blockers == 0`, no pending precondition.
+`unresolved_findings == 0` → RESOLVE skipped. IMPLEMENT — no `not_started` stage
+with met dependencies (`s9_end_to_end` needs s1–s8 ALL `verified`, but
+`s3_onepassword` was `self_tested`; `s10_schedule` needs s9). SELF-TEST — no
+`implemented` stage. VERIFY — the s1→s10 scan skipped s1/s2/s4/s5/s6/s7/s8
+(`verified`) and landed on the first `self_tested` stage, `s3_onepassword`.
+
+Spawned an independent general-purpose critic subagent (Appendix C brief):
+skeptical fresh context, READ-ONLY, briefed to read `REVAMP_PLAN.md` Step 0
+(1Password portion), `REVAMP_LOOP_PROMPT.md` Appendix A Stage 3, `TEST_LOG.md`
+Iteration 41, `BLOCKERS.md` B1, `FINDINGS.md` F2, `config/credentials-setup.md`,
+and `_ralph/evidence/s3_op_verification_2026-05-21.md`. It was explicitly told
+the structural fact that `op` is a desktop tool absent from the ephemeral Linux
+sandbox, that Appendix A Stage 3 Check 2 was deliberately rewritten to confirm
+the operator-evidence file rather than re-run `op`, and that its job is to judge
+whether that evidence is genuine and whether the loop's acceptance is honest.
+
+### Critic output (verbatim)
+
+> ## Verification Findings — s3_onepassword
+>
+> **1. Artifact exists and is complete — PASS (NIT only).** `config/credentials-setup.md` exists (89 lines, non-empty) and satisfies every Appendix A Stage 3 IMPLEMENT requirement:
+> - Item path documented — lines 35–37: `op read "op://Personal/dealstream.com/username"` / `.../password`, plus the item table at lines 41–46 (vault `Personal` ID `4s5nnkrzqk2exofau5mlmv4ocu`, item `dealstream.com` ID `6lidhvmgp7siixuwmse6faooza`).
+> - `op` install + sign-in documented — lines 9–27 (`brew install --cask 1password-cli`, `op signin`, `op --version`, `op whoami`).
+> - Fail-loud requirement documented — lines 67–78: "the overnight-search skill **must fail loudly**: print a clear error... exit non-zero, and **stop**. It must never: proceed to DealStream unauthenticated... fall back to cached, blank, or hard-coded credentials." Line 78 confirms a startup auth check (`op whoami` or trial `op read`). This fully matches the plan's REVAMP_PLAN.md:113 requirement.
+> - NIT: lines 39 and 48 use emoji decorations (`✅`). Cosmetic only; no fix required.
+>
+> **2. Path consistency across all sources — PASS.** `op://Personal/dealstream.com/...` is identical in REVAMP_PLAN.md:110–111, config/credentials-setup.md:35–37, REVAMP_LOOP_PROMPT.md Appendix A Stage 3 (line 184) and Appendix B (line 281), BLOCKERS.md B1 (line 35), FINDINGS.md F2 addendum (line 143), and the evidence file (line 56). The superseded `op://Private/DealStream/...` only appears as explicitly-labeled "original, wrong" history. No internal contradiction.
+>
+> **3. SELF-TEST Check 1 — independently re-verified, genuinely PASS.** I opened `config/credentials-setup.md` directly and confirmed exactly what TEST_LOG Iteration 41 (lines 752–771) claims. The TEST_LOG line citations (34–37, 67–78) match the real file. This is a real check, not hand-waving.
+>
+> **4. SELF-TEST Check 2 / evidence provenance — PASS, and the loop's acceptance is honest.** Git confirms `_ralph/evidence/s3_op_verification_2026-05-21.md` was created in commit `fb0b560` by author `Cowork Manual Review <cowork@earnedout.local>` at 2026-05-21T14:41:59Z — a distinct identity from the automated `Ralph Loop <ralph@earnedout.local>`. The loop honestly terminated at iteration 40 (`1166e0e`, 06:46:01Z, `active:false`, promise withheld); `fb0b560` raised `max_iterations` 40→60, which no loop iteration is empowered to do. The evidence file is byte-identical to its committed version (unchanged since `fb0b560`). The file records `op whoami` showing a signed-in account (`bb@braxton.ai`), and a successful non-empty `op read "op://Personal/dealstream.com/username"` with the secret correctly redacted per the SELF-TEST rule. Confirmed `which op` / `op --version` fail in the sandbox — the documented, permanent reason B1 existed; not a defect. Appendix A Stage 3 SELF-TEST (line 188) explicitly directs the loop to confirm the evidence file rather than re-run `op`, so marking Check 2 PASS on operator evidence is exactly what the operator-updated rule mandates. TEST_LOG lines 811–817 contain an explicit, honest HONESTY NOTE acknowledging the loop did not itself run `op` and that the s3 VERIFY phase will subject the evidence to an independent critic. This is honest, not a faked PASS.
+>
+> **5. IMPROVE — minor attribution looseness, non-blocking.** The evidence file header (line 6) says "Performed by: Biffrey Braxton, directly," but the git committer is `Cowork Manual Review <cowork@earnedout.local>`, not the separate `Biffrey Braxton <bb@braxton.ai>` author identity that exists in the repo (used for commits `b1e41f7`, `478753c`). This is consistent with a manual review session conducted *with* Biffrey through Cowork (the commit message says "manual review 2026-05-21"), so it is not evidence of fabrication — but the two-author distinction means the file's "Biffrey directly" wording slightly overstates verifiable provenance. Suggested fix: the evidence file could note it was committed via the Cowork manual-review session. Does not undermine the PASS.
+>
+> **6. No BLOCKING findings.** B1 is correctly RESOLVED (BLOCKERS.md:9, 115), F2 is correctly closed (FINDINGS.md:138–149), `open_blockers == 0`. The loop did not re-raise B1 or re-run `op`, per Appendix A Stage 3. TEST_LOG Iteration 41 accurately reflects what is on disk and in git history.
+>
+> The stage's two SELF-TEST checks were genuinely performed: Check 1 is directly reproducible (I reproduced it) and Check 2 rests on a genuine, provenance-verified operator-evidence file that records a real successful `op read`. Accepting Check 2 on that evidence is exactly what the operator-rewritten Appendix A Stage 3 instructs and is honestly disclosed in the TEST_LOG.
+>
+> VERDICT: SHIP
+
+### Loop decision
+
+Verdict: **`SHIP`**, zero BLOCKING findings. Per Step 1.4 ("If verdict is
+`SHIP` with no BLOCKING findings: set `status: verified`"), `s3_onepassword` →
+`verified`.
+
+The two graded items are non-blocking and do NOT gate verification:
+- Finding #1 NIT — cosmetic `✅` emoji in `config/credentials-setup.md`
+  (critic: "no fix required").
+- Finding #5 IMPROVE — the evidence-file header says "Performed by: Biffrey
+  Braxton, directly" while the git committer identity is `Cowork Manual Review`;
+  the critic judged this "not evidence of fabrication... consistent with a
+  manual review session conducted with Biffrey through Cowork" and "does not
+  undermine the PASS."
+
+`unresolved_findings` is NOT incremented: per Step 1.4, the
+"write each BLOCKING/IMPROVE finding to `FINDINGS.md`, increment
+`unresolved_findings`" instruction is part of the `REVISE`/BLOCKING branch only;
+the verdict here is `SHIP` with no BLOCKING finding, so the `verified` branch
+applies. This is the same handling applied to the NIT/IMPROVE items in the s1–s8
+VERIFY iterations (20–26). The two items are recorded here verbatim for
+transparency. `open_blockers` stays 0; B1 not re-raised (RESOLVED).
+
+**`s3_onepassword` → `verified`.** All eight implementable schema/skill/template
+stages (s1–s8) are now `verified`; `s9_end_to_end`'s dependency (s1–s8 all
+`verified`) is satisfied for the first time. Next iteration: IMPLEMENT on
+`s9_end_to_end` (the live end-to-end test run).

@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 41
+iteration: 42
 max_iterations: 60
-last_iteration_at: 2026-05-21T14:47:12Z
+last_iteration_at: 2026-05-21T14:57:30Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -10,7 +10,7 @@ open_blockers: 0
 stages:
   s1_repo:            { status: verified }
   s2_playwright:      { status: verified }
-  s3_onepassword:     { status: self_tested }
+  s3_onepassword:     { status: verified }
   s4_airtable:        { status: verified }
   s5_overnight_skill: { status: verified }
   s6_submit_url:      { status: verified }
@@ -982,16 +982,76 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   raised; B1 not re-raised (RESOLVED). Counters unchanged (`unresolved_findings:
   0`, `open_blockers: 0`). Next iteration: VERIFY on `s3_onepassword`.
 
+- Iteration 42 (2026-05-21T14:57:30Z): VERIFY on `s3_onepassword`. Step 0:
+  `active: true`, `iteration` 41 → 42 (`42 >= 60` false → no cap termination).
+  Step 1 blocker re-check: B1 already RESOLVED (2026-05-21 operator manual
+  review); `open_blockers == 0`, no pending precondition. `unresolved_findings
+  == 0` → RESOLVE skipped. IMPLEMENT: no `not_started` stage with met deps
+  (`s9_end_to_end` needs s1–s8 ALL `verified`, but `s3_onepassword` was only
+  `self_tested`; `s10_schedule` needs s9). SELF-TEST: no `implemented` stage.
+  VERIFY: the s1→s10 scan skipped s1/s2/s4/s5/s6/s7/s8 (`verified`) and landed
+  on the first `self_tested` stage, `s3_onepassword`. Spawned an independent
+  general-purpose critic subagent (Appendix C brief): skeptical fresh context,
+  READ-ONLY; read `REVAMP_PLAN.md` Step 0 (1Password portion),
+  `REVAMP_LOOP_PROMPT.md` Appendix A Stage 3, `TEST_LOG.md` Iteration 41,
+  `BLOCKERS.md` B1, `FINDINGS.md` F2, `config/credentials-setup.md`, and the
+  operator-evidence file `_ralph/evidence/s3_op_verification_2026-05-21.md`.
+  The critic **independently re-ran SELF-TEST Check 1** — opened
+  `config/credentials-setup.md` directly and confirmed it documents the
+  1Password item path (`op://Personal/dealstream.com/{username,password}`, item
+  table L41–46), the `op` install + sign-in steps (L9–27), and the fail-loud
+  requirement (L67–78); confirmed the path is internally consistent across
+  `REVAMP_PLAN.md` Step 0, the loop prompt Appendix A Stage 3 / Appendix B,
+  `BLOCKERS.md` B1, `FINDINGS.md` F2, and the evidence file (no contradiction).
+  For **Check 2** (the `op read` credential retrieval — structurally not
+  reproducible by the loop, `op` being a desktop tool absent from the sandbox),
+  the critic **independently cross-checked the operator-evidence provenance via
+  git**: the evidence file was committed in `fb0b560` by author
+  `Cowork Manual Review <cowork@earnedout.local>` (distinct from the automated
+  `Ralph Loop` identity), after the loop honestly self-terminated at iteration
+  40 (`1166e0e`, `active:false`, promise withheld, B1 open); `fb0b560` also
+  raised `max_iterations` 40→60 — both actions only an operator session could
+  take. The file is byte-identical to its committed version and records a
+  signed-in `op whoami` (`bb@braxton.ai`) plus a successful, non-empty
+  `op read "op://Personal/dealstream.com/username"`. The critic judged the
+  loop's acceptance of Check 2 on that evidence **honest** — exactly what the
+  operator-rewritten Appendix A Stage 3 SELF-TEST directs — and found no faked
+  PASS in `TEST_LOG.md` Iteration 41 (which carries an explicit HONESTY NOTE).
+  **Verdict: `SHIP`, zero BLOCKING findings.** Two non-blocking graded items:
+  NIT #1 (cosmetic `✅` emoji in `config/credentials-setup.md` — "no fix
+  required") and IMPROVE #5 (the evidence-file header says "Performed by:
+  Biffrey Braxton, directly" while the git committer identity is `Cowork Manual
+  Review` — the critic judged this "not evidence of fabrication... consistent
+  with a manual review session conducted with Biffrey through Cowork" and "does
+  not undermine the PASS"). Per Step 1.4 (SHIP + no BLOCKING → `verified`),
+  `s3_onepassword` → `verified`; `unresolved_findings` NOT incremented — the
+  "write each BLOCKING/IMPROVE finding to `FINDINGS.md`" instruction is part of
+  the `REVISE`/BLOCKING branch only, and the verdict is `SHIP` with no BLOCKING
+  finding (same handling as the NIT/IMPROVE items in VERIFY iterations 20–26).
+  The two items are recorded verbatim in `VERIFY_LOG.md` for transparency. B1
+  not re-raised (RESOLVED); `open_blockers` stays 0. Full critic output in
+  `VERIFY_LOG.md` under `## Iteration 42 — s3_onepassword verify`. **All eight
+  implementable stages s1–s8 are now `verified`** — `s9_end_to_end`'s
+  dependency is satisfied for the first time. Next iteration: IMPLEMENT on
+  `s9_end_to_end` (the live end-to-end pipeline run; see Appendix A Stage 9).
+
 ## Next iteration (expected)
-> ⚠️ **SUPERSEDED by the 2026-05-21 operator manual review — see the
-> "## Manual review & loop restart" section below.** Blocker B1 is RESOLVED,
-> `open_blockers` is now 0, `s3_onepassword` is reset to `implemented`, the loop
-> is reactivated (`active: true`), and `max_iterations` is raised 40 → 60. The
-> next run is **iteration 41**: Step 1's blocker re-check will find B1 already
-> RESOLVED, then SELF-TEST will run on `s3_onepassword` against the recorded
-> operator evidence (`_ralph/evidence/s3_op_verification_2026-05-21.md`). The
-> pre-restart blocked-state analysis below is retained only as a historical
-> record and no longer applies.
+> **Updated after iteration 42.** All eight implementable stages (s1–s8) are now
+> `verified`; `s3_onepassword` was verified this iteration (critic verdict
+> `SHIP`, zero BLOCKING findings). `unresolved_findings: 0`, `open_blockers: 0`.
+> The next run is **iteration 43**: Step 1's blocker re-check finds none open,
+> RESOLVE is skipped (`unresolved_findings == 0`), and the IMPLEMENT scan finds
+> its first actionable `not_started` stage — `s9_end_to_end` — whose dependency
+> (s1–s8 all `verified`) is now satisfied for the first time. So iteration 43
+> runs **IMPLEMENT on `s9_end_to_end`**: per Appendix A Stage 9, "implement"
+> here means actually running the overnight-search pipeline end-to-end against
+> live systems at small scope, then the submit-url skill on a test URL, then a
+> price-drop scenario — tagging every Airtable record created with
+> `[RALPH TEST]`. After that: SELF-TEST on s9 (the plan's 13 Verification
+> checks), VERIFY on s9, then IMPLEMENT/SELF-TEST/VERIFY on `s10_schedule`, then
+> FINAL AUDIT, then COMPLETE. Roughly 8–9 iterations of real work remain; the
+> cap is 60, so there is ample headroom. The pre-restart blocked-state analysis
+> below is retained only as a historical record and no longer applies.
 
 **(Historical, pre-restart.) The loop is now blocked on B1 and cannot advance any stage until Biffrey
 resolves it.** Step 1 will first re-check `BLOCKERS.md`: counting blocker B1
