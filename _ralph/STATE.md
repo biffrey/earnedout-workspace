@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 26
+iteration: 27
 max_iterations: 40
-last_iteration_at: 2026-05-21T04:14:36Z
+last_iteration_at: 2026-05-21T04:24:38Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -659,6 +659,24 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `VERIFY_LOG.md` under `## Iteration 26 — s8_dashboard verify`. **All eight
   implementable stages other than the `op`-blocked s3 are now `verified`; the
   loop is now fully blocked on B1 — see "Next iteration" below.**
+
+- Iteration 27 (2026-05-21T04:24:38Z): IDLE — loop blocked on B1, no actionable
+  phase. Step 1 blocker re-check: counting blocker B1 (`op` CLI) still open —
+  `op --version` → `op: command not found` (exit 127), `which op` exit 1 in the
+  iteration-27 sandbox; the precondition (an installed, signed-in `op` reachable
+  by the SELF-TEST) did not clear, so B1 stays open and `open_blockers` stays 1.
+  `unresolved_findings == 0` so Step 1 fell through RESOLVE. Every remaining
+  phase is non-actionable: **IMPLEMENT** — no actionable `not_started` stage
+  (`s9_end_to_end` needs s1–s8 ALL `verified` but `s3_onepassword` is `blocked`;
+  `s10_schedule` needs s9 `verified`); **SELF-TEST** — no `implemented` stage
+  (s1/s2/s4/s5/s6/s7/s8 `verified`, s3 `blocked`, s9/s10 `not_started`);
+  **VERIFY** — no `self_tested` stage; **FINAL AUDIT** / **COMPLETE** — require
+  all 10 stages `verified` AND `open_blockers == 0`, neither holds. Per Step 1's
+  terminal rule ("If `open_blockers > 0` and no other phase is actionable,
+  output a status note describing the blockers and exit"), this run idled with a
+  status note. No stage status changed; no findings raised; no STATE counters
+  changed except `iteration`/`last_iteration_at`. The loop remains blocked on B1
+  until Biffrey completes the B1 fix instructions in `BLOCKERS.md`.
 
 ## Next iteration (expected)
 **The loop is now blocked on B1 and cannot advance any stage until Biffrey
