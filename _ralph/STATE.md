@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 40
+iteration: 41
 max_iterations: 60
-last_iteration_at: 2026-05-21T06:44:48Z
+last_iteration_at: 2026-05-21T14:47:12Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -10,7 +10,7 @@ open_blockers: 0
 stages:
   s1_repo:            { status: verified }
   s2_playwright:      { status: verified }
-  s3_onepassword:     { status: implemented }
+  s3_onepassword:     { status: self_tested }
   s4_airtable:        { status: verified }
   s5_overnight_skill: { status: verified }
   s6_submit_url:      { status: verified }
@@ -949,6 +949,38 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   and terminate the loop without reaching COMPLETE.** B1 was never cleared from
   inside the no-human ephemeral sandbox; the loop honestly did not fake the
   `op read` credential check it could not run.
+- Iteration 41 (2026-05-21T14:47:12Z): SELF-TEST on `s3_onepassword`. Step 0:
+  `active: true`, `iteration` 40 → 41 (`41 >= 60` false → no cap termination).
+  Step 1 blocker re-check: B1 is already RESOLVED (2026-05-21 operator manual
+  review); `open_blockers == 0`, no pending precondition. `unresolved_findings
+  == 0` → RESOLVE skipped. IMPLEMENT: no `not_started` stage with met deps
+  (`s9_end_to_end` needs s1–s8 ALL `verified`, but `s3` was only `implemented`;
+  `s10` needs s9). First `implemented` stage is `s3_onepassword` → SELF-TEST.
+  Ran both Appendix A Stage 3 checks (full evidence in `TEST_LOG.md`,
+  "## Iteration 41 — s3_onepassword self-test"):
+  • Check 1 (`config/credentials-setup.md` exists + documents item path +
+    fail-loud) — verified directly this iteration: file present (89 lines, non-
+    empty), documents `op://Personal/dealstream.com/{username,password}`, the
+    `op` CLI install/sign-in, and a "fail loudly, never proceed unauthenticated"
+    section; path agrees with `REVAMP_PLAN.md` Step 0 and the loop prompt. PASS.
+  • Check 2 (`op read` credential retrieval) — per Appendix A Stage 3, `op` is a
+    desktop credential manager that genuinely cannot run in the ephemeral Linux
+    sandbox; the check is satisfied by the recorded operator-evidence file.
+    Confirmed `_ralph/evidence/s3_op_verification_2026-05-21.md` exists (76 lines)
+    and records `op whoami` (signed in, `bb@braxton.ai`) plus a successful, non-
+    empty `op read "op://Personal/dealstream.com/username"`. Before accepting it,
+    cross-checked provenance: the file was committed in `fb0b560` by author
+    `Cowork Manual Review` AFTER the automated loop honestly self-terminated at
+    iteration 40 (commit `1166e0e`, promise withheld, B1 open); the inactive loop
+    could not have authored `fb0b560`, and that commit also raised `max_iterations`
+    40 → 60 — both actions only an operator session would take, consistent with a
+    genuine manual review rather than loop self-deception. PASS (by operator
+    evidence). HONESTY NOTE: this iteration did NOT itself execute `op` and the
+    loop cannot reproduce it; the s3 VERIFY phase will subject this evidence to an
+    independent critic subagent — the designed control for this structural limit.
+  Both checks PASS → `s3_onepassword` `implemented` → `self_tested`. No findings
+  raised; B1 not re-raised (RESOLVED). Counters unchanged (`unresolved_findings:
+  0`, `open_blockers: 0`). Next iteration: VERIFY on `s3_onepassword`.
 
 ## Next iteration (expected)
 > ⚠️ **SUPERSEDED by the 2026-05-21 operator manual review — see the

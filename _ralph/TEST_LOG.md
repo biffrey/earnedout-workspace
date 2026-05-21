@@ -737,3 +737,92 @@ viewport. All render sub-checks PASS:
 Both mandatory Appendix A Stage 8 SELF-TEST checks PASS (30/30 structural +
 all headless-render checks, 0 console errors, layout confirmed visually) — no
 findings raised. `s8_dashboard` → `self_tested`.
+
+## Iteration 41 — s3_onepassword self-test
+
+Phase: SELF-TEST. Stage: `s3_onepassword`. Run at 2026-05-21T14:47:12Z.
+Selection: `unresolved_findings == 0` → RESOLVE skipped; IMPLEMENT found no
+`not_started` stage with met dependencies (`s9_end_to_end` needs s1–s8 ALL
+`verified`, but `s3_onepassword` was only `implemented`; `s10_schedule` needs
+s9); first `implemented` stage is `s3_onepassword` → SELF-TEST. Blocker re-check:
+B1 already RESOLVED (2026-05-21 operator manual review), `open_blockers == 0`.
+
+Appendix A Stage 3 defines two SELF-TEST checks.
+
+### Check 1 — `config/credentials-setup.md` exists + documents item path + fail-loud (PASS)
+
+Read `config/credentials-setup.md` directly this iteration — 89 lines, non-empty.
+Confirmed:
+- Documents the 1Password item path: `op read "op://Personal/dealstream.com/username"`
+  and `op read "op://Personal/dealstream.com/password"` (Credential Retrieval
+  section, lines 34–37), plus an item table — vault `Personal`
+  (ID `4s5nnkrzqk2exofau5mlmv4ocu`), item `dealstream.com`
+  (ID `6lidhvmgp7siixuwmse6faooza`).
+- Documents `op` CLI install (`brew install --cask 1password-cli`) and sign-in
+  (`op signin`, then `op --version` / `op whoami`) — Prerequisites section.
+- Documents the fail-loud requirement — "Failure Behavior — fail loudly, never
+  proceed unauthenticated" section (lines 67–78): on a missing/unsigned `op` or
+  an unreadable item, print a named error, exit non-zero, and stop; never
+  proceed unauthenticated, never fall back to cached/blank/hard-coded creds.
+- Cross-checked the path against `REVAMP_PLAN.md` Step 0 (lines 110–111) and the
+  loop prompt Appendix A Stage 3 / Appendix B — all four sources agree on
+  `op://Personal/dealstream.com/...`. No discrepancy → no finding.
+
+Result: **PASS** — verified directly by this iteration.
+
+### Check 2 — credential retrieval via `op read` (PASS — by operator evidence)
+
+Appendix A Stage 3 directs that `op` is a desktop credential manager that
+genuinely cannot run in the ephemeral Linux sandbox; the loop must NOT re-run
+`op` here and must NOT re-raise blocker B1 (B1 is RESOLVED). The check is
+satisfied by confirming the operator-evidence file.
+
+Confirmed `_ralph/evidence/s3_op_verification_2026-05-21.md` exists (76 lines)
+and records a genuine operator-run verification:
+- `op whoami` → signed in (account `bb@braxton.ai`, `https://my.1password.com/`,
+  User ID `R22YQLTCLFCCFO6HZHL6JPZJDU`).
+- `op read "op://Private/DealStream/username"` → FAILED (`"Private" isn't a
+  vault in this account`) — the plan's original path does not resolve.
+- `op vault list` → exactly one vault, `Personal`.
+- `op item list | grep -i deal` → the DealStream login item is `dealstream.com`
+  (vault `Personal`, ID `6lidhvmgp7siixuwmse6faooza`).
+- `op read "op://Personal/dealstream.com/username"` → SUCCESS, a real non-empty
+  value returned (secret redacted by the operator; only "length > 0" recorded).
+
+Provenance cross-check (done this iteration to satisfy the loop's "distrust
+prior artifacts" rule before accepting operator evidence):
+- The evidence file was committed in `fb0b560` by author
+  `Cowork Manual Review <cowork@earnedout.local>` at 2026-05-21T14:41:59Z — a
+  session distinct from the `Ralph Loop <ralph@earnedout.local>` automated
+  iterations.
+- The automated loop honestly TERMINATED at iteration 40 (commit `1166e0e`,
+  2026-05-21T06:46:01Z) with `active: false`, B1 open, and the
+  `REVAMP_VERIFIED` promise deliberately WITHHELD. After `active: false`, every
+  subsequent scheduled run exits immediately — so the loop itself could not have
+  authored `fb0b560`; it required a separate operator session. `fb0b560` also
+  raised `max_iterations` 40 → 60, which no loop iteration is empowered to do.
+  Both facts are consistent with a genuine operator manual review, not loop
+  self-deception.
+- The corrected path `op://Personal/dealstream.com/...` is propagated
+  consistently across `REVAMP_PLAN.md` Step 0, `config/credentials-setup.md`,
+  `REVAMP_LOOP_PROMPT.md` (Appendix A Stage 3 + Appendix B), `BLOCKERS.md` B1,
+  and `FINDINGS.md` F2 — no internal contradiction.
+
+HONESTY NOTE: this loop iteration did NOT itself execute `op read`, and it
+cannot — `op` is a desktop tool absent from the sandbox. Check 2 PASSES on the
+strength of operator-supplied evidence whose provenance this iteration
+cross-checked and found consistent with a genuine operator review. It is NOT
+independently reproducible by the loop. The s3 VERIFY phase (next iteration)
+will subject this evidence to an independent critic subagent — the designed
+control for this residual, structural limitation.
+
+credential retrieval verified by operator evidence (length > 0); see
+`_ralph/evidence/s3_op_verification_2026-05-21.md`.
+
+Result: **PASS** — by operator evidence per the current Appendix A Stage 3 rule.
+
+### Result
+
+Both Appendix A Stage 3 SELF-TEST checks PASS (Check 1 verified directly this
+iteration; Check 2 by operator evidence). No findings raised; blocker B1 not
+re-raised (RESOLVED). `s3_onepassword` → `self_tested`.
