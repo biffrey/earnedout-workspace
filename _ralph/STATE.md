@@ -1,8 +1,8 @@
 ---
-active: true
+active: false
 iteration: 40
 max_iterations: 40
-last_iteration_at: 2026-05-21T06:34:55Z
+last_iteration_at: 2026-05-21T06:44:48Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -995,6 +995,21 @@ loop refused to fake the `op read` credential check it never ran. To finish
 the revamp, Biffrey must (1) clear B1 per the `BLOCKERS.md` fix instructions
 and (2) raise `max_iterations` (or reset `active: true` with more budget) so
 the loop has room to run the ~9–10 remaining post-B1 iterations.
+
+## Loop termination (2026-05-21T06:44:48Z)
+Step 0 cap check: `iteration (40) >= max_iterations (40)` → TRUE. Per the loop
+prompt Step 0, this run did NOT increment `iteration` or run a phase. It set
+`active: false`, appended a cap-termination entry to `IMPLEMENTATION_LOG.md`
+summarizing remaining work and the open blocker, committed, and output
+`Iteration cap reached. Loop terminated.` The `<promise>REVAMP_VERIFIED</promise>`
+was deliberately NOT emitted — the COMPLETE conditions are not met (`s3_onepassword`
+`blocked`, `s9_end_to_end`/`s10_schedule` `not_started`, `final_audit_passed: false`,
+`open_blockers: 1`). Final loop state: 7 of 10 stages `verified`
+(s1, s2, s4, s5, s6, s7, s8); `s3_onepassword` `blocked` on B1; `s9_end_to_end`
+and `s10_schedule` `not_started`. `unresolved_findings: 0`, `open_blockers: 1`
+(B1). To finish the revamp, Biffrey must clear B1 per `BLOCKERS.md`, then reset
+`active: true` and raise `max_iterations` to give the loop room for the ~9–10
+remaining post-B1 iterations.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

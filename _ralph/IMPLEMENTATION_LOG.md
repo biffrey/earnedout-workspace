@@ -521,3 +521,65 @@ IMPLEMENT scan finds no actionable `not_started` stage — `s9_end_to_end` requi
 s1–s8 all `verified` (they are only `implemented`) and `s10_schedule` requires s9
 `verified` — so Step 1 falls through to **SELF-TEST**, whose s1→s10 scan lands on
 the first `implemented` stage, `s1_repo`.
+
+---
+
+## Iteration 40 — LOOP TERMINATED (iteration cap reached) — 2026-05-21T06:44:48Z
+
+Step 0 cap check: `iteration (40) >= max_iterations (40)` evaluated TRUE, so this
+scheduled run did not increment `iteration` and did not run a RESOLVE / IMPLEMENT
+/ SELF-TEST / VERIFY / FINAL AUDIT / COMPLETE phase. Per the loop prompt Step 0,
+it set `active: false`, wrote this final entry, committed, and stopped.
+
+### Final loop state
+- **Stages verified (7 of 10):** `s1_repo`, `s2_playwright`, `s4_airtable`,
+  `s5_overnight_skill`, `s6_submit_url`, `s7_outreach`, `s8_dashboard` — each
+  reached `verified` via an independent critic subagent (iterations 20–26),
+  every verdict `SHIP` with zero BLOCKING findings.
+- **`s3_onepassword`: `blocked`** on counting blocker **B1** since iteration 14.
+  IMPLEMENT artifact (`config/credentials-setup.md`) is complete and passed
+  SELF-TEST Check 1; only the live `op read` credential check (SELF-TEST
+  Check 2) is blocked — `op` (1Password CLI) is not installed/signed-in anywhere
+  the ephemeral Linux execution sandbox can reach.
+- **`s9_end_to_end`: `not_started`** — its dependency (s1–s8 all `verified`) is
+  unmet because `s3_onepassword` is `blocked`, not `verified`. The live
+  end-to-end pipeline run (plan Verification's 13 checks) was never executed.
+- **`s10_schedule`: `not_started`** — depends on `s9` `verified`; never reached.
+- **`final_audit_passed: false`** — FINAL AUDIT was never reached (gated on all
+  10 stages `verified` + `open_blockers == 0`).
+- **`unresolved_findings: 0`** — findings F1, F2, F3 were all raised and resolved
+  in earlier iterations; none open at termination.
+- **`open_blockers: 1`** — B1 (`op` CLI). Advisory note A1 (Playwright MCP tools
+  need a Cowork restart) is non-counting and did not block any stage.
+
+### Remaining work to finish the revamp (NOT done by this loop)
+1. Clear blocker **B1** — install and sign in to the `op` 1Password CLI somewhere
+   the loop's SELF-TEST can reach, and confirm
+   `op read "op://Private/DealStream/username"` returns a value. Full fix
+   instructions are in `_ralph/BLOCKERS.md`.
+2. `s3_onepassword` — re-run SELF-TEST Check 2 (`op read`), then VERIFY.
+3. `s9_end_to_end` — run the overnight-search skill end-to-end against live
+   systems (small scope), run submit-url on a test URL, trigger the price-drop
+   scenario, then run all 13 plan Verification checks; SELF-TEST and VERIFY.
+4. `s10_schedule` — create the nightly scheduled task; SELF-TEST and VERIFY.
+5. FINAL AUDIT subagent, then COMPLETE.
+This is roughly 9–10 more iterations of real work after B1 is cleared.
+
+### Why the loop did NOT emit the promise
+The `<promise>REVAMP_VERIFIED</promise>` token was deliberately withheld. The
+COMPLETE conditions (all 10 stages `verified`, `final_audit_passed == true`,
+`unresolved_findings == 0`, `open_blockers == 0`) are not met. B1 — live
+DealStream credential retrieval via `op` — could not be exercised from inside
+the no-human ephemeral Linux sandbox, and the loop's anti-deception rule forbids
+faking the `op read` check that was never run. An honest cap-termination with
+B1 open is the correct outcome, not a fabricated PASS.
+
+### To resume
+Biffrey must (1) clear B1 per `_ralph/BLOCKERS.md`, and (2) set `active: true`
+and raise `max_iterations` in `_ralph/STATE.md` so the loop has budget for the
+~9–10 remaining post-B1 iterations. The next scheduled run will then pick up at
+the s3 SELF-TEST.
+
+Loop terminated at iteration 40 (cap reached). `git push` to `origin` remains
+unavailable from the sandbox (finding F1, accepted by design); the local commit
+persists in Biffrey's real workspace `.git`.
