@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 10
+iteration: 11
 max_iterations: 40
-last_iteration_at: 2026-05-21T01:34:14Z
+last_iteration_at: 2026-05-21T01:44:28Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -15,7 +15,7 @@ stages:
   s5_overnight_skill: { status: implemented }
   s6_submit_url:      { status: implemented }
   s7_outreach:        { status: implemented }
-  s8_dashboard:       { status: not_started }
+  s8_dashboard:       { status: implemented }
   s9_end_to_end:      { status: not_started }
   s10_schedule:       { status: not_started }
 ---
@@ -172,19 +172,42 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   odd/even-on-Listing-ID to per-lead alternation (DealStream IDs are
   alphanumeric). `config/` is not a `.claude/` path so `Write` worked directly.
   No findings raised. `s7_outreach` → `implemented`.
+- Iteration 11 (2026-05-21T01:44:28Z): IMPLEMENT phase (`unresolved_findings == 0`,
+  `open_blockers == 0` at start). Re-checked `BLOCKERS.md` — no counting
+  blockers, advisory A1 still stands (`mcp__playwright__*` still absent).
+  Scanned s1→s10; s1–s7 are `implemented` so skipped; first `not_started` stage
+  is `s8_dashboard` (dep s1 met). IMPLEMENT on `s8_dashboard`: re-read
+  `REVAMP_PLAN.md` Step 7 and `templates/single-report.html`, audited the
+  pre-existing `templates/daily-dashboard.html` (10,135 B, dated 2026-04-16),
+  and rewrote it (395 lines, 14,396 B), fixing 3 concrete defects: (1) it was a
+  string-replace file with row bodies as dead HTML comments, not a Jinja
+  template — converted to genuine Jinja2 (`{% for %}` row loops over
+  new_finds/running_queue/revisit_bucket + platform/industry/errors, `{% if %}`
+  price-drop/manual conditionals, a `score_cls()` macro, `{% else %}` empty
+  states); (2) CSS `:root` used `--badge-bg` + a bespoke `--price-drop` token —
+  realigned to single-report.html's exact 11-token palette (`--badge`;
+  price-drop styling reuses `--warn`); (3) no documented render contract —
+  added a `{# #}` header documenting every context variable and a Jinja render
+  example. All four sections retained (A New Finds + price-drop/manual badges,
+  B Running Queue + Date Added column, C Revisit Bucket, D Run Summary with
+  per-platform/industry breakdowns + errors). `templates/` is not a `.claude/`
+  path so `Write` worked directly. No findings raised. `s8_dashboard` →
+  `implemented`.
 
 ## Next iteration (expected)
-IMPLEMENT phase expected: `unresolved_findings == 0` and `open_blockers == 0`,
-so Step 1 falls through RESOLVE to IMPLEMENT. The s1→s10 scan skips s1–s7 (all
-`implemented`) and lands on the first `not_started` stage — `s8_dashboard`
-(dependency: s1, which is `implemented` — met). IMPLEMENT on `s8_dashboard`:
-create `templates/daily-dashboard.html` per `REVAMP_PLAN.md` Step 7 — a
-Jinja-style, self-contained template with the four sections (A — Last Night's
-New Finds with price-drop badge, B — Running Queue of all `Disposition = Active`
-leads with a Date Added column, C — Revisit Bucket of `Disposition = Revisit for
-Roll-up` leads, D — Run Summary with totals and per-industry/platform
-breakdowns), CSS styled to match `templates/single-report.html`. Note:
-`templates/` is NOT a `.claude/` path, so `Write`/`Edit` work directly there.
+SELF-TEST phase expected. `unresolved_findings == 0` and `open_blockers == 0`,
+so Step 1 falls through RESOLVE. The IMPLEMENT scan finds no actionable
+`not_started` stage — `s9_end_to_end` depends on s1–s8 all `verified` (they are
+only `implemented`) and `s10_schedule` depends on s9 `verified` — so Step 1
+falls through IMPLEMENT to **SELF-TEST**. The SELF-TEST s1→s10 scan lands on the
+first `implemented` stage, `s1_repo`. SELF-TEST on `s1_repo` (Appendix A Stage
+1): `find` the directory tree and confirm every dir/file is present and
+non-empty; `git remote -v` (origin present), `git status` (clean post-commit),
+`git log` (commits present locally — the push leg is intentionally skipped per
+finding F1 Option C); confirm `.claude/skills/prospect-evaluation/skill.md` is
+non-empty and `references/` + `templates/` hold the required files. Record all
+commands and outputs in `TEST_LOG.md` under `## Iteration N — s1_repo
+self-test`.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

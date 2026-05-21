@@ -447,3 +447,77 @@ and the deferred "Revisit for Roll-up" rule.
 (`unresolved_findings` stays 0). `open_blockers` stays 0. Next iteration:
 IMPLEMENT scan resumes at `s8_dashboard` (dependency: s1, which is `implemented`
 — met).
+
+## Iteration 11 — 2026-05-21T01:44:28Z — IMPLEMENT on s8_dashboard
+
+**Phase selected:** Step 1 IMPLEMENT. At iteration start `unresolved_findings == 0`
+and `open_blockers == 0`, so RESOLVE was skipped. Re-checked `BLOCKERS.md`: no
+counting blockers; advisory A1 (Playwright MCP tools absent) still stands —
+`mcp__playwright__*` tools are still not in the tool list — but A1 is
+non-counting and gates nothing, so no precondition cleared and no stage was
+un-blocked. Scanning s1→s10: s1–s7 are all `implemented` (skipped by IMPLEMENT);
+the first `not_started` stage is `s8_dashboard` (dependency: s1, which is
+`implemented` — met). One phase only — IMPLEMENT; the valid-HTML / four-sections /
+headless-render SELF-TEST belongs to the s8 SELF-TEST phase and was NOT run or
+claimed here.
+
+**s8_dashboard IMPLEMENT actions (Appendix A Stage 8 / REVAMP_PLAN.md Step 7):**
+
+Re-read `REVAMP_PLAN.md` Step 7 (the canonical source — the four-section
+structure, the Section-A column list, the price-drop badge / "was $X → now $Y"
+notation, the Section-B "Date Added" column, the "Jinja-style template" mandate)
+and `templates/single-report.html` (for the CSS aesthetic to match). Per the
+anti-deception rule the pre-existing `templates/daily-dashboard.html` (10,135 B,
+dated 2026-04-16, written before this loop) was treated as untrusted and audited
+against the plan. It was structurally close — all four sections, the column
+sets, a price-drop chip — but carried **3 concrete defects**, all fixed in the
+rewrite:
+
+1. *Not a real Jinja template* — the row bodies were dead HTML comments
+   (`<!-- {{SECTION_A_ROWS}} -->`, `<!-- {{PLATFORM_BREAKDOWN}} -->`), so the
+   file could only be populated by a bespoke string-replace renderer, not by
+   Jinja. `REVAMP_PLAN.md` Step 7 says "Jinja-style template" (twice) and the
+   s5/s6 skills "regenerate the dashboard from `templates/daily-dashboard.html`".
+   **Primary fix** — converted to a genuine Jinja2 template: `{% for lead in
+   new_finds %}` / `running_queue` / `revisit_bucket` row loops, `{% for %}` over
+   `platform_breakdown` / `industry_breakdown` / `errors`, `{% if lead.price_drop %}`
+   and `{% if lead.source == 'Manual Submission' %}` conditionals, a
+   `score_cls()` macro for the high/mid/low score colour, and `{% else %}`
+   empty-state rows on all three lead tables and all three Section-D lists. It is
+   now directly renderable with `jinja2.Template(...).render(ctx)`.
+2. *CSS `:root` drifted from `single-report.html`* — the old file used
+   `--badge-bg` and a bespoke `--price-drop` token. Appendix A Stage 8 requires
+   CSS "styled to match `templates/single-report.html`". The `:root` block is
+   now byte-identical to single-report.html's 11-token palette (`--badge`, not
+   `--badge-bg`; price-drop styling reuses single-report's existing `--warn`).
+3. *No documented render contract* — the old file had scattered example-row
+   comments but no statement of what context variables a renderer must supply.
+   Added a `{# ... #}` header documenting every `ctx` variable (`date`,
+   `generated_at`, `stats`, `new_finds`, `running_queue`, `revisit_bucket`,
+   `platform_breakdown`, `industry_breakdown`, `errors`) and the per-lead dict
+   shape, plus a one-line Jinja render example.
+
+The rewritten file (395 lines, 14,396 B) keeps all four plan-mandated sections —
+**A** Last Night's New Finds (Rank/Score/Business Name/Industry/State/Asking
+Price/EBITDA/Source/Report columns, PRICE DROP + MANUAL chips, "was <previous>"
+notation), **B** Running Queue (Disposition = Active, with a Date Added column),
+**C** Revisit Bucket (Disposition = Revisit for Roll-up), **D** Run Summary
+(Search Totals, Leads by Platform, Leads by Industry, Errors & Warnings) — and
+the header stat cards. Rank is `loop.index` over score-desc-sorted lists.
+
+**IMPLEMENT-diligence checks (NOT the SELF-TEST):** `wc` → 395 lines; `grep`
+confirmed `id="section-a..d"` all four present; Jinja block balance for=6/
+endfor=6, if=5/endif=5, macro=1/endmacro=1; `--badge: #0b1019` present and
+`--badge-bg` absent (palette matches single-report.html). The browser headless
+render + jinja2-render-with-sample-data checks are the s8 SELF-TEST bar and were
+deliberately deferred to that phase.
+
+**Write-path note:** `templates/` is NOT a `.claude/` protected path, so `Write`
+worked directly — no `bash`-copy workaround needed.
+
+**Result:** `s8_dashboard` status set to `implemented`. No findings raised
+(`unresolved_findings` stays 0). `open_blockers` stays 0. Next iteration: the
+IMPLEMENT scan finds no actionable `not_started` stage — `s9_end_to_end` requires
+s1–s8 all `verified` (they are only `implemented`) and `s10_schedule` requires s9
+`verified` — so Step 1 falls through to **SELF-TEST**, whose s1→s10 scan lands on
+the first `implemented` stage, `s1_repo`.
