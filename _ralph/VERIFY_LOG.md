@@ -914,3 +914,57 @@ transparency. `open_blockers` stays 0; B1 not re-raised (RESOLVED).
 stages (s1–s8) are now `verified`; `s9_end_to_end`'s dependency (s1–s8 all
 `verified`) is satisfied for the first time. Next iteration: IMPLEMENT on
 `s9_end_to_end` (the live end-to-end test run).
+
+---
+
+## Iteration 52 — s9_end_to_end verify
+
+**Phase:** VERIFY. Step 0: `active: true`, `iteration` 51 → 52 (`52 >= 75` false →
+no cap termination). Step 1 blocker re-check: `open_blockers == 0`, advisory A1
+non-counting; B1 + B2 both RESOLVED. `unresolved_findings == 0` → RESOLVE
+skipped. IMPLEMENT: no `not_started` stage with met deps (`s10_schedule` needs
+s9 `verified`; s9 is `self_tested`). SELF-TEST: no `implemented` stage. VERIFY:
+the s1→s10 scan skipped s1–s8 (`verified`) and landed on the first `self_tested`
+stage, `s9_end_to_end`. Spawned an independent general-purpose critic subagent
+(Appendix C brief): skeptical fresh context, READ-ONLY; read `REVAMP_PLAN.md`
+"Implementation Order" #9 + the full 13-check "Verification" section,
+`TEST_LOG.md` iterations 48/49/51, and `IMPLEMENTATION_LOG.md` iterations 48–51.
+
+The critic **independently re-ran Verification Checks 6, 7, 8, 11, and 12**
+against the live Airtable base (`appOsvuyy5eK43QTx` / `tblSmNrHROMLm7vOS`) via
+the Airtable MCP, and inspected the on-disk artifacts directly:
+- **Check 6 (all new fields populated)** — PASS. All 3 `[RALPH TEST]` records
+  read live; cvkfxz `recDUV3S985L7ytXK` has Date Added 2026-05-21, Listing ID
+  `cvkfxz`, Direct URL, Lead Score 50, Disposition Active, Link Health Live,
+  Source Overnight Search; the `Listing Screenshot` field holds a genuine
+  Airtable-hosted attachment (`attINtUOSVpZ2s33I`, image/png, 831,574 B,
+  1200×3074, thumbnails) — same confirmed for maya0n (`attWVUS63ABhr6F6K`) and
+  so8acs (`att4T7fKfwdtz0D1Q`). The iteration-49 honest FAIL → iter-50 RESOLVE
+  (F4) → iter-51 re-PASS trail is backed by real data.
+- **Check 7 (price-drop)** — PASS. maya0n: Previous Asking Price $1,800,000,
+  Asking Price $1,495,000, Date Updated 2026-05-21, Lead Score 35 (re-evaluated),
+  Notes carries the `PRICE DROP:` line.
+- **Check 8 / 11 / 12** — PASS. so8acs Source = Manual Submission, Disposition
+  Passed; maya0n in dashboard Section C not B; all 3 Notes fields carry business
+  name + listing ID + direct URL and NO search-results-page URL.
+- Filesystem artifacts (7 screenshots, 3 report dirs with `.md`+`.html`+
+  `listing-data.json`, dashboard HTML, outreach drafts, run log) all exist and
+  are genuine non-stub content.
+
+**Verdict: `SHIP`, zero BLOCKING findings.** Eight numbered items: findings
+#1–#5 + #8 are NIT-level PASS confirmations ("no fix needed"); the two IMPROVE
+items are non-blocking and plan-sanctioned — #6 (the 3 `[RALPH TEST]` records
+remain in the live base; plan Appendix A Stage 9 explicitly permits "delete OR
+clearly mark" and they ARE clearly marked in both Business Name and Notes — the
+critic suggests deleting them after VERIFY as a cleanliness improvement) and #7
+(scope was deliberately narrow — 1 industry / DealStream only — which the plan
+explicitly sanctions as "deliberately small scope"; multi-platform extraction
+unproven by a live run, flagged for a future broader run). Per Step 1.4 (SHIP +
+no BLOCKING → `verified`), `s9_end_to_end` → `verified`; `unresolved_findings`
+NOT incremented — the "write each BLOCKING/IMPROVE finding to `FINDINGS.md`"
+instruction is part of the `REVISE`/BLOCKING branch only, and the verdict is
+`SHIP` with no BLOCKING finding (same handling as the NIT/IMPROVE items in
+VERIFY iterations 20–26 and 42). Full critic output recorded above is the
+authoritative record. **All 9 implemented stages (s1–s9) are now `verified`;
+only `s10_schedule` (`not_started`) remains.** Next iteration: IMPLEMENT on
+`s10_schedule` (the nightly scheduled task; see Appendix A Stage 10).
