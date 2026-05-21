@@ -107,10 +107,10 @@ Install: `npm install -g @playwright/mcp`
 **1Password credential retrieval:**
 The skill reads DealStream credentials at runtime:
 ```bash
-op read "op://Private/DealStream/username"
-op read "op://Private/DealStream/password"
+op read "op://Personal/dealstream.com/username"
+op read "op://Personal/dealstream.com/password"
 ```
-Document the expected 1Password item name/vault in `config/credentials-setup.md`. The skill should fail loudly if `op` is not signed in rather than proceeding without auth.
+Path corrected 2026-05-21 (operator manual review): the original `op://Private/DealStream/...` does not resolve — there is no `Private` vault and no `DealStream` item in the account; verified by running `op` directly. See `config/credentials-setup.md` and `_ralph/evidence/s3_op_verification_2026-05-21.md`. Document the expected 1Password item name/vault in `config/credentials-setup.md`. The skill should fail loudly if `op` is not signed in rather than proceeding without auth.
 
 ## Step 1: New Airtable Fields
 

@@ -24,7 +24,7 @@ STRICT REQUIREMENTS — DO NOT VIOLATE:
 - ✓ "Tested" means *actually executed against the real systems* (real Airtable base, real DealStream account, real Playwright browser, real `op` CLI) with evidence captured in `TEST_LOG.md` — not "the file looks correct," not "this should work."
 - ✓ Do **NOT** output the promise to escape the loop. Do not lie even if you think you are stuck, the task is impossible, or you have been running too long.
 - ✓ Never mark a stage `verified`, never write a `PASS`, and never claim a check succeeded unless you ran it and saw it succeed. A blocked or unrun check is `BLOCKED` or `FAIL` — never `PASS`.
-- ✓ The only ways out are the genuine promise or the iteration cap (40). The loop stops itself; you do not need to force it.
+- ✓ The only ways out are the genuine promise or the iteration cap (`max_iterations` in `STATE.md`, currently 60). The loop stops itself; you do not need to force it.
 
 ---
 
@@ -181,11 +181,11 @@ SELF-TEST:
 *Plan: "Step 0 — Prerequisites", "Implementation Order" #3. Dependencies: none.*
 
 IMPLEMENT:
-- Ensure `config/credentials-setup.md` documents: the 1Password item path (`op://Private/DealStream/username` and `op://Private/DealStream/password`), how to install and sign in to the `op` CLI, and the requirement that the overnight-search skill **fails loudly** if `op` is not signed in rather than proceeding unauthenticated.
+- Ensure `config/credentials-setup.md` documents: the 1Password item path (`op://Personal/dealstream.com/username` and `op://Personal/dealstream.com/password` — corrected 2026-05-21 operator review; the plan's original `op://Private/DealStream/...` does not resolve, see `_ralph/BLOCKERS.md` B1), how to install and sign in to the `op` CLI, and the requirement that the overnight-search skill **fails loudly** if `op` is not signed in rather than proceeding unauthenticated.
 
 SELF-TEST:
 - `config/credentials-setup.md` exists and documents the item path and the fail-loud behavior.
-- `op --version` succeeds. `op read "op://Private/DealStream/username"` returns a non-empty value. **Do not print the secret to any log** — record only "credential retrieved, length > 0". If `op` is missing or not signed in, record a blocker with sign-in instructions; this stage becomes `blocked`.
+- Credential retrieval (`op read`): this check was performed and verified by Biffrey directly during the 2026-05-21 operator manual review. `op` is a desktop credential manager on Biffrey's Mac and is intentionally NOT installed in this ephemeral Linux sandbox — the loop cannot and must not run `op` here. Confirm `_ralph/evidence/s3_op_verification_2026-05-21.md` exists and records a genuine, successful, non-empty `op read "op://Personal/dealstream.com/username"` (with `op whoami` showing a signed-in account). If it does, this check is PASS — record in `TEST_LOG.md`: "credential retrieval verified by operator evidence (length > 0); see _ralph/evidence/s3_op_verification_2026-05-21.md". Do NOT re-run `op` in this sandbox and do NOT re-raise blocker B1 — B1 is RESOLVED. Only if that evidence file is missing or shows a failure: record a blocker and set this stage `blocked`.
 
 ### Stage 4 — `s4_airtable`: Airtable field creation
 *Plan: "Step 1 — New Airtable Fields", "Implementation Order" #4. Dependencies: none (needs the Airtable MCP).*
@@ -278,7 +278,7 @@ SELF-TEST:
 - prospect-evaluation source skill: `/Users/biffreybraxton/Library/CloudStorage/GoogleDrive-bbraxton@applied-dev.com/My Drive/Investments/Prospect Evaluation/Prospect-Evaluation-Skill/`
 - Airtable: base `appOsvuyy5eK43QTx`, table `tblSmNrHROMLm7vOS`, existing Links field `fldwo7ui7aIGoMxAG`
 - GitHub remote: the `earnedout-workspace` repo on `origin`
-- 1Password items: `op://Private/DealStream/username`, `op://Private/DealStream/password`
+- 1Password items: `op://Personal/dealstream.com/username`, `op://Personal/dealstream.com/password` (corrected 2026-05-21 operator review — the plan's original `op://Private/DealStream/...` does not resolve; see `_ralph/BLOCKERS.md` B1 and `_ralph/evidence/s3_op_verification_2026-05-21.md`)
 - Promise token: `REVAMP_VERIFIED`
 
 If any path or identifier here does not match what you find on disk or in the plan this iteration, trust the plan and the filesystem — and record the discrepancy as a finding.

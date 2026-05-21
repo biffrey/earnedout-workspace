@@ -28,46 +28,41 @@ stored in the repo, in config files, or in Airtable.
 
 ## Credential Retrieval
 
-The skill reads the DealStream credentials at runtime using the canonical
-1Password item path from `REVAMP_PLAN.md` (Step 0):
+The skill reads the DealStream credentials at runtime using the verified
+1Password item path (confirmed by running `op` directly on 2026-05-21):
 
 ```bash
-op read "op://Private/DealStream/username"
-op read "op://Private/DealStream/password"
+op read "op://Personal/dealstream.com/username"
+op read "op://Personal/dealstream.com/password"
 ```
 
-### Expected 1Password Item (canonical, per REVAMP_PLAN.md)
+### 1Password Item (verified 2026-05-21)
 
-| Field            | Value                       |
-|------------------|-----------------------------|
-| Vault            | `Private`                   |
-| Item name        | `DealStream`                |
-| `username` field | DealStream login email      |
-| `password` field | DealStream login password   |
+| Field            | Value                                              |
+|------------------|----------------------------------------------------|
+| Vault            | `Personal` (ID `4s5nnkrzqk2exofau5mlmv4ocu`)       |
+| Item name        | `dealstream.com` (ID `6lidhvmgp7siixuwmse6faooza`) |
+| `username` field | DealStream login email                             |
+| `password` field | DealStream login password                          |
 
-### ⚠️ Vault / item-path reconciliation needed
+### ✅ Vault / item-path reconciliation — RESOLVED 2026-05-21
 
-An earlier version of this file (created 2026-04-16, before the current build
-loop) documented a **different** location — `op://Personal/dealstream.com/username`
-and `.../password` (vault `Personal`, item `dealstream.com`). The canonical plan
-specifies `op://Private/DealStream/...`. These genuinely differ in both the
-vault name and the item name.
+An earlier draft of this file and `REVAMP_PLAN.md` Step 0 specified
+`op://Private/DealStream/username` / `.../password`. **That path is wrong** and
+was confirmed wrong on 2026-05-21 when Biffrey ran `op` directly:
 
-Before the skill runs in production, confirm where the DealStream credentials
-actually live in 1Password and make this file **and** the skill use the path
-that resolves:
+- `op vault list` shows the account has exactly one vault, `Personal` — there
+  is no `Private` vault, so `op://Private/DealStream/...` cannot resolve.
+- `op item list` shows the DealStream login item is named `dealstream.com`
+  (in `Personal`), not `DealStream`.
+- `op read "op://Personal/dealstream.com/username"` returned a real, non-empty
+  value with no error.
 
-```bash
-op vault list                            # find the real vault name
-op item list --vault <vault>             # find the real item name
-op item get DealStream --vault Private   # confirm the canonical path resolves
-```
-
-If the real item is at `op://Personal/dealstream.com/...`, either (a) move or
-alias the item to `op://Private/DealStream/...` so it matches the plan, or
-(b) update `REVAMP_PLAN.md` and this file to the real path. Tracked as build-loop
-finding **F2**; the s3 SELF-TEST runs `op read "op://Private/DealStream/username"`
-and will surface which path is correct.
+The canonical path is therefore `op://Personal/dealstream.com/...`. This has
+been propagated to `REVAMP_PLAN.md` Step 0 and `REVAMP_LOOP_PROMPT.md`
+(Appendix A Stage 3 and Appendix B). Full evidence:
+`_ralph/evidence/s3_op_verification_2026-05-21.md`. Tracked as build-loop
+finding **F2** (closed) and blocker **B1** (RESOLVED).
 
 ## Failure Behavior — fail loudly, never proceed unauthenticated
 

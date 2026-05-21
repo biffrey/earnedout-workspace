@@ -6,11 +6,51 @@ satisfied, the blocker is marked RESOLVED and the affected stage is reset.
 
 ## Counting blockers (gate the COMPLETE phase; `open_blockers` counts these)
 
-### B1 — s3_onepassword — `op` (1Password CLI) not available in the execution sandbox
+### B1 — s3_onepassword — `op` (1Password CLI) not available in the execution sandbox — ✅ RESOLVED
 
 **Raised:** iteration 14 (2026-05-21T02:15:09Z)
 **Stage blocked:** `s3_onepassword` (status set `implemented` → `blocked`)
-**`open_blockers`:** incremented 0 → 1
+**`open_blockers`:** incremented 0 → 1; decremented 1 → 0 on resolution below.
+
+> ## ✅ RESOLVED — 2026-05-21, operator manual review (not an automated iteration)
+>
+> Biffrey ran the `op` 1Password CLI directly on his Mac during a manual review
+> session with Claude, and the credential-retrieval check **genuinely
+> succeeded**. Full transcript and evidence:
+> `_ralph/evidence/s3_op_verification_2026-05-21.md`.
+>
+> **What was observed:**
+> - `op whoami` → signed in (account `bb@braxton.ai`, `my.1password.com`).
+> - `op read "op://Private/DealStream/username"` → **FAILED**: `"Private" isn't
+>   a vault in this account`. The plan's original canonical path does not exist.
+> - `op vault list` → the account has exactly one vault: `Personal`.
+> - `op item list` → the DealStream login item is `dealstream.com` (in
+>   `Personal`), not an item named `DealStream`.
+> - `op read "op://Personal/dealstream.com/username"` → **SUCCESS**: returned a
+>   real, non-empty value with no error. (Secret not logged — only "credential
+>   retrieved, length > 0" per the s3 SELF-TEST rule.)
+>
+> **Path reconciliation (also closes finding F2's deferred real-world question):**
+> the verified canonical path is `op://Personal/dealstream.com/username` and
+> `op://Personal/dealstream.com/password`. This was propagated to
+> `REVAMP_PLAN.md` Step 0, `config/credentials-setup.md`, and
+> `REVAMP_LOOP_PROMPT.md` (Appendix A Stage 3 and Appendix B).
+>
+> **How the s3 SELF-TEST is satisfied going forward:** `op` is a desktop
+> credential manager and genuinely cannot run in the ephemeral Linux sandbox —
+> that is the permanent reason B1 was raised, and it does not change. The
+> resolution Biffrey chose ("verify on your Mac, record the evidence") means the
+> `op read` check was run for real by the operator, and its evidence is on disk.
+> `REVAMP_LOOP_PROMPT.md` Appendix A Stage 3 SELF-TEST has been updated so the
+> loop confirms the recorded evidence file rather than re-running `op` in the
+> sandbox. **The loop must NOT re-run `op` in the sandbox and must NOT re-raise
+> B1.** This is a genuine, operator-run check with its evidence preserved — not
+> a faked PASS.
+>
+> **Counter changes:** `open_blockers` 1 → 0; `s3_onepassword` reset
+> `blocked` → `implemented` (the loop will SELF-TEST then VERIFY it normally).
+>
+> The original blocker analysis is retained below as a historical record.
 
 **Observed (s3 SELF-TEST Check 2, iteration 14):**
 ```
@@ -72,7 +112,7 @@ available, mark B1 RESOLVED, decrement `open_blockers` 1 → 0, reset
 `s3_onepassword` from `blocked` back to `implemented`, and retry the s3
 SELF-TEST.
 
-_No other open counting blockers._
+_B1 is RESOLVED (2026-05-21 operator manual review). There are no open counting blockers — `open_blockers: 0`._
 
 ## Advisory notes (non-counting — do NOT add to `open_blockers`)
 

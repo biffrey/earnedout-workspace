@@ -135,6 +135,19 @@ faked PASS: the discrepancy and its reconciliation steps remain fully visible in
 `s3_onepassword` stays `implemented` (it was never `self_tested`/`verified`, so
 no stage demotion applies).
 
+**ADDENDUM (2026-05-21, operator manual review):** F2's deferred real-world
+question — "which path actually resolves against Biffrey's live 1Password
+vault" — is now answered. Biffrey ran `op` directly on his Mac: neither a vault
+named `Private` nor an item named `DealStream` exists. The DealStream
+credentials live at `op://Personal/dealstream.com/...` (vault `Personal`, item
+`dealstream.com`), and `op read "op://Personal/dealstream.com/username"`
+returned a non-empty value with no error. The canonical path has been corrected
+in `REVAMP_PLAN.md` Step 0, `config/credentials-setup.md`, and
+`REVAMP_LOOP_PROMPT.md` (Appendix A Stage 3 + Appendix B). Evidence:
+`_ralph/evidence/s3_op_verification_2026-05-21.md`. This also resolved blocker
+**B1**. F2 is now fully closed — both the file-vs-plan text mismatch and the
+real-world vault path are reconciled.
+
 ## F3 — s4_airtable — financial fields use "Revenue YYYY" not plan's "YYYY Revenue" (IMPROVE)
 
 **Iteration raised:** 6 (2026-05-21T00:28:12Z)

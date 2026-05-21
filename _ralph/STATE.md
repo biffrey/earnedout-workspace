@@ -1,16 +1,16 @@
 ---
-active: false
+active: true
 iteration: 40
-max_iterations: 40
+max_iterations: 60
 last_iteration_at: 2026-05-21T06:44:48Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
-open_blockers: 1
+open_blockers: 0
 stages:
   s1_repo:            { status: verified }
   s2_playwright:      { status: verified }
-  s3_onepassword:     { status: blocked }
+  s3_onepassword:     { status: implemented }
   s4_airtable:        { status: verified }
   s5_overnight_skill: { status: verified }
   s6_submit_url:      { status: verified }
@@ -951,7 +951,17 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `op read` credential check it could not run.
 
 ## Next iteration (expected)
-**The loop is now blocked on B1 and cannot advance any stage until Biffrey
+> ⚠️ **SUPERSEDED by the 2026-05-21 operator manual review — see the
+> "## Manual review & loop restart" section below.** Blocker B1 is RESOLVED,
+> `open_blockers` is now 0, `s3_onepassword` is reset to `implemented`, the loop
+> is reactivated (`active: true`), and `max_iterations` is raised 40 → 60. The
+> next run is **iteration 41**: Step 1's blocker re-check will find B1 already
+> RESOLVED, then SELF-TEST will run on `s3_onepassword` against the recorded
+> operator evidence (`_ralph/evidence/s3_op_verification_2026-05-21.md`). The
+> pre-restart blocked-state analysis below is retained only as a historical
+> record and no longer applies.
+
+**(Historical, pre-restart.) The loop is now blocked on B1 and cannot advance any stage until Biffrey
 resolves it.** Step 1 will first re-check `BLOCKERS.md`: counting blocker B1
 (`op` unavailable) will almost certainly still be open — its precondition (an
 installed, signed-in `op` reachable by the SELF-TEST) cannot clear from inside
@@ -1010,6 +1020,51 @@ and `s10_schedule` `not_started`. `unresolved_findings: 0`, `open_blockers: 1`
 (B1). To finish the revamp, Biffrey must clear B1 per `BLOCKERS.md`, then reset
 `active: true` and raise `max_iterations` to give the loop room for the ~9–10
 remaining post-B1 iterations.
+
+## Manual review & loop restart (2026-05-21, operator session)
+This is NOT an automated loop iteration — it is a manual review Biffrey ran with
+Claude after the loop hit the 40-iteration cap. Actions taken:
+
+- **Reviewed `_ralph/BLOCKERS.md` and `_ralph/FINDINGS.md`** with Biffrey. All
+  three findings (F1, F2, F3) were already resolved (`unresolved_findings: 0`).
+  The only open item was counting blocker **B1** (`op` 1Password CLI not in the
+  sandbox), which gated COMPLETE.
+- **Resolved B1 via genuine operator-run evidence.** Biffrey ran the `op` CLI
+  directly on his Mac. Findings: the plan's original path
+  `op://Private/DealStream/...` does NOT resolve (no `Private` vault and no
+  `DealStream` item exist); the real path is `op://Personal/dealstream.com/...`,
+  and `op read "op://Personal/dealstream.com/username"` returned a non-empty
+  value with no error. `op whoami` confirmed a signed-in account. Full
+  transcript: `_ralph/evidence/s3_op_verification_2026-05-21.md`. B1 marked
+  RESOLVED in `BLOCKERS.md`.
+- **Reconciled the 1Password path** (closes F2's deferred real-world question):
+  corrected `op://Private/DealStream/...` → `op://Personal/dealstream.com/...`
+  in `REVAMP_PLAN.md` Step 0, `config/credentials-setup.md`, and
+  `REVAMP_LOOP_PROMPT.md` (Appendix A Stage 3 + Appendix B). F2 addendum added.
+- **Updated the s3 SELF-TEST** in `REVAMP_LOOP_PROMPT.md` Appendix A Stage 3:
+  `op` is a desktop tool that genuinely cannot run in the ephemeral Linux
+  sandbox, so the `op read` SELF-TEST check is satisfied by confirming the
+  recorded operator evidence file. The loop must NOT re-run `op` in the sandbox
+  and must NOT re-raise B1. This is the "verify on the operator's Mac, record
+  the evidence" resolution Biffrey chose — a genuine check, run by the operator,
+  with its evidence preserved on disk; it is not a faked PASS.
+- **Reactivated the loop:** frontmatter `active: false → true`,
+  `max_iterations: 40 → 60` (20 more iterations: 41–60), `open_blockers: 1 → 0`,
+  `s3_onepassword: blocked → implemented`. `iteration` stays at 40 so the next
+  run increments to 41 and the existing iteration history stays consistent.
+
+**Expected path to COMPLETE:** iter 41 SELF-TEST `s3` → iter 42 VERIFY `s3` →
+then IMPLEMENT / SELF-TEST / VERIFY for `s9_end_to_end` (the live end-to-end
+run) and `s10_schedule` (nightly schedule), then FINAL AUDIT, then COMPLETE —
+roughly 9–11 iterations of real work, within the 20-iteration budget.
+
+**Caveat for the operator (honest risk note):** stage 9 runs the overnight-search
+pipeline live, which itself needs `op`, a Playwright browser, and a DealStream
+login from the execution environment. If the loop's ephemeral Linux sandbox
+cannot run those live (the same class of limitation as B1), the loop will
+honestly raise new blockers at s9 rather than fake the end-to-end run — that
+would need another operator-assisted review like this one. Raising the cap to
+60 does not by itself guarantee the loop reaches COMPLETE.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
