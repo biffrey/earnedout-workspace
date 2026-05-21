@@ -373,3 +373,126 @@ are explicit "no severity" confirmations.
 Both Appendix A Stage 4 SELF-TEST checks were independently re-run by the critic
 against the live Airtable schema and observed to genuinely pass.
 **`s4_airtable` → `verified`.**
+
+## Iteration 23 — s5_overnight_skill verify
+
+VERIFY phase. Step 1 fell through RESOLVE (`unresolved_findings == 0`), the
+IMPLEMENT scan (no actionable `not_started` stage — s9 needs s1–s8 all
+`verified`, s10 needs s9 `verified`), and the SELF-TEST scan (no `implemented`
+stage — s1/s2/s4 `verified`, s5/s6/s7/s8 `self_tested`, s3 `blocked`) to
+**VERIFY**. The VERIFY s1→s10 scan skipped `s1_repo`/`s2_playwright`/
+`s4_airtable` (`verified`) and `s3_onepassword` (`blocked`, not `self_tested`)
+and landed on the first `self_tested` stage, `s5_overnight_skill`.
+
+Spawned an independent general-purpose critic subagent (Appendix C brief):
+skeptical fresh context, instructed to read `REVAMP_PLAN.md` Steps 2 (2a–2e),
+3, 4, 5, 7, 8 + "Implementation Order" #5 and `TEST_LOG.md` Iteration 16,
+verify the artifact `.claude/skills/overnight-search/skill.md`, independently
+re-run at least one SELF-TEST check, and flag any unbacked PASS; read-only.
+
+### Critic subagent — full output
+
+> My independent re-check confirms the TEST_LOG claims. One small discrepancy
+> to verify: TEST_LOG Check 3 says base/table IDs appear "at L17 and L90;
+> existing Links field at L17" — my grep confirms L17 and L90 for base/table,
+> and Links only at L17. Let me also note the file size discrepancy and check
+> the 16 field names count.
+>
+> The verification is complete. Here are my findings.
+>
+> ---
+>
+> ## Verification Findings — s5_overnight_skill
+>
+> **1. Artifact exists and is substantive — no issue.**
+> `/Users/biffreybraxton/published-listing-search/.claude/skills/overnight-search/skill.md`
+> exists, 209 lines / 13,905 bytes, real content (not a stub). Severity: none.
+>
+> **2. Frontmatter is valid YAML with exactly `name` + `description` —
+> confirmed independently.** Command: `python3` with `yaml.safe_load` on the
+> `---`-delimited block. Output: `parsed type: dict`,
+> `keys: ['description', 'name']`, `exactly name+description: True`,
+> `name: 'overnight-search'` (matches the directory slug), `description len:
+> 584`. Matches TEST_LOG Iteration 16 Check 1 exactly (584 chars).
+> Severity: none.
+>
+> **3. Base/table/Links IDs — confirmed, with one minor TEST_LOG inaccuracy.**
+> `grep` found base `appOsvuyy5eK43QTx` + table `tblSmNrHROMLm7vOS` at L17 and
+> L90; Links field `fldwo7ui7aIGoMxAG` at L17 only. TEST_LOG Check 3 says
+> "base...and table...both appear at L17 and L90; existing Links field
+> `fldwo7ui7aIGoMxAG` at L17" — accurate. All three IDs match the plan.
+> Severity: NIT (no correction needed; the TEST_LOG line citations are
+> correct).
+>
+> **4. Sixteen new field names — confirmed, all present with F3-canonical
+> names.** Step 7 (L129–144) writes: `Listing ID`, `Direct Listing URL`,
+> `Listing Screenshot`, `Date Added`, `Date Updated`, `Link Health Status`,
+> `Link Last Checked`, `Disposition`, `Lead Score`, `Prospect Eval Report`,
+> `Source` (11), plus the four financial fields. `grep` confirms the financials
+> use the **live Airtable names** `Revenue 2024` (L140), `Cash Flow 2024`
+> (L141), `Revenue 2025` (L142), `Cash Flow 2025` (L143) — per finding F3,
+> intentional and correct (not the plan-table "2025 Revenue" word order). The
+> 16th, `Previous Asking Price`, appears at L103 and L157. All 16 present.
+> Severity: none.
+>
+> **5. "Never store search-results URLs" rule — explicit, confirmed.**
+> Dedicated section header at L55, hard rule at L56 ("NEVER store a
+> search-results page URL as a listing link... skip it"), reinforced at L131
+> and L154. Severity: none.
+>
+> **6. Price-drop detection logic — explicit, confirmed.** Step 5 L102–110
+> spells out the full branch: store old price in `Previous Asking Price`,
+> update `Asking Price`, set `Date Updated`, re-run prospect eval, update
+> score/report, append `PRICE DROP: was $[OLD], now $[NEW] ([DATE])` note
+> (L108), price-drop outreach template (L109), Section-A "PRICE DROP" badge
+> (L110). Severity: none.
+>
+> **7. Plan-step coverage (2a–2e, 3, 4, 5, 7, 8) — all covered with labelled
+> headers.** `grep -nE '^#'` confirms every section header names the plan step
+> it maps to: 2a→L10+L19, 2b→L36, 2c→L58, 2d→L68, 2e→L88, 3→L112, 4→L123,
+> 5→L159, 8→L173, 7→L188. Note ordering: skill Step 9 covers plan Step 8 and
+> skill Step 10 covers plan Step 7 — non-sequential but every plan step is
+> explicitly mapped, so coverage is complete. Severity: NIT.
+>
+> **8. Truth of testing — TEST_LOG Iteration 16 is honest and backed by real
+> evidence.** Check 1 cites a real `yaml.safe_load` run with concrete output
+> (parsed dict, exact keys, 584-char description). Checks 2 and 3 cite specific
+> line numbers that I independently verified by `grep` — every cited line (L17,
+> L55–56, L90, L102–110, L129–144, L140–143, L157) resolves to exactly the
+> claimed content. No hand-waving, no "looks right" language. No unbacked PASS
+> detected. Severity: none.
+>
+> **9. Minor TEST_LOG metadata drift — NIT.** Iteration 16 header states the
+> file is "13,905 B, 209 lines" — `wc` confirms exactly 209 lines / 13,905
+> bytes. Header also says "dated 2026-05-21 00:40 (the iteration-8 rewrite)" —
+> not independently checkable here but immaterial. No correction needed.
+>
+> All three Stage 5 SELF-TEST checks were genuinely executed and independently
+> reproduce. The artifact fully matches the plan; the F3 live-name adoption for
+> financial fields is correctly applied.
+>
+> VERDICT: SHIP
+
+### Loop decision — Iteration 23
+
+Critic verdict: **SHIP**, zero BLOCKING findings. The only graded items are
+findings #3 and #7, both severity **NIT**, plus #9 (NIT, TEST_LOG metadata
+drift); findings #1, #2, #4, #5, #6, #8 are explicit "no severity"
+confirmations. The critic independently re-ran SELF-TEST Check 1
+(`yaml.safe_load` of the frontmatter → dict with exactly `name`/`description`,
+584-char description) and Check 3 (`grep` of base/table/Links IDs, the 16 new
+field names incl. F3-canonical `Revenue/Cash Flow 2024/2025`, the
+never-store-search-URL rule at L55–56, the price-drop logic at L102–110), and
+confirmed `TEST_LOG.md` Iteration 16's PASS claims are honest and
+line-citation-accurate — no unbacked PASS.
+
+Per loop-prompt Step 1.4 (SHIP verdict + no BLOCKING finding → set `verified`),
+`s5_overnight_skill` → `verified`. `unresolved_findings` is NOT incremented:
+the "write each BLOCKING/IMPROVE finding to FINDINGS.md" instruction applies
+only on the `REVISE`/BLOCKING branch and, in any case, only to BLOCKING/IMPROVE
+severities — the three NITs (#3, #7, #9) do not qualify and are recorded here
+for transparency only. None is a defect of s5's implemented substance.
+
+All three Appendix A Stage 5 SELF-TEST checks were independently re-run by the
+critic against the real `skill.md` file and observed to genuinely pass.
+**`s5_overnight_skill` → `verified`.**
