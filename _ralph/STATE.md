@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 23
+iteration: 24
 max_iterations: 40
-last_iteration_at: 2026-05-21T03:44:23Z
+last_iteration_at: 2026-05-21T03:54:31Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -13,7 +13,7 @@ stages:
   s3_onepassword:     { status: blocked }
   s4_airtable:        { status: verified }
   s5_overnight_skill: { status: verified }
-  s6_submit_url:      { status: self_tested }
+  s6_submit_url:      { status: verified }
   s7_outreach:        { status: self_tested }
   s8_dashboard:       { status: self_tested }
   s9_end_to_end:      { status: not_started }
@@ -544,6 +544,42 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   the three NITs do not qualify). Full critic output in `VERIFY_LOG.md` under
   `## Iteration 23 — s5_overnight_skill verify`.
 
+- Iteration 24 (2026-05-21T03:54:31Z): VERIFY phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-24 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`); the SELF-TEST scan
+  found no `implemented` stage (s1/s2/s4/s5 `verified`, s6/s7/s8 `self_tested`,
+  s3 `blocked`) so Step 1 fell through to **VERIFY**. The VERIFY s1→s10 scan
+  skipped `s1_repo`/`s2_playwright`/`s4_airtable`/`s5_overnight_skill`
+  (`verified`) and `s3_onepassword` (`blocked`, not `self_tested`) and landed on
+  the first `self_tested` stage, `s6_submit_url`. Spawned an independent
+  general-purpose critic subagent (Appendix C brief): skeptical fresh context,
+  read `REVAMP_PLAN.md` "Step 6", `TEST_LOG.md` Iteration 17, and the artifact
+  `.claude/skills/submit-url/skill.md`; read-only. The critic **independently
+  re-ran all three Appendix A Stage 6 SELF-TEST checks** against the real file
+  (`.claude/skills/submit-url/skill.md`, 11,091 B, 153 lines): Check 1 —
+  `yaml.safe_load` of the frontmatter parses as a dict with exactly
+  `name`=`submit-url` + a 590-char `description`; Check 2 —
+  `grep -nE '^## Step [0-9]'` returns exactly 9 headings numbered 1→9, each
+  mapping 1:1 to plan Step 6's 9-step workflow, with all 8 overnight-search
+  cross-references resolving to the correct headings (no dangling refs); Check 3
+  — `grep -n 'Manual Submission'` returns 4 hits incl. the operative `Source`
+  field mapping at L95. It reproduced every value claimed in `TEST_LOG.md`
+  Iteration 17 exactly (no faked PASS) and confirmed the 16 new fields use the
+  F3-canonical live names `Revenue/Cash Flow 2024/2025`. **Verdict: `SHIP`,
+  zero BLOCKING findings.** The only graded items are NIT #7 (immaterial
+  cross-iteration metadata wording drift in a blocker re-check note) and NIT #8
+  (this very VERIFY phase being the expected next step); findings #1–#6 are
+  "INFO" PASS confirmations. Per Step 1.4 (SHIP + no BLOCKING → `verified`),
+  `s6_submit_url` → `verified`; `unresolved_findings` NOT incremented (the
+  write-findings instruction applies only on the REVISE/BLOCKING branch, and
+  only to BLOCKING/IMPROVE severities — the two NITs do not qualify). Full
+  critic output in `VERIFY_LOG.md` under `## Iteration 24 — s6_submit_url
+  verify`.
+
 ## Next iteration (expected)
 VERIFY phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
@@ -552,15 +588,15 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 `unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`); the SELF-TEST scan finds no
-`implemented` stage (s1/s2/s4/s5 are now `verified`; s6/s7/s8 are `self_tested`;
+`implemented` stage (s1/s2/s4/s5/s6 are now `verified`; s7/s8 are `self_tested`;
 s3 is `blocked`) so it falls through to **VERIFY**. The VERIFY s1→s10 scan
-skips `s1_repo`, `s2_playwright`, `s4_airtable`, `s5_overnight_skill`
-(`verified`) and `s3_onepassword` (`blocked`, not `self_tested`) and lands on
-the first `self_tested` stage, `s6_submit_url`: spawn an independent critic
-subagent (Appendix C brief) for `s6_submit_url`, append its full output to
-`VERIFY_LOG.md` under `## Iteration N — s6_submit_url verify`, and on a `SHIP`
-verdict with no BLOCKING findings set `s6_submit_url` → `verified` (else write
-findings and increment `unresolved_findings`).
+skips `s1_repo`, `s2_playwright`, `s4_airtable`, `s5_overnight_skill`,
+`s6_submit_url` (`verified`) and `s3_onepassword` (`blocked`, not
+`self_tested`) and lands on the first `self_tested` stage, `s7_outreach`:
+spawn an independent critic subagent (Appendix C brief) for `s7_outreach`,
+append its full output to `VERIFY_LOG.md` under `## Iteration N — s7_outreach
+verify`, and on a `SHIP` verdict with no BLOCKING findings set `s7_outreach` →
+`verified` (else write findings and increment `unresolved_findings`).
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
 loop can still progress through the s5–s8 VERIFY phase meanwhile, but cannot
 reach COMPLETE (`open_blockers == 0` required, all 10 stages `verified`) until

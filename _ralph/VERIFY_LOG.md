@@ -496,3 +496,128 @@ for transparency only. None is a defect of s5's implemented substance.
 All three Appendix A Stage 5 SELF-TEST checks were independently re-run by the
 critic against the real `skill.md` file and observed to genuinely pass.
 **`s5_overnight_skill` → `verified`.**
+
+---
+
+## Iteration 24 — s6_submit_url verify
+
+**Phase:** VERIFY. **Timestamp:** 2026-05-21T03:54:31Z.
+**Stage selected:** `s6_submit_url`. Step 1 blocker re-check: counting blocker
+B1 (`op` CLI) still open — `op --version` → `op: command not found` (exit 127),
+`which op` exit 1 in the iteration-24 sandbox; precondition (an installed,
+signed-in `op` reachable by the SELF-TEST) did not clear, so B1 stays open and
+`open_blockers` stays 1. `unresolved_findings == 0` so Step 1 fell through
+RESOLVE; the IMPLEMENT scan found no actionable `not_started` stage (s9 needs
+s1–s8 all `verified`, s10 needs s9 `verified`); the SELF-TEST scan found no
+`implemented` stage (s1/s2/s4/s5 `verified`, s6/s7/s8 `self_tested`, s3
+`blocked`) so Step 1 fell through to **VERIFY**. The VERIFY s1→s10 scan skipped
+`s1_repo`/`s2_playwright`/`s4_airtable`/`s5_overnight_skill` (`verified`) and
+`s3_onepassword` (`blocked`, not `self_tested`) and landed on the first
+`self_tested` stage, `s6_submit_url`.
+
+An independent general-purpose critic subagent was spawned with the Appendix C
+brief: skeptical fresh context, instructed to read `REVAMP_PLAN.md` "Step 6",
+the loop's `_ralph/TEST_LOG.md` Iteration 17 entry, and the artifact
+`.claude/skills/submit-url/skill.md`; explicitly read-only (no file or Airtable
+mutation). Full critic output follows verbatim.
+
+---
+
+### Critic subagent output (verbatim)
+
+## Verification Findings: s6_submit_url
+
+**1. [INFO] Existence & completeness — PASS.** `.claude/skills/submit-url/skill.md`
+exists (11,091 bytes, 153 lines). Frontmatter parses as a valid YAML dict via
+`yaml.safe_load` with exactly two keys: `name: 'submit-url'` (exact slug
+required by plan) and a 590-char `description` that faithfully covers the plan
+Step 6 workflow (Playwright validation + screenshot, data extraction, dedup
+with price-drop detection, prospect-evaluation scoring, Airtable record with
+`Source = "Manual Submission"`, outreach draft, dashboard regen, score report)
+plus trigger phrases. The plan's literal description is a shorter sentence; the
+file's is a plan-faithful expansion — acceptable.
+
+**2. [INFO] All 9 workflow steps present, in order — PASS.**
+`grep -nE '^## Step [0-9]'` returns exactly 9 headings numbered 1→9: Accept URL
+(L19), Validate/Playwright (L26), Extract Data (L34), Dedup+Price-Drop (L46),
+Prospect-Eval (L65), Airtable record (L74), Broker Outreach (L110), Regenerate
+Dashboard (L125), Report to User (L135). Each maps 1:1 to plan Step 6 items 1–9.
+
+**3. [INFO] Overnight-search cross-references are consistent — PASS.** Every
+cross-reference in submit-url resolves to the correct overnight-search heading:
+skill Step 2→overnight Step 3 (L58), Step 3→Step 4 (L68), Step 4→Step 5 (L88),
+Step 5→Step 6 (L112), Step 6→Step 7 (L123), Step 7→Step 8 (L159), Step 8→Step 10
+(L188), and L24's "overnight-search skill Step 2" → L36 Search platforms. All 8
+line numbers in the TEST_LOG cross-ref table I independently confirmed by
+`grep`. No dangling references.
+
+**4. [INFO] `Source = "Manual Submission"` — PASS.** `grep -n 'Manual
+Submission'` returns 4 hits: frontmatter (L3), intro (L8), Step 6 heading (L74),
+the operative field mapping at L95 (`Source` → "Manual Submission", explicitly
+contrasted with overnight-search's "Overnight Search"), and the Notes block at
+L102. Plan Step 6 requirement satisfied.
+
+**5. [INFO] Required-coverage checklist — PASS.** The skill covers all plan
+Step 6 elements: one URL accepted (L19–24, with search-results rejection),
+Playwright validation (L26–32), data extraction incl. 2024/2025 financials and
+"do not fabricate" (L34–44), dedup with full 3-branch price-drop logic and
+`Previous Asking Price` (L46–63), prospect-evaluation invocation (L65–72),
+Airtable create/update with all 16 new fields under F3-canonical names
+`Revenue 2024/2025`, `Cash Flow 2024/2025` (L74–108), conditional broker
+outreach (L110–123, correctly drafts only if broker info exists), dashboard
+regen (L125–133), score+summary display (L135–145). Bonus Error Handling
+section (L147–153).
+
+**6. [INFO] Truth of testing — Iteration 17 evidence is REAL, not hand-waving.**
+TEST_LOG Iteration 17 cites concrete commands (`yaml.safe_load`,
+`grep -nE '^## Step [0-9]'`, `grep -n 'Manual Submission'`) with specific output
+(parsed dict, 2 keys, name `submit-url`, description length 590, 9 step
+headings, 4 grep hits). I independently re-ran all three checks: every claimed
+value matches exactly — `name: 'submit-url'`, `description length: 590`, exactly
+9 ordered `## Step N` headings at the cited lines, 4 `Manual Submission` hits.
+No PASS in Iteration 17 is unsupported.
+
+**7. [NIT] TEST_LOG phase-selection note slightly inconsistent across
+iterations** — Iter 17 says `op --version` exit 127 while Iter 16 says exit 1.
+Cosmetic discrepancy in a blocker re-check note unrelated to s6; not
+load-bearing. Suggested fix: none required.
+
+**8. [NIT] Iteration 17 was self-test only; no VERIFY/critic pass yet for s6** —
+git log shows iters 20–23 verified s1, s2, s4, s5 but s6 sits at `self_tested`,
+not `verified`. This is the expected loop ordering, not a defect — it is
+precisely why this independent verification was commissioned. No fix needed.
+
+No BLOCKING or IMPROVE findings. The artifact fully matches plan Step 6, the
+Iteration 17 self-test was genuinely executed with reproducible evidence, and my
+independent re-checks reproduce every claimed result. This is read-only
+verification; no files or Airtable records were modified.
+
+VERDICT: SHIP
+
+---
+
+### Loop disposition (iteration 24)
+
+The critic returned **`VERDICT: SHIP` with zero BLOCKING and zero IMPROVE
+findings.** It independently re-ran all three Appendix A Stage 6 SELF-TEST
+checks against the real `.claude/skills/submit-url/skill.md` — frontmatter
+`yaml.safe_load` (dict, exactly `name`=`submit-url` + 590-char `description`),
+the 9 ordered `## Step N` headings, and the 4 `Manual Submission` hits — and
+reproduced every value claimed in `TEST_LOG.md` Iteration 17 exactly, confirming
+that self-test was genuinely executed (no faked PASS).
+
+Per loop-prompt Step 1.4 (SHIP verdict + no BLOCKING finding → set `verified`),
+`s6_submit_url` → `verified`. `unresolved_findings` is NOT incremented: the
+"write each BLOCKING/IMPROVE finding to FINDINGS.md" instruction applies only on
+the `REVISE`/BLOCKING branch and, in any case, only to BLOCKING/IMPROVE
+severities — the two NITs (#7, #8) do not qualify and are recorded here for
+transparency only. NIT #7 is an immaterial cross-iteration metadata wording
+drift in a blocker re-check note (the `op` check genuinely fails either way; the
+exit code reported can legitimately differ run-to-run depending on how the
+shell surfaces the missing command); NIT #8 simply describes this very VERIFY
+phase being the expected next step. Neither is a defect of s6's implemented
+substance.
+
+All three Appendix A Stage 6 SELF-TEST checks were independently re-run by the
+critic against the real `skill.md` file and observed to genuinely pass.
+**`s6_submit_url` → `verified`.**
