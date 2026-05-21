@@ -1089,3 +1089,58 @@ Result: `{"records": [], "metadata": {"totalRecordCount": 0}}`.
 → **PASS** — no test data, marked or unmarked, remains in the production base.
 Stage 9's "leave no unmarked test data in the live base" requirement is now
 satisfied by deletion. F6 resolved; `unresolved_findings` 1 → 0.
+
+## Iteration 59 — s5_overnight_skill self-test
+
+**Date:** 2026-05-21T17:50:41Z — SELF-TEST phase, Appendix A Stage 5.
+**Stage:** `s5_overnight_skill` (was `implemented`, demoted by iter-57 F5 RESOLVE).
+**Artifact:** `.claude/skills/overnight-search/skill.md` (210 lines).
+
+### Check 1 — frontmatter valid YAML with `name` + `description` — PASS
+```
+$ python3 (split on '---', inspect block 1)
+keys: ['name', 'description']
+name: overnight-search
+description: <long non-empty string, "Runs the EarnedOut overnight ...">
+valid key:value lines, no tabs: True
+```
+Frontmatter is a well-formed 2-key block.
+
+### Check 2 — coverage checklist (plan Steps 2a,2b,2c,2d,2e,3,4,5,7,8) — PASS
+`grep -nE '^## '` heading map:
+- 2a → L10 `## Before you start (plan Step 2a — Read Config)` + L19 `## Step 1: Authenticate (plan Step 2a — Authenticate)`
+- 2b → L36 `## Step 2: Search All Active Platforms (plan Step 2b)`
+- 2c → L58 `## Step 3: Validate Each URL + Screenshot — Playwright (plan Step 2c)`
+- 2d → L68 `## Step 4: Extract Structured Data (plan Step 2d)`
+- 2e → L88 `## Step 5: Deduplicate Against Airtable — with Price-Drop Detection (plan Step 2e)`
+- 3  → L112 `## Step 6: Prospect Evaluation (plan Step 3)`
+- 4  → L123 `## Step 7: Create / Update the Airtable Record (plan Step 4)`
+- 5  → L159 `## Step 8: Draft Broker Outreach (plan Step 5)`
+- 7  → L188 `## Step 10: Generate the Daily HTML Dashboard (plan Step 7)`
+- 8  → L173 `## Step 9: Disposition Workflow (plan Step 8)`
+All 10 plan steps covered by plan-step-labelled headings.
+
+### Check 3 — base/table IDs + new field names + key rules — PASS
+- `grep` for IDs: base `appOsvuyy5eK43QTx`, table `tblSmNrHROMLm7vOS`, Links
+  `fldwo7ui7aIGoMxAG` all present at L17 and L90.
+- 16 new fields written by canonical live names at L129–144 incl. F3-canonical
+  `Revenue 2024 / Cash Flow 2024 / Revenue 2025 / Cash Flow 2025`; `Previous
+  Asking Price` at L103 + L157.
+- Never-store-search-results rule: dedicated section L55–56
+  ("**NEVER store a search-results page URL as a listing link.**").
+- Price-drop detection logic: explicit at L102–110 (store old price in
+  `Previous Asking Price`, update `Asking Price`, set `Date Updated`, re-run
+  prospect-eval, append `PRICE DROP:` Notes line, Section A badge).
+
+### F5 re-check — `op://` path grep — PASS
+```
+$ grep -n 'op://' .claude/skills/overnight-search/skill.md
+26:op read "op://Personal/dealstream.com/username"
+27:op read "op://Personal/dealstream.com/password"
+```
+Exactly two `op://` hits, both the verified canonical
+`op://Personal/dealstream.com/...` path. The dead `op://Private/DealStream/...`
+path is fully removed. The L23 citation ("canonical item path (per
+`REVAMP_PLAN.md` Step 0 and `config/credentials-setup.md`)") is now accurate.
+
+**Result: all checks PASS → `s5_overnight_skill` → `self_tested`.**

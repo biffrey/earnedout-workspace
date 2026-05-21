@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 58
+iteration: 59
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:47:55Z
+last_iteration_at: 2026-05-21T17:50:41Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -12,7 +12,7 @@ stages:
   s2_playwright:      { status: verified }
   s3_onepassword:     { status: verified }
   s4_airtable:        { status: verified }
-  s5_overnight_skill: { status: implemented }
+  s5_overnight_skill: { status: self_tested }
   s6_submit_url:      { status: implemented }
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
@@ -1435,7 +1435,47 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   to F6. `unresolved_findings` 1 → 0. Full detail in `TEST_LOG.md` /
   `FINDINGS.md` F6.
 
+- Iteration 59 (2026-05-21T17:50:41Z): SELF-TEST phase. Step 0: `active: true`,
+  `iteration` 58 → 59 (`59 >= 75` false → no cap). Step 1 blocker re-check: B1
+  and B2 both RESOLVED, advisory A1 non-counting; `open_blockers == 0`, no
+  pending precondition. `unresolved_findings == 0` → RESOLVE skipped. IMPLEMENT
+  scan s1→s10: no `not_started` stage. SELF-TEST scan: first `implemented` stage
+  is `s5_overnight_skill` (demoted by iter 57's F5 RESOLVE) → ran it
+  (Appendix A Stage 5). All three mandatory checks executed against the real
+  file `.claude/skills/overnight-search/skill.md` (210 lines):
+  • **Check 1 PASS** — frontmatter parses as a 2-key block (`name` =
+    `overnight-search`, `description` a long non-empty string); every non-empty
+    line is a valid `key: value` pair, no tabs.
+  • **Check 2 PASS** — coverage checklist: all 10 plan steps covered by
+    plan-step-labelled `## ` headings — 2a → L10 (Before you start) + L19
+    (Step 1 Authenticate), 2b → L36, 2c → L58, 2d → L68, 2e → L88, 3 → L112,
+    4 → L123, 5 → L159, 7 → L188, 8 → L173.
+  • **Check 3 PASS** — base `appOsvuyy5eK43QTx` + table `tblSmNrHROMLm7vOS` +
+    Links `fldwo7ui7aIGoMxAG` present at L17/L90; all 16 new fields written by
+    canonical live names (incl. F3 `Revenue/Cash Flow 2024/2025`,
+    `Previous Asking Price`) at L129–144/L157; never-store-search-results rule
+    at L55–56; price-drop detection logic spelled out at L102–110.
+  • **F5 re-check PASS** — `grep 'op://'` returns exactly two hits, both the
+    verified canonical `op://Personal/dealstream.com/{username,password}` path
+    (L26–27). The dead `op://Private/DealStream/...` path is fully gone from the
+    skill; the L23 "canonical item path (per `REVAMP_PLAN.md` Step 0 and
+    `config/credentials-setup.md`)" citation is now accurate.
+  **All checks PASS → no findings raised → `s5_overnight_skill` → `self_tested`.**
+  Counters unchanged (`unresolved_findings: 0`, `open_blockers: 0`). Evidence in
+  `TEST_LOG.md` under `## Iteration 59 — s5_overnight_skill self-test`.
+
 ## Next iteration (expected)
+> **Updated after iteration 59.** SELF-TEST re-passed `s5_overnight_skill` after
+> the F5 fix (skill now uses the canonical `op://Personal/dealstream.com/...`
+> path, confirmed by an explicit `op://` grep). `unresolved_findings: 0`,
+> `open_blockers: 0`, `final_audit_passed: false`, s5 `self_tested`, s6 still
+> `implemented`. The next run is **iteration 60**: `unresolved_findings == 0` →
+> RESOLVE skipped; IMPLEMENT finds no `not_started` stage → **SELF-TEST** phase,
+> first `implemented` stage = **s6_submit_url** — re-run the s6 SELF-TEST with an
+> explicit `op://` grep confirming the canonical path. Then iters 61–62 VERIFY
+> s5 and s6, then FINAL AUDIT re-runs and — if clean — COMPLETE emits the promise.
+
+## Next iteration (superseded — kept for history)
 > **Updated after iteration 58.** RESOLVE closed F6 (the three `[RALPH TEST]`
 > records are deleted; the live base is clean — `RALPH TEST` filter returns 0).
 > `unresolved_findings: 0`, `open_blockers: 0`, `final_audit_passed: false`,
