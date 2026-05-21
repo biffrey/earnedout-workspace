@@ -968,3 +968,96 @@ VERIFY iterations 20–26 and 42). Full critic output recorded above is the
 authoritative record. **All 9 implemented stages (s1–s9) are now `verified`;
 only `s10_schedule` (`not_started`) remains.** Next iteration: IMPLEMENT on
 `s10_schedule` (the nightly scheduled task; see Appendix A Stage 10).
+
+## Iteration 55 — s10_schedule verify
+
+Spawned an independent general-purpose critic subagent (Appendix C brief) to
+verify Stage 10. It read `REVAMP_PLAN.md` "Implementation Order" #10,
+`TEST_LOG.md` Iteration 54, and inspected the four artifacts directly
+(`config/launchd/ai.earnedout.overnight-search.plist`, the installed
+`~/Library/LaunchAgents/` copy, `run-overnight-search.sh`, `config/schedule.md`).
+It independently re-ran the load-bearing SELF-TEST checks against the real macOS
+launchd system. Full critic output:
+
+---
+
+Verification complete. Bash syntax is valid; `claude` resolves at
+`/Users/biffreybraxton/.local/bin/claude`, which is the first entry in the
+script's exported PATH. (Exit code 1 was only the final `for`-loop test
+returning non-zero on the last non-match — not a real failure.)
+
+## Findings — s10_schedule (Stage 10, Nightly schedule)
+
+1. **[PASS] Artifacts all exist and match the plan.** REVAMP_PLAN.md
+   Implementation Order #10 calls for "Schedule — Set up via `/schedule` or cron
+   for nightly execution." All four artifacts are present and non-empty:
+   `config/launchd/ai.earnedout.overnight-search.plist` (1175 B), the installed
+   `~/Library/LaunchAgents/` copy, `run-overnight-search.sh` (2328 B, executable
+   `-rwxr-xr-x`), and `config/schedule.md` (documented mechanism/cadence/prompt).
+   No severity issue.
+
+2. **[PASS] Repo plist and installed plist are byte-identical.** Independent
+   `diff` of the two files returned `IDENTICAL` — no version drift between the
+   version-controlled source and the installed copy. Matches the TEST_LOG claim.
+
+3. **[PASS — independently re-checked] launchd task is genuinely loaded.**
+   `launchctl list | grep -i earnedout` returned
+   `-	0	ai.earnedout.overnight-search` (loaded, not running, last exit 0).
+   `launchctl print gui/501/ai.earnedout.overnight-search` shows it registered as
+   a `LaunchAgent` in `domain = gui/501` with an `event triggers` block:
+   `descriptor = { "Minute" => 37, "Hour" => 2 }`,
+   `stream = com.apple.launchd.calendarinterval`, `watching = 1`. This confirms
+   the intended **02:37 daily** cadence is live in the real macOS launchd system
+   — not hand-waving. `runs = 0` (never fired yet — expected, it is not 02:37).
+
+4. **[PASS — independently re-checked] Both plists pass `plutil -lint`.** I ran
+   `plutil -lint` on the repo copy and the installed copy; both returned `OK`.
+
+5. **[PASS] Trigger prompt is documented and substantive.**
+   `run-overnight-search.sh` line 27 defines `$PROMPT` invoking the
+   overnight-search skill end-to-end (op fail-loud credential retrieval,
+   Playwright multi-platform search, direct-URL/listing-ID/2024+2025 financials,
+   link validation + screenshots, Airtable dedup with price-drop detection on
+   `appOsvuyy5eK43QTx`/`tblSmNrHROMLm7vOS`, prospect-evaluation,
+   `Source = "Overnight Search"`, outreach drafted to files/Notes only — never
+   send, daily dashboard). `config/schedule.md` documents the same. `bash -n`
+   confirms valid script syntax.
+
+6. **[NIT] Design choice deviates from the literal plan wording but is
+   well-justified.** Plan #10 says "via `/schedule` or cron"; the implementer
+   used a macOS `launchd` LaunchAgent instead of a `/schedule` remote routine.
+   `config/schedule.md` lines 8-17 explain why: the pipeline needs the `op`
+   1Password desktop CLI, which only resolves in the local GUI login session; a
+   remote `/schedule` agent has no `op`. launchd is the documented "or cron"
+   equivalent. Sound reasoning, no fix needed.
+
+7. **[NIT] `RunAtLoad = false` means the schedule was never smoke-tested by an
+   actual fire.** `runs = 0`, `last exit code = (never exited)`. The task is
+   correctly loaded but has never executed; a real nightly run depends on the
+   runtime prerequisites in `schedule.md` (op signed in, MCP servers configured).
+   Suggested optional fix: a one-time
+   `launchctl kickstart -k gui/$(id -u)/ai.earnedout.overnight-search` to confirm
+   the script chain runs clean. Not blocking for Stage 10, whose scope is
+   "schedule exists with the intended cadence and prompt."
+
+**Honesty assessment:** Every PASS in TEST_LOG Iteration 54 is backed by real
+evidence. I independently reproduced the three load-bearing checks
+(`launchctl list`, `launchctl print` cadence, `plutil -lint`) plus the `diff`
+and executable-bit checks, and all outputs match what Iteration 54 reported
+exactly — including the `{ "Minute" => 37, "Hour" => 2 }` descriptor and the
+byte-identical plists. No fabricated or unsupported PASS found. The stage
+produces what the plan intends: a nightly early-morning scheduled task running
+the overnight-search skill with a documented trigger prompt.
+
+VERDICT: SHIP
+
+---
+
+**Loop disposition:** `VERDICT: SHIP` with zero BLOCKING findings (the two graded
+items are NITs — #6 the well-justified `launchd`-vs-`/schedule` choice, #7
+`RunAtLoad=false`/never-fired which is out of Stage 10's scope). Per Step 1.4
+(SHIP + no BLOCKING → `verified`), `s10_schedule` → `verified`.
+`unresolved_findings` NOT incremented (the write-findings instruction applies
+only on the REVISE/BLOCKING branch, and only to BLOCKING/IMPROVE severities —
+NITs do not qualify). **All 10 stages (s1–s10) are now `verified`.** Next
+iteration: FINAL AUDIT (Step 1 phase 5).
