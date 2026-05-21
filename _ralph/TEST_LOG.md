@@ -1173,10 +1173,11 @@ Each maps 1:1 to plan Step 6's 9-step workflow; every cross-reference to an
 overnight-search skill step is labelled and consistent with the s5 skill headings.
 
 **Check 3 — Source = "Manual Submission" → PASS**
-`grep -n 'Manual Submission'` returns 4 hits. The operative `Source` field
-mapping is at L95 (`**\`Source\` → "Manual Submission"**` in the Step 6 new-field
-map), reinforced in the Step 6 heading (L74), the Notes block (L102), the intro
-(L8), and the frontmatter description (L3).
+`grep -n 'Manual Submission'` returns 5 hits (L3, L8, L74, L95, L102 — count
+corrected from "4 hits" by the iteration-62 VERIFY critic re-run). The operative
+`Source` field mapping is at L95 (`**\`Source\` → "Manual Submission"**` in the
+Step 6 new-field map), reinforced in the Step 6 heading (L74), the Notes block
+(L102), the intro (L8), and the frontmatter description (L3).
 
 **F5 re-check — canonical 1Password path → PASS**
 `grep -n 'op://'` returns exactly one line (L14) containing two occurrences, both

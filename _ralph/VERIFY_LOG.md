@@ -1203,3 +1203,51 @@ VERDICT: SHIP
 → `verified`. `unresolved_findings` NOT incremented — the lone graded item is a NIT
 (off-by-one line count, "no fix required"); the write-findings instruction applies only
 on the REVISE/BLOCKING branch and only to BLOCKING/IMPROVE severities.
+
+## Iteration 62 — s6_submit_url verify
+
+VERIFY phase. Step 1 blocker re-check: B1 RESOLVED (op:// canonical, operator
+evidence on disk), B2 RESOLVED (s9 live run done), advisory A1 non-counting —
+`open_blockers` stays 0. `unresolved_findings == 0` → fell through RESOLVE; no
+`not_started` stage → fell through IMPLEMENT; no `implemented` stage → fell
+through SELF-TEST; the VERIFY s1→s10 scan skipped s1–s5 (`verified`) and landed
+on the first `self_tested` stage, `s6_submit_url`.
+
+Spawned an independent general-purpose critic subagent (Appendix C brief):
+skeptical fresh context, read `REVAMP_PLAN.md` "Step 6" (+ cross-referenced
+Steps 2c/2d/2e/3/4/5/7), `_ralph/TEST_LOG.md` Iteration 60, and the artifact
+`.claude/skills/submit-url/skill.md`; read-only.
+
+The critic **independently re-ran all three Appendix A Stage 6 SELF-TEST checks
+plus the F5 op:// re-check** against the real file
+(`.claude/skills/submit-url/skill.md`, 153 lines):
+- Check 1 — frontmatter parses as valid YAML, exactly two keys `name`/`description`,
+  `name: submit-url`, 590-char plan-faithful description.
+- Check 2 — `grep -nE '^## Step [0-9]'` returns exactly 9 headings numbered 1→9
+  (L19/26/34/46/65/74/110/125/135), mapping 1:1 to plan Step 6's 9-step workflow;
+  every overnight-search cross-reference resolves to the correct s5 heading.
+- Check 3 — `Source = "Manual Submission"` set; operative field mapping at L95.
+- **F5 re-check** — `grep -n 'op://'` returns exactly one line (L14), two
+  occurrences, BOTH the verified canonical path `op://Personal/dealstream.com/...`;
+  `grep -c 'op://Private/DealStream'` = 0 — the dead non-resolving path is fully
+  absent. F5's fix holds in s6.
+
+**Verdict: `SHIP`, zero BLOCKING findings.** Graded items: one IMPROVE (#6 — the
+TEST_LOG Iteration 60 entry said `grep` returned "4 hits" for `Manual Submission`
+but the true count is 5; the entry then *listed all 5 lines*, so the conclusion
+was correct and no PASS was undermined — purely an evidence-count typo) and one
+NIT (#7 — plan-stub vs artifact step-title nuance, no issue). Findings #1–#5 are
+"no severity" PASS confirmations.
+
+**Action taken on the IMPROVE:** rather than open a tracked finding for a
+one-character log typo, the iteration-62 VERIFY phase corrected the TEST_LOG
+Iteration 60 entry directly — "returns 4 hits" → "returns 5 hits (L3, L8, L74,
+L95, L102 — count corrected ... by the iteration-62 VERIFY critic re-run)". This
+is a correction of the loop's own evidence record (not the s6 artifact), so it
+does not affect s6's substance; the artifact itself is defect-free.
+
+**Loop disposition:** Per Step 1.4 (SHIP + no BLOCKING → `verified`),
+`s6_submit_url` → `verified`. `unresolved_findings` NOT incremented — the IMPROVE
+was a TEST_LOG typo already corrected in this phase, and the write-findings
+instruction applies only on the REVISE/BLOCKING branch. With s6 verified, all 10
+stages are now `verified`; the next iteration runs the FINAL AUDIT.
