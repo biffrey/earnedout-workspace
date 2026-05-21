@@ -1,14 +1,14 @@
 ---
 active: true
-iteration: 11
+iteration: 12
 max_iterations: 40
-last_iteration_at: 2026-05-21T01:44:28Z
+last_iteration_at: 2026-05-21T01:54:25Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
 open_blockers: 0
 stages:
-  s1_repo:            { status: implemented }
+  s1_repo:            { status: self_tested }
   s2_playwright:      { status: implemented }
   s3_onepassword:     { status: implemented }
   s4_airtable:        { status: implemented }
@@ -193,21 +193,42 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   per-platform/industry breakdowns + errors). `templates/` is not a `.claude/`
   path so `Write` worked directly. No findings raised. `s8_dashboard` →
   `implemented`.
+- Iteration 12 (2026-05-21T01:54:25Z): SELF-TEST phase. `unresolved_findings == 0`
+  and `open_blockers == 0`, so Step 1 fell through RESOLVE; the IMPLEMENT scan
+  found no actionable `not_started` stage (s9 deps need s1–s8 `verified`; s10
+  needs s9 `verified`) so it fell through to SELF-TEST; the s1→s10 scan landed on
+  the first `implemented` stage, `s1_repo`. Re-checked `BLOCKERS.md` — no
+  counting blockers; advisory A1 still stands (`mcp__playwright__*` still absent).
+  Ran SELF-TEST on `s1_repo` (Appendix A Stage 1), all three checks executed
+  against the real filesystem + real git repo: (1) directory tree — all 10
+  required dirs present and non-empty, `README.md` non-empty; the lone 0-byte
+  file `output/screenshots/.gitkeep` is an intentional git dir-placeholder, not a
+  check failure; (2) git — `origin` present
+  (`git@github.com:biffrey/earnedout-workspace.git`), `git status --porcelain`
+  clean post-iter-11-commit, `git log` shows commits present locally (push leg
+  accepted-skipped per finding F1 Option C — SSH remote unreachable from
+  sandbox); (3) prospect-evaluation skill (10,576 B, valid frontmatter) + all 3
+  `references/` files + all 3 `templates/` files exist and are non-empty, with
+  `head` spot-checks confirming genuine migrated content. **All checks PASS → no
+  findings raised → `s1_repo` → `self_tested`.** Evidence in `TEST_LOG.md` under
+  `## Iteration 12 — s1_repo self-test`.
 
 ## Next iteration (expected)
 SELF-TEST phase expected. `unresolved_findings == 0` and `open_blockers == 0`,
 so Step 1 falls through RESOLVE. The IMPLEMENT scan finds no actionable
-`not_started` stage — `s9_end_to_end` depends on s1–s8 all `verified` (they are
-only `implemented`) and `s10_schedule` depends on s9 `verified` — so Step 1
-falls through IMPLEMENT to **SELF-TEST**. The SELF-TEST s1→s10 scan lands on the
-first `implemented` stage, `s1_repo`. SELF-TEST on `s1_repo` (Appendix A Stage
-1): `find` the directory tree and confirm every dir/file is present and
-non-empty; `git remote -v` (origin present), `git status` (clean post-commit),
-`git log` (commits present locally — the push leg is intentionally skipped per
-finding F1 Option C); confirm `.claude/skills/prospect-evaluation/skill.md` is
-non-empty and `references/` + `templates/` hold the required files. Record all
-commands and outputs in `TEST_LOG.md` under `## Iteration N — s1_repo
-self-test`.
+`not_started` stage — `s9_end_to_end` depends on s1–s8 all `verified` and
+`s10_schedule` depends on s9 `verified` — so Step 1 falls through IMPLEMENT to
+**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo` (now `self_tested`) and
+lands on the first `implemented` stage, `s2_playwright`. SELF-TEST on
+`s2_playwright` (Appendix A Stage 2): confirm `.claude/settings.json` parses as
+JSON and contains the `playwright` server; `npm ls -g @playwright/mcp` confirms
+the package is installed; run the headless Chromium smoke test (launch Chromium,
+load `https://example.com`, capture a screenshot to a temp path, confirm the
+file exists and is non-empty) via the `npx playwright` / Node CLI fallback —
+advisory note A1 records that the `mcp__playwright__*` MCP tools are absent
+(restart-gated, non-counting), so the conditional live-MCP-navigation sub-check
+is skipped. Record all commands and outputs in `TEST_LOG.md` under
+`## Iteration N — s2_playwright self-test`.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
