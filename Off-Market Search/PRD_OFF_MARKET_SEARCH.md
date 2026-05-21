@@ -652,10 +652,16 @@ loop** (its own plan + loop prompt + STATE) would implement the
 ### 9.4 Review Cadence
 
 Off-market leads land as `Disposition = Active` and appear in the **same daily
-dashboard** the operator already reviews — Section A (new finds, the run day),
-Section B (running queue). The operator triages with the same `Disposition`
-values (Active / Contacted / Maybe Later / Revisit for Roll-up / Passed / Dead
-Link). No new review surface.
+dashboard** the operator already reviews. That dashboard has four sections
+(`overnight-search` skill Step 10): **A** — Last Night's New Finds, **B** —
+Running Queue (`Disposition = Active`), **C** — Revisit Bucket
+(`Disposition = Revisit for Roll-up`), **D** — Run Summary. Off-market finds
+behave exactly like on-market manual submissions: although Section A is titled
+"Last Night's New Finds," every lead created on the dashboard's run day appears
+there — so a **monthly** off-market run's new targets surface in Section A on
+that run's day, and thereafter in Section B until dispositioned. The operator
+triages with the same `Disposition` values (Active / Contacted / Maybe Later /
+Revisit for Roll-up / Passed / Dead Link). No new review surface.
 
 ---
 
@@ -787,6 +793,14 @@ and **never auto-sent** (on-market convention preserved).
   (§4.7, §11).
 - [ ] **DUNS** retirement date / handling for legacy records (§6.1).
 - [ ] **SEC EDGAR / RID** — coverage and (for RID) non-gov ToS (§4.7).
+- [ ] **SBIC program variants in scope** — confirm whether all SBIC license/
+  program types or only certain ones are targeted (§3.2).
+- [ ] **`Listing ID` reuse vs. new `Gov Entity ID` field** — operator decision
+  on the off-market unique key (§6.2, §8.2, §8.4).
+- [ ] **Dashboard enhancement** — whether to add a `Source` column / off-market
+  badge to `templates/daily-dashboard.html` (§10).
+- [ ] **Off-market outreach template** — whether to create a dedicated
+  proprietary-approach template (§10).
 - [ ] All §2.2 **success-metric targets** (operator-set).
 - [ ] All §9.3 **cadence** decisions (operator-set).
 
