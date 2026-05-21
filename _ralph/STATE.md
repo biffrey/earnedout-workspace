@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 48
+iteration: 49
 max_iterations: 75
-last_iteration_at: 2026-05-21T16:41:28Z
+last_iteration_at: 2026-05-21T17:17:29Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 0
+unresolved_findings: 1
 open_blockers: 0
 stages:
   s1_repo:            { status: verified }
@@ -1187,21 +1187,17 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   loop will idle each run until the cap and terminate without reaching COMPLETE.
 
 ## Next iteration (expected)
-> **Updated after iteration 47.** Unchanged from iterations 44–46 —
-> `s9_end_to_end` is `blocked` on **counting blocker B2** (live end-to-end
-> pipeline run requires the `op` 1Password CLI, absent from the sandbox, and
-> network access to DealStream / BizQuest / BizBuySell, unreachable: `000`).
-> `open_blockers: 1`, `unresolved_findings: 0`. The next run is **iteration
-> 48**: Step 1's blocker re-check will again test B2's precondition — `op`
-> installed + signed in AND a reachable live run, OR an operator-recorded s9
-> evidence file. That precondition cannot clear from inside the no-human
-> ephemeral sandbox, so B2 will almost certainly still be open and iteration 48
-> will **IDLE** with a status note per Step 1's terminal rule. **To unblock:**
-> Biffrey runs the overnight-search pipeline manually on his Mac (where `op`
-> works and DealStream is reachable) at small scope, executes the plan's 13
-> Verification checks, and records the evidence into
-> `_ralph/evidence/s9_e2e_verification_<date>.md` — exactly the model that
-> resolved B1 for s3. See `BLOCKERS.md` B2 for the full instructions.
+> **Updated after iteration 49.** `s9_end_to_end` is `implemented`; its
+> SELF-TEST scored 12/13 Verification checks PASS with **Check 6 FAIL** (Listing
+> Screenshot attachment field not populated). `unresolved_findings: 1` (F4),
+> `open_blockers: 0`. The next run is **iteration 50**: `unresolved_findings > 0`
+> forces the **RESOLVE** phase on F4 — populate the `Listing Screenshot`
+> attachment for the 3 test records (host the PNGs at fetchable URLs, then
+> `update_records_for_table`), append a `RESOLUTION:` line, decrement
+> `unresolved_findings` 1 → 0. If hosting is not reachable from the loop's
+> environment, F4 becomes an external blocker instead. After F4 resolves, the
+> loop re-runs s9 SELF-TEST (Check 6), then VERIFY s9, then IMPLEMENT/SELF-TEST/
+> VERIFY s10, then FINAL AUDIT, then COMPLETE.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —
@@ -1377,6 +1373,42 @@ would need another operator-assisted review like this one. Raising the cap to
   detection exercised, outreach drafted, daily dashboard rendered. `s9` →
   `implemented`. Known gap for SELF-TEST: Listing Screenshot attachment field
   not populated (Airtable needs a hosted URL). See IMPLEMENTATION_LOG iter 48.
+
+- Iteration 49 (2026-05-21T17:17:29Z): SELF-TEST on `s9_end_to_end`. Step 0:
+  `active: true`, `iteration` 48 → 49 (`49 >= 75` false → no cap termination).
+  Step 1 blocker re-check: B1 + B2 both RESOLVED, advisory A1 non-counting;
+  `open_blockers == 0`, no pending precondition. `unresolved_findings == 0` at
+  start → RESOLVE skipped. IMPLEMENT: no `not_started` stage with met deps
+  (`s10_schedule` needs s9 `verified`; s9 is `implemented`). SELF-TEST: first
+  `implemented` stage is `s9_end_to_end` → ran it. Walked the plan's 13
+  Verification checks (REVAMP_PLAN.md L406–421) against the iteration-48 live
+  run's artifacts + the live Airtable records, evidence inspected directly this
+  iteration (full detail + per-check evidence in `TEST_LOG.md`
+  "## Iteration 49 — s9_end_to_end self-test"):
+  • Checks 1–5, 7–13 **PASS** (12 checks) — `op read` credential retrieval
+    (genuine in iter 48 + login-screenshot downstream proof; this iter's
+    unattended re-run hit the 1Password desktop-approval timeout, noted
+    honestly); Playwright DealStream login + search + pagination; known-good URL
+    validation + screenshots; dead-URL flagging; prospect-eval `.md`+`.html`
+    reports; price-drop detection (maya0n Previous Asking Price $1.8M stored,
+    score re-evaluated); submit-url full pipeline (so8acs Manual Submission);
+    dashboard Section A with price-drop badge + report links; Section B 18-row
+    Active queue; Revisit-for-Roll-up in Section C not B; Notes field content;
+    broker outreach updated template, drafted-only.
+  • Check 6 **FAIL** — the Airtable `Listing Screenshot` attachment field is not
+    populated on any of the 3 test records (cvkfxz/maya0n/so8acs). All other
+    check-6 fields (Date Added, Listing ID, Direct URL, Lead Score, Disposition
+    = Active) ARE populated; only the attachment is empty (Airtable attachments
+    need a hosted/fetchable URL — the screenshots are local files). Known gap
+    flagged in IMPLEMENTATION_LOG iter 48.
+  Per Step 1's SELF-TEST rule (any FAIL → leave stage `implemented`, write one
+  finding per failure, increment `unresolved_findings`): `s9_end_to_end` stays
+  `implemented`; finding **F4** written to `FINDINGS.md`; `unresolved_findings`
+  0 → 1. `[RALPH TEST]` records remain clearly marked in the live base (full
+  cleanup deferred to end of Stage 9). Next iteration: RESOLVE F4 (populate the
+  Listing Screenshot attachment field — host the 3 PNGs at fetchable URLs and
+  `update_records_for_table`, or escalate to a blocker if no host is reachable),
+  then re-run s9 SELF-TEST Check 6.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

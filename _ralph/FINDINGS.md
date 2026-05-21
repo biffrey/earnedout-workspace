@@ -214,3 +214,38 @@ No counting blocker (fully resolved inside the loop). No live-base mutation
 `s4_airtable` stays `implemented` (never `self_tested`/`verified`, so no stage
 demotion applies; the annotation does not change s4's implemented substance —
 all 16 fields verified present).
+
+## F4 — s9_end_to_end — Listing Screenshot attachment field not populated (IMPROVE)
+
+**Iteration raised:** 49 (2026-05-21T17:17:29Z) — s9_end_to_end SELF-TEST Check 6.
+**Stage:** `s9_end_to_end` (stays `implemented`; was never `self_tested`/
+`verified`, so no demotion applies).
+
+**Observed:** Plan Verification check #6 (REVAMP_PLAN.md L414) requires an
+Airtable record "with all new fields populated (Date Added, Listing ID, Direct
+URL, **Screenshot attachment**, Lead Score, Disposition = Active)". The three s9
+test records (cvkfxz `recDUV3S985L7ytXK`, maya0n `rec5Pz99DMbpG8KhH`, so8acs
+`reccLQrb5S84uBsEj`) have every other enumerated field populated, but the
+**Listing Screenshot** field (`multipleAttachments`, one of the 16 plan Step-1
+fields) is empty on all three. Airtable attachment fields can only be written
+with a hosted/fetchable URL (or via the content upload API); the iteration-48
+pipeline captured the screenshots as local files (`output/screenshots/
+cvkfxz.png`, `maya0n.png`, `so8acs.png` — genuine full-page PNGs) and referenced
+them only by path in the Notes field. IMPLEMENTATION_LOG iter 48 flagged this
+explicitly as a known gap for the s9 SELF-TEST to weigh.
+
+**Severity:** IMPROVE. The screenshots genuinely exist and are validated
+(Check 3 PASS); the gap is solely that they are not surfaced into the dedicated
+attachment field. Checks 1–5 and 7–13 all PASS.
+
+**Recommended resolution (next RESOLVE phase):** populate the Listing Screenshot
+attachment for the three records. Within the loop's available tools the workable
+path is: host the three PNGs at fetchable URLs (e.g., commit them under
+`output/screenshots/` and use `raw.githubusercontent.com` URLs once the repo is
+pushed, or another reachable host), then `update_records_for_table` each record's
+Listing Screenshot field with `[{"url": "...", "filename": "<id>.png"}]`. If no
+fetchable host is reachable from the loop's environment, classify it as an
+external blocker (operator hosts/uploads the screenshots) rather than faking the
+field. After resolution, re-run s9 SELF-TEST Check 6 to confirm PASS.
+
+**RESOLUTION:** _(pending — to be completed in a RESOLVE phase)_

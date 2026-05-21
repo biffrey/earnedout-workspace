@@ -826,3 +826,128 @@ Result: **PASS** — by operator evidence per the current Appendix A Stage 3 rul
 Both Appendix A Stage 3 SELF-TEST checks PASS (Check 1 verified directly this
 iteration; Check 2 by operator evidence). No findings raised; blocker B1 not
 re-raised (RESOLVED). `s3_onepassword` → `self_tested`.
+
+## Iteration 49 — s9_end_to_end self-test
+
+SELF-TEST phase. `s9_end_to_end` was `implemented` by iteration 48 (the live
+pipeline run on Biffrey's Mac via `run-ralph-cli.sh`). This iteration walks the
+plan's 13 "Verification" checks (REVAMP_PLAN.md L406–421), each PASS/FAIL with
+evidence inspected directly this iteration. Records under test (all Notes-tagged
+`[RALPH TEST]`): cvkfxz `recDUV3S985L7ytXK`, maya0n `rec5Pz99DMbpG8KhH`,
+so8acs `reccLQrb5S84uBsEj` in base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS`.
+
+### Check 1 — `op read` retrieves DealStream credentials — PASS
+This iteration re-ran `op read "op://Personal/dealstream.com/{username,password}"`
+(`op` 2.33.1 at `/opt/homebrew/bin/op`). Both calls returned `error initializing
+client: authorization timeout` after a ~60s wait each — the 1Password desktop
+approval dialog needs a human to approve and this is an unattended scheduled run
+(iteration 48 noted the same: short calls time out, a 45–60s *attended* window
+succeeds). That timeout is the no-human approval gate, NOT a failure of
+credential retrieval. The check is genuinely satisfied by evidence inspected
+this iteration: (a) iteration 48's IMPLEMENT run executed `op read` successfully
+(IMPLEMENTATION_LOG iter 48: lengths 24 / 15; secrets not logged); (b) downstream
+proof — `output/screenshots/s9_dealstream_login_2026-05-21.png`, viewed this
+iteration, shows the authenticated DealStream member dashboard "Welcome back,
+Biffrey Braxton" with a Log Out control; that authenticated session is
+impossible without successful credential retrieval; (c) the operator-evidence
+file `_ralph/evidence/s3_op_verification_2026-05-21.md` independently records a
+genuine `op read` success for the same item. PASS — multi-source genuine
+evidence; honest note: not reproducible in an unattended run due to the desktop
+approval gate.
+
+### Check 2 — Playwright logs into DealStream, navigates a search page, paginates — PASS
+`s9_dealstream_login_2026-05-21.png` (1200×891, valid PNG): authenticated member
+dashboard. `s9_dealstream_search_hvac_2026-05-21.png` (1200×891, valid PNG):
+`businesses-for-sale?q=HVAC` results page, "Showing 1-25 of 243 results", HVAC
+listing cards visible. `search_reports/run_log_2026-05-21.md` records `&page=2`
+→ "Showing 26-50 of 243" (pagination exercised). PASS.
+
+### Check 3 — known-good listing URL validated + screenshot to output/screenshots/ — PASS
+Three full-page listing screenshots present and valid PNGs: `cvkfxz.png`
+(1200×3074), `maya0n.png` (1200×3352), `so8acs.png` (1200×3426), all in
+`output/screenshots/`. listing-data.json for each records `link_health: "Live"`.
+PASS.
+
+### Check 4 — known-dead URL correctly flagged and skipped — PASS
+`s9_dead_url_check_2026-05-21.png` (1200×891, valid PNG), viewed this iteration,
+shows the DealStream "Sorry, the page you requested was not found" error page
+for `/d/biz-sale/hvac/zzzz99`. run_log records "1 dead links caught — hvac/zzzz99
+('Page Not Found', correctly flagged + skipped)"; no Airtable record was created
+for it. PASS.
+
+### Check 5 — prospect-evaluation produces .md AND .html reports in output/reports/{id}/ — PASS
+`output/reports/cvkfxz/` (hvac-business-sc-report.md 23,973 B + .html 33,228 B),
+`output/reports/maya0n/` (thriving-hvac-sd-report.md 22,331 B + .html 35,379 B),
+`output/reports/so8acs/` (hvac-plumbing-contractor-report.md 23,628 B + .html
+33,191 B). Spot-checked cvkfxz .md head: genuine prospect-evaluation output —
+Buy Box screening table, GATE RESULT, 26-field-style scorecard; .html begins
+`<!doctype html>`. PASS.
+
+### Check 6 — Airtable record with all new fields populated — FAIL
+cvkfxz `recDUV3S985L7ytXK` (the Overnight Search / Active record) was inspected
+live via the Airtable MCP. Of the fields check 6 enumerates: Date Added
+`fld3TRpVYopXL7LLm` = 2026-05-21 ✓; Listing ID `fld81k0uFwqkHaEEI` = cvkfxz ✓;
+Direct Listing URL `fldMCmSVQjYv3odok` = https://dealstream.com/d/biz-sale/hvac/cvkfxz ✓;
+Lead Score `fld2ipICYNLjaDm39` = 50 ✓; Disposition `fldw0xk1YBkmP7sBD` = Active ✓.
+**Listing Screenshot attachment field — NOT populated** (no attachment value on
+any of the three records). Airtable `multipleAttachments` fields require a
+hosted/fetchable URL or the content upload API; the screenshots are local files
+under `output/screenshots/` and are only referenced by path in the Notes field.
+This was flagged as a known gap in IMPLEMENTATION_LOG iter 48. Because check 6
+requires *all* enumerated new fields populated and the Listing Screenshot
+attachment is empty, **Check 6 = FAIL**. → finding **F4** raised.
+
+### Check 7 — price-drop detection — PASS
+maya0n `rec5Pz99DMbpG8KhH` inspected live: Previous Asking Price
+`fldySRjfm1P8Nodes` = $1,800,000 (the pre-seeded higher price); Asking Price
+`fldhqAXiAWh2ktXln` = $1,495,000 (live DealStream price); Date Updated
+`fldMXwyQbEWPXbqE2` = 2026-05-21; Lead Score = 35 (re-evaluated); Notes contains
+a "PRICE DROP: was $1,800,000, now $1,495,000 … Previous Asking Price stored,
+score re-evaluated" line. PASS.
+
+### Check 8 — submit-url processes a test URL through the full pipeline — PASS
+so8acs `reccLQrb5S84uBsEj` inspected live: Source `fldiGyXTk6Ybb6J1L` = Manual
+Submission; full record populated (Listing ID, Direct URL, Lead Score 20, Link
+Health Live, financials); `.md`+`.html` reports under `output/reports/so8acs/`;
+Disposition = Passed (non-US/Canada hard geography reject — correct pipeline
+outcome). The submit-url skill ran the full validate→extract→dedup→evaluate→
+record→disposition pipeline. PASS.
+
+### Check 9 — daily dashboard shows test leads in Section A with price-drop badge + report links — PASS
+`output/dashboards/dashboard_2026-05-21.html`: `section-a` lists all 3 new finds
+(cvkfxz L197, maya0n L216, so8acs L235) each with a `../reports/{id}/...html`
+View link; maya0n carries `<span class="chip price-drop">PRICE DROP</span>`
+(L205). `s9_dashboard_2026-05-21.png` (1200×2739), viewed this iteration, shows
+the rendered dark-themed dashboard with the PRICE DROP badge on maya0n. PASS.
+
+### Check 10 — running queue (Section B) pulls all undispositioned/Active leads — PASS
+`section-b` "Running Queue — Active Leads" carries an 18-row table (dashboard
+screenshot header "18 ACTIVE LEADS"); it includes a Date Added column (L257) per
+plan Step 7. cvkfxz (Active) appears in Section B (L275). PASS.
+
+### Check 11 — a "Revisit for Roll-up" lead appears in Section C, not Section B — PASS
+maya0n Disposition = Revisit for Roll-up. In the dashboard it appears ONLY in
+`section-c` "Revisit Bucket — Roll-up Targets" (L567) and in `section-a` (new
+finds); it does NOT appear in `section-b` (grep of the three test IDs across the
+section-b line range returns only cvkfxz). PASS.
+
+### Check 12 — Notes field has business name, listing ID, direct URL (not a search page) — PASS
+All three records' Notes (inspected live) begin with `[RALPH TEST] <business
+name> | Listing ID: <id>` followed by `Direct URL: https://dealstream.com/d/
+biz-sale/hvac/<id>` and an Airtable record URL. No search-results-page URL
+appears in any Notes field. PASS.
+
+### Check 13 — broker outreach email uses the updated template with personalized details — PASS
+`search_reports/outreach_drafts_2026-05-21.md` and the cvkfxz Notes field both
+carry a default-template draft, personalized (broker "Synergy Business Brokers",
+business name, DealStream ID, "20-year history / 1,100 recurring residential
+customers"), with an A/B subject-line variant. Header states "[RALPH TEST]
+drafts only — NEVER sent." maya0n outreach deferred (Revisit for Roll-up);
+so8acs none (Passed). Nothing was sent. PASS.
+
+### Result
+12 of 13 checks PASS; **Check 6 FAIL** (Listing Screenshot attachment field not
+populated on the Airtable records). Per Step 1's SELF-TEST rule, `s9_end_to_end`
+stays `implemented`; one finding (**F4**) written to `FINDINGS.md`;
+`unresolved_findings` 0 → 1. `[RALPH TEST]` records remain clearly marked in the
+live base (full cleanup deferred to the end of Stage 9 per Appendix A Stage 9).
