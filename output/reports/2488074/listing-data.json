@@ -1,0 +1,66 @@
+{
+  "listing_id": "2488074",
+  "platform": "BizBuySell",
+  "direct_url": "https://www.bizbuysell.com/business-opportunity/profitable-dumpster-rental-business-1m-recurring-revenue/2488074/",
+  "business_name": "Profitable Dumpster Rental Business - $1M+ Recurring Revenue",
+  "location": {
+    "city": "Orlando",
+    "state": "FL",
+    "country": "USA"
+  },
+  "industry": "Roll-off dumpster rental / commercial & construction waste",
+  "naics": "562111",
+  "naics_description": "Solid Waste Collection",
+  "roll_up_context": {
+    "is_addon": true,
+    "platform_company": "Fambro Waste Management",
+    "relaxed_thresholds": {
+      "min_fte": 5,
+      "min_ebitda_usd": 500000,
+      "min_years": 5
+    },
+    "bonus_line_applies": true,
+    "score_denominator": 110
+  },
+  "financials": {
+    "asking_price_usd": 849000,
+    "cash_flow_sde_usd": 245001,
+    "ebitda_usd": null,
+    "ebitda_disclosed": false,
+    "gross_revenue_usd": 1120509,
+    "sde_margin_pct": 21.9,
+    "inventory_usd": 541000,
+    "inventory_included_in_asking": false,
+    "valuation_multiple_sde": 3.47
+  },
+  "operations": {
+    "established_year": 2000,
+    "years_in_business": 26,
+    "real_estate": "Leased",
+    "fleet": "Multiple roll-off trucks plus approximately 186 dumpsters",
+    "employees_estimate_fte": 6,
+    "employees_disclosed": false,
+    "owner_role": "Largely managerial",
+    "dispatch": "Modern dispatch software",
+    "repeat_customer_pct": 99,
+    "referral_new_client_pct": 95,
+    "gross_profit_service_model_pct": 100
+  },
+  "broker": {
+    "name": "Owen Miller",
+    "firm": "Biz Depot Brokers",
+    "sponsoring_broker": "Raj Golee"
+  },
+  "description": "Roll-off dumpster rentals for construction, renovation and property clean-out. Fleet of trucks plus ~186 dumpsters. SDE margin 21.9%. 99% repeat customer business, 95% of new clients from referrals. ~100% gross-profit service model. Lean team of experienced drivers with modern dispatch software. Owner role largely managerial. Growth via pricing increases, fleet expansion, more drivers, and more commercial/contractor accounts.",
+  "screenshot": "output/reports/2488074/2488074.png",
+  "evaluation": {
+    "lead_score": 78,
+    "score_denominator": 110,
+    "buybox_passed": 4,
+    "buybox_total": 6,
+    "disposition": "Revisit for Roll-up",
+    "ebitda_status": "needs broker follow-up",
+    "ebitda_margin_pct": 21.9,
+    "evaluated_date": "2026-05-21"
+  }
+}

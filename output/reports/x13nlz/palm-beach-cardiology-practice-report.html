@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Cardiology Practice — Palm Beach County, FL — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+  .shot { width: 100%; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Cardiology Practice — Palm Beach County, FL — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream listing x13nlz
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict fail">Buy Box: FAIL</span>
+      <div class="score-badge">
+        <div class="num">35</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals & Leadership</a></li>
+      <li><a href="#products">4. Products & Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers & Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook & Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>&ge; 10 full-time employees</td><td><span class="chip fail">FAIL</span></td><td>Broker listing: 1 physician + 5 staff = 6 total. Below the 10-FTE floor.</td></tr>
+          <tr><td>2</td><td>EBITDA &ge; $1M / year</td><td><span class="chip fail">FAIL</span></td><td>No institutional EBITDA disclosed. "Owner's cash flow" of $500K+ (2023) is SDE bundling the solo cardiologist's clinical pay; after a market-rate replacement physician (~$588K median, MedAxiom 2024) residual EBITDA is near zero or negative.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>Broker listing: established and owner-operated 30+ years.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">INSUFFICIENT</span></td><td>Collections grew $1.01M&rarr;$1.14M&rarr;$1.29M&rarr;$1.43M (2021-24). Profit growth not verifiable — only 2023 SDE disclosed; 2024 only "strong". Needs broker follow-up.</td></tr>
+          <tr><td>5</td><td>Asking price &le; 4.0x EBITDA</td><td><span class="chip warn">INSUFFICIENT</span></td><td>$495K ask (practice only). No EBITDA to compute against; SDE is not a valid EBITDA proxy here. Insufficient data.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">INSUFFICIENT</span></td><td>Cannot model — no EBITDA, no real-estate price, no debt terms.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;"><strong>Overall Buy Box: FAIL</strong> (2 PASS, 2 FAIL, 2 INSUFFICIENT — &le;3 passes). <strong>Lead Score: 35 / 100.</strong> Disposition: <strong>Passed.</strong> This is a solo-physician medical practice — a job, not an owner-independent operating company. It fails on the 10-FTE floor, has no institutional EBITDA (disclosed cash flow is the cardiologist's own clinical earnings), and cannot run without the owner. The price multiple cannot be assessed because no EBITDA exists.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Cardiology Practice for Sale (Palm Beach County, FL) — name withheld by broker</td><td>DealStream x13nlz</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream listing x13nlz (also on 1stmedtransitions.com id=239)</td><td>Listing</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>30+ years</td><td>1st Med Transitions</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>Not in sale — building offered separately for sale or lease; price n/d</td><td>1st Med Transitions</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>Not disclosed (cardiac diagnostic + monitoring equipment present)</td><td>—</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>6 (1 physician + 5 staff); FT/PT split n/d</td><td>1st Med Transitions</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>9</td><td>Business address</td><td>2,000 sq ft stand-alone building on a major thoroughfare, Palm Beach County, FL — exact address withheld</td><td>1st Med Transitions</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>$1,140,000 (annual collections)</td><td>1st Med Transitions</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>$1,290,000 (collections; DealStream rounds to "$1.3M")</td><td>DealStream / 1st Med Transitions</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>$1,427,261 (annual collections)</td><td>1st Med Transitions</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>Not disclosed — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>"Over $500K" owner's cash flow (SDE — incl. owner-physician comp)</td><td>DealStream</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>"Strong"; exact figure not disclosed — needs broker follow-up</td><td>1st Med Transitions</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>Not disclosed — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>$495,000 (practice only; real estate separate)</td><td>1st Med Transitions id=239</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>+12.9% (2022) / +13.2% (2023) / +10.6% (2024)</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>Not computable — no institutional EBITDA disclosed</td><td>—</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>No material single patient; payer concentration likely Medicare-heavy — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td><a href="https://www.1stmedtransitions.com/medical-practice-details?id=239">1stmedtransitions.com id=239</a> — broker holds detail</td><td>Listing</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>35 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px; color:var(--muted); font-size:13px;">No values are tagged <span class="est">(est.)</span> — all financials are broker-disclosed actuals. Blank items are genuinely undisclosed; none were guessed.</p>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Cardiology is an explicit EarnedOut target (Cardiac/Medical keyword list).</td></tr>
+          <tr><td>EBITDA tier</td><td>0</td><td>15</td><td>No institutional EBITDA &ge; $1M. $500K+ "owner's cash flow" is SDE dominated by solo-physician clinical labor — not a valid EBITDA proxy.</td></tr>
+          <tr><td>Years in business &ge;10</td><td>10</td><td>10</td><td>30+ years operating.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>5</td><td>10</td><td>Revenue grew every year 2021-2024. Profit growth not verifiable — only one SDE year disclosed. Half credit.</td></tr>
+          <tr><td>Recurring revenue</td><td>0</td><td>10</td><td>Pure fee-for-service physician practice; per-encounter billing, no contracted revenue.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Insufficient data — not awarded. Payer mix likely heavily Medicare.</td></tr>
+          <tr><td>Employees &ge;10</td><td>0</td><td>10</td><td>6 total employees — below the 10-FTE floor.</td></tr>
+          <tr><td>Valuation multiple</td><td>0</td><td>15</td><td>Insufficient data — not awarded. No EBITDA to compute a multiple.</td></tr>
+          <tr><td>Low owner dependence</td><td>0</td><td>5</td><td>Maximum owner dependence — a single cardiologist; remove the owner and there is no revenue.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>0</td><td>10</td><td>N/A — standalone target, not a translation/interpretation or waste add-on.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>35</strong></td><td><strong>100</strong></td><td>Interpretation band: &lt;50 — Pass.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> A solo-cardiologist private practice in Palm Beach County, FL, operating 30+ years from a 2,000 sq ft stand-alone building with 4 exam rooms. Services: simple + nuclear stress testing, echocardiograms, peripheral vascular studies, Holter/event monitoring.</li>
+        <li><strong>Financial highlights:</strong> Annual collections grew steadily — $1.01M (2021) &rarr; $1.14M (2022) &rarr; $1.29M (2023) &rarr; $1.43M (2024), ~+11-13%/yr. Owner's cash flow (SDE) "over $500K" in 2023, "strong" in 2024. Asking $495,000 for the practice; real estate offered separately.</li>
+        <li><strong>Buy Box summary:</strong> <strong>FAIL</strong> — passes only years-in-business; fails on employee count (6 vs 10) and absence of institutional EBITDA; two criteria unscoreable on disclosed data.</li>
+        <li><strong>Why NOT pursue:</strong> It is a job, not a business — the $500K cash flow is the cardiologist's own pay. A non-physician buyer must hire a replacement cardiologist (~$588K median comp), which erases the earnings. At 6 employees and one revenue-producing provider it is far below EarnedOut's scale floor with extreme key-person risk. There is no EBITDA against which to test the 4.0x ceiling.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>Background and history:</strong> A long-tenured cardiology practice established and owner-operated for 30+ years in Palm Beach County. The single owner-physician built the patient base and community reputation that constitute essentially all of the practice's goodwill.</p>
+      <p><strong>Ownership structure:</strong> Single owner-operator (sole physician). Legal entity not disclosed by the broker; comparable practices are typically PA/PC or single-member entities.</p>
+      <p><strong>Key milestones:</strong> ~1990s — practice founded (30+ years before listing). 2021-2024 — collections grew every year from $1.01M to $1.43M. Oct 2, 2024 — listed for sale on DealStream and via 1st Med Transitions; owner seeking a retirement/succession exit.</p>
+      <p><strong>Organizational structure:</strong> Flat — one physician over five support staff (likely front desk, billing, MA/tech, sonographer/nuclear tech). No second physician, GM, or practice administrator; the owner is both clinician and manager.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals & Leadership</h2>
+      <h3>Owner-Physician (name withheld by broker) — Cardiologist / Owner</h3>
+      <p>Sole treating cardiologist and de facto practice manager; the entire clinical revenue line depends on this individual. 30+ years operating this practice. Credentials, fellowship, and hospital affiliations not disclosed — confirmable via the CMS NPI registry and the Florida Board of Medicine once the practice name is released. Contact routed through the broker.</p>
+      <h3>Michael Furlong — Senior Transition Advisor (Broker)</h3>
+      <p>Listing broker / transition advisor, 1st Med Transitions. Phone (800) 815-0590; email mfurlong@1stmedtransitions.com.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products & Services</h2>
+      <p><strong>Descriptions:</strong> Outpatient cardiology — diagnostic and follow-up care. In-office ancillary testing: simple stress tests, nuclear stress tests, echocardiograms, peripheral vascular studies, Holter/event monitoring. The in-house nuclear and echo capability is the main margin driver beyond office E/M visits.</p>
+      <p><strong>Pricing model:</strong> Fee-for-service; billed per encounter and per diagnostic study to commercial payers and (predominantly) Medicare. No retainer, subscription, or contracted recurring revenue.</p>
+      <p><strong>Differentiators:</strong> 30-year community reputation and a sticky patient panel; a stand-alone high-visibility building; in-office ancillary testing that keeps imaging revenue inside the practice — all real but tied to the departing physician.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> US cardiology is consolidating fast — a MedAxiom survey found roughly half of private cardiology practices were under private-equity ownership by 2023, up from essentially zero a few years earlier. Solo independent practices are an increasingly rare, structurally disadvantaged segment.</p>
+      <p><strong>Growth drivers:</strong> Aging population (Palm Beach County skews elderly — strong cardiology demand); steady same-store collections growth here (+11-13%/yr).</p>
+      <p><strong>Headwinds:</strong> Medicare fee-schedule pressure, rising operating costs (medical-practice operating expenses up ~11% in 2025), difficulty recruiting a replacement cardiologist to a solo setting, and ongoing CMS cuts to nuclear-cardiology/imaging reimbursement.</p>
+      <p><strong>Peer benchmarks:</strong> PE-backed / hospital-employed cardiology groups trade 8-18x adjusted EBITDA at the platform level. Small solo/small-group practices change hands at ~1.5-3x SDE (a physician-replacement valuation). This target at $495K on ~$500K SDE &asymp; 1.0x SDE — low end even of the small-practice band, consistent with a retirement succession sale to an individual cardiologist.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers & Revenue Model</h2>
+      <p><strong>Customer segments:</strong> Individual patients — outpatient cardiology skewing older given Palm Beach County demographics. B2C clinical care reimbursed through third-party payers.</p>
+      <p><strong>Retention:</strong> Not disclosed. Cardiology panels are generally sticky (chronic-disease follow-up), but retention through a transition depends on the incoming physician.</p>
+      <p><strong>Recurring vs one-time:</strong> No contracted recurring revenue. Repeat visits give <em>repeat</em> but not <em>contracted</em> revenue — scored 0 on the recurring-revenue line.</p>
+      <p><strong>Concentration:</strong> No single patient is material. The real risk is payer mix — a cardiology panel is typically Medicare-dominant, concentrating reimbursement-policy risk. Exact mix not disclosed; flagged for broker follow-up.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue (collections)</th><th>EBITDA</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2021</td><td>$1,010,000</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2022</td><td>$1,140,000</td><td>Not disclosed</td><td>—</td><td>+12.9%</td></tr>
+          <tr><td>2023</td><td>$1,290,000</td><td>SDE "$500K+" (incl. owner comp)</td><td>—</td><td>+13.2%</td></tr>
+          <tr><td>2024</td><td>$1,427,261</td><td>SDE "strong" (exact n/d)</td><td>—</td><td>+10.6%</td></tr>
+          <tr><td>2025 (YTD)</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Annual collections ($M)</text>
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="60"  y="83"  width="60" height="77"  rx="3" />
+            <rect x="160" y="73"  width="60" height="87"  rx="3" />
+            <rect x="260" y="62"  width="60" height="98"  rx="3" />
+            <rect x="360" y="51"  width="60" height="109" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#e7ecf3" text-anchor="middle">
+            <text x="90"  y="78">1.01</text>
+            <text x="190" y="68">1.14</text>
+            <text x="290" y="57">1.29</text>
+            <text x="390" y="46">1.43</text>
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="175">2021</text>
+            <text x="190" y="175">2022</text>
+            <text x="290" y="175">2023</text>
+            <text x="390" y="175">2024</text>
+          </g>
+        </svg>
+      </div>
+      <p>Collections rose every year for four straight years, ~+10-13% annually — a healthy top line for a solo practice. But "owner's cash flow" is SDE: it includes the cardiologist's clinical compensation. Median private-cardiology compensation was ~$588K in 2024 (MedAxiom). With ~$500K of SDE against a ~$588K market replacement cost, <strong>institutional EBITDA — what is left for an absentee owner after paying a working cardiologist — is approximately zero or negative.</strong> That is the core reason the deal fails the Buy Box.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>~1.0x SDE</strong> ($495,000 / ~$500K). Cannot be expressed as an EBITDA multiple — there is no EBITDA. Small practices trade ~1.5-3x SDE; PE platforms 8-18x adjusted EBITDA. EarnedOut's 4.0x EBITDA framework cannot be applied to an asset with no EBITDA — the right buyer here is a practicing cardiologist, not a financial acquirer.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>30+ year track record and established patient base</li>
+          <li>Four straight years of collections growth (+10-13%/yr)</li>
+          <li>In-house nuclear/echo ancillary testing</li>
+          <li>Stand-alone high-visibility building (optionally acquirable)</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>Solo physician — owner IS the business (no EBITDA without him)</li>
+          <li>Only 6 employees — far below the 10-FTE floor</li>
+          <li>No contracted recurring revenue; fee-for-service only</li>
+          <li>No add-back schedule disclosed; SDE &ne; EBITDA</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>Attractive succession buy for a young cardiologist (practice + real estate)</li>
+          <li>Add providers/APRNs to convert SDE into true EBITDA over time</li>
+          <li>Real estate purchase could anchor a small medical-office hold</li>
+          <li>6-12 month seller transition de-risks handover</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Replacement-physician recruiting risk to a solo setting</li>
+          <li>Medicare fee-schedule and nuclear-imaging reimbursement cuts</li>
+          <li>Patient attrition during ownership transition</li>
+          <li>PE-backed groups out-competing solo practices on payer terms</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> Heavy Medicare exposure; ongoing CMS pressure on cardiology and nuclear-imaging reimbursement; consolidation leaving solo practices structurally disadvantaged.</li>
+        <li><strong>Financial:</strong> No disclosed institutional EBITDA; reported cash flow is SDE bundling owner-physician labor; only one SDE year quantified; no 2025 data; no FF&E or balance-sheet detail.</li>
+        <li><strong>Operational:</strong> Maximum key-person dependency — a single cardiologist generates 100% of clinical revenue. Replacement-physician recruiting is the single largest execution risk. Just 6 staff total.</li>
+        <li><strong>Regulatory / legal:</strong> FL physician licensure, DEA registration, nuclear-materials handling for nuclear stress testing (state radiation-control / NRC agreement-state licensing), Stark/anti-kickback considerations on in-office ancillary services, and CMS/Medicare re-credentialing for a new owner.</li>
+        <li><strong>Deal conditions:</strong> Not a fit for EarnedOut's mandate. No scenario short of a full restructuring (hiring multiple providers and a practice administrator to build genuine absentee-owner EBITDA) brings this inside the Buy Box — and that is a build, not an acquisition.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook & Growth Opportunities</h2>
+      <p><strong>Expansion potential:</strong> Adding a second cardiologist or APRNs could grow capacity and, over time, create real institutional EBITDA above provider compensation — but that is a multi-year operational build, not a turnkey acquisition.</p>
+      <p><strong>Operational upside:</strong> Modernizing billing/RCM, optimizing payer mix, and expanding ancillary testing volume could lift margin — value to be created, not bought.</p>
+      <p><strong>Strategic:</strong> The realistic exit the broker is targeting is a retiring cardiologist selling to a younger cardiologist who wants to own a practice plus real estate. EarnedOut is not that buyer.</p>
+      <p><strong>Recommendation: Pass.</strong> Log the broker (Michael Furlong, 1st Med Transitions) as a Cardiac/Medical deal source — he may surface larger, multi-provider cardiology groups that would fit the Buy Box. This specific listing should not advance.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/medical-practices/x13nlz">dealstream.com/d/biz-sale/medical-practices/x13nlz</a> — primary listing x13nlz; 2023 collections ~$1.3M, owner cash flow $500K+, building/exam-room detail. (Returned HTTP 403 to automated fetch; data taken from the task-supplied extraction captured today.)</li>
+        <li><a href="https://www.1stmedtransitions.com/medical-practice-details?id=239">1stmedtransitions.com/medical-practice-details?id=239</a> — same broker's listing; full 2021-2024 collections series, $495,000 asking price, staffing (1 physician + 5 staff), 30+ years, services, transition terms, real estate offered separately.</li>
+        <li><a href="https://www.tctmd.com/news/private-equity-firms-own-half-cardiology-practices-medaxiom-survey">tctmd.com — PE owns ~half of private cardiology practices by 2023</a> — consolidation context.</li>
+        <li><a href="https://cardiovascularbusiness.com/topics/healthcare-management/cardiologist-salary/cardiologist-compensation-hits-all-time-high">cardiovascularbusiness.com — cardiologist compensation</a> — compensation context.</li>
+        <li>MedAxiom 2024 Cardiovascular Provider Compensation Survey (via tctmd.com / medaxiom.com) — median private-cardiology comp ~$588K in 2024; used to assess replacement-physician cost.</li>
+        <li><a href="https://focusbankers.com/cardiology-practice-valuation/">focusbankers.com</a> and <a href="https://sovdoc.com/guides/how-to-value-cardiology-practice/">sovdoc.com</a> — cardiology valuation multiples (small practices ~1.5-3x SDE; PE platforms 8-18x adjusted EBITDA).</li>
+        <li>output/screenshots/x13nlz.png — captured screenshot of the live DealStream listing (copied into this report folder as x13nlz.png).</li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>Replacement-cardiologist cost of ~$588K is the MedAxiom 2024 median private-cardiology compensation; used qualitatively to show ~$500K SDE leaves no positive institutional EBITDA. No scorecard field was set from this — it informs the EBITDA FAIL rationale only.</li>
+        <li>Payer mix assumed Medicare-heavy based on the general profile of an outpatient cardiology panel in an elderly county; flagged as unconfirmed, not entered as a number.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p>No scorecard field is tagged <span class="est">(est.)</span>. All financial values are broker-disclosed actuals. Field #19 (YoY revenue growth) is computed, not estimated:<br>
+      <strong>Field #19 — % revenue growth YoY:</strong> 2022 = (1,140,000 &minus; 1,010,000)/1,010,000 = +12.9%; 2023 = (1,290,000 &minus; 1,140,000)/1,140,000 = +13.2%; 2024 = (1,427,261 &minus; 1,290,000)/1,290,000 = +10.6%. Source: collections series from the 1st Med Transitions listing.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li>output/screenshots/x13nlz.png — screenshot of the live DealStream listing x13nlz (captured 2026-05-21).</li>
+        <li>Task-supplied listing extraction (DealStream x13nlz, 2026-05-21) — 2023 collections, owner cash flow, building detail, broker, listing date.</li>
+      </ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>2025 collections and YTD 2026 figures.</li>
+        <li>Exact 2024 owner's cash flow, plus a year-by-year add-back schedule bridging SDE to a true EBITDA.</li>
+        <li>Payer mix — Medicare vs commercial vs self-pay percentages.</li>
+        <li>Real estate asking price and building condition; lease terms if leased instead.</li>
+        <li>FF&E value and condition/age of the nuclear and echo equipment.</li>
+        <li>Whether the collections series is gross collections or net of refunds/adjustments.</li>
+        <li>Legal entity type, malpractice-tail arrangements, and CMS re-credentialing path for a new owner.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources.</footer>
+</div>
+</body>
+</html>

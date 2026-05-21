@@ -1,0 +1,62 @@
+{
+  "listing_id": "c5bsbj",
+  "platform": "DealStream",
+  "direct_url": "https://dealstream.com/d/biz-sale/other-biz-service/c5bsbj",
+  "business_name": "Southeast-US Language Translation and Interpreting Business (anonymized blind listing)",
+  "location": "United States — Southeast US (state not disclosed)",
+  "industry": "Translation and Interpretation Services",
+  "naics": "541930",
+  "roll_up_context": "Applied Development add-on (no size floor; +10 bonus line; scored out of 110)",
+  "asking_price": 800000,
+  "cash_flow_sde": 216461,
+  "gross_revenue": 1634006,
+  "sde_margin_pct": 13.2,
+  "implied_multiple_sde": 3.70,
+  "status": "UNDER CONTRACT",
+  "date_listed": "2025-12-09",
+  "date_renewed": "2026-01-19",
+  "broker": {
+    "name": "Angela Graham",
+    "title": "Managing Partner",
+    "firm": "Alliant Capital Advisors LLC",
+    "firm_locations": "Huntsville AL / Nashville TN — mid-South M&A intermediary, est. 2005",
+    "email_pattern": "a***@alliantbroker.com",
+    "team_profile": "https://alliantbrokers.com/team/angela-graham/"
+  },
+  "business_detail": {
+    "languages_offered": "80+",
+    "services": "Interpretation and translation for commercial clients",
+    "management": "Experienced General Manager in place; management will stay post-sale",
+    "revenue_split_by_year": "NOT DISCLOSED — needs broker follow-up (do not fabricate)"
+  },
+  "needs_broker_follow_up": [
+    "2024 and 2025 revenue and cash flow split",
+    "Years in business / founding date",
+    "Full-time employee count (vs 1099 interpreter pool)",
+    "Customer concentration (largest client %)",
+    "Recurring vs project revenue mix and contract status",
+    "Exact state / metro location",
+    "Real estate and FF&E values",
+    "Current status of the contract (LOI vs binding APA; backup-offer window)"
+  ],
+  "research_findings": {
+    "company_identity": "Not identifiable — anonymized confidential brokered listing; no public match found",
+    "industry_market_size_2025": "$58B-$79B global language services market (source dependent)",
+    "industry_growth": "US Translation Services ~4.1% CAGR 2020-2025 (IBISWorld); global 5-9% CAGR forward",
+    "broker_verified": true
+  },
+  "buy_box": {
+    "fte_ge_10": "insufficient data",
+    "ebitda_1m_to_4m": "FAIL — SDE $216,461",
+    "years_ge_10": "insufficient data",
+    "three_yr_growth": "insufficient data",
+    "price_le_4x": "PASS — 3.70x SDE",
+    "dscr_gt_1_4": "insufficient data (informational only)",
+    "passed_count": 1,
+    "verdict": "FAIL (standalone); CONDITIONAL (add-on)"
+  },
+  "lead_score": 55,
+  "lead_score_denominator": 110,
+  "disposition": "Revisit for Roll-up",
+  "evaluated_date": "2026-05-21"
+}

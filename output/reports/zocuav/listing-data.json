@@ -1,0 +1,35 @@
+{
+  "listing_id": "zocuav",
+  "platform": "DealStream",
+  "direct_url": "https://dealstream.com/d/biz-sale/print-shops/zocuav",
+  "business_name": "National Commercial Printing Services Provider (anonymous broker listing)",
+  "location": "United States (national operations)",
+  "industry": "Printing — commercial printing & direct mail services",
+  "naics": "323111",
+  "asking_price": "Not Disclosed / On Request",
+  "cash_flow_ttm": 4378000,
+  "sales_ttm": 16908000,
+  "financial_period": "TTM ending Oct 31, 2025 (treated as ~2025 financials)",
+  "ebitda_margin_pct": 25.9,
+  "listed_date": "2026-05-13",
+  "new_arrival": true,
+  "broker": {
+    "name": "Kendall Stafford",
+    "title": "Managing Partner",
+    "firm": "Benchmark International",
+    "office": "Denver, CO"
+  },
+  "detail": "National general printing company — stationery, brochures, flyers, postcards, signage; national + local direct mailing services. Adjusted EBITDA grew at a 30.6% CAGR from 2021 through TTM Oct 31 2025. From 2022 through TTM Oct 2025, operating income growth outpaced gross profit growth (improved operational efficiency). Purchased a new state-of-the-art large-format digital printing press in cash in Q1 2025. Named to the Inc. Power Partner list 2025.",
+  "screenshot": "output/reports/zocuav/zocuav.png",
+  "evaluation": {
+    "score": 71,
+    "score_max": 100,
+    "buybox_passed": 1,
+    "buybox_total": 6,
+    "disposition": "Revisit for Roll-up",
+    "years_in_business": "est. 15+",
+    "employees_fte": "est. 70 (range 55-90)",
+    "ebitda": 4378000,
+    "ebitda_margin": "25.9%"
+  }
+}

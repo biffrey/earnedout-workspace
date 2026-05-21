@@ -5,33 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>EarnedOut Daily Dashboard — 2026-05-21</title>
 <style>
-  /* Palette mirrors templates/single-report.html (prospect-evaluation aesthetic) */
   :root {
-    --bg: #0f1419;
-    --panel: #171d26;
-    --panel-2: #1f2733;
-    --text: #e7ecf3;
-    --muted: #8a97ab;
-    --border: #2a3342;
-    --accent: #5aa7ff;
-    --pass: #2fbf71;
-    --fail: #e74c3c;
-    --warn: #f5a623;
-    --badge: #0b1019;
+    --bg: #0f1419; --panel: #171d26; --panel-2: #1f2733; --text: #e7ecf3;
+    --muted: #8a97ab; --border: #2a3342; --accent: #5aa7ff; --pass: #2fbf71;
+    --fail: #e74c3c; --warn: #f5a623; --badge: #0b1019;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                 "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.55; font-size: 15px;
   }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
-
   .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
-
-  /* Header banner — matches single-report.html header.banner */
   header.banner {
     background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
     border: 1px solid var(--border); border-radius: 14px;
@@ -41,7 +28,6 @@
   }
   header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
   header.banner .meta { color: var(--muted); font-size: 13px; }
-
   .stats-row { display: flex; gap: 12px; flex-wrap: wrap; }
   .stat-card {
     background: var(--badge); border: 1px solid var(--border);
@@ -52,8 +38,6 @@
     font-size: 11px; color: var(--muted); letter-spacing: .08em;
     text-transform: uppercase; margin-top: 4px;
   }
-
-  /* Sections — matches single-report.html section */
   section {
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 12px; padding: 20px 24px; margin-bottom: 18px;
@@ -68,10 +52,6 @@
     background: rgba(90,167,255,.15); color: var(--accent);
     border: 1px solid rgba(90,167,255,.3);
   }
-  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
-  section p, section li { color: #cbd3df; }
-
-  /* Tables — matches single-report.html */
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td {
     text-align: left; padding: 9px 10px;
@@ -83,27 +63,18 @@
   }
   tr:last-child td { border-bottom: none; }
   tbody tr:hover { background: rgba(90,167,255,.04); }
-
-  /* Score cell + chips */
   .score { font-weight: 800; font-size: 16px; }
   .score.high { color: var(--pass); }
   .score.mid  { color: var(--accent); }
   .score.low  { color: var(--fail); }
-
   .chip {
     display: inline-block; padding: 2px 9px; border-radius: 999px;
-    font-size: 12px; font-weight: 700; margin-left: 6px;
+    font-size: 11px; font-weight: 700; margin-left: 6px;
   }
-  .chip.price-drop {
-    background: rgba(245,166,35,.15); color: var(--warn);
-    border: 1px solid rgba(245,166,35,.4);
+  .chip.rollup {
+    background: rgba(47,191,113,.13); color: var(--pass);
+    border: 1px solid rgba(47,191,113,.35);
   }
-  .chip.manual {
-    background: rgba(90,167,255,.15); color: var(--accent);
-    border: 1px solid rgba(90,167,255,.3);
-  }
-
-  /* Run-summary grid */
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 768px) { .summary-grid { grid-template-columns: 1fr; } }
   .summary-card {
@@ -117,11 +88,6 @@
   .summary-card ul { list-style: none; }
   .summary-card li { padding: 3px 0; font-size: 14px; }
   .summary-card li strong { color: var(--text); }
-
-  .empty-state {
-    color: var(--muted); font-style: italic; text-align: center; padding: 22px;
-  }
-
   footer { color: var(--muted); font-size: 12px; text-align: center; padding: 16px; }
   footer code { color: var(--text); }
 </style>
@@ -138,464 +104,96 @@
       </div>
     </div>
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="num">3</div>
-        <div class="label">New Finds</div>
-      </div>
-      <div class="stat-card">
-        <div class="num">1</div>
-        <div class="label">Price Drops</div>
-      </div>
-      <div class="stat-card">
-        <div class="num">18</div>
-        <div class="label">Active Queue</div>
-      </div>
-      <div class="stat-card">
-        <div class="num">3</div>
-        <div class="label">Revisit Bucket</div>
-      </div>
+      <div class="stat-card"><div class="num">14</div><div class="label">New Finds</div></div>
+      <div class="stat-card"><div class="num">0</div><div class="label">Price Drops</div></div>
+      <div class="stat-card"><div class="num">18</div><div class="label">Active Queue</div></div>
+      <div class="stat-card"><div class="num">8</div><div class="label">Revisit Bucket</div></div>
     </div>
   </header>
 
-  
+  <!-- ===== SECTION A — Last Night's New Finds ===== -->
   <section id="section-a">
-    <h2>Section A: Last Night's New Finds
-      <span class="badge">3 new</span>
-    </h2>
+    <h2>Section A: Last Night's New Finds <span class="badge">14 new</span></h2>
     <table>
-      <thead>
-        <tr>
-          <th style="width:50px;">Rank</th>
-          <th style="width:64px;">Score</th>
-          <th>Business Name</th>
-          <th>Industry</th>
-          <th style="width:60px;">State</th>
-          <th>Asking Price</th>
-          <th>EBITDA</th>
-          <th>Source</th>
-          <th style="width:70px;">Report</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th style="width:50px;">Rank</th><th style="width:64px;">Score</th><th>Business Name</th>
+        <th>Industry</th><th style="width:60px;">State</th><th>Asking Price</th><th>EBITDA / Cash Flow</th>
+        <th>Source</th><th style="width:70px;">Report</th>
+      </tr></thead>
       <tbody>
-        
-        <tr>
-          <td>1</td>
-          <td><span class="score mid">50</span></td>
-          <td>
-            HVAC Business, Very Profitable, Recurring Clients [RALPH TEST]
-            
-            
-          </td>
-          <td>HVAC / Home Services</td>
-          <td>SC</td>
-          <td>
-            $1,500,000
-            
-          </td>
-          <td>$403,000</td>
-          <td>Overnight Search</td>
-          <td><a href="../reports/cvkfxz/hvac-business-sc-report.html">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>2</td>
-          <td><span class="score low">35</span></td>
-          <td>
-            Thriving HVAC Business (Southwestern South Dakota) [RALPH TEST]
-            <span class="chip price-drop">PRICE DROP</span>
-            
-          </td>
-          <td>HVAC / Home Services</td>
-          <td>SD</td>
-          <td>
-            $1,495,000
-            <br><small style="color:var(--warn);">was $1,800,000</small>
-          </td>
-          <td>$41,515</td>
-          <td>Overnight Search</td>
-          <td><a href="../reports/maya0n/thriving-hvac-sd-report.html">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>3</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Profitable HVAC & Plumbing Contractor With Land [RALPH TEST]
-            
-            <span class="chip manual">MANUAL</span>
-          </td>
-          <td>HVAC + Plumbing / Home Services</td>
-          <td>CAN</td>
-          <td>
-            $1,962,686
-            
-          </td>
-          <td>$327,114</td>
-          <td>Manual Submission</td>
-          <td><a href="../reports/so8acs/hvac-plumbing-contractor-report.html">View</a></td>
-        </tr>
-        
+        <tr><td>1</td><td><span class="score mid">78</span></td><td>Profitable Dumpster Rental Business — Orlando FL <span class="chip rollup">FAMBRO ROLL-UP</span></td><td>Commercial Waste</td><td>FL</td><td>$849,000</td><td>$245,001 (SDE)</td><td>Overnight Search</td><td><a href="../reports/2488074/orlando-dumpster-rental-report.html">View</a></td></tr>
+        <tr><td>2</td><td><span class="score high">75</span></td><td>Orange County Cardiovascular Practice &amp; Cardiac Rehab Center</td><td>Cardiac / Medical</td><td>CA</td><td>$4,600,000</td><td>$1,315,000</td><td>Overnight Search</td><td><a href="../reports/i01naw/oc-cardiovascular-practice-report.html">View</a></td></tr>
+        <tr><td>3</td><td><span class="score mid">72</span></td><td>25-Year NYC Waste Management Co (Roll-Off &amp; Carting) <span class="chip rollup">FAMBRO ROLL-UP</span></td><td>Commercial Waste</td><td>NY</td><td>$7,950,000</td><td>$1,680,000</td><td>Overnight Search</td><td><a href="../reports/4s78q1/nyc-waste-rolloff-carting-report.html">View</a></td></tr>
+        <tr><td>4</td><td><span class="score mid">72</span></td><td>Commercial Demolition focused on Interiors <span class="chip rollup">FAMBRO ROLL-UP</span></td><td>Commercial Waste</td><td>CO</td><td>$3,525,000</td><td>$642,941 (SDE)</td><td>Overnight Search</td><td><a href="../reports/mwlpo5/denver-commercial-demolition-report.html">View</a></td></tr>
+        <tr><td>5</td><td><span class="score mid">60</span></td><td>Northern California Roll-Off Dumpster Company <span class="chip rollup">FAMBRO ROLL-UP</span></td><td>Commercial Waste</td><td>CA</td><td>Not disclosed</td><td>$400,000 (CF)</td><td>Overnight Search</td><td><a href="../reports/96k1ze/norcal-rolloff-dumpster-report.html">View</a></td></tr>
+        <tr><td>6</td><td><span class="score mid">55</span></td><td>Southeast-US Language Translation &amp; Interpreting Business <span class="chip rollup">APPLIED DEV ROLL-UP</span></td><td>Sign Language / Translation</td><td>US</td><td>$800,000</td><td>$216,461 (SDE)</td><td>Overnight Search</td><td><a href="../reports/c5bsbj/southeast-translation-interpreting-report.html">View</a></td></tr>
+        <tr><td>7</td><td><span class="score mid">55</span></td><td>National Commercial Printing Services Provider</td><td>Printing</td><td>US</td><td>Not disclosed</td><td>$4,378,000 (Adj. EBITDA)</td><td>Overnight Search</td><td><a href="../reports/zocuav/national-commercial-printing-report.html">View</a></td></tr>
+        <tr><td>8</td><td><span class="score low">47</span></td><td>Intl Supplier of Commercial &amp; Military Aircraft Parts</td><td>Aerospace</td><td>NJ</td><td>Not disclosed</td><td>$610,000 (SDE)</td><td>Overnight Search</td><td><a href="../reports/fptdcc/intl-aircraft-parts-supplier-report.html">View</a></td></tr>
+        <tr><td>9</td><td><span class="score low">45</span></td><td>Project Print / Commercial Printing Business</td><td>Printing</td><td>US</td><td>Not disclosed</td><td>$1,310,192 (CF)</td><td>Overnight Search</td><td><a href="../reports/cxc6up/project-print-commercial-printing-report.html">View</a></td></tr>
+        <tr><td>10</td><td><span class="score low">37</span></td><td>Leading American Sign Language Training Center</td><td>ASL Education</td><td>NY</td><td>$550,000</td><td>$114,364 (SDE)</td><td>Overnight Search</td><td><a href="../reports/dnmrsc/asl-training-center-nyc-report.html">View</a></td></tr>
+        <tr><td>11</td><td><span class="score low">35</span></td><td>Cardiology Practice — Palm Beach County FL</td><td>Cardiac / Medical</td><td>FL</td><td>Not disclosed</td><td>Not disclosed</td><td>Overnight Search</td><td><a href="../reports/x13nlz/palm-beach-cardiology-practice-report.html">View</a></td></tr>
+        <tr><td>12</td><td><span class="score low">33</span></td><td>Sought After Aircraft Fuel &amp; Service Center</td><td>Aerospace</td><td>CA</td><td>Not disclosed</td><td>$123,948 (CF, stale 2023)</td><td>Overnight Search</td><td><a href="../reports/12b5ig/aircraft-fuel-service-center-report.html">View</a></td></tr>
+        <tr><td>13</td><td><span class="score low">31</span></td><td>Established Cardiology Practice — Orlando FL</td><td>Cardiac / Medical</td><td>FL</td><td>$700,000</td><td>$385,234 (SDE)</td><td>Overnight Search</td><td><a href="../reports/jm9ntb/orlando-cardiology-practice-report.html">View</a></td></tr>
+        <tr><td>14</td><td><span class="score low">30</span></td><td>Personal Injury Lead Generation Platform</td><td>Marketing</td><td>FL</td><td>$5,000,000</td><td>$581,384 (CF)</td><td>Overnight Search</td><td><a href="../reports/kmr6nv/pi-lead-generation-platform-report.html">View</a></td></tr>
       </tbody>
     </table>
   </section>
 
-  
+  <!-- ===== SECTION B — Running Queue (Active) ===== -->
   <section id="section-b">
-    <h2>Section B: Running Queue &mdash; Active Leads
-      <span class="badge">18 leads</span>
-    </h2>
+    <h2>Section B: Running Queue &mdash; Active Leads <span class="badge">18 leads</span></h2>
     <table>
-      <thead>
-        <tr>
-          <th style="width:50px;">Rank</th>
-          <th style="width:64px;">Score</th>
-          <th>Business Name</th>
-          <th>Industry</th>
-          <th style="width:60px;">State</th>
-          <th>Asking Price</th>
-          <th>EBITDA</th>
-          <th>Date Added</th>
-          <th style="width:70px;">Report</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th style="width:50px;">Rank</th><th style="width:64px;">Score</th><th>Business Name</th>
+        <th>Industry</th><th style="width:60px;">State</th><th>Asking Price</th><th>EBITDA / Cash Flow</th>
+        <th>Date Added</th><th style="width:70px;">Report</th>
+      </tr></thead>
       <tbody>
-        
-        <tr>
-          <td>1</td>
-          <td><span class="score mid">50</span></td>
-          <td>
-            HVAC Business, Very Profitable, Recurring Clients [RALPH TEST]
-            
-          </td>
-          <td>HVAC / Home Services</td>
-          <td>SC</td>
-          <td>$1,500,000</td>
-          <td>$403,000</td>
-          <td>2026-05-21</td>
-          <td><a href="../reports/cvkfxz/hvac-business-sc-report.html">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>2</td>
-          <td><span class="score low">47</span></td>
-          <td>
-            High Growth Oilfield Equipment Rental — Bakken
-            
-          </td>
-          <td>Oilfield Services</td>
-          <td>ND</td>
-          <td>$17,000,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>3</td>
-          <td><span class="score low">45</span></td>
-          <td>
-            FAA Certified Repair Station — Florida (BizBuySell)
-            
-          </td>
-          <td>Aerospace / MRO</td>
-          <td>FL</td>
-          <td>$26,000,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>4</td>
-          <td><span class="score low">35</span></td>
-          <td>
-            Powder Coating & Cerakote Oven Manufacturer
-            
-          </td>
-          <td>Manufacturing</td>
-          <td>IL</td>
-          <td>$10,950,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>5</td>
-          <td><span class="score low">35</span></td>
-          <td>
-            Metal Fabrication Business — Harris County TX
-            
-          </td>
-          <td>Manufacturing</td>
-          <td>TX</td>
-          <td>$17,990,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>6</td>
-          <td><span class="score low">30</span></td>
-          <td>
-            Aviation Maintenance Facility — Fort Lauderdale
-            
-          </td>
-          <td>Aerospace / MRO</td>
-          <td>FL</td>
-          <td>$1,800,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>7</td>
-          <td><span class="score low">25</span></td>
-          <td>
-            $1.48M EBITDA Boutique Digital Marketing Agency — Charlotte, NC
-            
-          </td>
-          <td>Marketing</td>
-          <td>NC</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>8</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            SBA Pre-Qual Digital Marketing Agency — Tampa, FL
-            
-          </td>
-          <td>Marketing</td>
-          <td>FL</td>
-          <td>$1,400,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>9</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Digital Marketing Agency — Healthcare Sector Focus
-            
-          </td>
-          <td>Marketing</td>
-          <td>US</td>
-          <td>$900,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>10</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Disaster Response & Emergency Base Camp Provider
-            
-          </td>
-          <td>Emergency Management</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>11</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Profitable Locksmith Business + Property — SBA Pre-Qual
-            
-          </td>
-          <td>Home Services</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>12</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            HVAC & Plumbing Company
-            
-          </td>
-          <td>HVAC / Home Services</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>13</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Thriving Garage Door & Gate Business
-            
-          </td>
-          <td>Home Services</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>14</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Profitable Interventional Cardiology Practice
-            
-          </td>
-          <td>Cardiac / Medical</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>15</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            High-End Architecture & Interior Design Firm
-            
-          </td>
-          <td>Architectural Design</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>16</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            $1.72M Revenue Digital Marketing Agency — Austin, TX
-            
-          </td>
-          <td>Marketing</td>
-          <td>TX</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>17</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            Aircraft Repair & Paint Facility — Mena, Arkansas (Hampton Aviation)
-            
-          </td>
-          <td>Aerospace / MRO</td>
-          <td>AR</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>18</td>
-          <td><span class="score low">20</span></td>
-          <td>
-            FAA 141 & 142 SEVP Certified Flight Training School
-            
-          </td>
-          <td>Aerospace</td>
-          <td>US</td>
-          <td>—</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
+        <tr><td>1</td><td><span class="score high">75</span></td><td>Orange County Cardiovascular Practice &amp; Cardiac Rehab Center</td><td>Cardiac / Medical</td><td>CA</td><td>$4,600,000</td><td>$1,315,000</td><td>2026-05-21</td><td><a href="../reports/i01naw/oc-cardiovascular-practice-report.html">View</a></td></tr>
+        <tr><td>2</td><td><span class="score low">47</span></td><td>High Growth Oilfield Equipment Rental — Bakken</td><td>Other</td><td>ND</td><td>$17,000,000</td><td>$3,569,601</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>3</td><td><span class="score low">45</span></td><td>FAA Certified Repair Station — Florida</td><td>Part 145 Aviation</td><td>FL</td><td>$26,000,000</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>4</td><td><span class="score low">35</span></td><td>Powder Coating &amp; Cerakote Oven Manufacturer</td><td>Other</td><td>IL</td><td>$10,950,000</td><td>$2,773,001</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>5</td><td><span class="score low">35</span></td><td>Metal Fabrication Business — Harris County TX</td><td>Other</td><td>TX</td><td>$17,990,000</td><td>$6,403,708</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>6</td><td><span class="score low">30</span></td><td>Aviation Maintenance Facility — Fort Lauderdale</td><td>Part 145 Aviation</td><td>FL</td><td>$1,800,000</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>7</td><td><span class="score low">25</span></td><td>$1.48M EBITDA Boutique Digital Marketing Agency — Charlotte, NC</td><td>Marketing</td><td>NC</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>8</td><td><span class="score low">20</span></td><td>Disaster Response &amp; Emergency Base Camp Provider</td><td>Other</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>9</td><td><span class="score low">20</span></td><td>Profitable Locksmith Business + Property — SBA Pre-Qual</td><td>Other</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>10</td><td><span class="score low">20</span></td><td>HVAC &amp; Plumbing Company</td><td>Other</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>11</td><td><span class="score low">20</span></td><td>Thriving Garage Door &amp; Gate Business</td><td>Other</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>12</td><td><span class="score low">20</span></td><td>Profitable Interventional Cardiology Practice</td><td>Cardiac / Medical</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>13</td><td><span class="score low">20</span></td><td>Aircraft Repair &amp; Paint Facility — Mena, Arkansas</td><td>Part 145 Aviation</td><td>AR</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>14</td><td><span class="score low">20</span></td><td>High-End Architecture &amp; Interior Design Firm</td><td>Other</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>15</td><td><span class="score low">20</span></td><td>SBA Pre-Qual Digital Marketing Agency — Tampa, FL</td><td>Marketing</td><td>FL</td><td>$1,400,000</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>16</td><td><span class="score low">20</span></td><td>Digital Marketing Agency — Healthcare Sector Focus</td><td>Marketing</td><td>US</td><td>$900,000</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>17</td><td><span class="score low">20</span></td><td>$1.72M Revenue Digital Marketing Agency — Austin, TX</td><td>Marketing</td><td>TX</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>18</td><td><span class="score low">20</span></td><td>FAA 141 &amp; 142 SEVP Certified Flight Training School</td><td>Part 145 Aviation</td><td>US</td><td>—</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
       </tbody>
     </table>
   </section>
 
-  
+  <!-- ===== SECTION C — Revisit Bucket (Revisit for Roll-up) ===== -->
   <section id="section-c">
-    <h2>Section C: Revisit Bucket &mdash; Roll-up Targets
-      <span class="badge">3 leads</span>
-    </h2>
+    <h2>Section C: Revisit Bucket &mdash; Roll-up Targets <span class="badge">8 leads</span></h2>
     <table>
-      <thead>
-        <tr>
-          <th style="width:50px;">Rank</th>
-          <th style="width:64px;">Score</th>
-          <th>Business Name</th>
-          <th>Industry</th>
-          <th style="width:60px;">State</th>
-          <th>Asking Price</th>
-          <th>EBITDA</th>
-          <th>Date Added</th>
-          <th style="width:70px;">Report</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th style="width:50px;">Rank</th><th style="width:64px;">Score</th><th>Business Name</th>
+        <th>Industry</th><th style="width:60px;">State</th><th>Asking Price</th><th>EBITDA / Cash Flow</th>
+        <th>Date Added</th><th style="width:70px;">Report</th>
+      </tr></thead>
       <tbody>
-        
-        <tr>
-          <td>1</td>
-          <td><span class="score low">35</span></td>
-          <td>Thriving HVAC Business (Southwestern South Dakota) [RALPH TEST]</td>
-          <td>HVAC / Home Services</td>
-          <td>SD</td>
-          <td>$1,495,000</td>
-          <td>$41,515</td>
-          <td>2026-05-21</td>
-          <td><a href="../reports/maya0n/thriving-hvac-sd-report.html">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>2</td>
-          <td><span class="score low">25</span></td>
-          <td>Part 145 Avionics Repair Station — Arkansas</td>
-          <td>Aerospace / MRO</td>
-          <td>AR</td>
-          <td>$1,000,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
-        <tr>
-          <td>3</td>
-          <td><span class="score low">20</span></td>
-          <td>FAA Part 135 Charter Certificate — Florida</td>
-          <td>Aerospace</td>
-          <td>FL</td>
-          <td>$249,000</td>
-          <td>—</td>
-          <td>2026-04-16</td>
-          <td><a href="#">View</a></td>
-        </tr>
-        
+        <tr><td>1</td><td><span class="score mid">78</span></td><td>Profitable Dumpster Rental Business — Orlando FL</td><td>Commercial Waste</td><td>FL</td><td>$849,000</td><td>$245,001 (SDE)</td><td>2026-05-21</td><td><a href="../reports/2488074/orlando-dumpster-rental-report.html">View</a></td></tr>
+        <tr><td>2</td><td><span class="score mid">72</span></td><td>25-Year NYC Waste Management Co (Roll-Off &amp; Carting)</td><td>Commercial Waste</td><td>NY</td><td>$7,950,000</td><td>$1,680,000</td><td>2026-05-21</td><td><a href="../reports/4s78q1/nyc-waste-rolloff-carting-report.html">View</a></td></tr>
+        <tr><td>3</td><td><span class="score mid">72</span></td><td>Commercial Demolition focused on Interiors</td><td>Commercial Waste</td><td>CO</td><td>$3,525,000</td><td>$642,941 (SDE)</td><td>2026-05-21</td><td><a href="../reports/mwlpo5/denver-commercial-demolition-report.html">View</a></td></tr>
+        <tr><td>4</td><td><span class="score mid">60</span></td><td>Northern California Roll-Off Dumpster Company</td><td>Commercial Waste</td><td>CA</td><td>Not disclosed</td><td>$400,000 (CF)</td><td>2026-05-21</td><td><a href="../reports/96k1ze/norcal-rolloff-dumpster-report.html">View</a></td></tr>
+        <tr><td>5</td><td><span class="score mid">55</span></td><td>Southeast-US Language Translation &amp; Interpreting Business</td><td>Sign Language / Translation</td><td>US</td><td>$800,000</td><td>$216,461 (SDE)</td><td>2026-05-21</td><td><a href="../reports/c5bsbj/southeast-translation-interpreting-report.html">View</a></td></tr>
+        <tr><td>6</td><td><span class="score mid">55</span></td><td>National Commercial Printing Services Provider</td><td>Printing</td><td>US</td><td>Not disclosed</td><td>$4,378,000 (Adj. EBITDA)</td><td>2026-05-21</td><td><a href="../reports/zocuav/national-commercial-printing-report.html">View</a></td></tr>
+        <tr><td>7</td><td><span class="score low">25</span></td><td>Part 145 Avionics Repair Station — Arkansas</td><td>Part 145 Aviation</td><td>AR</td><td>$1,000,000</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
+        <tr><td>8</td><td><span class="score low">20</span></td><td>FAA Part 135 Charter Certificate — Florida</td><td>Part 145 Aviation</td><td>FL</td><td>$249,000</td><td>—</td><td>2026-04-16</td><td>—</td></tr>
       </tbody>
     </table>
   </section>
 
-  
+  <!-- ===== SECTION D — Run Summary ===== -->
   <section id="section-d">
     <h2>Section D: Run Summary</h2>
     <div class="summary-grid">
@@ -603,43 +201,45 @@
       <div class="summary-card">
         <h3>Search Totals</h3>
         <ul>
-          <li><strong>243</strong> listings found across all platforms</li>
-          <li><strong>2</strong> new leads added</li>
+          <li><strong>16</strong> listings examined in detail across all platforms</li>
+          <li><strong>14</strong> new leads added (all evaluated through prospect-evaluation)</li>
           <li><strong>0</strong> duplicates skipped</li>
-          <li><strong>1</strong> dead links caught</li>
-          <li><strong>1</strong> price drops detected &amp; re-evaluated</li>
-          <li><strong>1</strong> manual submissions added</li>
+          <li><strong>2</strong> dead links caught (stale BizBuySell listings 2420487, 1944639)</li>
+          <li><strong>0</strong> price drops detected &amp; re-evaluated</li>
+          <li><strong>0</strong> manual submissions added</li>
         </ul>
       </div>
 
       <div class="summary-card">
         <h3>Leads by Platform</h3>
         <ul>
-          
-          <li><strong>DealStream:</strong> 243 found, 3 new</li>
-          
-          <li><strong>BizBuySell:</strong> 0 found, 0 new</li>
-          
-          <li><strong>BizQuest:</strong> 0 found, 0 new</li>
-          
+          <li><strong>DealStream (authenticated):</strong> 13 new leads from 9 industry searches</li>
+          <li><strong>BizBuySell:</strong> 1 new lead; 2 dead links caught</li>
+          <li><strong>BizQuest:</strong> category pages reviewed; 0 new direct listings surfaced</li>
         </ul>
       </div>
 
       <div class="summary-card">
         <h3>Leads by Industry</h3>
         <ul>
-          
-          <li><strong>HVAC / Home Services:</strong> 3 new</li>
-          
+          <li><strong>Commercial Waste (Fambro roll-up):</strong> 4 new</li>
+          <li><strong>Cardiac / Medical:</strong> 3 new</li>
+          <li><strong>Sign Language / Translation (Applied Dev roll-up):</strong> 2 new</li>
+          <li><strong>Aerospace:</strong> 2 new</li>
+          <li><strong>Printing:</strong> 2 new</li>
+          <li><strong>Marketing:</strong> 1 new</li>
         </ul>
       </div>
 
       <div class="summary-card">
         <h3>Errors &amp; Warnings</h3>
         <ul>
-          
-          <li>s9 test run — deliberately small scope: 1 industry (HVAC), DealStream only, limited pagination. 1 dead URL (hvac/zzzz99) correctly flagged + skipped.</li>
-          
+          <li>DealStream keyword search OR-matches multi-word queries (e.g. "Part 145 repair station" → 5,103 noisy hits); single distinctive keywords used to compensate.</li>
+          <li>BizBuySell URLs from web search were stale — 2 returned "File Not Found" (caught as dead links, skipped).</li>
+          <li>No nuclear-pharmacy / radiopharmaceutical and no precious-metals refiner/recycler listings found on DealStream this run.</li>
+          <li>Industry Match field lacks "Printing", "Medical/Cardiac" and "Marketing" options — 6 leads tagged "Other"; true NAICS recorded in the NAICS Code field + Notes.</li>
+          <li>Listing Screenshot attachment field not populated (Airtable attachments require a hosted URL) — screenshots saved to output/screenshots/ and referenced in Notes.</li>
+          <li>Scope: 9 of 14 active industries swept on DealStream this run; emergency management, organ transport, architectural design, home services and SBIC not separately swept.</li>
         </ul>
       </div>
 
@@ -647,7 +247,7 @@
   </section>
 
   <footer>
-    Generated by EarnedOut Overnight Search &nbsp;&middot;&nbsp; 2026-05-21T13:07:07
+    Generated by EarnedOut Overnight Search &nbsp;&middot;&nbsp; 2026-05-21T15:48:00-04:00
     &nbsp;&middot;&nbsp;
     Dashboard: <code>output/dashboards/dashboard_2026-05-21.html</code>
   </footer>

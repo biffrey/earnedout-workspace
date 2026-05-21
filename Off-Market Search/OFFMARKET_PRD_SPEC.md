@@ -1,0 +1,129 @@
+# Off-Market Target Search — Canonical PRD Spec (the "what")
+
+> This is the **canonical spec** the off-market Ralph loop drives to completion.
+> `OFFMARKET_LOOP_PROMPT.md` describes *how* to drive it; this file describes
+> *what* must end up in the deliverable. Re-read it every iteration.
+>
+> **Deliverable of the loop:** a complete, internally-consistent, self-audited
+> `Off-Market Search/PRD_OFF_MARKET_SEARCH.md`.
+>
+> **This loop is a PLANNING pass.** It writes the PRD. It does **not** perform
+> live searches, fetch from FPDS/SAM/USAspending/SBA, or build the tool. Any
+> NAICS/PSC code, API detail, statistic, or rate limit the loop is not certain
+> of must be written into the PRD as an explicit `⚠ VERIFY:` line, never as a
+> stated fact.
+
+---
+
+## Objective
+
+Produce a Product Requirements Document for an **Off-Market Target Search**
+system: a new intake pipeline that surfaces acquisition targets which are **not
+listed for sale**, sourced from U.S. government / open-data sources, and feeds
+them into the **exact same tracking, scoring, and review structure** already
+used by the on-market published-listing search.
+
+The off-market PRD must **not** invent a parallel system. Off-market records
+must be interchangeable with on-market records — same Airtable base/table, same
+fields, same prospect-evaluation scoring, same dashboard, same review cadence.
+Only the **sourcing front-end** is new.
+
+## The two target classes
+
+1. **ASL platform bolt-ons.** Operating companies providing sign-language
+   interpretation, CART / realtime captioning, VRI, or related deaf / hard-of-
+   hearing communication-access services that could be acquired and bolted onto
+   the platform company **Applied Development** (confirm the exact entity name
+   and thesis from `references/buy-box-and-scoring.md` and the prospect-
+   evaluation skill). "Off-market" means not currently listed for sale.
+
+2. **SBIC firms to acquire outright.** Licensed Small Business Investment
+   Companies where the acquisition target is the **GP / management entity that
+   holds the SBA SBIC license / fund** — NOT the portfolio companies. Look for
+   aging fund managers, wind-down vintages, single-GP shops, dormant licensees.
+
+## Required government / open-data sources
+
+The PRD must specify, **source by source**, exactly how to query each and what
+to extract:
+
+- **FPDS-NG** (Federal Procurement Data System, fpds.gov) — federal contract
+  award history; find companies that won interpretation/captioning contracts.
+- **SAM.gov** — entity registrations, NAICS codes, socioeconomic / small-
+  business status, contract opportunities.
+- **USAspending.gov** — federal award & recipient data, prime- and sub-award
+  contract history.
+- **SBA.gov** — the official **SBIC Program directory** of licensed SBICs
+  (primary source for target class 2); and the SBA **Dynamic Small Business
+  Search (DSBS)** for target class 1.
+- **Other relevant .gov sources** the loop identifies — e.g., GSA eLibrary /
+  GSA Advantage schedule holders, state procurement portals, state Secretary of
+  State business registries, the federal courts' interpreter procurement. Each
+  listed with a rationale.
+
+**Candidate search keys for target class 1 — flag for operator verification,
+do not state as confirmed:** NAICS **541930** (Translation and Interpretation
+Services) and PSC code **R608** (translation/interpreting) are *starting points
+only*. The PRD must instruct that the exact current codes be confirmed from the
+primary source. Define a keyword strategy: ASL, sign language, interpreting,
+CART, realtime captioning, communication access, deaf/HoH.
+
+## Required PRD contents (Step-4 checklist)
+
+The finished PRD must contain at least:
+
+1. Objective, success metrics, scope, explicit non-goals.
+2. Definitions of the two target classes.
+3. Per-source methodology — query parameters, codes, filters, fields to
+   extract, access method (UI vs. API vs. bulk download), rate-limit / ToS
+   notes.
+4. Entity resolution & de-duplication — recognizing the same company across
+   FPDS-NG / SAM.gov / USAspending (UEI, CAGE, DUNS, name/address), and
+   avoiding re-surfacing targets already in the tracker.
+5. Qualification — how a raw government record becomes a scored prospect using
+   the **existing** Buy Box / prospect-evaluation skill (roll-up add-on mode for
+   class 1; SBIC GP screening mode for class 2).
+6. Data schema — mapped **field-by-field** to the on-market Airtable tracker so
+   off-market and on-market records are interchangeable.
+7. Workflow & cadence — mirroring the loop in `REVAMP_LOOP_PROMPT.md`.
+8. Integration plan — which existing files / trackers get written to, and how.
+9. Compliance & legal notes — government-data ToS, bulk-access rules, FOIA
+   considerations.
+10. Risks and an explicit open-questions list.
+
+## The on-market system the PRD must integrate with (facts on disk)
+
+- **Canonical on-market plan:** `REVAMP_PLAN.md`. **On-market loop driver:**
+  `REVAMP_LOOP_PROMPT.md`. The on-market Ralph loop is COMPLETE (`_ralph/STATE.md`,
+  iteration 64, all 10 stages verified).
+- **Tracker:** Airtable base `appOsvuyy5eK43QTx`, table `tblSmNrHROMLm7vOS`
+  ("Master Deal Pipeline"). Field IDs are enumerated in `REVAMP_PLAN.md` Step 1
+  (the "Live field-name reconciliation" paragraph) — read them from there; do
+  not hit Airtable live for this planning pass.
+- **Scoring:** the `prospect-evaluation` skill (`.claude/skills/prospect-
+  evaluation/skill.md` + `references/buy-box-and-scoring.md`). It **already
+  supports both off-market target classes**: Applied Development roll-up add-ons
+  (NAICS 541930; no size floor; scored 0–110) and SBIC GP / management-company
+  acquisitions (gated on SBIC license good standing; financials informational).
+  The off-market PRD reuses this skill — it must not define new scoring.
+- **`Source` single-select** (`fldiGyXTk6Ybb6J1L`) currently has values
+  `Overnight Search` and `Manual Submission`. The PRD must propose the off-market
+  `Source` value(s) to add (e.g., `Off-Market — ASL Bolt-on`, `Off-Market —
+  SBIC`) and flag that the operator must create them.
+- **Dashboard:** `templates/daily-dashboard.html`; daily output to
+  `output/dashboards/`. **Run logs / drafts:** `search_reports/`.
+
+## Constraints
+
+- Planning pass only. No live searches, no fetching the .gov sites, no tool
+  build. Deliverable is the PRD only.
+- Flag every assumption, statistic, and NAICS/PSC code as `⚠ VERIFY:` — tell
+  the operator to confirm it from the primary source. Do not state guesses as
+  facts.
+- The PRD's open-questions section collects clarifying questions for the
+  operator; the loop does **not** block waiting for answers — it proceeds with
+  clearly-flagged assumptions.
+
+## Final deliverable path
+
+`~/published-listing-search/Off-Market Search/PRD_OFF_MARKET_SEARCH.md`
