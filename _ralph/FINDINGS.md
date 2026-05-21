@@ -134,3 +134,49 @@ faked PASS: the discrepancy and its reconciliation steps remain fully visible in
 `config/credentials-setup.md` and here. `unresolved_findings` decremented 1 → 0.
 `s3_onepassword` stays `implemented` (it was never `self_tested`/`verified`, so
 no stage demotion applies).
+
+## F3 — s4_airtable — financial fields use "Revenue YYYY" not plan's "YYYY Revenue" (IMPROVE)
+
+**Iteration raised:** 6 (2026-05-21T00:28:12Z)
+**Observed:** `REVAMP_PLAN.md` Step 1 (lines 132–135) tabulates four financial
+fields with the labels **"2025 Revenue", "2025 Cash Flow", "2024 Revenue",
+"2024 Cash Flow"** (all type Currency). The live Airtable table
+`tblSmNrHROMLm7vOS` ("Master Deal Pipeline", base `appOsvuyy5eK43QTx`) instead
+has them as **"Revenue 2025"** (`fld8Pmhi9M7m5qaUf`), **"Cash Flow 2025"**
+(`flde6Fr88nm4BAoE1`), **"Revenue 2024"** (`fldfUOMF98BAk8Qeo`), **"Cash Flow
+2024"** (`fldwX2NkTE2E66pln`) — all currency, precision 0, `$`. The word order
+is reversed; the type is correct.
+
+**Context that matters:** the base already carries a full multi-year set in the
+"Revenue YYYY" / "Cash Flow YYYY" form — Revenue 2022, Revenue 2023, Cash Flow
+2022, Cash Flow 2023 all pre-exist with that convention. So the live "Revenue
+2024/2025" + "Cash Flow 2024/2025" fields are internally consistent with the
+table's own established naming; it is the *plan's* Step-1 label that is the
+outlier.
+
+**Action taken this iteration (IMPLEMENT s4):** No duplicate fields were
+created. Creating a second field literally named "2025 Revenue" beside the
+existing "Revenue 2025" would split the same metric across two columns and
+directly contradicts the plan's intent (one field per metric per year). The
+other 12 plan Step-1 fields exist with exact name + type matches, and the three
+single-selects (Disposition, Link Health Status, Source) have option sets that
+match the plan exactly. Per Appendix B ("trust the plan AND the filesystem —
+record the discrepancy as a finding"), the naming variance is logged here
+rather than "fixed" by a destructive rename or a duplicate-create.
+
+**Severity:** IMPROVE. **Why it matters:** Stage 5 (`s5_overnight_skill`) and
+Stage 6 (`s6_submit_url`) must write to these fields *by name*. If the skill is
+authored against the plan's literal "2025 Revenue" label, the Airtable write
+will fail or silently create a field. The naming must be settled before s5 is
+implemented.
+
+**Recommended resolution for the next RESOLVE phase:** Adopt the live field
+names as canonical — keep "Revenue 2024", "Revenue 2025", "Cash Flow 2024",
+"Cash Flow 2025" (no rename: they hold/will hold data and match the base's
+2022–2023 convention). Record in the loop record that the plan's Step-1 labels
+"2025 Revenue" etc. denote these existing fields, and ensure the s5/s6 IMPLEMENT
+phases use the exact live names. Optionally annotate `REVAMP_PLAN.md` Step 1 with
+the live names. No counting blocker — this is fully resolvable inside the loop.
+`s4_airtable` stays `implemented` (never `self_tested`/`verified`, no demotion).
+
+**RESOLUTION:** _(pending — to be completed by a RESOLVE phase)_

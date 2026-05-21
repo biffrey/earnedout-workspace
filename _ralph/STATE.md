@@ -1,17 +1,17 @@
 ---
 active: true
-iteration: 5
+iteration: 6
 max_iterations: 40
-last_iteration_at: 2026-05-21T00:23:54Z
+last_iteration_at: 2026-05-21T00:28:12Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 0
+unresolved_findings: 1
 open_blockers: 0
 stages:
   s1_repo:            { status: implemented }
   s2_playwright:      { status: implemented }
   s3_onepassword:     { status: implemented }
-  s4_airtable:        { status: not_started }
+  s4_airtable:        { status: implemented }
   s5_overnight_skill: { status: not_started }
   s6_submit_url:      { status: not_started }
   s7_outreach:        { status: not_started }
@@ -86,15 +86,32 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   Appended a `RESOLUTION:` line to F2. `unresolved_findings` → 0. `s3_onepassword`
   stays `implemented` (never `self_tested`/`verified`, no demotion).
 
+- Iteration 6 (2026-05-21T00:28:12Z): IMPLEMENT phase (`unresolved_findings == 0`,
+  `open_blockers == 0` at start). Re-checked `BLOCKERS.md` — no counting
+  blockers, advisory A1 still stands (`mcp__playwright__*` still absent).
+  Scanned s1→s10; `s1_repo`/`s2_playwright`/`s3_onepassword` are `implemented`
+  so skipped; first `not_started` stage is `s4_airtable` (no deps). IMPLEMENT on
+  `s4_airtable`: listed table `tblSmNrHROMLm7vOS` ("Master Deal Pipeline", base
+  `appOsvuyy5eK43QTx`, 88 fields). All 16 plan Step-1 fields already exist with
+  correct types — 0 fields created, 0 modified (no live-base mutation). The 3
+  single-selects match the plan's option sets exactly (Disposition 6 / Link
+  Health Status 3 / Source 2). Discrepancy: the 4 financial fields exist as
+  "Revenue 2024/2025" + "Cash Flow 2024/2025" (the base's established
+  convention, matching pre-existing 2022/2023 fields) rather than the plan
+  Step-1 labels "2024/2025 Revenue" + "Cash Flow". Recorded as finding F3
+  (`unresolved_findings` → 1); no duplicate fields created (would split data).
+  `s4_airtable` → `implemented`.
+
 ## Next iteration (expected)
-IMPLEMENT phase expected: `unresolved_findings == 0` and `open_blockers == 0`,
-so Step 1 falls through RESOLVE to IMPLEMENT. The s1→s10 scan skips `s1_repo`,
-`s2_playwright`, `s3_onepassword` (all `implemented`) and lands on the first
-`not_started` stage — `s4_airtable` (Airtable field creation; no stage
-dependencies, needs the Airtable MCP). IMPLEMENT on `s4_airtable`: list the
-fields on table `tblSmNrHROMLm7vOS` in base `appOsvuyy5eK43QTx` via the Airtable
-MCP, then create any missing field from the plan's Step 1 table (the 16 new
-fields with their specified types and single-select options).
+RESOLVE phase expected: `unresolved_findings == 1` forces RESOLVE first (Step 1
+selection rule). The next iteration takes the oldest unresolved finding — F3 —
+and resolves it. Likely outcome: F3 closed by adopting the live field names
+("Revenue 2024/2025", "Cash Flow 2024/2025") as canonical (no rename — they
+match the base's 2022/2023 convention and hold data), recording that the plan's
+Step-1 labels denote those existing fields, so the later s5/s6 IMPLEMENT phases
+author the skill against the exact live names; `unresolved_findings` → 0, no new
+counting blocker. After RESOLVE, the IMPLEMENT scan resumes at `s5_overnight_skill`
+(first `not_started` stage; dependency s1 is `implemented` — met).
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

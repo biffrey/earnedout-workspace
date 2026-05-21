@@ -171,3 +171,68 @@ by IMPLEMENT); the first `not_started` stage with met dependencies is
 **Result:** `s3_onepassword` status set to `implemented`. `unresolved_findings`
 → 1 (F2). `open_blockers` stays 0. Next iteration will run RESOLVE on F2 (per
 the Step 1 selection rule: `unresolved_findings > 0` forces RESOLVE first).
+
+## Iteration 6 — 2026-05-21T00:28:12Z — IMPLEMENT on s4_airtable
+
+**Phase selected:** Step 1 IMPLEMENT. At iteration start `unresolved_findings == 0`
+(F2 closed by the iteration-5 RESOLVE) and `open_blockers == 0`, so RESOLVE was
+skipped. Re-checked `BLOCKERS.md`: no counting blockers; advisory note A1
+(Playwright MCP tools absent) still stands — `mcp__playwright__*` tools are still
+not in the tool list — but A1 is non-counting and gates nothing. Scanning
+s1→s10: `s1_repo`, `s2_playwright`, `s3_onepassword` are all `implemented`
+(skipped by IMPLEMENT); the first `not_started` stage with met dependencies is
+`s4_airtable` (dependencies: none; needs the Airtable MCP, which is available).
+One phase only — IMPLEMENT; the field-by-field SELF-TEST re-list belongs to the
+s4 SELF-TEST phase.
+
+**s4_airtable IMPLEMENT actions (Appendix A Stage 4 / REVAMP_PLAN.md Step 1):**
+
+1. *Listed the live table schema* — `list_tables_for_base` on base
+   `appOsvuyy5eK43QTx` returned table `tblSmNrHROMLm7vOS`, user-facing name
+   **"Master Deal Pipeline"**, 88 fields, primary field `Business Name`
+   (`fldquYtYnHJ1YzUR7`).
+
+2. *Checked the 16 plan Step-1 fields against the live schema* — **All 16
+   already exist** with the plan's specified types, so 0 fields were created
+   this iteration. Field-ID map:
+   - Listing ID → `fld81k0uFwqkHaEEI` (singleLineText) ✓
+   - Direct Listing URL → `fldMCmSVQjYv3odok` (url) ✓
+   - Listing Screenshot → `fldrPuxZHGsYZuxTO` (multipleAttachments) ✓
+   - Date Added → `fldoZVwrhWaGGMlFR` (date) ✓
+   - Date Updated → `fld3TRpVYopXL7LLm` (date) ✓
+   - Previous Asking Price → `fldySRjfm1P8Nodes` (currency) ✓
+   - Link Health Status → `fldlsuLeSFhFKQuFc` (singleSelect) ✓
+   - Link Last Checked → `fldMXwyQbEWPXbqE2` (date) ✓
+   - Disposition → `fldw0xk1YBkmP7sBD` (singleSelect) ✓
+   - Lead Score → `fld2ipICYNLjaDm39` (number, precision 0) ✓
+   - Prospect Eval Report → `fld9InVXs4RqgtNDo` (url) ✓
+   - 2025 Revenue → `fld8Pmhi9M7m5qaUf`, **live name "Revenue 2025"** (currency) — name variance
+   - 2025 Cash Flow → `flde6Fr88nm4BAoE1`, **live name "Cash Flow 2025"** (currency) — name variance
+   - 2024 Revenue → `fldfUOMF98BAk8Qeo`, **live name "Revenue 2024"** (currency) — name variance
+   - 2024 Cash Flow → `fldwX2NkTE2E66pln`, **live name "Cash Flow 2024"** (currency) — name variance
+   - Source → `fldiGyXTk6Ybb6J1L` (singleSelect) ✓
+
+3. *Verified single-select options via `get_table_schema`* — all three match the
+   plan exactly: Link Health Status = {Live, Dead, Redirect}; Disposition =
+   {Active, Contacted, Maybe Later, Revisit for Roll-up, Passed, Dead Link};
+   Source = {Overnight Search, Manual Submission}.
+
+4. *Discrepancy found — financial-field naming* — The 4 financial fields exist
+   under the table's established **"Revenue YYYY" / "Cash Flow YYYY"** convention
+   (the base also already has Revenue/Cash Flow 2022 & 2023 in that same form),
+   not the plan Step-1 table's literal "YYYY Revenue" / "YYYY Cash Flow" labels.
+   Type is correct (currency) for all 4. **No duplicate fields were created** —
+   adding e.g. a second "2025 Revenue" alongside "Revenue 2025" would split data
+   across two columns and is clearly contrary to the plan's intent (one field
+   per metric/year). Recorded as finding **F3** (`unresolved_findings` → 1) so a
+   RESOLVE phase makes the deliberate naming decision before the s5 skill is
+   written against a wrong field name. Per Appendix B ("trust the plan AND the
+   filesystem — record the discrepancy as a finding").
+
+**No live-base mutation this iteration:** 0 fields created, 0 modified — the
+schema already satisfied the plan. The IMPLEMENT action is a no-op write-wise;
+its substance is the verification + the F3 finding.
+
+**Result:** `s4_airtable` status set to `implemented`. `unresolved_findings` → 1
+(F3). `open_blockers` stays 0. Next iteration runs RESOLVE on F3 (Step 1
+selection rule: `unresolved_findings > 0` forces RESOLVE first).
