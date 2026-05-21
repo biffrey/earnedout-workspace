@@ -1,15 +1,15 @@
 ---
 active: true
-iteration: 20
+iteration: 21
 max_iterations: 40
-last_iteration_at: 2026-05-21T03:14:22Z
+last_iteration_at: 2026-05-21T03:24:29Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
 open_blockers: 1
 stages:
   s1_repo:            { status: verified }
-  s2_playwright:      { status: self_tested }
+  s2_playwright:      { status: verified }
   s3_onepassword:     { status: blocked }
   s4_airtable:        { status: self_tested }
   s5_overnight_skill: { status: self_tested }
@@ -436,6 +436,41 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `s1_repo` → `verified`; `unresolved_findings` NOT incremented (the
   write-findings instruction applies only on the REVISE/BLOCKING branch). Full
   critic output in `VERIFY_LOG.md` under `## Iteration 20 — s1_repo verify`.
+- Iteration 21 (2026-05-21T03:24:29Z): VERIFY phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-21 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`); the SELF-TEST scan
+  found no `implemented` stage (s1 `verified`, s2/s4/s5/s6/s7/s8 `self_tested`,
+  s3 `blocked`) so Step 1 fell through to **VERIFY**. The VERIFY s1→s10 scan
+  skipped `s1_repo` (`verified`) and landed on the first `self_tested` stage,
+  `s2_playwright`. Spawned an independent general-purpose critic subagent
+  (Appendix C brief): skeptical fresh context, read `REVAMP_PLAN.md` "Step 0 —
+  Prerequisites" + "Implementation Order" #2, `TEST_LOG.md` Iteration 13,
+  `BLOCKERS.md` advisory A1, and `.claude/settings.json`; read-only. The critic
+  **independently re-ran all three mandatory Appendix A Stage 2 SELF-TEST
+  checks** from a clean ephemeral sandbox: Check 1 — `.claude/settings.json`
+  parses as JSON and has `mcpServers.playwright` (`command: npx`,
+  `args: ["@playwright/mcp@latest"]`); Check 2 — confirmed the sandbox ephemeral
+  (`npm ls -g` empty against `/usr/lib`), re-installed and confirmed
+  `@playwright/mcp@0.0.75` via `npm ls -g` with `NPM_CONFIG_PREFIX=$HOME/.npm-global`;
+  Check 3 — re-installed Chromium (`chromium-1224` + headless-shell,
+  `INSTALLATION_COMPLETE`), launched headless Chromium (Playwright 1.61.0-alpha),
+  rendered a page (`"render OK"`), captured a valid 7,366-byte PNG. Check 4
+  (live MCP navigation) correctly SKIPPED — `mcp__playwright__*` tools absent
+  (advisory A1, non-counting, by-design conditional). The critic also confirmed
+  TEST_LOG Iteration 13's evidence is truthful and re-derivable, no faked PASS.
+  **Verdict: `SHIP`, zero BLOCKING findings.** The lone graded item is NIT #6
+  (plan example `@playwright/mcp` untagged vs. on-disk `@playwright/mcp@latest`
+  — the critic rates it "functionally equivalent ... not a defect"); findings
+  #1–#5 are "no severity" confirmations. Per Step 1.4 (SHIP + no BLOCKING →
+  `verified`), `s2_playwright` → `verified`; `unresolved_findings` NOT
+  incremented (the write-findings instruction applies only on the REVISE/BLOCKING
+  branch, and only to BLOCKING/IMPROVE severities — NIT #6 does not qualify).
+  Full critic output in `VERIFY_LOG.md` under `## Iteration 21 — s2_playwright
+  verify`.
 
 ## Next iteration (expected)
 VERIFY phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
@@ -445,13 +480,14 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 `unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`); the SELF-TEST scan finds no
-`implemented` stage (s1 is now `verified`; s2/s4/s5/s6/s7/s8 are `self_tested`;
+`implemented` stage (s1/s2 are now `verified`; s4/s5/s6/s7/s8 are `self_tested`;
 s3 is `blocked`) so it falls through to **VERIFY**. The VERIFY s1→s10 scan
-skips `s1_repo` (`verified`) and lands on the first `self_tested` stage,
-`s2_playwright`: spawn an independent critic subagent (Appendix C brief) for
-`s2_playwright`, append its full output to `VERIFY_LOG.md` under
-`## Iteration N — s2_playwright verify`, and on a `SHIP` verdict with no
-BLOCKING findings set `s2_playwright` → `verified` (else write findings and
+skips `s1_repo` and `s2_playwright` (`verified`) and `s3_onepassword`
+(`blocked`, not `self_tested`) and lands on the first `self_tested` stage,
+`s4_airtable`: spawn an independent critic subagent (Appendix C brief) for
+`s4_airtable`, append its full output to `VERIFY_LOG.md` under
+`## Iteration N — s4_airtable verify`, and on a `SHIP` verdict with no
+BLOCKING findings set `s4_airtable` → `verified` (else write findings and
 increment `unresolved_findings`).
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
 loop can still progress through the s2–s8 VERIFY phase meanwhile, but cannot
