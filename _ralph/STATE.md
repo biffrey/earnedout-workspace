@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 16
+iteration: 17
 max_iterations: 40
-last_iteration_at: 2026-05-21T02:34:17Z
+last_iteration_at: 2026-05-21T02:44:19Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -13,7 +13,7 @@ stages:
   s3_onepassword:     { status: blocked }
   s4_airtable:        { status: self_tested }
   s5_overnight_skill: { status: self_tested }
-  s6_submit_url:      { status: implemented }
+  s6_submit_url:      { status: self_tested }
   s7_outreach:        { status: implemented }
   s8_dashboard:       { status: implemented }
   s9_end_to_end:      { status: not_started }
@@ -318,6 +318,33 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   checks PASS → no findings raised → `s5_overnight_skill` → `self_tested`.**
   Evidence in `TEST_LOG.md` under `## Iteration 16 — s5_overnight_skill self-test`.
 
+- Iteration 17 (2026-05-21T02:44:19Z): SELF-TEST phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-17 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`) so it fell through
+  to SELF-TEST; the s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable`/
+  `s5_overnight_skill` (`self_tested`) and `s3_onepassword` (`blocked`, not
+  `implemented`) and landed on the first `implemented` stage, `s6_submit_url`.
+  Ran SELF-TEST on `s6_submit_url` (Appendix A Stage 6), all three checks
+  executed against the real file (`.claude/skills/submit-url/skill.md`,
+  153 lines): (1) **PASS** — a Python `yaml.safe_load` of the frontmatter parses
+  as a dict with exactly `name` (= `submit-url`) and `description` (590-char
+  non-empty string, a plan-faithful superset of plan Step 6's literal
+  description). (2) **PASS** — `grep` returns exactly 9 `## Step N` headings,
+  numbered 1→9 in order, each mapping 1:1 to plan Step 6's 9-step workflow
+  (lines 322–330); every cross-reference to an overnight-search skill step
+  (Steps 2,3,4,5,6,7,8,10) was verified against the live overnight-search
+  headings and resolves to the same-function step; new-field mapping uses the
+  F3-canonical live names (`Revenue/Cash Flow 2024/2025`, `Previous Asking
+  Price`). (3) **PASS** — `Source` is explicitly set to `Manual Submission` at
+  L95 (Step 6), reinforced in the Notes block L102, the Step 6 heading L74, and
+  the frontmatter description L3. **All three mandatory checks PASS → no
+  findings raised → `s6_submit_url` → `self_tested`.** Evidence in `TEST_LOG.md`
+  under `## Iteration 17 — s6_submit_url self-test`.
+
 ## Next iteration (expected)
 SELF-TEST phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
@@ -327,16 +354,16 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`) so it falls through to
 **SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`/
-`s4_airtable`/`s5_overnight_skill` (`self_tested`) and `s3_onepassword`
-(`blocked`, not `implemented`) and lands on the first `implemented` stage,
-`s6_submit_url`. SELF-TEST on `s6_submit_url` (Appendix A Stage 6): read
-`.claude/skills/submit-url/skill.md`; confirm the frontmatter is valid
-(`name: submit-url`, description per plan Step 6); confirm all 9 workflow steps
-are present, in order, and consistent with the overnight-search steps they
-reference; confirm `Source` is set to `Manual Submission`. Record all evidence in
-`TEST_LOG.md` under `## Iteration N — s6_submit_url self-test`.
+`s4_airtable`/`s5_overnight_skill`/`s6_submit_url` (`self_tested`) and
+`s3_onepassword` (`blocked`, not `implemented`) and lands on the first
+`implemented` stage, `s7_outreach`. SELF-TEST on `s7_outreach` (Appendix A
+Stage 7): read `config/outreach_templates.md`; confirm it contains the default
+template, the price-drop follow-up template, the Aviation Template C, the
+subject-line-only A/B logic, the template-selection logic, and the storage
+rules; record which lines cover each. Record all evidence in `TEST_LOG.md`
+under `## Iteration N — s7_outreach self-test`.
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
-loop can still progress on s5–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
+loop can still progress on s6–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
 COMPLETE (`open_blockers == 0` required) until B1 clears.
 
 ## Environment notes (read before every git commit)

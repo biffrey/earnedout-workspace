@@ -476,3 +476,94 @@ All 10 plan steps are covered with substantive, plan-aligned content. **PASS.**
 
 All three mandatory Appendix A Stage 5 SELF-TEST checks PASS — no findings
 raised. `s5_overnight_skill` → `self_tested`.
+
+## Iteration 17 — s6_submit_url self-test
+
+**Phase:** SELF-TEST. Step 1 blocker re-check: counting blocker B1 (`op` CLI)
+still open — `op --version` → `op: command not found` (exit 127), `which op`
+exit 1 in the iteration-17 sandbox; precondition (an installed, signed-in `op`
+reachable by the SELF-TEST) did not clear, B1 stays open, `open_blockers`
+stays 1. `unresolved_findings == 0` → Step 1 falls through RESOLVE; the
+IMPLEMENT scan finds no actionable `not_started` stage (s9 needs s1–s8 all
+`verified`; s10 needs s9 `verified`) → falls through to SELF-TEST. The s1→s10
+scan skips `s1_repo`/`s2_playwright`/`s4_airtable`/`s5_overnight_skill`
+(`self_tested`) and `s3_onepassword` (`blocked`, not `implemented`) and lands
+on the first `implemented` stage, `s6_submit_url`.
+
+Target file: `.claude/skills/submit-url/skill.md` (153 lines). SELF-TEST bar:
+Appendix A Stage 6. Plan source re-read this iteration: `REVAMP_PLAN.md`
+Step 6 (lines 303–331).
+
+### Check 1 — Frontmatter is valid YAML (`name: submit-url`, description per plan) — PASS
+
+Python `yaml.safe_load` of the frontmatter block:
+```
+parsed type: dict
+keys: ['description', 'name']
+name: 'submit-url'
+description length: 590
+description ok (non-empty str): True
+```
+The frontmatter parses as a dict with exactly two keys. `name` is the literal
+string `submit-url` (Appendix A Stage 6 requires exactly this). `description`
+is a non-empty 590-char string that accurately describes the plan Step 6
+workflow (validate via Playwright + screenshot, extract data, dedup with
+price-drop detection, prospect-evaluation scoring, Airtable record with
+`Source = "Manual Submission"`, draft outreach, regenerate dashboard, report
+score) and includes the trigger phrases. The plan Step 6 literal description
+is a shorter sentence; the file's description is an expanded, plan-faithful
+superset — "description per plan" satisfied. **PASS.**
+
+### Check 2 — All 9 workflow steps present, in order, consistent with the overnight-search steps referenced — PASS
+
+`grep -nE '^## Step [0-9]'` on the skill file returns exactly 9 step headings,
+numbered 1→9 in order. Mapping to plan Step 6's 9-step workflow (lines 322–330):
+
+| Plan Step 6 item | submit-url skill heading | OK |
+|---|---|---|
+| 1 Accept one URL | L19 `Step 1: Accept the URL` | ✓ |
+| 2 Validate via Playwright (Step 2c) | L26 `Step 2: Validate the URL — Playwright (plan Step 2c; overnight-search skill Step 3)` | ✓ |
+| 3 Extract structured data (Step 2d) | L34 `Step 3: Extract Structured Data (plan Step 2d; overnight-search skill Step 4)` | ✓ |
+| 4 Dedup incl. price-drop (Step 2e) | L46 `Step 4: Deduplicate Against Airtable — with Price-Drop Detection (plan Step 2e; overnight-search skill Step 5)` | ✓ |
+| 5 Run prospect-evaluation (Step 3) | L65 `Step 5: Run the Prospect-Evaluation Skill (plan Step 3; overnight-search skill Step 6)` | ✓ |
+| 6 Create/update Airtable, Source=Manual Submission (Step 4) | L74 `Step 6: Create / Update the Airtable Record — Source = "Manual Submission" (plan Step 4; overnight-search skill Step 7)` | ✓ |
+| 7 Draft broker outreach (Step 5) | L110 `Step 7: Draft Broker Outreach (plan Step 5; overnight-search skill Step 8)` | ✓ |
+| 8 Regenerate daily dashboard | L125 `Step 8: Regenerate the Daily Dashboard (plan Step 7; overnight-search skill Step 10)` | ✓ |
+| 9 Display lead score + summary | L135 `Step 9: Report to the User` | ✓ |
+
+Cross-reference consistency — each submit-url step names a specific
+overnight-search skill step; verified against the live overnight-search
+headings (`grep -nE '^## Step [0-9]' .claude/skills/overnight-search/skill.md`):
+
+| submit-url reference | overnight-search actual heading | OK |
+|---|---|---|
+| Step 1 "rule the overnight search enforces in … overnight-search skill Step 2" | L36 `Step 2: Search All Active Platforms (plan Step 2b)` | ✓ |
+| Step 2 → overnight-search Step 3 | L58 `Step 3: Validate Each URL + Screenshot — Playwright (plan Step 2c)` | ✓ |
+| Step 3 → overnight-search Step 4 | L68 `Step 4: Extract Structured Data (plan Step 2d)` | ✓ |
+| Step 4 → overnight-search Step 5 | L88 `Step 5: Deduplicate Against Airtable — with Price-Drop Detection (plan Step 2e)` | ✓ |
+| Step 5 → overnight-search Step 6 | L112 `Step 6: Prospect Evaluation (plan Step 3)` | ✓ |
+| Step 6 → overnight-search Step 7 | L123 `Step 7: Create / Update the Airtable Record (plan Step 4)` | ✓ |
+| Step 7 → overnight-search Step 8 | L159 `Step 8: Draft Broker Outreach (plan Step 5)` | ✓ |
+| Step 8 → overnight-search Step 10 | L188 `Step 10: Generate the Daily HTML Dashboard (plan Step 7)` | ✓ |
+
+Every cross-reference resolves to an overnight-search step that performs the
+same function — no dangling or mismatched references. Field-name consistency
+also holds: Step 6's new-field mapping (L80–95) uses the F3-canonical live
+names incl. `Revenue 2024/2025`, `Cash Flow 2024/2025`, and `Previous Asking
+Price` in the price-drop branch — matching the overnight-search skill and
+`REVAMP_PLAN.md` Step 1 "Live field-name reconciliation". **PASS.**
+
+### Check 3 — `Source` is set to `Manual Submission` — PASS
+
+`grep -n 'Manual Submission'` returns 4 hits. The operative one is skill Step 6
+L95: **`Source` → "Manual Submission"** — explicitly stated as "the one field
+that distinguishes a manual submission from an overnight-search find. The
+overnight-search skill sets this to "Overnight Search"; this skill always sets
+it to "Manual Submission"." Reinforced in the Notes block (L102
+`Source: Manual Submission`), the Step 6 heading (L74), and the frontmatter
+description (L3). **PASS.**
+
+### Result
+
+All three mandatory Appendix A Stage 6 SELF-TEST checks PASS — no findings
+raised. `s6_submit_url` → `self_tested`.
