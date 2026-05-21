@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 59
+iteration: 60
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:50:41Z
+last_iteration_at: 2026-05-21T17:52:44Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -13,7 +13,7 @@ stages:
   s3_onepassword:     { status: verified }
   s4_airtable:        { status: verified }
   s5_overnight_skill: { status: self_tested }
-  s6_submit_url:      { status: implemented }
+  s6_submit_url:      { status: self_tested }
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
   s9_end_to_end:      { status: verified }
@@ -1464,16 +1464,40 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   Counters unchanged (`unresolved_findings: 0`, `open_blockers: 0`). Evidence in
   `TEST_LOG.md` under `## Iteration 59 — s5_overnight_skill self-test`.
 
+- Iteration 60 (2026-05-21T17:52:44Z): SELF-TEST phase. Step 0: `active: true`,
+  `iteration` 59 → 60 (`60 >= 75` false → no cap). Step 1 blocker re-check: B1
+  and B2 both RESOLVED, advisory A1 non-counting; `open_blockers == 0`, no
+  pending precondition. `unresolved_findings == 0` → RESOLVE skipped. IMPLEMENT
+  scan s1→s10: no `not_started` stage. SELF-TEST scan: first `implemented` stage
+  is `s6_submit_url` (demoted by iter 57's F5 RESOLVE) → ran it (Appendix A
+  Stage 6). All checks executed against the real file
+  `.claude/skills/submit-url/skill.md` (153 lines):
+  • **Check 1 PASS** — frontmatter parses as a 2-key block (`name` =
+    `submit-url`, `description` a 590-char non-empty string); no tabs, every
+    line a valid `key: value` pair.
+  • **Check 2 PASS** — `grep -nE '^## Step [0-9]'` returns exactly 9 headings
+    numbered 1→9 in order, each mapping 1:1 to plan Step 6's 9-step workflow;
+    all overnight-search cross-references labelled and consistent.
+  • **Check 3 PASS** — `Source = "Manual Submission"` set at the operative L95
+    field mapping, reinforced at L3/L8/L74/L102.
+  • **F5 re-check PASS** — `grep 'op://'` returns exactly one line (L14) with
+    two occurrences, both the verified canonical
+    `op://Personal/dealstream.com/{username,password}` path. The dead
+    `op://Private/DealStream/...` path is fully absent from the skill.
+  **All checks PASS → no findings raised → `s6_submit_url` → `self_tested`.**
+  Counters unchanged (`unresolved_findings: 0`, `open_blockers: 0`). Evidence in
+  `TEST_LOG.md` under `## Iteration 60 — s6_submit_url self-test`.
+
 ## Next iteration (expected)
-> **Updated after iteration 59.** SELF-TEST re-passed `s5_overnight_skill` after
-> the F5 fix (skill now uses the canonical `op://Personal/dealstream.com/...`
-> path, confirmed by an explicit `op://` grep). `unresolved_findings: 0`,
-> `open_blockers: 0`, `final_audit_passed: false`, s5 `self_tested`, s6 still
-> `implemented`. The next run is **iteration 60**: `unresolved_findings == 0` →
-> RESOLVE skipped; IMPLEMENT finds no `not_started` stage → **SELF-TEST** phase,
-> first `implemented` stage = **s6_submit_url** — re-run the s6 SELF-TEST with an
-> explicit `op://` grep confirming the canonical path. Then iters 61–62 VERIFY
-> s5 and s6, then FINAL AUDIT re-runs and — if clean — COMPLETE emits the promise.
+> **Updated after iteration 60.** SELF-TEST re-passed `s6_submit_url` after the
+> F5 fix (skill now uses the canonical `op://Personal/dealstream.com/...` path,
+> confirmed by an explicit `op://` grep). `unresolved_findings: 0`,
+> `open_blockers: 0`, `final_audit_passed: false`, both s5 and s6 `self_tested`.
+> The next run is **iteration 61**: `unresolved_findings == 0` → RESOLVE skipped;
+> IMPLEMENT finds no `not_started` stage; SELF-TEST finds no `implemented` stage
+> → **VERIFY** phase, first `self_tested` stage = **s5_overnight_skill**. Then
+> iter 62 VERIFYs s6, then FINAL AUDIT re-runs and — if clean — COMPLETE emits
+> the promise.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 58.** RESOLVE closed F6 (the three `[RALPH TEST]`

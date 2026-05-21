@@ -1144,3 +1144,44 @@ path is fully removed. The L23 citation ("canonical item path (per
 `REVAMP_PLAN.md` Step 0 and `config/credentials-setup.md`)") is now accurate.
 
 **Result: all checks PASS → `s5_overnight_skill` → `self_tested`.**
+
+## Iteration 60 — s6_submit_url self-test
+
+Ran Appendix A Stage 6 SELF-TEST against the real file
+`.claude/skills/submit-url/skill.md` (153 lines). All checks executed and observed
+this iteration.
+
+**Check 1 — frontmatter valid → PASS**
+`wc -l` = 153. Python parse of the `---`-delimited frontmatter block: exactly two
+keys `['description', 'name']`, no tabs, every line a valid `key: value` pair.
+`name` = `submit-url` (matches Appendix A Stage 6 requirement). `description` is a
+590-char non-empty string, a plan-faithful superset of plan Step 6's literal
+description.
+
+**Check 2 — all 9 workflow steps present and in order → PASS**
+`grep -nE '^## Step [0-9]'` returns exactly 9 headings, numbered 1→9 in sequence:
+- Step 1 Accept the URL (L19)
+- Step 2 Validate the URL — Playwright / plan 2c (L26)
+- Step 3 Extract Structured Data / plan 2d (L34)
+- Step 4 Deduplicate w/ Price-Drop Detection / plan 2e (L46)
+- Step 5 Run Prospect-Evaluation / plan 3 (L65)
+- Step 6 Create/Update Airtable Record — Source=Manual Submission / plan 4 (L74)
+- Step 7 Draft Broker Outreach / plan 5 (L110)
+- Step 8 Regenerate Daily Dashboard / plan 7 (L125)
+- Step 9 Report to the User (L135)
+Each maps 1:1 to plan Step 6's 9-step workflow; every cross-reference to an
+overnight-search skill step is labelled and consistent with the s5 skill headings.
+
+**Check 3 — Source = "Manual Submission" → PASS**
+`grep -n 'Manual Submission'` returns 4 hits. The operative `Source` field
+mapping is at L95 (`**\`Source\` → "Manual Submission"**` in the Step 6 new-field
+map), reinforced in the Step 6 heading (L74), the Notes block (L102), the intro
+(L8), and the frontmatter description (L3).
+
+**F5 re-check — canonical 1Password path → PASS**
+`grep -n 'op://'` returns exactly one line (L14) containing two occurrences, both
+the verified canonical path: `op://Personal/dealstream.com/username` and
+`op://Personal/dealstream.com/password`. The dead, non-resolving
+`op://Private/DealStream/...` path is fully absent from the skill — F5's fix holds.
+
+**Result:** all checks PASS → no findings raised → `s6_submit_url` → `self_tested`.
