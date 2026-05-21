@@ -659,3 +659,81 @@ plan Step 5 suggestions, and the file header L5–6 carries the no-send guardrai
 ### Result
 All six mandatory Appendix A Stage 7 SELF-TEST checks PASS — no findings raised.
 `s7_outreach` → `self_tested`.
+
+## Iteration 19 — s8_dashboard self-test
+
+**Phase:** SELF-TEST. **Stage:** `s8_dashboard` (Appendix A Stage 8).
+**Run at:** 2026-05-21T03:04:28Z. **Executed in:** workspace bash mount
+`/sessions/great-friendly-shannon/mnt/published-listing-search`.
+**File under test:** `templates/daily-dashboard.html` (14,372 bytes, 396 lines).
+**Plan reference:** `REVAMP_PLAN.md` Step 7 (lines 333–359).
+**Evidence artifacts (committed):** `_ralph/evidence/iter19/` — `s8_validate.py`,
+`s8_render.js`, `dashboard_render.html` (Jinja2-rendered), `dashboard_render.png`
+(headless-Chromium screenshot).
+
+Appendix A Stage 8 SELF-TEST has two checks: (1) the file is valid HTML, contains
+all four sections, and has the template placeholders for each; (2) render it
+headlessly and confirm no console errors and the layout appears. Both executed.
+
+### Check 1 — valid HTML + four sections + placeholders (PASS)
+
+Ran `python3 s8_validate.py` (jinja2 3.0.3, Python 3.10.12). 30/30 sub-checks PASS:
+
+- Template carries all four section anchors: `id="section-a"` (A New Finds),
+  `id="section-b"` (B Running Queue), `id="section-c"` (C Revisit Bucket),
+  `id="section-d"` (D Run Summary).
+- Template placeholders present: `{{ date }}`, `{% for lead in new_finds %}`,
+  `{% for lead in running_queue %}`, `{% for lead in revisit_bucket %}`,
+  `{{ stats.total_searched }}`, `{% for p in platform_breakdown %}`,
+  `{% for i in industry_breakdown %}`, `{% for e in errors %}`,
+  `lead.price_drop`, `lead.date_added`.
+- Jinja2 render with a populated context (4 new finds incl. 1 price-drop +
+  1 manual submission, 2 active-queue leads, 1 revisit lead, 2 platforms,
+  3 industries, 1 error) → 11,956-byte HTML, no template syntax error.
+- Jinja2 render with an all-empty context → 8,966-byte HTML, exercising every
+  `{% else %}` empty-state branch, no error.
+- Rendered HTML tag-balance check (`html.parser` stack walker, void-element
+  aware): `errs=[] leftover=[]` — well-formed.
+- Rendered output contains all four section headings ("Section A: Last Night
+  …", "Section B: Running Queue …", "Section C: Revisit Bucket …", "Section D:
+  Run Summary"), the `PRICE DROP` badge, the `MANUAL` chip, a lead row
+  ("Acme Aviation MRO"), and the previous-price notation ("was $4,900,000").
+- Empty render contains all four empty-state strings ("No new leads found last
+  night.", "No active leads in the running queue.", "No roll-up targets flagged
+  for revisit.", "No errors or platform blocks encountered.").
+- No leftover `{{` / `{%` Jinja delimiters in either rendered output.
+
+Section coverage vs. plan Step 7: Section A table columns Rank/Score/Business
+Name/Industry/State/Asking Price/EBITDA/Source/Report match the plan's Section A
+column list; B adds the Date Added column (plan: "Shows Date Added column");
+C filters Revisit-for-Roll-up; D has Search Totals + Leads by Platform + Leads
+by Industry + Errors & Warnings (plan's four Run-Summary bullet groups).
+
+### Check 2 — headless render, no console errors, layout appears (PASS)
+
+Installed Playwright 1.60.0 (`npm install playwright@latest`) and the Chromium
+browser binary (`node playwright/cli.js install chromium` → `chromium-1223`
++ `chromium_headless_shell-1223` in `$HOME/.cache/ms-playwright`). Ran
+`node s8_render.js` — launched headless Chromium, loaded
+`file://…/dashboard_render.html` (the Check-1 populated render), 1366×1100
+viewport. All render sub-checks PASS:
+
+- Page loaded; **0 uncaught page (JS) errors**; **0 console errors**
+  (`console` listener captured 0 messages of any type).
+- Layout boxes (non-zero w×h, i.e. genuinely laid out): `header.banner`
+  1232×123, `section#section-a` 1232×325, `section#section-b` 1232×219,
+  `section#section-c` 1232×175, `section#section-d` 1232×480,
+  `#section-a table` 1182×230, `#section-d .summary-grid` 1182×385.
+- Data rows rendered: Section A 4 rows, Section B 2 rows, Section C 1 row;
+  1 `.chip.price-drop` badge; 1 `.chip.manual` chip; 4 header `.stat-card`s.
+- `document.body.scrollHeight` = 1518px (real height, not collapsed).
+- Full-page screenshot written: `dashboard_render.png`, 188,486 bytes.
+- Screenshot viewed this iteration: dark-themed dashboard renders correctly —
+  header banner + 4 stat cards, all four sections with their data tables, the
+  PRICE DROP badge and MANUAL chip visible in Section A, Section D's four
+  summary cards. Aesthetic matches `templates/single-report.html` palette.
+
+### Result
+Both mandatory Appendix A Stage 8 SELF-TEST checks PASS (30/30 structural +
+all headless-render checks, 0 console errors, layout confirmed visually) — no
+findings raised. `s8_dashboard` → `self_tested`.

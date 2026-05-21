@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 18
+iteration: 19
 max_iterations: 40
-last_iteration_at: 2026-05-21T02:54:18Z
+last_iteration_at: 2026-05-21T03:04:28Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -15,7 +15,7 @@ stages:
   s5_overnight_skill: { status: self_tested }
   s6_submit_url:      { status: self_tested }
   s7_outreach:        { status: self_tested }
-  s8_dashboard:       { status: implemented }
+  s8_dashboard:       { status: self_tested }
   s9_end_to_end:      { status: not_started }
   s10_schedule:       { status: not_started }
 ---
@@ -374,27 +374,58 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   mandatory checks PASS → no findings raised → `s7_outreach` → `self_tested`.**
   Evidence in `TEST_LOG.md` under `## Iteration 18 — s7_outreach self-test`.
 
+- Iteration 19 (2026-05-21T03:04:28Z): SELF-TEST phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-19 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`) so it fell through
+  to SELF-TEST; the s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable`/
+  `s5_overnight_skill`/`s6_submit_url`/`s7_outreach` (`self_tested`) and
+  `s3_onepassword` (`blocked`, not `implemented`) and landed on the first
+  `implemented` stage, `s8_dashboard`. Ran SELF-TEST on `s8_dashboard`
+  (Appendix A Stage 8) against the real file (`templates/daily-dashboard.html`,
+  14,372 B, 396 lines); both mandatory checks executed and observed:
+  (1) **PASS** — `s8_validate.py` (jinja2 3.0.3) ran 30/30 structural sub-checks:
+  all four section anchors (`section-a`/`-b`/`-c`/`-d`) + all required Jinja
+  placeholders present; the template renders cleanly with both a populated
+  context (11,956 B) and an all-empty context (8,966 B, exercising every
+  `{% else %}` empty state); the rendered HTML is tag-balanced (`html.parser`
+  stack walk, `errs=[] leftover=[]`); rendered output carries all four section
+  headings, the PRICE DROP badge, MANUAL chip, lead rows, previous-price text,
+  and all four empty-state strings; no leftover `{{`/`{%` delimiters.
+  (2) **PASS** — installed Playwright 1.60.0 + Chromium `chromium-1223`, ran
+  `s8_render.js`: headless Chromium loaded the populated render with **0 page
+  errors and 0 console errors**; `header.banner` + all four `section#section-*`
+  + the Section-A table + Section-D summary-grid all have non-zero layout boxes;
+  4/2/1 data rows in Sections A/B/C, 1 price-drop badge, 1 manual chip, 4 stat
+  cards; `scrollHeight` 1518px; 188,486-byte full-page screenshot captured and
+  **viewed this iteration** — dark-themed dashboard renders correctly, matches
+  the `single-report.html` palette. Evidence committed to
+  `_ralph/evidence/iter19/`. **Both mandatory checks PASS → no findings raised →
+  `s8_dashboard` → `self_tested`.** Evidence in `TEST_LOG.md` under
+  `## Iteration 19 — s8_dashboard self-test`.
+
 ## Next iteration (expected)
-SELF-TEST phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
+VERIFY phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
 installed, signed-in `op` reachable by the SELF-TEST) cannot clear from inside
 the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 `unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
-`verified`; `s10_schedule` needs s9 `verified`) so it falls through to
-**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`/
-`s4_airtable`/`s5_overnight_skill`/`s6_submit_url`/`s7_outreach` (`self_tested`)
-and `s3_onepassword` (`blocked`, not `implemented`) and lands on the first
-`implemented` stage, `s8_dashboard`. SELF-TEST on `s8_dashboard` (Appendix A
-Stage 8): confirm `templates/daily-dashboard.html` is valid HTML, contains all
-four sections (A — New Finds, B — Running Queue, C — Revisit Bucket, D — Run
-Summary) with their template placeholders, then render it headlessly via the
-installed Chromium / `npx playwright` CLI path (from s2) and confirm no console
-errors and that the layout appears. Record all evidence in `TEST_LOG.md` under
-`## Iteration N — s8_dashboard self-test`.
+`verified`; `s10_schedule` needs s9 `verified`); the SELF-TEST scan finds no
+`implemented` stage (s1/s2/s4/s5/s6/s7/s8 are now `self_tested`, s3 is
+`blocked`) so it falls through to **VERIFY**. The VERIFY s1→s10 scan lands on
+the first `self_tested` stage, `s1_repo`: spawn an independent critic subagent
+(Appendix C brief) for `s1_repo`, append its full output to `VERIFY_LOG.md`
+under `## Iteration N — s1_repo verify`, and on a `SHIP` verdict with no
+BLOCKING findings set `s1_repo` → `verified` (else write findings and increment
+`unresolved_findings`).
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
-loop can still progress on s8 SELF-TEST and the s1–s7 VERIFY phase meanwhile,
-but cannot reach COMPLETE (`open_blockers == 0` required) until B1 clears.
+loop can still progress through the s1–s8 VERIFY phase meanwhile, but cannot
+reach COMPLETE (`open_blockers == 0` required, all 10 stages `verified`) until
+B1 clears and s3/s9/s10 finish.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
