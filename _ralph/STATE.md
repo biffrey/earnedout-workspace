@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 52
+iteration: 53
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:25:53Z
+last_iteration_at: 2026-05-21T17:29:20Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -17,7 +17,7 @@ stages:
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
   s9_end_to_end:      { status: verified }
-  s10_schedule:       { status: not_started }
+  s10_schedule:       { status: implemented }
 ---
 
 # Ralph Loop State — EarnedOut Overnight Search Revamp
@@ -1272,18 +1272,47 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   implemented stages (s1–s9) are now `verified`; only `s10_schedule`
   (`not_started`) remains.** Next iteration: IMPLEMENT on `s10_schedule`.
 
+- Iteration 53 (2026-05-21T17:29:20Z): IMPLEMENT phase on `s10_schedule`.
+  Step 0: `active: true`, `iteration` 52 → 53 (`53 >= 75` false → no cap).
+  Step 1 blocker re-check: `open_blockers == 0`, advisory A1 non-counting, B1 +
+  B2 RESOLVED. `unresolved_findings == 0` → RESOLVE skipped. IMPLEMENT scan
+  s1→s10: s1–s9 `verified`; first `not_started` stage is `s10_schedule`, dep
+  (s9 `verified`) MET → IMPLEMENT on `s10_schedule` (Appendix A Stage 10).
+  Created the nightly scheduled task as a **macOS `launchd` LaunchAgent** (the
+  plan's "or cron" option) rather than a `/schedule` remote routine — chosen
+  deliberately: the pipeline retrieves DealStream creds via the `op` 1Password
+  **desktop** CLI, which only resolves in Biffrey's local GUI login session; a
+  cloud `/schedule` agent has no `op` and would fail loud. Artifacts created:
+  (1) `run-overnight-search.sh` (workspace root, chmod +x) — headless
+  `claude -p "<trigger prompt>" --dangerously-skip-permissions` wrapper that
+  cds to the workspace, sets PATH for `claude`+`op`, and logs to
+  `output/logs/overnight-search_YYYY-MM-DD.log`; the trigger prompt instructs
+  the overnight-search skill end-to-end (op creds → DealStream/Playwright crawl
+  → extract → dedup+price-drop → prospect-evaluation → Airtable
+  `Source="Overnight Search"` → outreach drafts, never send → daily dashboard).
+  (2) `config/launchd/ai.earnedout.overnight-search.plist` — version-controlled
+  plist, `StartCalendarInterval` `Hour=2 Minute=37` (daily 02:37 local,
+  off-minute), `RunAtLoad=false`. (3) `config/schedule.md` — full documentation
+  (mechanism rationale, cadence, trigger prompt, manage/disable commands,
+  prerequisites). Installed the plist to `~/Library/LaunchAgents/` (`plutil
+  -lint` → OK) and loaded it (`launchctl bootstrap gui/$UID` rc=0); `launchctl
+  list` shows `ai.earnedout.overnight-search` (status `-` / last-exit `0`),
+  `launchctl print` confirms the calendar descriptor `Minute=>37 Hour=>2`. No
+  findings raised, no blockers. `s10_schedule` → `implemented`. See
+  `IMPLEMENTATION_LOG.md` for full detail.
+
 ## Next iteration (expected)
-> **Updated after iteration 52.** `s9_end_to_end` is now `verified` — the
-> independent VERIFY critic returned `SHIP` with zero BLOCKING findings.
-> `unresolved_findings: 0`, `open_blockers: 0`, `final_audit_passed: false`.
-> All 9 implemented stages (s1–s9) are `verified`; only `s10_schedule`
-> (`not_started`) remains. The next run is **iteration 53**:
-> `unresolved_findings == 0` and `open_blockers == 0` → RESOLVE skipped;
-> IMPLEMENT scan finds `s10_schedule` `not_started` with its dep (s9 `verified`)
-> now MET → **IMPLEMENT on `s10_schedule`** (create the nightly scheduled task
-> that runs the overnight-search skill; document the schedule + trigger prompt;
-> see Appendix A Stage 10). Then SELF-TEST + VERIFY `s10_schedule`, then FINAL
-> AUDIT, then COMPLETE.
+> **Updated after iteration 53.** `s10_schedule` is now `implemented` — the
+> nightly `launchd` LaunchAgent `ai.earnedout.overnight-search` is created,
+> installed, and loaded (daily 02:37 local). `unresolved_findings: 0`,
+> `open_blockers: 0`, `final_audit_passed: false`. All 9 prior stages (s1–s9)
+> are `verified`; `s10_schedule` is `implemented`. The next run is **iteration
+> 54**: `unresolved_findings == 0` and `open_blockers == 0` → RESOLVE skipped;
+> IMPLEMENT scan finds no `not_started` stage → falls through; SELF-TEST scan
+> finds `s10_schedule` `implemented` → **SELF-TEST on `s10_schedule`** (list
+> scheduled tasks, confirm the overnight-search task exists with the intended
+> cadence and trigger prompt; Appendix A Stage 10 SELF-TEST). Then VERIFY
+> `s10_schedule`, then FINAL AUDIT, then COMPLETE.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —

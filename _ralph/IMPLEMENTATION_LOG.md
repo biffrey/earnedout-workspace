@@ -716,3 +716,70 @@ hosted URL and the screenshots are local files. They exist under
 **Result:** s9 pipeline genuinely ran end-to-end against live systems.
 `s9_end_to_end` → `implemented`. Next phase: SELF-TEST (walk the plan's 13
 Verification checks PASS/FAIL against this evidence).
+
+---
+
+## Iteration 53 — 2026-05-21T17:29:20Z — IMPLEMENT s10_schedule
+
+**Phase:** IMPLEMENT. `unresolved_findings == 0`, `open_blockers == 0`; IMPLEMENT
+scan s1→s10 found s1–s9 `verified` and `s10_schedule` the first `not_started`
+stage with its dependency (s9 `verified`) met. Plan ref: "Implementation Order"
+#10 — *"Schedule — Set up via `/schedule` or cron for nightly execution."*
+Appendix A Stage 10.
+
+**Mechanism decision — `launchd` LaunchAgent, not a `/schedule` remote routine.**
+The plan offers "`/schedule` or cron". I chose the cron path, implemented as a
+macOS `launchd` LaunchAgent, because the overnight-search pipeline retrieves
+DealStream credentials via the `op` 1Password **desktop** CLI. `op` only resolves
+inside Biffrey's local GUI login session (this is the same permanent constraint
+behind blockers B1/B2). A `/schedule` remote/cloud agent runs in Anthropic's
+cloud with no `op` and would fail loud at credential retrieval — it cannot run
+this pipeline. A `launchd` LaunchAgent runs in the user's login session where
+`op` works, persists across reboots, and does not expire. `launchd` is the macOS
+equivalent of cron. Precedent: the Ralph loop itself runs via
+`run-ralph-cli.sh` invoking `claude -p ... --dangerously-skip-permissions` on
+this Mac; the nightly task mirrors that pattern.
+
+**Artifacts created:**
+
+1. **`run-overnight-search.sh`** (workspace root, `chmod +x`) — the trigger
+   script. Sets `PATH` explicitly (launchd gives agents a minimal env) so
+   `/Users/biffreybraxton/.local/bin/claude` and `/opt/homebrew/bin/op` resolve;
+   `cd`s to the workspace; runs
+   `claude -p "<trigger prompt>" --dangerously-skip-permissions`; appends
+   stdout/stderr to `output/logs/overnight-search_YYYY-MM-DD.log`. The trigger
+   prompt instructs the overnight-search skill end-to-end: `op` creds (fail loud
+   if not signed in) → DealStream + Playwright crawl of every active platform →
+   extract direct URL / listing ID / 2024+2025 financials → validate links +
+   screenshots → dedup against Airtable `appOsvuyy5eK43QTx`/`tblSmNrHROMLm7vOS`
+   with price-drop detection → prospect-evaluation on every new lead + price-drop
+   → create/update Airtable records `Source = "Overnight Search"` → draft broker
+   outreach to files + Notes only (never send email) → generate daily dashboard.
+
+2. **`config/launchd/ai.earnedout.overnight-search.plist`** — version-controlled
+   canonical plist. `Label = ai.earnedout.overnight-search`; `ProgramArguments`
+   = `/bin/bash run-overnight-search.sh`; `StartCalendarInterval` `Hour=2`
+   `Minute=37` (daily 02:37 local — early morning, off-minute by design);
+   `RunAtLoad=false` (fires only on the calendar trigger); stdio →
+   `output/logs/launchd.overnight-search.{out,err}.log`; `ProcessType=Background`.
+
+3. **`config/schedule.md`** — full documentation: mechanism rationale, the
+   installed-artifacts table, cadence, the trigger prompt, manage/run-now/reload/
+   disable commands, and prerequisites for a successful run.
+
+**Installed & loaded:**
+- Copied the plist to `~/Library/LaunchAgents/ai.earnedout.overnight-search.plist`.
+- `plutil -lint ~/Library/LaunchAgents/ai.earnedout.overnight-search.plist` → `OK`.
+- `launchctl bootstrap gui/$(id -u) <plist>` → rc=0.
+- `launchctl list | grep earnedout` → `-  0  ai.earnedout.overnight-search`
+  (loaded; not currently running; last exit 0).
+- `launchctl print gui/$(id -u)/ai.earnedout.overnight-search` → calendar
+  descriptor `{ "Minute" => 37, "Hour" => 2 }`, program `/bin/bash`, arguments
+  point at `run-overnight-search.sh`.
+
+Also created `output/logs/` with a `.gitkeep`.
+
+**Result:** the nightly scheduled task exists, is installed, and is loaded into
+launchd. No findings raised, no blockers. `s10_schedule` → `implemented`. Next
+phase: SELF-TEST `s10_schedule` (Appendix A Stage 10 — list scheduled tasks,
+confirm the overnight-search task exists with the intended cadence + prompt).
