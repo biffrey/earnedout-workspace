@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 39
+iteration: 40
 max_iterations: 40
-last_iteration_at: 2026-05-21T06:24:28Z
+last_iteration_at: 2026-05-21T06:34:55Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -924,6 +924,32 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   run (iteration 40) will idle, and the run after that will hit the cap and
   terminate the loop without reaching COMPLETE.
 
+- Iteration 40 (2026-05-21T06:34:55Z): IDLE — loop blocked on B1, no actionable
+  phase. Step 0: `iteration` 39 → 40 (`39 >= 40` is false, so no cap termination
+  this run — the cap fires on the *next* run). Step 1 blocker re-check: counting
+  blocker B1 (`op` CLI) still open — `op --version` → `op: command not found`
+  (exit 127), `which op` exit 1, `op whoami` → `op: command not found` (exit 127)
+  in the iteration-40 sandbox, and `op` is absent from `/usr/local/bin`,
+  `/opt/homebrew/bin`, `/usr/bin`, `/bin`, `~/.local/bin`, and `/snap/bin`; the
+  precondition (an installed, signed-in `op` reachable by the SELF-TEST) did not
+  clear, so B1 stays open and `open_blockers` stays 1. `unresolved_findings == 0`
+  so Step 1 fell through RESOLVE. Every remaining phase is non-actionable:
+  **IMPLEMENT** — no actionable `not_started` stage (`s9_end_to_end` needs s1–s8
+  ALL `verified` but `s3_onepassword` is `blocked`; `s10_schedule` needs s9
+  `verified`); **SELF-TEST** — no `implemented` stage (s1/s2/s4/s5/s6/s7/s8
+  `verified`, s3 `blocked`, s9/s10 `not_started`); **VERIFY** — no `self_tested`
+  stage; **FINAL AUDIT** / **COMPLETE** — require all 10 stages `verified` AND
+  `open_blockers == 0`, neither holds. Per Step 1's terminal rule ("If
+  `open_blockers > 0` and no other phase is actionable, output a status note
+  describing the blockers and exit"), this run idled with a status note. No
+  stage status changed; no findings raised; no STATE counters changed except
+  `iteration`/`last_iteration_at`. **Iteration 40 is the last work iteration —
+  the next scheduled run will read `iteration == max_iterations (40)`, set
+  `active: false`, append a cap-termination entry to `IMPLEMENTATION_LOG.md`,
+  and terminate the loop without reaching COMPLETE.** B1 was never cleared from
+  inside the no-human ephemeral sandbox; the loop honestly did not fake the
+  `op read` credential check it could not run.
+
 ## Next iteration (expected)
 **The loop is now blocked on B1 and cannot advance any stage until Biffrey
 resolves it.** Step 1 will first re-check `BLOCKERS.md`: counting blocker B1
@@ -956,12 +982,19 @@ Once B1 clears: the blocker re-check marks B1 RESOLVED, decrements
 loop then runs SELF-TEST on s3, VERIFY on s3, IMPLEMENT (the live end-to-end
 run) + SELF-TEST + VERIFY on s9, then s10, then FINAL AUDIT, then COMPLETE.
 That is roughly 9–10 more iterations of real work after B1 is resolved. As of
-iteration 39, only 1 iteration of headroom remains before the 40-iteration cap.
-Realistically the loop will now hit the cap and terminate without reaching
-COMPLETE unless B1 is cleared and the cap is raised — there is no longer enough
-iteration budget to complete the post-B1 work even if B1 cleared immediately.
-This is the honest, correct outcome: the loop did not fake the credential check
-it never ran.
+iteration 40, **zero iterations of headroom remain** before the 40-iteration
+cap. The next scheduled run will read `iteration == max_iterations (40)` at
+Step 0, set `active: false`, append a cap-termination entry to
+`IMPLEMENTATION_LOG.md` summarizing the remaining work (s3 SELF-TEST/VERIFY,
+the s9 live end-to-end run, s10 scheduling, FINAL AUDIT, COMPLETE) and the
+single open blocker B1, output `Iteration cap reached. Loop terminated.`, and
+stop — without reaching COMPLETE and without emitting the `REVAMP_VERIFIED`
+promise. This is the honest, correct outcome: B1 (`op` credential retrieval)
+could not be cleared from inside the no-human ephemeral Linux sandbox, and the
+loop refused to fake the `op read` credential check it never ran. To finish
+the revamp, Biffrey must (1) clear B1 per the `BLOCKERS.md` fix instructions
+and (2) raise `max_iterations` (or reset `active: true` with more budget) so
+the loop has room to run the ~9–10 remaining post-B1 iterations.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
