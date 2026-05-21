@@ -248,4 +248,33 @@ fetchable host is reachable from the loop's environment, classify it as an
 external blocker (operator hosts/uploads the screenshots) rather than faking the
 field. After resolution, re-run s9 SELF-TEST Check 6 to confirm PASS.
 
-**RESOLUTION:** _(pending — to be completed in a RESOLVE phase)_
+**RESOLUTION (iteration 50, 2026-05-21T17:19:54Z):** Closed. The three s9 test
+records now have the `Listing Screenshot` attachment field populated, verified
+against the live base. Concrete steps this RESOLVE phase:
+  1. Confirmed the loop's environment can reach a fetchable host. The loop runs
+     via `run-ralph-cli.sh` on Biffrey's Mac; `gh auth status` → logged in as
+     `biffrey`; `gh repo view biffrey/earnedout-workspace` → `visibility: PUBLIC`;
+     `git ls-remote origin` → exit 0; local HEAD `82b8314` == remote HEAD. So
+     `origin` is reachable and synced (note: this also means the F1 sandbox
+     limitation no longer applies in the CLI-on-Mac environment).
+  2. Confirmed the three screenshots are already tracked AND pushed:
+     `git ls-files output/screenshots/` lists `cvkfxz.png`, `maya0n.png`,
+     `so8acs.png`; they were committed in `82b8314` (the current remote HEAD).
+  3. Verified the `raw.githubusercontent.com` URLs are fetchable — `curl` each →
+     `HTTP 200 image/png` with sizes 831574 / 747191 / 868781, byte-identical to
+     the local files.
+  4. `update_records_for_table` set `fldrPuxZHGsYZuxTO` (Listing Screenshot) on
+     all three records to `[{"url": "https://raw.githubusercontent.com/biffrey/
+     earnedout-workspace/main/output/screenshots/<id>.png", "filename":
+     "<id>.png"}]` — cvkfxz → `recDUV3S985L7ytXK`, maya0n → `rec5Pz99DMbpG8KhH`,
+     so8acs → `reccLQrb5S84uBsEj`.
+  5. Re-read the three records: Airtable genuinely fetched and stored each image —
+     attachment IDs `attINtUOSVpZ2s33I` / `attWVUS63ABhr6F6K` / `att4T7fKfwdtz0D1Q`,
+     each with `type: image/png`, the matching stored `size`, real pixel
+     dimensions (1200×3074 / 1200×3352 / 1200×3426), and small/large/full
+     thumbnails generated. The field is no longer empty on any record.
+This is a genuine fix verified against the live base, not a faked PASS. No
+counting blocker needed — a fetchable host was reachable. `unresolved_findings`
+decremented 1 → 0. `s9_end_to_end` stays `implemented` (it was never
+`self_tested`/`verified`, so no stage demotion applies); the next iteration
+re-runs the s9 SELF-TEST, where Check 6 is now expected to PASS.

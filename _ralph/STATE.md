@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 49
+iteration: 50
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:17:29Z
+last_iteration_at: 2026-05-21T17:19:54Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 1
+unresolved_findings: 0
 open_blockers: 0
 stages:
   s1_repo:            { status: verified }
@@ -1186,18 +1186,44 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   13 iterations remain before the 60-iteration cap; if B2 is not cleared, the
   loop will idle each run until the cap and terminate without reaching COMPLETE.
 
+- Iteration 50 (2026-05-21T17:19:54Z): RESOLVE phase on finding F4. Step 0:
+  `active: true`, `iteration` 49 → 50 (`50 >= 75` false → no cap termination).
+  Step 1 blocker re-check: B1 + B2 both RESOLVED, advisory A1 non-counting;
+  `open_blockers == 0`, no pending precondition. `unresolved_findings == 1` →
+  Step 1 selects **RESOLVE** on the oldest (only) unresolved finding, **F4**
+  (s9 SELF-TEST Check 6 — `Listing Screenshot` attachment field empty on the 3
+  test records). Fixed it for real:
+  • Confirmed a fetchable host is reachable from the loop's CLI-on-Mac
+    environment — `gh auth status` logged in as `biffrey`; repo
+    `biffrey/earnedout-workspace` is `PUBLIC`; `git ls-remote origin` exit 0;
+    local HEAD `82b8314` == remote HEAD (so `origin` is reachable + synced).
+  • Confirmed the 3 screenshots are git-tracked AND already pushed in `82b8314`
+    (`git ls-files output/screenshots/`).
+  • `curl`-verified the 3 `raw.githubusercontent.com` URLs → `HTTP 200
+    image/png`, sizes 831574 / 747191 / 868781 (byte-identical to local files).
+  • `update_records_for_table` set `fldrPuxZHGsYZuxTO` on all 3 records to the
+    raw-URL attachment (cvkfxz `recDUV3S985L7ytXK`, maya0n `rec5Pz99DMbpG8KhH`,
+    so8acs `reccLQrb5S84uBsEj`).
+  • Re-read the 3 records: Airtable genuinely fetched + stored each image —
+    attachment IDs assigned, `type image/png`, matching `size`, real pixel
+    dimensions, small/large/full thumbnails generated. Field no longer empty.
+  Appended a `RESOLUTION:` line to F4; `unresolved_findings` 1 → 0. No counting
+  blocker (a fetchable host was reachable). `s9_end_to_end` stays `implemented`
+  — it was never `self_tested`/`verified`, so no stage demotion applies.
+
 ## Next iteration (expected)
-> **Updated after iteration 49.** `s9_end_to_end` is `implemented`; its
-> SELF-TEST scored 12/13 Verification checks PASS with **Check 6 FAIL** (Listing
-> Screenshot attachment field not populated). `unresolved_findings: 1` (F4),
-> `open_blockers: 0`. The next run is **iteration 50**: `unresolved_findings > 0`
-> forces the **RESOLVE** phase on F4 — populate the `Listing Screenshot`
-> attachment for the 3 test records (host the PNGs at fetchable URLs, then
-> `update_records_for_table`), append a `RESOLUTION:` line, decrement
-> `unresolved_findings` 1 → 0. If hosting is not reachable from the loop's
-> environment, F4 becomes an external blocker instead. After F4 resolves, the
-> loop re-runs s9 SELF-TEST (Check 6), then VERIFY s9, then IMPLEMENT/SELF-TEST/
-> VERIFY s10, then FINAL AUDIT, then COMPLETE.
+> **Updated after iteration 50.** Finding F4 is RESOLVED — the `Listing
+> Screenshot` attachment is now populated + Airtable-verified on all 3 s9 test
+> records. `unresolved_findings: 0`, `open_blockers: 0`. `s9_end_to_end` is
+> `implemented`. The next run is **iteration 51**: `unresolved_findings == 0`
+> and `open_blockers == 0` → RESOLVE skipped; IMPLEMENT finds no actionable
+> `not_started` stage (`s10_schedule` needs s9 `verified`); the SELF-TEST scan
+> lands on the first `implemented` stage, `s9_end_to_end` → **re-run the s9
+> SELF-TEST** (the plan's 13 Verification checks). Check 6 (Listing Screenshot
+> attachment) is now expected to PASS; checks 1–5, 7–13 already passed at
+> iteration 49. If all 13 PASS, `s9_end_to_end` → `self_tested`. Then VERIFY s9,
+> then IMPLEMENT/SELF-TEST/VERIFY `s10_schedule`, then FINAL AUDIT, then
+> COMPLETE.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —
