@@ -567,3 +567,95 @@ description (L3). **PASS.**
 
 All three mandatory Appendix A Stage 6 SELF-TEST checks PASS — no findings
 raised. `s6_submit_url` → `self_tested`.
+
+## Iteration 18 — s7_outreach self-test
+
+**Phase:** SELF-TEST. **Stage:** `s7_outreach`. **Timestamp:** 2026-05-21T02:54:18Z.
+
+**Phase-selection trail.** Step 1 blocker re-check: counting blocker B1 (`op`
+CLI) still open — `op --version` → `bash: line 1: op: command not found`
+(exit 127), `which op` exit 1 in the iteration-18 sandbox. The B1 precondition
+(an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+stays open and `open_blockers` stays 1. Advisory note A1 (Playwright MCP) still
+stands — `mcp__playwright__*` tools absent from the tool list. With
+`unresolved_findings == 0`, Step 1 fell through RESOLVE; the IMPLEMENT scan
+found no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
+`verified`; `s10_schedule` needs s9 `verified`) so it fell through to SELF-TEST.
+The s1→s10 SELF-TEST scan skipped `s1_repo` / `s2_playwright` / `s4_airtable` /
+`s5_overnight_skill` / `s6_submit_url` (all `self_tested`) and `s3_onepassword`
+(`blocked`, not `implemented`), landing on the first `implemented` stage:
+`s7_outreach`.
+
+**Artifact under test:** `config/outreach_templates.md` — 277 lines (confirmed
+via `wc -l config/outreach_templates.md` → `277`), read in full this iteration.
+**Canonical source:** `REVAMP_PLAN.md` Step 5 "Broker Outreach (revised template
++ response-rate improvements)", lines 233–301, re-read in full this iteration.
+
+Appendix A Stage 7 SELF-TEST bar: the file must contain (1) the default
+template, (2) the price-drop template, (3) the aviation template, (4) the
+subject-line A/B logic, (5) the selection logic, (6) the storage rules — and the
+lines covering each must be recorded. All six checked below against the file.
+
+### Check 1 — Default template — PASS
+`## Template A — Updated Default Template` header at L50. Subject-line block
+L54–64 — Variant 1 (fenced L57–59) is plan Step 5's literal subject; Variant 2
+(fenced L62–64) is the business-name-personalized subject per plan suggestion
+#1. Body code block L68–100. Placeholders L102–106. The body text matches
+`REVAMP_PLAN.md` Step 5 "Updated Default Template" body (plan L243–272) — same
+greeting, same firm list (Applied Development / Inno-Native / FlexFly /
+Intiendo), same buy-box bullets, same 3-point NDA / CIM / 20-min-call ask, same
+`https://smbsteward.com/` link, same signature block (443-864-2408 /
+bbraxton@applied-dev.com). The only difference observed: the plan source carries
+trailing whitespace on a few wrapped lines while the file trims it — an
+invisible, non-semantic formatting difference, not a content discrepancy. PASS.
+
+### Check 2 — Price-drop template — PASS
+`## Template D — Price-Drop Follow-Up` header at L162, scoped to price-drop
+re-outreach (L164–165). Single anchored subject line fenced L169–171, with the
+documented rationale (no A/B rotation — follow-up on a known thread) at L173–175.
+Body code block L179–198 — built from plan Step 5 suggestion #7 (plan L289),
+references the adjusted asking price [PREVIOUS_PRICE] → [CURRENT_PRICE] and a
+"schedule a call this week" CTA. Placeholders L200–205, with [PREVIOUS_PRICE]
+explicitly tied to the Airtable `Previous Asking Price` field. PASS.
+
+### Check 3 — Aviation template — PASS
+`## Template C — Aviation-Specific` header at L110, scoped to Part 135 / Part
+145 / FAA-certificated and MRO leads (L112). Subject-line A/B block L114–124
+(Variant 1 fenced L117–119, Variant 2 fenced L122–124). Body code block L128–153
+with aviation-specific language ([CERT_TYPE], MRO portfolio, engine-overhaul
+detail). Placeholders L155–158. Matches plan Step 5 "Template Selection Logic"
+L294 (Aviation → Template C). PASS.
+
+### Check 4 — Subject-line A/B logic — PASS
+`## A/B Testing — Subject Line Only` header at L31, body L33–47. States the
+subject line only rotates and the email body stays constant within each
+template; cites plan Step 5 suggestion #8 (L34–35) replacing the old odd/even
+whole-body A/B test. Selection method L40–43 = per-lead alternation (1st lead
+Variant 1, 2nd Variant 2, …), deterministic and Listing-ID-format-agnostic.
+Variant tracking to the Airtable Notes field L44–47. Consistent with plan L291
+and L297. PASS.
+
+### Check 5 — Selection logic — PASS
+`## Template Selection Logic` header at L14, body L16–27. First-match-wins
+order: (1) Aviation → Template C (L18–19); (2) price-drop re-outreach →
+Template D (L20–22); (3) all other leads → Template A (L23). Plus a "Deferred"
+clause L25–27 — `Disposition = "Revisit for Roll-up"` leads get no outreach
+drafted. Matches plan Step 5 "Template Selection Logic" L293–297 (Aviation → C,
+price-drop → follow-up, all others → default, A/B rotates subject only). PASS.
+
+### Check 6 — Storage rules — PASS
+`## Storage & Handling` header at L260, body L262–277. Covers: draft-only /
+never-send (L264–266); append the drafted outreach to the Airtable Notes field
+(L267–269); compile all run drafts into
+`search_reports/outreach_drafts_YYYY-MM-DD.md` (L270–272); "Revisit for Roll-up"
+outreach deferred (L273–275); variant tracking to the Notes field (L276–277).
+Matches plan Step 5 "Storage" L299–301 (Notes field + dated drafts file +
+Revisit-for-Roll-up deferral). PASS.
+
+Beyond the SELF-TEST bar (recorded for completeness, not part of the six
+checks): a `## Response-Rate Guidance` section L209–256 reproduces all eight
+plan Step 5 suggestions, and the file header L5–6 carries the no-send guardrail.
+
+### Result
+All six mandatory Appendix A Stage 7 SELF-TEST checks PASS — no findings raised.
+`s7_outreach` → `self_tested`.

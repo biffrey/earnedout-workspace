@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 17
+iteration: 18
 max_iterations: 40
-last_iteration_at: 2026-05-21T02:44:19Z
+last_iteration_at: 2026-05-21T02:54:18Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -14,7 +14,7 @@ stages:
   s4_airtable:        { status: self_tested }
   s5_overnight_skill: { status: self_tested }
   s6_submit_url:      { status: self_tested }
-  s7_outreach:        { status: implemented }
+  s7_outreach:        { status: self_tested }
   s8_dashboard:       { status: implemented }
   s9_end_to_end:      { status: not_started }
   s10_schedule:       { status: not_started }
@@ -345,6 +345,35 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   findings raised → `s6_submit_url` → `self_tested`.** Evidence in `TEST_LOG.md`
   under `## Iteration 17 — s6_submit_url self-test`.
 
+- Iteration 18 (2026-05-21T02:54:18Z): SELF-TEST phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-18 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`) so it fell through
+  to SELF-TEST; the s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable`/
+  `s5_overnight_skill`/`s6_submit_url` (`self_tested`) and `s3_onepassword`
+  (`blocked`, not `implemented`) and landed on the first `implemented` stage,
+  `s7_outreach`. Ran SELF-TEST on `s7_outreach` (Appendix A Stage 7) against the
+  real file (`config/outreach_templates.md`, 277 lines) and `REVAMP_PLAN.md`
+  Step 5 (L233–301); all six mandatory checks executed and observed: (1) **PASS**
+  — default template = Template A (header L50; subject block L54–64; body
+  L68–100; placeholders L102–106); body matches plan Step 5 "Updated Default
+  Template" (plan L243–272), the only diff being plan-side trailing whitespace
+  the file trims (non-semantic). (2) **PASS** — price-drop template = Template D
+  (header L162; subject L169–171; body L179–198; placeholders L200–205), built
+  from plan suggestion #7. (3) **PASS** — aviation template = Template C (header
+  L110; subject L114–124; body L128–153; placeholders L155–158). (4) **PASS** —
+  subject-line-only A/B logic at L31–47 (body constant, per-lead variant
+  alternation, plan suggestion #8). (5) **PASS** — selection logic at L14–27
+  (first-match-wins: Aviation→C, price-drop→D, all others→A; Revisit-for-Roll-up
+  deferred), matching plan L293–297. (6) **PASS** — storage rules at L260–277
+  (Airtable Notes + `search_reports/outreach_drafts_YYYY-MM-DD.md` + deferral +
+  draft-only/never-send + variant tracking), matching plan L299–301. **All six
+  mandatory checks PASS → no findings raised → `s7_outreach` → `self_tested`.**
+  Evidence in `TEST_LOG.md` under `## Iteration 18 — s7_outreach self-test`.
+
 ## Next iteration (expected)
 SELF-TEST phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
@@ -354,17 +383,18 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`) so it falls through to
 **SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`/
-`s4_airtable`/`s5_overnight_skill`/`s6_submit_url` (`self_tested`) and
-`s3_onepassword` (`blocked`, not `implemented`) and lands on the first
-`implemented` stage, `s7_outreach`. SELF-TEST on `s7_outreach` (Appendix A
-Stage 7): read `config/outreach_templates.md`; confirm it contains the default
-template, the price-drop follow-up template, the Aviation Template C, the
-subject-line-only A/B logic, the template-selection logic, and the storage
-rules; record which lines cover each. Record all evidence in `TEST_LOG.md`
-under `## Iteration N — s7_outreach self-test`.
+`s4_airtable`/`s5_overnight_skill`/`s6_submit_url`/`s7_outreach` (`self_tested`)
+and `s3_onepassword` (`blocked`, not `implemented`) and lands on the first
+`implemented` stage, `s8_dashboard`. SELF-TEST on `s8_dashboard` (Appendix A
+Stage 8): confirm `templates/daily-dashboard.html` is valid HTML, contains all
+four sections (A — New Finds, B — Running Queue, C — Revisit Bucket, D — Run
+Summary) with their template placeholders, then render it headlessly via the
+installed Chromium / `npx playwright` CLI path (from s2) and confirm no console
+errors and that the layout appears. Record all evidence in `TEST_LOG.md` under
+`## Iteration N — s8_dashboard self-test`.
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
-loop can still progress on s6–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
-COMPLETE (`open_blockers == 0` required) until B1 clears.
+loop can still progress on s8 SELF-TEST and the s1–s7 VERIFY phase meanwhile,
+but cannot reach COMPLETE (`open_blockers == 0` required) until B1 clears.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
