@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 50
+iteration: 51
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:19:54Z
+last_iteration_at: 2026-05-21T17:23:05Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -16,7 +16,7 @@ stages:
   s6_submit_url:      { status: verified }
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
-  s9_end_to_end:      { status: implemented }
+  s9_end_to_end:      { status: self_tested }
   s10_schedule:       { status: not_started }
 ---
 
@@ -1211,19 +1211,44 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   blocker (a fetchable host was reachable). `s9_end_to_end` stays `implemented`
   — it was never `self_tested`/`verified`, so no stage demotion applies.
 
+- Iteration 51 (2026-05-21T17:23:05Z): SELF-TEST phase on `s9_end_to_end`.
+  Step 0: `active: true`, `iteration` 50 → 51 (`51 >= 75` false → no cap
+  termination). Step 1 blocker re-check: `open_blockers == 0`, nothing pending;
+  advisory A1 non-counting. `unresolved_findings == 0` → RESOLVE skipped.
+  IMPLEMENT: no actionable `not_started` stage (`s10_schedule` needs s9
+  `verified`; s9 is `implemented`). SELF-TEST: first `implemented` stage is
+  `s9_end_to_end` → ran it. Re-ran the plan's 13 Verification checks
+  (REVAMP_PLAN.md L406–421) against the iteration-48 live-run artifacts + the
+  live Airtable records. **Check 6** — the lone iteration-49 FAIL (`Listing
+  Screenshot` attachment empty) — now **PASSes**: independently re-read all 3
+  test records live via the Airtable MCP, each `Listing Screenshot` field
+  `fldrPuxZHGsYZuxTO` holds a genuine Airtable-stored attachment
+  (`attINtUOSVpZ2s33I` / `attWVUS63ABhr6F6K` / `att4T7fKfwdtz0D1Q`,
+  `type image/png`, sizes 831574 / 747191 / 868781, real dimensions, thumbnails),
+  and the other check-6 fields (Date Added, Listing ID, Direct URL, Lead Score,
+  Disposition = Active on cvkfxz) re-confirmed in the same read. **Checks 1–5,
+  7–13** re-confirmed PASS: `ls -la` verified all 7 screenshots + 3 report dirs
+  (`.md`+`.html`+`listing-data.json` each) + dashboard HTML + outreach drafts +
+  run log present and non-empty on disk; live Airtable re-read re-confirmed the
+  price-drop (Check 7), Manual Submission Source (Check 8), Revisit-for-Roll-up
+  disposition (Check 11), Notes content (Check 12), and the drafted-not-sent
+  broker outreach (Check 13). **13 of 13 checks PASS.** Per Step 1's SELF-TEST
+  rule (all checks PASS → `self_tested`), `s9_end_to_end` → `self_tested`. No
+  findings raised; `unresolved_findings` stays 0. `[RALPH TEST]` records remain
+  clearly marked. Evidence in `TEST_LOG.md` under `## Iteration 51 —
+  s9_end_to_end self-test (re-run after F4 resolution)`.
+
 ## Next iteration (expected)
-> **Updated after iteration 50.** Finding F4 is RESOLVED — the `Listing
-> Screenshot` attachment is now populated + Airtable-verified on all 3 s9 test
-> records. `unresolved_findings: 0`, `open_blockers: 0`. `s9_end_to_end` is
-> `implemented`. The next run is **iteration 51**: `unresolved_findings == 0`
-> and `open_blockers == 0` → RESOLVE skipped; IMPLEMENT finds no actionable
-> `not_started` stage (`s10_schedule` needs s9 `verified`); the SELF-TEST scan
-> lands on the first `implemented` stage, `s9_end_to_end` → **re-run the s9
-> SELF-TEST** (the plan's 13 Verification checks). Check 6 (Listing Screenshot
-> attachment) is now expected to PASS; checks 1–5, 7–13 already passed at
-> iteration 49. If all 13 PASS, `s9_end_to_end` → `self_tested`. Then VERIFY s9,
-> then IMPLEMENT/SELF-TEST/VERIFY `s10_schedule`, then FINAL AUDIT, then
-> COMPLETE.
+> **Updated after iteration 51.** `s9_end_to_end` is now `self_tested` — all 13
+> plan Verification checks PASS. `unresolved_findings: 0`, `open_blockers: 0`,
+> `final_audit_passed: false`. The next run is **iteration 52**:
+> `unresolved_findings == 0` and `open_blockers == 0` → RESOLVE skipped;
+> IMPLEMENT finds no actionable `not_started` stage (`s10_schedule` needs s9
+> `verified`); the VERIFY scan lands on the first `self_tested` stage,
+> `s9_end_to_end` → **spawn the independent VERIFY critic subagent** for s9
+> (Appendix C brief). If it returns `SHIP` with no BLOCKING findings,
+> `s9_end_to_end` → `verified`. Then IMPLEMENT/SELF-TEST/VERIFY `s10_schedule`,
+> then FINAL AUDIT, then COMPLETE.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —

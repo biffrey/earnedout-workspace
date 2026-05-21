@@ -951,3 +951,63 @@ populated on the Airtable records). Per Step 1's SELF-TEST rule, `s9_end_to_end`
 stays `implemented`; one finding (**F4**) written to `FINDINGS.md`;
 `unresolved_findings` 0 → 1. `[RALPH TEST]` records remain clearly marked in the
 live base (full cleanup deferred to the end of Stage 9 per Appendix A Stage 9).
+
+## Iteration 51 — s9_end_to_end self-test (re-run after F4 resolution)
+
+SELF-TEST phase. `s9_end_to_end` is still `implemented` (iteration 49's SELF-TEST
+left it `implemented` because Check 6 FAILed; iteration 50 RESOLVE closed finding
+F4). This iteration re-runs the s9 SELF-TEST — the plan's 13 "Verification"
+checks (REVAMP_PLAN.md L406–421). Records under test: cvkfxz `recDUV3S985L7ytXK`,
+maya0n `rec5Pz99DMbpG8KhH`, so8acs `reccLQrb5S84uBsEj`.
+
+### Check 6 — Airtable record with all new fields populated — PASS (re-verified)
+The iteration-49 FAIL was solely the empty `Listing Screenshot` attachment field;
+F4 (iteration 50) populated it. This iteration **independently re-read all three
+records live** via the Airtable MCP (`list_records_for_table`, recordIds filter).
+Each record's `Listing Screenshot` field `fldrPuxZHGsYZuxTO` now holds a genuine
+Airtable-stored attachment object:
+- cvkfxz `recDUV3S985L7ytXK` → attachment `attINtUOSVpZ2s33I`, `type image/png`,
+  `size 831574`, `1200×3074`, small/large/full thumbnails generated.
+- maya0n `rec5Pz99DMbpG8KhH` → attachment `attWVUS63ABhr6F6K`, `type image/png`,
+  `size 747191`, `1200×3352`, thumbnails generated.
+- so8acs `reccLQrb5S84uBsEj` → attachment `att4T7fKfwdtz0D1Q`, `type image/png`,
+  `size 868781`, `1200×3426`, thumbnails generated.
+The other check-6 fields were re-confirmed in the same live read for the
+Overnight-Search / Active record cvkfxz: Date Added `fldoZVwrhWaGGMlFR` =
+2026-05-21 ✓; Listing ID `fld81k0uFwqkHaEEI` = cvkfxz ✓; Direct Listing URL
+`fldMCmSVQjYv3odok` = https://dealstream.com/d/biz-sale/hvac/cvkfxz ✓; Lead Score
+`fld2ipICYNLjaDm39` = 50 ✓; Disposition `fldw0xk1YBkmP7sBD` = Active ✓; Listing
+Screenshot ✓ (above). **All enumerated new fields populated → Check 6 = PASS.**
+
+### Checks 1–5, 7–13 — re-confirmed PASS
+These 12 checks PASSed at iteration 49 against the iteration-48 live-run
+artifacts; nothing has mutated those artifacts since. Re-confirmed this iteration:
+- **Filesystem artifacts present + non-empty** (`ls -la`): 7 screenshots in
+  `output/screenshots/` — 3 listing PNGs (`cvkfxz.png` 831574 B, `maya0n.png`
+  747191 B, `so8acs.png` 868781 B) + 4 process PNGs (`s9_dealstream_login`,
+  `s9_dealstream_search_hvac`, `s9_dead_url_check`, `s9_dashboard`); 3 report
+  dirs `output/reports/{cvkfxz,maya0n,so8acs}/` each with `.md` + `.html` +
+  `listing-data.json`; `output/dashboards/dashboard_2026-05-21.html` (18,851 B);
+  `search_reports/outreach_drafts_2026-05-21.md` + `run_log_2026-05-21.md`.
+- **Live Airtable re-read** confirms: Check 7 — maya0n Previous Asking Price
+  `fldySRjfm1P8Nodes` = $1,800,000, Asking Price `fldhqAXiAWh2ktXln` = $1,495,000,
+  Notes carries the "PRICE DROP: was $1,800,000, now $1,495,000 … Previous Asking
+  Price stored, score re-evaluated" line; Check 8 — so8acs Source
+  `fldiGyXTk6Ybb6J1L` = Manual Submission, full pipeline record; Check 11 —
+  maya0n Disposition = Revisit for Roll-up (Section C, not B); Check 12 — all 3
+  Notes fields begin `[RALPH TEST] <business name> | Listing ID: <id>` + Direct
+  URL + Airtable record URL, no search-results URL; Check 13 — cvkfxz Notes
+  carries the default-template broker outreach draft marked "NOT SENT".
+- Checks 1, 2, 4, 5, 9, 10 rest on the iteration-49 evidence (process
+  screenshots viewed, run log, dashboard HTML), all unchanged on disk and
+  re-confirmed present above.
+
+### Result
+**13 of 13 checks PASS.** Check 6 — the lone iteration-49 FAIL — now PASSes
+(F4 resolved + independently re-verified live this iteration). Per Step 1's
+SELF-TEST rule (all checks PASS → `status: self_tested`), `s9_end_to_end` →
+`self_tested`. No findings raised; `unresolved_findings` stays 0. `[RALPH TEST]`
+records remain clearly marked in both Business Name and Notes on all 3 live
+records (Appendix A Stage 9 "delete or clearly mark" — satisfied by the clear
+marking; records retained as the s9 verification evidence base for the VERIFY
+phase).
