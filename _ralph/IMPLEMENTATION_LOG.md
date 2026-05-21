@@ -374,3 +374,76 @@ present; 153 lines.
 (`unresolved_findings` stays 0). `open_blockers` stays 0. Next iteration:
 IMPLEMENT scan resumes at `s7_outreach` (dependency: s1, which is `implemented`
 — met).
+
+## Iteration 10 — 2026-05-21T01:34:14Z — IMPLEMENT on s7_outreach
+
+**Phase selected:** Step 1 IMPLEMENT. At iteration start `unresolved_findings == 0`
+and `open_blockers == 0`, so RESOLVE was skipped. Re-checked `BLOCKERS.md`: no
+counting blockers; advisory A1 (Playwright MCP tools absent) still stands —
+`mcp__playwright__*` tools are still not in the tool list — but A1 is
+non-counting and gates nothing, so no precondition cleared and no stage was
+un-blocked. Scanning s1→s10: s1–s6 are all `implemented` (skipped by IMPLEMENT);
+the first `not_started` stage is `s7_outreach` (dependency: s1, which is
+`implemented` — met). One phase only — IMPLEMENT; the section-coverage SELF-TEST
+belongs to the s7 SELF-TEST phase and was NOT run or claimed here.
+
+**s7_outreach IMPLEMENT actions (Appendix A Stage 7 / REVAMP_PLAN.md Step 5):**
+
+Re-read `REVAMP_PLAN.md` Step 5 (the canonical source — "Updated Default
+Template" email block, the 8 "Suggestions to Increase Response Rate", the
+"Template Selection Logic", and "Storage"). Per the anti-deception rule the
+pre-existing `config/outreach_templates.md` (4,092 B, 147 lines, dated
+2026-04-16, written before this loop) was treated as untrusted and audited
+against the plan. It carried **4 concrete defects**, all fixed in the rewrite:
+
+1. *Wrong firm name in the default template* — Template A body read
+   "co-founder of other firms, such as Inno-Native, FlexFly, and **P3
+   Innovation**." `REVAMP_PLAN.md` Step 5 (line 246) says "**Intiendo**".
+   Corrected to "Intiendo". **Critical fix** — a wrong company name in
+   live broker outreach is a credibility error.
+2. *Default template was a paraphrase, not the plan block* — the old Template A
+   body was a loop-author paraphrase that silently baked in some response-rate
+   suggestions (dropped the buy-box bullet list, etc.) and so had drifted from
+   the plan. Appendix A Stage 7 IMPLEMENT requires "the revised default template
+   (the email block in plan Step 5)". Template A now reproduces the plan Step 5
+   "Updated Default Template" email block **verbatim** (buy-box bullet list,
+   3-point ask, website line, signature) so it is fully traceable to the plan.
+3. *No response-rate guidance section* — Appendix A Stage 7 IMPLEMENT explicitly
+   requires "Capture the plan's response-rate guidance." The old file had none.
+   Added a "Response-Rate Guidance" section reproducing all 8 plan Step 5
+   suggestions, each annotated with whether/where it is implemented.
+4. *No storage-rules section* — Appendix A Stage 7 IMPLEMENT requires
+   documenting that outreach goes to the Airtable Notes field AND
+   `search_reports/outreach_drafts_YYYY-MM-DD.md`, and that "Revisit for
+   Roll-up" outreach is deferred. The old file had no storage section at all.
+   Added a "Storage & Handling" section covering: draft-only/never-send, the
+   Airtable Notes field, the dated `search_reports/outreach_drafts_YYYY-MM-DD.md`
+   file, the deferred "Revisit for Roll-up" rule, and variant tracking.
+
+Kept (already plan-correct, lightly cleaned): the template-selection logic
+(Aviation → Template C, price-drop → Template D, all others → Template A); the
+A/B-testing "subject line only" rule (plan Step 5 suggestion #8); Template C
+(Aviation — the plan does not specify a literal C body, so the existing one is
+retained) and Template D (Price-Drop — built from plan Step 5 suggestion #7).
+The A/B selection method was changed from odd/even-on-Listing-ID (which does not
+work for DealStream's alphanumeric IDs) to a deterministic per-lead alternation
+(1st lead → Variant 1, 2nd → Variant 2, …).
+
+**Decisions noted (autonomous run):** (a) Template A is the plan's *verbatim*
+default block; suggestions 2–6 are kept as guidance rather than hard-coded into
+the body, so the default stays plan-faithful and any personalization stays
+grounded in real listing data rather than invented. (b) The signature line is
+reproduced verbatim from the plan, including the plan's `📞`/`✉️` glyphs, for
+fidelity to the canonical block.
+
+**Write-path note:** `config/` is NOT a `.claude/` protected path, so `Write`
+worked directly — no `bash`-copy workaround needed. Post-write checks confirmed:
+277 lines; 7 `##` sections (Template Selection Logic, A/B Testing, Template A,
+Template C, Template D, Response-Rate Guidance, Storage & Handling); 1 "Intiendo"
+/ 0 "P3 Innovation"; storage section references `outreach_drafts_YYYY-MM-DD.md`
+and the deferred "Revisit for Roll-up" rule.
+
+**Result:** `s7_outreach` status set to `implemented`. No findings raised
+(`unresolved_findings` stays 0). `open_blockers` stays 0. Next iteration:
+IMPLEMENT scan resumes at `s8_dashboard` (dependency: s1, which is `implemented`
+— met).

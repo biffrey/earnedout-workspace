@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 9
+iteration: 10
 max_iterations: 40
-last_iteration_at: 2026-05-21T01:24:41Z
+last_iteration_at: 2026-05-21T01:34:14Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -14,7 +14,7 @@ stages:
   s4_airtable:        { status: implemented }
   s5_overnight_skill: { status: implemented }
   s6_submit_url:      { status: implemented }
-  s7_outreach:        { status: not_started }
+  s7_outreach:        { status: implemented }
   s8_dashboard:       { status: not_started }
   s9_end_to_end:      { status: not_started }
   s10_schedule:       { status: not_started }
@@ -152,19 +152,39 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `outputs/` and copied in via the `bash` mount; post-copy checks confirmed the
   fixes. No findings raised. `s6_submit_url` → `implemented`.
 
+- Iteration 10 (2026-05-21T01:34:14Z): IMPLEMENT phase (`unresolved_findings == 0`,
+  `open_blockers == 0` at start). Re-checked `BLOCKERS.md` — no counting
+  blockers, advisory A1 still stands (`mcp__playwright__*` still absent).
+  Scanned s1→s10; s1–s6 are `implemented` so skipped; first `not_started` stage
+  is `s7_outreach` (dep s1 met). IMPLEMENT on `s7_outreach`: re-read
+  `REVAMP_PLAN.md` Step 5 and rewrote the pre-existing
+  `config/outreach_templates.md` (147 lines, dated 2026-04-16) to 277 lines,
+  fixing 4 concrete defects: (1) wrong firm name in the default template —
+  "P3 Innovation" → "Intiendo" (plan Step 5 line 246); (2) the default template
+  was a loop-author paraphrase — Template A now reproduces the plan Step 5
+  "Updated Default Template" email block verbatim; (3) no response-rate guidance
+  section — added one reproducing all 8 plan Step 5 suggestions; (4) no
+  storage-rules section — added "Storage & Handling" (Airtable Notes +
+  `search_reports/outreach_drafts_YYYY-MM-DD.md`; draft-only/never-send;
+  "Revisit for Roll-up" outreach deferred). Kept the plan-correct
+  template-selection logic, the subject-line-only A/B rule, Template C
+  (Aviation) and Template D (price-drop); changed the A/B selection method from
+  odd/even-on-Listing-ID to per-lead alternation (DealStream IDs are
+  alphanumeric). `config/` is not a `.claude/` path so `Write` worked directly.
+  No findings raised. `s7_outreach` → `implemented`.
+
 ## Next iteration (expected)
 IMPLEMENT phase expected: `unresolved_findings == 0` and `open_blockers == 0`,
-so Step 1 falls through RESOLVE to IMPLEMENT. The s1→s10 scan skips s1–s6 (all
-`implemented`) and lands on the first `not_started` stage — `s7_outreach`
-(dependency: s1, which is `implemented` — met). IMPLEMENT on `s7_outreach`:
-update `config/outreach_templates.md` per `REVAMP_PLAN.md` Step 5 — it must
-contain the revised default template (the email block in plan Step 5), the
-price-drop re-outreach follow-up template, the Aviation Template C, the
-subject-line-only A/B logic, the template-selection logic (Aviation → C,
-price-drop → follow-up, all others → default), the response-rate guidance, and
-the storage rules (Airtable Notes + `search_reports/outreach_drafts_YYYY-MM-DD.md`;
-"Revisit for Roll-up" outreach deferred). Note: `config/` is NOT a `.claude/`
-path, so `Write`/`Edit` work directly there — no `bash`-copy workaround needed.
+so Step 1 falls through RESOLVE to IMPLEMENT. The s1→s10 scan skips s1–s7 (all
+`implemented`) and lands on the first `not_started` stage — `s8_dashboard`
+(dependency: s1, which is `implemented` — met). IMPLEMENT on `s8_dashboard`:
+create `templates/daily-dashboard.html` per `REVAMP_PLAN.md` Step 7 — a
+Jinja-style, self-contained template with the four sections (A — Last Night's
+New Finds with price-drop badge, B — Running Queue of all `Disposition = Active`
+leads with a Date Added column, C — Revisit Bucket of `Disposition = Revisit for
+Roll-up` leads, D — Run Summary with totals and per-industry/platform
+breakdowns), CSS styled to match `templates/single-report.html`. Note:
+`templates/` is NOT a `.claude/` path, so `Write`/`Edit` work directly there.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
