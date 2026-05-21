@@ -1,15 +1,15 @@
 ---
 active: true
-iteration: 12
+iteration: 13
 max_iterations: 40
-last_iteration_at: 2026-05-21T01:54:25Z
+last_iteration_at: 2026-05-21T02:04:17Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
 open_blockers: 0
 stages:
   s1_repo:            { status: self_tested }
-  s2_playwright:      { status: implemented }
+  s2_playwright:      { status: self_tested }
   s3_onepassword:     { status: implemented }
   s4_airtable:        { status: implemented }
   s5_overnight_skill: { status: implemented }
@@ -212,23 +212,53 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `head` spot-checks confirming genuine migrated content. **All checks PASS → no
   findings raised → `s1_repo` → `self_tested`.** Evidence in `TEST_LOG.md` under
   `## Iteration 12 — s1_repo self-test`.
+- Iteration 13 (2026-05-21T02:04:25Z): SELF-TEST phase. `unresolved_findings == 0`
+  and `open_blockers == 0`, so Step 1 fell through RESOLVE; the IMPLEMENT scan
+  found no actionable `not_started` stage (s9 needs s1–s8 `verified`, s10 needs
+  s9 `verified`) so it fell through to SELF-TEST; the s1→s10 scan skipped
+  `s1_repo` (`self_tested`) and landed on the first `implemented` stage,
+  `s2_playwright`. Re-checked `BLOCKERS.md` — no counting blockers; advisory A1
+  still stands (`mcp__playwright__*` still absent from the tool list). Ran
+  SELF-TEST on `s2_playwright` (Appendix A Stage 2), all three mandatory checks
+  executed and observed: (1) `.claude/settings.json` parses as JSON and contains
+  `mcpServers.playwright` (`command: npx`, `args: ["@playwright/mcp@latest"]`);
+  (2) the sandbox is ephemeral so iteration-3's install did not persist —
+  re-installed `@playwright/mcp@0.0.75` to `$HOME/.npm-global` (default prefix
+  `/usr` not writable, `sudo` unavailable), `npm ls -g @playwright/mcp` confirms;
+  (3) installed the Chromium binary (`chromium-1224`, full Chrome for Testing
+  149.0.7827.3, `INSTALLATION_COMPLETE`) and ran a Node + Playwright `1.61.0-alpha`
+  headless smoke test — launched headless Chromium via `executablePath`,
+  rendered an inline HTML page (read back `"render OK"`, 15,204-byte PNG) and
+  navigated over HTTPS through the sandbox proxy to `https://registry.npmjs.org/`
+  (**HTTP 200**, 6,082-byte PNG); both screenshots exist, are non-empty, are
+  valid PNGs, and were viewed and confirmed genuine renders. `example.com` is
+  not on the sandbox network allowlist (`curl` → `000`), so the allowlisted
+  `registry.npmjs.org` was used as the "simple page" — documented honest
+  substitution, not a faked PASS. Check 4 (live MCP navigation) is explicitly
+  conditional and was correctly SKIPPED — `mcp__playwright__*` tools absent
+  (advisory A1, non-counting). **All three mandatory checks PASS → no findings
+  raised → `s2_playwright` → `self_tested`.** Evidence in `TEST_LOG.md` under
+  `## Iteration 13 — s2_playwright self-test`.
 
 ## Next iteration (expected)
 SELF-TEST phase expected. `unresolved_findings == 0` and `open_blockers == 0`,
 so Step 1 falls through RESOLVE. The IMPLEMENT scan finds no actionable
 `not_started` stage — `s9_end_to_end` depends on s1–s8 all `verified` and
 `s10_schedule` depends on s9 `verified` — so Step 1 falls through IMPLEMENT to
-**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo` (now `self_tested`) and
-lands on the first `implemented` stage, `s2_playwright`. SELF-TEST on
-`s2_playwright` (Appendix A Stage 2): confirm `.claude/settings.json` parses as
-JSON and contains the `playwright` server; `npm ls -g @playwright/mcp` confirms
-the package is installed; run the headless Chromium smoke test (launch Chromium,
-load `https://example.com`, capture a screenshot to a temp path, confirm the
-file exists and is non-empty) via the `npx playwright` / Node CLI fallback —
-advisory note A1 records that the `mcp__playwright__*` MCP tools are absent
-(restart-gated, non-counting), so the conditional live-MCP-navigation sub-check
-is skipped. Record all commands and outputs in `TEST_LOG.md` under
-`## Iteration N — s2_playwright self-test`.
+**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo` and `s2_playwright`
+(both now `self_tested`) and lands on the first `implemented` stage,
+`s3_onepassword`. SELF-TEST on `s3_onepassword` (Appendix A Stage 3): confirm
+`config/credentials-setup.md` documents the canonical 1Password item path
+(`op://Private/DealStream/username` + `/password`) and the fail-loud
+requirement; then run `op --version` and `op read "op://Private/DealStream/username"`.
+NOTE — `op` is a desktop credential manager on Biffrey's Mac and is not present
+in the Linux execution sandbox; per Appendix A Stage 3 the expected outcome is
+that the `op` checks cannot run, so the next iteration should record an
+`op`-unavailable blocker in `BLOCKERS.md` with sign-in instructions for Biffrey
+and set `s3_onepassword` to `blocked` (this would make `open_blockers == 1`).
+The file-documentation sub-check is fully runnable and should be recorded
+independently. Record all commands and outputs in `TEST_LOG.md` under
+`## Iteration N — s3_onepassword self-test`.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
