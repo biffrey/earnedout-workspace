@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 34
+iteration: 35
 max_iterations: 40
-last_iteration_at: 2026-05-21T05:34:44Z
+last_iteration_at: 2026-05-21T05:44:31Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -816,6 +816,29 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   until Biffrey completes the B1 fix instructions in `BLOCKERS.md`. Note: 6
   iterations remain before the 40-iteration cap; if B1 is not cleared, the loop
   will idle each run until the cap and terminate without reaching COMPLETE.
+
+- Iteration 35 (2026-05-21T05:44:31Z): IDLE — loop blocked on B1, no actionable
+  phase. Step 1 blocker re-check: counting blocker B1 (`op` CLI) still open —
+  `op --version` → `op: command not found` (exit 127), `which op` exit 1,
+  `op whoami` → `op: command not found` (exit 127) in the iteration-35 sandbox,
+  and `op` is absent from `/usr/local/bin`, `/opt/homebrew/bin`, `/usr/bin`,
+  `~/.local/bin`, and `/snap/bin`; the precondition (an installed, signed-in
+  `op` reachable by the SELF-TEST) did not clear, so B1 stays open and
+  `open_blockers` stays 1. `unresolved_findings == 0` so Step 1 fell through
+  RESOLVE. Every remaining phase is non-actionable: **IMPLEMENT** — no
+  actionable `not_started` stage (`s9_end_to_end` needs s1–s8 ALL `verified`
+  but `s3_onepassword` is `blocked`; `s10_schedule` needs s9 `verified`);
+  **SELF-TEST** — no `implemented` stage (s1/s2/s4/s5/s6/s7/s8 `verified`, s3
+  `blocked`, s9/s10 `not_started`); **VERIFY** — no `self_tested` stage;
+  **FINAL AUDIT** / **COMPLETE** — require all 10 stages `verified` AND
+  `open_blockers == 0`, neither holds. Per Step 1's terminal rule ("If
+  `open_blockers > 0` and no other phase is actionable, output a status note
+  describing the blockers and exit"), this run idled with a status note. No
+  stage status changed; no findings raised; no STATE counters changed except
+  `iteration`/`last_iteration_at`. The loop remains blocked on B1 until Biffrey
+  completes the B1 fix instructions in `BLOCKERS.md`. Note: 5 iterations remain
+  before the 40-iteration cap; if B1 is not cleared, the loop will idle each
+  run until the cap and terminate without reaching COMPLETE.
 
 ## Next iteration (expected)
 **The loop is now blocked on B1 and cannot advance any stage until Biffrey
