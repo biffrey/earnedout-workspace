@@ -1011,3 +1011,45 @@ records remain clearly marked in both Business Name and Notes on all 3 live
 records (Appendix A Stage 9 "delete or clearly mark" — satisfied by the clear
 marking; records retained as the s9 verification evidence base for the VERIFY
 phase).
+
+## Iteration 54 — s10_schedule self-test
+
+SELF-TEST per Appendix A Stage 10: "List scheduled tasks and confirm the
+overnight-search task exists with the intended cadence and prompt." All checks
+executed this iteration against the real macOS `launchd` system + on-disk
+artifacts.
+
+**Artifacts present (PASS):**
+- `config/launchd/ai.earnedout.overnight-search.plist` — 1175 B, version-controlled.
+- `~/Library/LaunchAgents/ai.earnedout.overnight-search.plist` — installed copy,
+  1175 B. `diff` repo-copy vs installed → identical (no drift).
+- `run-overnight-search.sh` — 2328 B, mode `-rwxr-xr-x` (executable).
+- `config/schedule.md` — 3928 B, documents mechanism/cadence/trigger prompt/management.
+
+**Check — task is loaded & valid (PASS):**
+- `launchctl list | grep -i earnedout` → `-	0	ai.earnedout.overnight-search`
+  (loaded; PID `-` = not currently running; last exit code `0`).
+- `plutil -lint` on both the repo copy and the installed copy → `OK` (valid plist).
+
+**Check — cadence (PASS):**
+- `launchctl print gui/$UID/ai.earnedout.overnight-search` → calendar descriptor
+  `{ "Minute" => 37, "Hour" => 2 }`, stream `com.apple.launchd.calendarinterval`,
+  `watching = 1` → fires every day at **02:37 local** (early-morning nightly,
+  matching the plan's "Implementation Order" #10 cron cadence). `state = not running`
+  (expected — not 02:37 now). `RunAtLoad` is `false` in the plist (fires only on
+  the calendar trigger).
+
+**Check — trigger prompt (PASS):**
+- The plist `ProgramArguments` runs `/bin/bash run-overnight-search.sh`.
+- `run-overnight-search.sh` invokes `claude -p "$PROMPT" --dangerously-skip-permissions`;
+  `$PROMPT` instructs the overnight-search skill end-to-end: `op` credential
+  retrieval with fail-loud, Playwright DealStream login + multi-platform search,
+  direct-URL/listing-ID/2024+2025-financials extraction, link validation +
+  screenshots, Airtable dedup with price-drop detection (base `appOsvuyy5eK43QTx`
+  / table `tblSmNrHROMLm7vOS`), prospect-evaluation on new leads + price-drops,
+  record create/update with `Source = "Overnight Search"`, broker-outreach
+  drafting **to files/Notes only — NEVER send email**, and daily HTML dashboard
+  generation. `config/schedule.md` documents the same.
+
+**Result: all SELF-TEST checks PASS → `s10_schedule` → `self_tested`.** No
+findings raised; `unresolved_findings` stays 0; `open_blockers` stays 0.

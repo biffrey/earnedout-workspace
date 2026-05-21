@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 53
+iteration: 54
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:29:20Z
+last_iteration_at: 2026-05-21T17:35:01Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -17,7 +17,7 @@ stages:
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
   s9_end_to_end:      { status: verified }
-  s10_schedule:       { status: implemented }
+  s10_schedule:       { status: self_tested }
 ---
 
 # Ralph Loop State — EarnedOut Overnight Search Revamp
@@ -1301,18 +1301,44 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   findings raised, no blockers. `s10_schedule` → `implemented`. See
   `IMPLEMENTATION_LOG.md` for full detail.
 
+- Iteration 54 (2026-05-21T17:35:01Z): SELF-TEST phase on `s10_schedule`.
+  Step 0: `active: true`, `iteration` 53 → 54 (`54 >= 75` false → no cap).
+  Step 1 blocker re-check: `open_blockers == 0`, advisory A1 non-counting, B1 +
+  B2 RESOLVED — nothing pending. `unresolved_findings == 0` → RESOLVE skipped.
+  IMPLEMENT scan s1→s10: s1–s9 `verified`, `s10_schedule` is `implemented`
+  (not `not_started`) → no actionable IMPLEMENT. SELF-TEST scan: first
+  `implemented` stage is `s10_schedule` → ran it (Appendix A Stage 10).
+  Executed all SELF-TEST checks against the real macOS `launchd` system:
+  • `launchctl list | grep -i earnedout` → `-  0  ai.earnedout.overnight-search`
+    (loaded; not currently running; last exit 0).
+  • `plutil -lint` on the repo copy AND the installed copy → both `OK`;
+    `diff` repo-copy vs `~/Library/LaunchAgents/...` → identical (no drift).
+  • `launchctl print gui/$UID/ai.earnedout.overnight-search` → calendar
+    descriptor `{ "Minute" => 37, "Hour" => 2 }` — fires daily at 02:37 local
+    (early-morning nightly cadence per plan Implementation Order #10);
+    `RunAtLoad` false.
+  • Trigger prompt: plist `ProgramArguments` runs `run-overnight-search.sh`
+    (executable, 2328 B), which invokes `claude -p "$PROMPT"` with a prompt
+    instructing the overnight-search skill end-to-end (op fail-loud, Playwright
+    DealStream multi-platform search, extraction, validation+screenshots,
+    Airtable dedup+price-drop, prospect-evaluation, `Source="Overnight Search"`,
+    outreach drafted-not-sent, daily dashboard). `config/schedule.md` (3928 B)
+    documents mechanism/cadence/prompt/management.
+  **All SELF-TEST checks PASS → `s10_schedule` → `self_tested`.** No findings
+  raised; counters unchanged (`unresolved_findings: 0`, `open_blockers: 0`).
+  Evidence in `TEST_LOG.md` under `## Iteration 54 — s10_schedule self-test`.
+
 ## Next iteration (expected)
-> **Updated after iteration 53.** `s10_schedule` is now `implemented` — the
+> **Updated after iteration 54.** `s10_schedule` is now `self_tested` — the
 > nightly `launchd` LaunchAgent `ai.earnedout.overnight-search` is created,
-> installed, and loaded (daily 02:37 local). `unresolved_findings: 0`,
-> `open_blockers: 0`, `final_audit_passed: false`. All 9 prior stages (s1–s9)
-> are `verified`; `s10_schedule` is `implemented`. The next run is **iteration
-> 54**: `unresolved_findings == 0` and `open_blockers == 0` → RESOLVE skipped;
-> IMPLEMENT scan finds no `not_started` stage → falls through; SELF-TEST scan
-> finds `s10_schedule` `implemented` → **SELF-TEST on `s10_schedule`** (list
-> scheduled tasks, confirm the overnight-search task exists with the intended
-> cadence and trigger prompt; Appendix A Stage 10 SELF-TEST). Then VERIFY
-> `s10_schedule`, then FINAL AUDIT, then COMPLETE.
+> installed, loaded, and confirmed (daily 02:37 local; valid plist; trigger
+> prompt verified). All 9 prior stages (s1–s9) are `verified`. The next run is
+> **iteration 55**: `unresolved_findings == 0` and `open_blockers == 0` →
+> RESOLVE skipped; IMPLEMENT/SELF-TEST scans find nothing actionable → falls
+> through to **VERIFY on `s10_schedule`** (spawn an independent critic subagent
+> per Appendix C). If SHIP with no BLOCKING → `s10_schedule` → `verified`,
+> making all 10 stages `verified`; iteration 56 then runs the **FINAL AUDIT**,
+> and iteration 57 **COMPLETE** (emit `<promise>REVAMP_VERIFIED</promise>`).
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —
