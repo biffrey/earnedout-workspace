@@ -1,19 +1,19 @@
 ---
 active: true
-iteration: 55
+iteration: 56
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:37:00Z
+last_iteration_at: 2026-05-21T17:40:12Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 0
+unresolved_findings: 2
 open_blockers: 0
 stages:
   s1_repo:            { status: verified }
   s2_playwright:      { status: verified }
   s3_onepassword:     { status: verified }
   s4_airtable:        { status: verified }
-  s5_overnight_skill: { status: verified }
-  s6_submit_url:      { status: verified }
+  s5_overnight_skill: { status: self_tested }
+  s6_submit_url:      { status: self_tested }
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
   s9_end_to_end:      { status: verified }
@@ -1360,20 +1360,55 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   NITs do not qualify). **All 10 stages (s1–s10) are now `verified`.** Full
   critic output in `VERIFY_LOG.md` under `## Iteration 55 — s10_schedule verify`.
 
+- Iteration 56 (2026-05-21T17:40:12Z): FINAL AUDIT phase. Step 0: `active: true`,
+  `iteration` 55 → 56 (`56 >= 75` false → no cap). Step 1 blocker re-check: no
+  counting blockers, advisory A1 non-counting; `open_blockers == 0`.
+  `unresolved_findings == 0` → RESOLVE skipped. IMPLEMENT scan: no `not_started`
+  stage. SELF-TEST scan: no `implemented` stage. VERIFY scan: no `self_tested`
+  stage. All 10 stages `verified` AND `unresolved_findings == 0` AND
+  `open_blockers == 0` AND `final_audit_passed == false` → ran **FINAL AUDIT**
+  (Step 1 phase 5). Spawned the comprehensive final-audit subagent (Appendix C
+  final-audit variant): read `REVAMP_PLAN.md` in full, independently confirmed
+  the 10 Implementation Order items and 13 Verification checks against the live
+  files, the live Airtable schema + the 3 s9 records, the dashboard, the launchd
+  task, and `_ralph/` logs. The auditor re-verified Airtable records 6/7/8/11/12
+  by re-reading them live (genuine screenshot attachments, price-drop, manual
+  source, revisit disposition, clean Notes — all real, no faked PASS in TEST_LOG
+  for the 13 checks). **Verdict: `VERDICT: REVISE`** — **1 BLOCKING finding:**
+  both executable skills (`overnight-search/skill.md` ~L26-27,
+  `submit-url/skill.md` ~L14) retrieve credentials with `op://Private/DealStream/...`,
+  the path the operator evidence (`s3_op_verification_2026-05-21.md`) PROVED does
+  not resolve — the iteration-8/9 IMPLEMENT phases wrote the pre-correction path
+  and the s5/s6 SELF-TEST/VERIFY phases never grepped the literal `op://` string;
+  run as written, the skills' own fail-loud rule halts the pipeline. Also 1
+  IMPROVE (the 3 `[RALPH TEST]` records still live in the production base —
+  marked, so Stage 9 literally passes, but recommend deleting) and 2 NITs (stale
+  path in `ralph-loop.local.md`; uncommitted STATE.md = the loop's own state).
+  Per Step 1 phase 5 (REVISE branch): wrote **F5** (BLOCKING, s5+s6) and **F6**
+  (IMPROVE, s9) to `FINDINGS.md`, `unresolved_findings` 0 → 2; demoted the two
+  stages F5 flags — `s5_overnight_skill` `verified` → `self_tested` and
+  `s6_submit_url` `verified` → `self_tested` (a BLOCKING defect materially
+  changes the stage). `s9_end_to_end` stays `verified` (F6 is an enhancement;
+  the records ARE clearly marked, satisfying Stage 9's literal SELF-TEST bar
+  "delete **or** clearly mark"). `final_audit_passed` stays `false`. Full auditor
+  output in `VERIFY_LOG.md` under `## Iteration 56 — FINAL AUDIT`.
+
 ## Next iteration (expected)
-> **Updated after iteration 55.** `s10_schedule` is now `verified` — **all 10
-> stages (s1–s10) are `verified`**. The iteration-55 critic subagent returned
-> `VERDICT: SHIP` with zero BLOCKING findings (two NITs only: the well-justified
-> `launchd`-vs-`/schedule` design choice, and `RunAtLoad=false` meaning no fire
-> yet — out of Stage 10's scope). `unresolved_findings: 0`, `open_blockers: 0`,
-> `final_audit_passed: false`. The next run is **iteration 56**: RESOLVE skipped
-> (`unresolved_findings == 0`); IMPLEMENT/SELF-TEST/VERIFY scans find nothing
-> actionable (all 10 stages `verified`) → falls through to **FINAL AUDIT** (Step
-> 1 phase 5: all 10 `verified` AND `unresolved_findings == 0` AND
-> `open_blockers == 0` AND `final_audit_passed == false`). Spawn the
-> comprehensive final-audit subagent (Appendix C, final-audit variant). If it
-> returns `SHIP` with no BLOCKING → `final_audit_passed: true`; iteration 57
-> then runs **COMPLETE** (emit `<promise>REVAMP_VERIFIED</promise>`).
+> **Updated after iteration 56.** The FINAL AUDIT returned `VERDICT: REVISE`
+> with one genuine BLOCKING finding — exactly the kind of drift this loop exists
+> to catch: a previous iteration "corrected" the 1Password path in the skills to
+> a value (`op://Private/DealStream/...`) that the operator later proved does
+> not resolve. `unresolved_findings: 2` (F5 BLOCKING, F6 IMPROVE), `open_blockers:
+> 0`, `final_audit_passed: false`, s5/s6 demoted to `self_tested`. The next run
+> is **iteration 57**: `unresolved_findings > 0` → **RESOLVE** phase, oldest
+> finding first = **F5** — edit `.claude/skills/overnight-search/skill.md` and
+> `.claude/skills/submit-url/skill.md` to replace `op://Private/DealStream/...`
+> with the canonical `op://Personal/dealstream.com/...`, fix the L23 mislabel,
+> and fix the stale path in `.claude/ralph-loop.local.md`; author files outside
+> `.claude/` and copy in via the `bash` mount. Then iteration 58 RESOLVE = F6
+> (delete the 3 `[RALPH TEST]` Airtable records). Then s5/s6 must be re-SELF-TESTED
+> (now with an explicit `op://` grep) and re-VERIFIED, after which FINAL AUDIT
+> re-runs and — if clean — COMPLETE emits the promise.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —

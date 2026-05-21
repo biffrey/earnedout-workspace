@@ -278,3 +278,68 @@ counting blocker needed — a fetchable host was reachable. `unresolved_findings
 decremented 1 → 0. `s9_end_to_end` stays `implemented` (it was never
 `self_tested`/`verified`, so no stage demotion applies); the next iteration
 re-runs the s9 SELF-TEST, where Check 6 is now expected to PASS.
+
+## F5 — s5_overnight_skill + s6_submit_url — skills use the wrong, non-resolving 1Password path (BLOCKING)
+
+**Iteration raised:** 56 (2026-05-21T17:40:12Z) — FINAL AUDIT, audit finding #1.
+**Stages:** `s5_overnight_skill` and `s6_submit_url` — both demoted `verified` →
+`self_tested` this iteration (a BLOCKING defect materially changes the stage).
+
+**Observed:** Both executable skills retrieve DealStream credentials with the
+path `op://Private/DealStream/username` / `op://Private/DealStream/password`:
+- `.claude/skills/overnight-search/skill.md` ~L26–27 (and L23 mislabels it "the
+  **canonical item path** (per `REVAMP_PLAN.md` Step 0 and
+  `config/credentials-setup.md`)").
+- `.claude/skills/submit-url/skill.md` ~L14.
+
+That path is **proven non-resolving**. The operator evidence file
+`_ralph/evidence/s3_op_verification_2026-05-21.md` (and FINDINGS F2 ADDENDUM)
+records that Biffrey ran `op` on his Mac: **no vault named `Private` and no item
+named `DealStream` exist** — `op read "op://Private/DealStream/username"` FAILS
+(`"Private" isn't a vault`). The credentials live at
+`op://Personal/dealstream.com/username` / `.../password`. The canonical path was
+corrected on 2026-05-21 in `REVAMP_PLAN.md` Step 0, `config/credentials-setup.md`,
+the loop prompt (Appendix A Stage 3 + Appendix B), and `run-overnight-search.sh`
+— but the iteration-8 (s5) and iteration-9 (s6) IMPLEMENT phases had written the
+old `op://Private/DealStream/...` path into the skills *before* that correction,
+believing it was canonical, and the s5/s6 SELF-TEST and VERIFY phases never
+grepped the literal `op://` string against the corrected path.
+
+**Impact:** BLOCKING. Run as written, both skills fail at the credential step;
+the skill's own fail-loud rule (overnight-search/skill.md ~L30) then halts the
+entire pipeline. The skills cannot authenticate to DealStream.
+
+**Recommended resolution (next RESOLVE phase):** In both skill files, replace
+every occurrence of `op://Private/DealStream/username` →
+`op://Personal/dealstream.com/username` and `op://Private/DealStream/password` →
+`op://Personal/dealstream.com/password`; fix the mislabel at
+overnight-search/skill.md ~L23 so the "(per ...)" citation matches what
+`REVAMP_PLAN.md` Step 0 and `config/credentials-setup.md` actually say. Also fix
+the same stale path in `.claude/ralph-loop.local.md` ~L22 (audit NIT #2 — not on
+the execution path, but fix it in the same pass for consistency). `.claude/`
+paths are not directly writable by Edit/Write — author the corrected files
+elsewhere and copy in via the `bash` mount, as iterations 8/9 did. After the
+fix, demoted stages s5 and s6 must be re-SELF-TESTED (the SELF-TEST must now
+include an explicit grep for `op://` confirming the canonical path) and
+re-VERIFIED. No counting blocker — fully fixable inside the loop (it is an
+on-disk text edit, no external dependency).
+
+## F6 — s9_end_to_end — three `[RALPH TEST]` records remain live in the production base (IMPROVE)
+
+**Iteration raised:** 56 (2026-05-21T17:40:12Z) — FINAL AUDIT, audit finding #4.
+**Stage:** `s9_end_to_end` — stays `verified` (the plan's Stage 9 SELF-TEST bar
+is "delete **or clearly mark**"; the records are clearly tagged `[RALPH TEST]`
+in Notes, so Stage 9 literally passes — no demotion). This finding is the
+audit's recommended enhancement, tracked so it is not forgotten.
+
+**Observed:** The three s9 live-test records — cvkfxz `recDUV3S985L7ytXK`,
+maya0n `rec5Pz99DMbpG8KhH`, so8acs `reccLQrb5S84uBsEj` — remain in the live
+Airtable base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS`. They are clearly
+marked with `[RALPH TEST]` in Notes (Stage 9 requirement met), but they will
+surface in the running-queue dashboard (Section B) as if they were real leads.
+
+**Severity:** IMPROVE. **Recommended resolution (next RESOLVE phase):** delete
+the three records via `delete_records_for_table` so no test data — marked or not
+— lingers in the production pipeline view. This is fully resolvable inside the
+loop (Airtable MCP). After deletion, `unresolved_findings` decrements; s9 stays
+`verified`.

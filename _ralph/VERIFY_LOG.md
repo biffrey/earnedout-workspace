@@ -1061,3 +1061,75 @@ items are NITs — #6 the well-justified `launchd`-vs-`/schedule` choice, #7
 only on the REVISE/BLOCKING branch, and only to BLOCKING/IMPROVE severities —
 NITs do not qualify). **All 10 stages (s1–s10) are now `verified`.** Next
 iteration: FINAL AUDIT (Step 1 phase 5).
+
+## Iteration 56 — FINAL AUDIT
+
+Spawned the comprehensive final-audit subagent (Appendix C final-audit variant):
+skeptical fresh context, read `REVAMP_PLAN.md` in full, independently confirmed
+the 10 Implementation Order items and 13 Verification checks against the actual
+files, the live Airtable schema + the 3 s9 records, the dashboard, the launchd
+task, and the `_ralph/` logs. Full auditor output below.
+
+---
+
+# Final Audit — EarnedOut Overnight-Search Revamp
+
+## Implementation Order (10 items)
+
+1. **Repo setup** — SATISFIED. All 10 dirs present/non-empty.
+2. **Playwright MCP** — SATISFIED. `.claude/settings.json` carries the server;
+   browser-driven s9 screenshots exist.
+3. **1Password integration** — PARTIALLY SATISFIED. `config/credentials-setup.md`
+   documents the correct `op://Personal/dealstream.com/...` path, install,
+   fail-loud; `op` 2.33.1 installed; operator evidence file genuine. BUT see
+   Finding 1 — the skills themselves use the wrong path.
+4. **Airtable fields** — SATISFIED. Independently confirmed all 16 fields via
+   `get_table_schema`: correct types; option sets exact (Disposition 6, Link
+   Health 3, Source 2). Financial fields `Revenue/Cash Flow 2024/2025` per F3.
+5. **Rewrite overnight-search skill.md** — DEFECTIVE (Finding 1).
+6. **Create submit-url skill** — DEFECTIVE (Finding 1).
+7. **Update outreach templates** — SATISFIED.
+8. **Daily dashboard template** — SATISFIED.
+9. **Test run** — SATISFIED (with caveat). Live s9 run produced 3 real Airtable
+   records, 7 screenshots, 3 report dirs, dashboard.
+10. **Schedule** — SATISFIED. `launchctl list` shows `ai.earnedout.overnight-search`
+    loaded; plist valid; cadence `Hour=2 Minute=37` confirmed.
+
+## Verification (13 checks)
+
+Checks 1–13 backed by genuine evidence; auditor independently re-read the 3
+Airtable records — Check 6 (genuine `image/png` screenshot attachments), Check 7
+(maya0n price-drop $1.8M→$1.495M), Check 8 (so8acs Source=Manual Submission),
+Check 11 (maya0n Disposition=Revisit for Roll-up), Check 12 (Notes clean) — all
+genuinely PASS. No faked PASS found in TEST_LOG for the 13 checks.
+
+## Findings
+
+1. **[BLOCKING]** Both executable skills retrieve credentials with the wrong,
+   proven-non-resolving 1Password path. `overnight-search/skill.md:26-27` and
+   `submit-url/skill.md:14` use `op://Private/DealStream/...`. The operator
+   evidence (`_ralph/evidence/s3_op_verification_2026-05-21.md`) proves that path
+   FAILS (`"Private" isn't a vault`). Canonical path `op://Personal/dealstream.com/...`
+   is in REVAMP_PLAN.md, credentials-setup.md, run-overnight-search.sh — but NOT
+   the two skills. overnight-search/skill.md:23 mislabels the wrong path
+   "canonical". Run as written, the skill's fail-loud rule halts the pipeline.
+2. **[NIT]** `.claude/ralph-loop.local.md:22` also carries the stale path.
+3. **[NIT]** `_ralph/STATE.md` uncommitted — the loop's own in-progress state.
+4. **[IMPROVE]** The 3 `[RALPH TEST]` records remain live in the production
+   Airtable base. Marked (Stage 9 permits "delete or clearly mark"), but they
+   appear in the dashboard running queue. Recommend deleting.
+
+VERDICT: REVISE
+
+---
+
+**Loop disposition (Step 1 phase 5, REVISE branch):** Wrote **F5** (BLOCKING,
+s5+s6) and **F6** (IMPROVE, s9) to `FINDINGS.md`; `unresolved_findings` 0 → 2.
+Demoted the two stages Finding 1 flags: `s5_overnight_skill` `verified` →
+`self_tested`, `s6_submit_url` `verified` → `self_tested`. `s9_end_to_end` stays
+`verified` (F6 is an enhancement — records ARE clearly marked, satisfying Stage
+9's literal SELF-TEST bar). `final_audit_passed` stays `false`. The BLOCKING
+finding is genuine and is precisely the failure mode this loop exists to catch:
+a pre-correction credential path frozen into the skills before the 2026-05-21
+operator correction, never re-grepped by the s5/s6 SELF-TEST/VERIFY phases. Next
+iteration: RESOLVE F5.
