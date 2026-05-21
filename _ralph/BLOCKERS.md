@@ -114,12 +114,38 @@ SELF-TEST.
 
 _B1 is RESOLVED (2026-05-21 operator manual review)._
 
-### B2 — s9_end_to_end — live end-to-end pipeline run cannot execute in the sandbox — ⛔ OPEN
+### B2 — s9_end_to_end — live end-to-end pipeline run cannot execute in the sandbox — ✅ RESOLVED
 
 **Raised:** iteration 43 (2026-05-21T15:08:15Z)
 **Stage blocked:** `s9_end_to_end` (status set `not_started` → `blocked` —
 IMPLEMENT could not be performed)
-**`open_blockers`:** incremented 0 → 1.
+**`open_blockers`:** incremented 0 → 1; decremented 1 → 0 on resolution below.
+
+> ## ✅ RESOLVED — 2026-05-21, iteration 48 (CLI run via `run-ralph-cli.sh`)
+>
+> B2's precondition (a) — "the loop's execution environment can run `op`
+> (installed + signed in) AND reach DealStream so the pipeline genuinely runs"
+> — is now **fully met**. The loop is no longer executing in the ephemeral
+> Linux sandbox; the operator launched it via `run-ralph-cli.sh` (Claude Code
+> CLI) directly on Biffrey's macOS machine. Iteration 48 blocker re-check
+> observed, all genuinely run this iteration:
+>
+> - `which op` → `/opt/homebrew/bin/op`; `op --version` → `2.33.1`. **Installed.**
+> - `op account list` → `my.1password.com / bb@braxton.ai`. **Account configured.**
+> - `op read "op://Personal/dealstream.com/username"` → success, length 24.
+>   `op read "op://Personal/dealstream.com/password"` → success, length 15.
+>   `op whoami` → signed in (`bb@braxton.ai`). **`op` works; creds retrievable.**
+>   (Secrets not logged — only "retrieved, length > 0" per the s3 SELF-TEST rule.)
+> - Playwright MCP navigation to `https://www.dealstream.com` → page loaded,
+>   title "DealStream - The #1 Deal Sourcing Platform", 0 console errors.
+>   **DealStream is reachable via a real browser.** (A bare `curl` returns 403 —
+>   anti-bot on header-less requests — but Playwright, which is what the
+>   pipeline uses, loads it fine. Airtable API reachable: `302`.)
+>
+> Both halves of precondition (a) hold. **`open_blockers` 1 → 0;
+> `s9_end_to_end` reset `blocked` → `not_started`.** The same iteration's
+> IMPLEMENT phase runs the s9 pipeline. The original blocker analysis is
+> retained below as historical record.
 
 **What is blocked:** Stage 9's IMPLEMENT bar (Appendix A Stage 9) is *actually
 running the pipeline end-to-end against live systems* — execute the
@@ -200,8 +226,9 @@ This is unlikely to be feasible for an ephemeral sandbox; Option b is expected.
 RESOLVED, decrements `open_blockers` 1 → 0, and resets `s9_end_to_end` to
 `not_started` for retry.
 
-_B2 is OPEN. `open_blockers: 1`. COMPLETE is gated until B2 resolves or the
-60-iteration cap is reached._
+_B2 is RESOLVED (2026-05-21, iteration 48 — CLI run on Biffrey's Mac: `op`
+signed in, `op read` returns DealStream creds, DealStream reachable via
+Playwright). `open_blockers: 0`._
 
 ## Advisory notes (non-counting — do NOT add to `open_blockers`)
 

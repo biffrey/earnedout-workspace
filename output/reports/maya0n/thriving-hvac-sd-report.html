@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thriving HVAC Business (Southwestern South Dakota) — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Thriving HVAC Business (Southwestern South Dakota) — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream published listing (ID maya0n), broker-represented
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict fail">Buy Box: FAIL</span>
+      <div class="score-badge">
+        <div class="num">35</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>&ge; 10 full-time employees</td><td><span class="chip warn">N/A</span></td><td>Headcount not disclosed in the listing — needs broker follow-up. Cannot confirm a pass; not guessed.</td></tr>
+          <tr><td>2</td><td>EBITDA &ge; $1M / year</td><td><span class="chip fail">FAIL</span></td><td>Listing discloses Cash Flow / SDE of <strong>$41,515</strong> — roughly 4% of the $1M floor. SDE used as a proxy; no separate EBITDA disclosed.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>Founded 1984 — 42 years in business (DealStream listing maya0n).</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">N/A</span></td><td>Only a single year of revenue ($1,036,842) and SDE ($41,515) disclosed. No multi-year trend — needs broker follow-up.</td></tr>
+          <tr><td>5</td><td>Asking price &le; 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>$1,495,000 &divide; $41,515 SDE &asymp; <strong>36.0x</strong> SDE — roughly 9x the 4.0x ceiling.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip fail">FAIL</span></td><td>At $41,515 SDE, debt service on any meaningful acquisition loan is not coverable. Proforma DSCR well below 1.0. Informational only.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;"><strong>Overall Buy Box: <span class="chip fail">FAIL</span></strong> &nbsp; Only 1 of 6 hard checks passes (years in business). The deal-killer is economics: SDE of $41,515 is ~4% of the $1M EBITDA floor, and the $1,495,000 ask implies ~36x SDE versus the 4.0x ceiling. Two further checks (employees, 3-yr growth) are unverifiable from the listing and would need broker follow-up, but neither could rescue the deal given the SDE and valuation failures.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>"Thriving HVAC Business (Southwestern South Dakota)" — legal name not disclosed</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream published listing (ID maya0n), broker-represented; captured 2026-05-21</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>1984 (42 years)</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>9</td><td>Business address</td><td>Southwestern South Dakota, USA — exact address not disclosed</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$1,036,842 (listing "Sales"; year basis not specified — treated as most-recent reported year)</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>$41,515 (listing "Cash Flow" / SDE; year basis not specified)</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>$1,495,000</td><td>DealStream listing maya0n</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>Not computable — only one year of revenue disclosed</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>4.0% (SDE proxy: $41,515 &divide; $1,036,842)</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td><em style="color:var(--muted);">Not disclosed — needs broker follow-up</em></td><td>—</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td><em style="color:var(--muted);">Not provided — no data room; request from broker</em></td><td>—</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>35 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px; color:var(--muted); font-size:13px;">No values in this scorecard are estimated. Every undisclosed field is left blank / "needs broker follow-up" per the no-fabrication rule. There are therefore no <span class="est">(est.)</span> entries in the Appendix.</p>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>HVAC is one of the four allowed Home Services subsets (garage door, locksmith, HVAC, plumbing). Clear target-industry match.</td></tr>
+          <tr><td>EBITDA tier</td><td>0</td><td>15</td><td>SDE $41,515 &le; $1M &rarr; 0 pts. (SDE used as the EBITDA proxy; no separate EBITDA disclosed.)</td></tr>
+          <tr><td>Years in business &ge;10</td><td>10</td><td>10</td><td>Founded 1984 — 42 years, comfortably &ge;10.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>0</td><td>10</td><td>Insufficient data — only one year of revenue/SDE disclosed; growth trend cannot be evaluated. Not awarded.</td></tr>
+          <tr><td>Recurring revenue</td><td>0</td><td>10</td><td>Insufficient data — revenue mix (service contracts vs. one-time install/repair) not disclosed. Not awarded.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Insufficient data — concentration not disclosed. Not awarded.</td></tr>
+          <tr><td>Employees &ge;10</td><td>0</td><td>10</td><td>Insufficient data — headcount not disclosed. Not awarded.</td></tr>
+          <tr><td>Valuation multiple</td><td>0</td><td>15</td><td>$1,495,000 &divide; $41,515 SDE &asymp; 36.0x &rarr; far above the 5.5x cap &rarr; 0 pts.</td></tr>
+          <tr><td>Low owner dependence</td><td>0</td><td>5</td><td>Insufficient data — no GM/second-in-command disclosed; thin SDE suggests an owner-operator model. Not awarded.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>0</td><td>10</td><td>N/A — standalone target. HVAC is not an Applied Development or Fambro Waste add-on category.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>35</strong></td><td><strong>100</strong></td><td></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;">35 / 100 falls in the "&lt; 50 — Pass" band. The 35 points come almost entirely from two structural facts (target industry, long tenure) that do not offset the broken economics. Even if every undisclosed field resolved favorably, the maximum reachable score would be ~65 — still short of the 70 "pursue with conditions" threshold — and the EBITDA tier (0) and valuation multiple (0) would remain zero regardless. The valuation and SDE failures are not negotiable into Buy Box range.</p>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> A 42-year-old (founded 1984) heating, ventilation, cooling, and mechanical contracting business in southwestern South Dakota, offered for sale on DealStream through an undisclosed broker.</li>
+        <li><strong>Financial highlights:</strong> Sales of $1,036,842 and Cash Flow / SDE of $41,515 — a 4.0% SDE margin. Asking price $1,495,000 implies roughly 36x SDE. Only a single year of figures was disclosed; no multi-year trend.</li>
+        <li><strong>Buy Box summary:</strong> <span class="chip fail">FAIL</span> — 1 of 6 hard checks passes (years in business). EBITDA/SDE is ~4% of the $1M floor and the implied multiple is ~9x the 4.0x ceiling.</li>
+        <li><strong>Why not pursue:</strong> SDE of $41,515 is an order of magnitude below EarnedOut's minimum cash-flow profile — effectively an owner's-wage business, not a cash-flowing platform. The $1,495,000 ask is wildly disconnected from earnings (~36x SDE), likely priced on undisclosed real estate/equipment. The disclosed economics cannot service acquisition debt; an LBO or SBA structure is not viable.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>Background and history:</strong> Founded in 1984 and operating for 42 years as an HVAC / mechanical contractor in southwestern South Dakota. The DealStream headline describes it as "thriving," but the disclosed financials (4.0% SDE margin on roughly $1.0M of sales) do not corroborate that characterization. Four decades of operating history — through multiple recessions and construction-cycle volatility — is a genuine asset, but tenure alone does not make the deal financeable.</p>
+      <p><strong>Ownership structure:</strong> Not disclosed. Legal entity type (sole proprietorship, LLC, S-corp) and current owner(s) are unknown — needs broker follow-up. A South Dakota Secretary of State business-entity search would be the authoritative source for entity type, formation date, officers, and registered agent.</p>
+      <p><strong>Key milestones:</strong> 1984 — business founded. 2026 — listed for sale on DealStream (ID maya0n) at $1,495,000 through an undisclosed broker.</p>
+      <p><strong>Organizational structure and leadership:</strong> Not disclosed. No general manager, operations lead, or org chart is described. The very thin SDE is consistent with an owner-operator model in which the principal is also the primary technician and/or estimator — a structure that conflicts directly with EarnedOut's "must not require daily owner involvement" criterion. Needs broker follow-up.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <p>No principals, owners, or key employees are named in the DealStream listing. The business is broker-represented and the broker is not named either.</p>
+      <h3>Owner — name not disclosed</h3>
+      <p><strong>Role:</strong> Unknown. Given a 4.0% SDE margin on ~$1.0M sales, the owner is most plausibly an owner-operator carrying technician, estimating, and/or administrative duties personally — but this is unconfirmed. <strong>Background, education, notable activities:</strong> Not disclosed. <strong>Contact:</strong> Email/phone/LinkedIn not disclosed — route through the DealStream listing / broker. Office: southwestern South Dakota (exact address not disclosed).</p>
+      <p>Recommended next step if the deal were pursued: a South Dakota Secretary of State entity search and a South Dakota contractor / mechanical-license lookup to identify the principal and confirm licensing — neither is needed given the FAIL verdict.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Detailed descriptions:</strong> The listing identifies the business as HVAC / heating, ventilating, cooling, and mechanical contracting. The specific service mix — residential vs. commercial, new-construction installation vs. service/repair vs. preventive-maintenance contracts — is not disclosed and needs broker follow-up. Service-line mix is the single most important undisclosed operational fact, because it drives revenue recurrence and margin durability.</p>
+      <p><strong>Pricing model:</strong> Not disclosed. HVAC contractors typically combine time-and-materials service calls, fixed-fee equipment installations, and (where present) recurring maintenance-agreement revenue. Which dominates here is unknown.</p>
+      <p><strong>Competitive differentiators:</strong> A 42-year operating history implies an established local reputation and likely a repeat-customer base in a rural southwestern South Dakota market — a plausible but unquantified moat. No certifications, proprietary processes, fleet details, or exclusive supplier/dealer relationships are disclosed.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> HVAC / mechanical contracting is a large, fragmented, and generally stable home-services category with steady replacement-and-repair demand and a long-running consolidation/roll-up trend. Demand has a non-discretionary floor, but new-construction-weighted contractors are exposed to construction-cycle and interest-rate swings. Rural southwestern South Dakota is a thin, low-density market — a smaller addressable base and a shallower hiring pool for skilled technicians than a metro market.</p>
+      <p><strong>Growth drivers and barriers:</strong> Drivers — aging installed equipment base, electrification/heat-pump retrofits, and the durability of service revenue. Barriers — skilled-technician scarcity (acute in rural areas), small population base capping organic growth, and weather-driven seasonality.</p>
+      <p><strong>Competitive landscape:</strong> No company-specific competitor data was gathered (DealStream listing is access-gated; verdict is already a clear FAIL). Generally, small HVAC contractors at this revenue scale transact at low-single-digit-to-mid multiples of SDE/EBITDA — broadly a ~2x–4x SDE range for healthy owner-operator shops, with asset-heavy businesses sometimes priced higher when real estate and equipment are included. Against any of those benchmarks, a ~36x-SDE ask is a severe outlier and signals the price is being justified by something other than earnings.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Customer segments:</strong> Not disclosed. Likely a mix of residential and commercial accounts across a rural southwestern South Dakota service area, but the split is unknown — needs broker follow-up.</p>
+      <p><strong>Retention rates:</strong> Not disclosed.</p>
+      <p><strong>Recurring vs one-time revenue breakdown:</strong> Not disclosed. The presence and size of a maintenance-agreement book is the key unknown; with none disclosed, no recurring-revenue credit was awarded.</p>
+      <p><strong>Top customer concentration:</strong> Not disclosed — needs broker follow-up. Concentration could not be evaluated and scored 0 ("insufficient data").</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA (SDE proxy)</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2023</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2025 (most recent reported)</td><td>$1,036,842</td><td>$41,515</td><td>4.0%</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M) — only one year disclosed</text>
+          </g>
+          <g fill="#2a3342">
+            <rect x="60"  y="60" width="60" height="100" rx="3" />
+            <rect x="160" y="60" width="60" height="100" rx="3" />
+            <rect x="260" y="60" width="60" height="100" rx="3" />
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="360" y="60" width="60" height="100" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab" text-anchor="middle">
+            <text x="90"  y="115">n/d</text>
+            <text x="190" y="115">n/d</text>
+            <text x="290" y="115">n/d</text>
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="390" y="115">$1.04M</text>
+            <text x="60"  y="175" text-anchor="start">2022</text>
+            <text x="190" y="175">2023</text>
+            <text x="290" y="175">2024</text>
+            <text x="390" y="175">2025</text>
+          </g>
+        </svg>
+      </div>
+      <p>No trajectory can be drawn — DealStream disclosed only a single year of revenue and cash flow. Three-plus years of revenue and profit history must be requested from the broker before any trend, growth rate, or quality-of-earnings view is possible. The dominant financial fact is the <strong>4.0% SDE margin</strong>: healthy small HVAC contractors typically run SDE margins well into double digits (often ~12%–20%+). A 4.0% margin on ~$1.0M of sales — about $41.5K of total seller's discretionary earnings — indicates the business barely generates a single owner's wage after expenses. This is the core reason the deal fails: there is no acquirer cash flow to buy.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>36.0x SDE</strong> ($1,495,000 &divide; $41,515). Comparable small HVAC contractors generally transact at ~2x–4x SDE/EBITDA (asset-inclusive deals sometimes higher) — the ask is roughly 9–18x the normal range. On EarnedOut's rubric, fair entry is &le;4.0x EBITDA (negotiable to 5.5x): at $41,515 SDE that is a $166K–$228K earnings-based value — a ~$1.27M+ gap to the ask. The only way to rationalize $1,495,000 is if the price is substantially backed by undisclosed real estate and FF&amp;E; even then, EarnedOut buys cash flow, not asset value, so the deal would still fail the screen.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>42-year operating history (founded 1984) — established local presence.</li>
+          <li>HVAC sits in a target Home Services subset with non-discretionary demand.</li>
+          <li>Long tenure implies a repeat-customer base and brand recognition.</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>SDE of only $41,515 — a 4.0% margin; effectively an owner's-wage business.</li>
+          <li>Asking price ~36x SDE — roughly 9x EarnedOut's 4.0x ceiling.</li>
+          <li>Headcount, growth history, recurring-revenue mix, and concentration all undisclosed.</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>If the thin margin reflects fixable issues (under-pricing, owner add-backs, weak cost control), there could be turnaround upside.</li>
+          <li>Maintenance-agreement programs could be built/expanded to add recurring revenue — if not already present.</li>
+          <li>Asset value (real estate, fleet) may underpin downside — but only relevant to an asset buyer, not EarnedOut.</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Turnaround / distressed-adjacent profile — explicitly on EarnedOut's "avoid" list.</li>
+          <li>Skilled-technician scarcity in a rural market constrains scaling.</li>
+          <li>Single-year disclosure may be concealing a declining or volatile earnings trend.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> HVAC demand has a non-discretionary floor, but new-construction-weighted work is cyclical and interest-rate sensitive; rural southwestern South Dakota has a thin labor pool for skilled technicians.</li>
+        <li><strong>Financial:</strong> The decisive risk. A 4.0% SDE margin leaves no buffer — small cost or revenue swings push the business to breakeven or loss. The single-year disclosure prevents any quality-of-earnings or trend assessment. With $41,515 of SDE, there is no capacity to service acquisition debt (DSCR well below 1.0).</li>
+        <li><strong>Operational:</strong> Likely heavy owner dependence (the thin SDE is consistent with an owner-operator doing billable work). No GM or succession bench disclosed. Loss of the owner-technician at close could be existential.</li>
+        <li><strong>Regulatory / legal:</strong> South Dakota mechanical/contractor licensing and standard OSHA, refrigerant-handling (EPA Section 608), and vehicle/DOT obligations apply. None verified — moot given the verdict.</li>
+        <li><strong>Deal conditions:</strong> This deal is not curable into Buy Box range by negotiation. To even reconsider it, EarnedOut would need (1) 3+ years of tax returns/P&amp;Ls showing materially higher normalized EBITDA after add-backs than $41,515; (2) a price renegotiation from ~36x to &le;4x EBITDA — a &gt;85% reduction off earnings, only conceivable if value is almost entirely real estate/equipment; and (3) confirmation of &ge;10 FTE and a non-owner-dependent structure. The combination is implausible; recommend pass.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion potential:</strong> Limited. A rural southwestern South Dakota market caps organic growth, and the thin labor pool constrains adding crews.</p>
+      <p><strong>Operational upside:</strong> In principle, a 4.0% SDE margin offers turnaround headroom — repricing service work, tightening job costing, and adding maintenance agreements could lift margins toward industry norms. But realizing that upside is a turnaround project, and turnarounds are explicitly outside EarnedOut's mandate.</p>
+      <p><strong>Strategic opportunities:</strong> HVAC is not an add-on category for either EarnedOut platform (Applied Development — interpretation/CART; Fambro Waste — commercial/construction waste), so there is no roll-up synergy. As a standalone, the economics do not clear the bar.</p>
+      <p><strong>100-day plan sketch:</strong> Not applicable — recommended verdict is <strong>pass</strong>. No outreach. If the broker proactively provides 3+ years of financials showing a dramatically different (much higher) normalized EBITDA, the listing could be re-screened from scratch; absent that, archive the lead.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/hvac/maya0n">https://dealstream.com/d/biz-sale/hvac/maya0n</a> — DealStream listing ID maya0n; primary source for all disclosed figures (business description, location, asking price $1,495,000, Cash Flow/SDE $41,515, Sales $1,036,842, founded 1984, broker-represented). The page is access-gated; a direct WebFetch returned HTTP 403. Figures used here are from the listing data captured by the user on 2026-05-21 and the captured screenshot.</li>
+        <li><code>output/screenshots/maya0n.png</code> — screenshot of the DealStream listing captured 2026-05-21; visually corroborates the headline business name, location, asking price, and the Finances (USD) block (Asking Price, Cash Flow, Sales).</li>
+      </ul>
+      <p>No other URLs were fetched. WebFetch against the DealStream listing and a BizBuySell HVAC-valuation reference both returned HTTP 403; given the unambiguous FAIL on disclosed economics, no further web research was warranted.</p>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>No scorecard fields were estimated; there are no <span class="est">(est.)</span> values. Undisclosed fields are left blank per the no-fabrication rule.</li>
+        <li>Interpretive assumption (not a scorecard value): "Cash Flow" on the DealStream listing is treated as Seller's Discretionary Earnings (SDE), the standard meaning of that field on business-listing marketplaces. SDE is used as the EBITDA proxy for the Buy Box and rubric, with the SDE-vs-EBITDA distinction noted. No separate EBITDA figure was disclosed.</li>
+        <li>Interpretive assumption (not a scorecard value): the single disclosed Sales figure ($1,036,842) and Cash Flow figure ($41,515) are treated as the most-recent reported year and entered in the 2025 rows; the listing does not state the fiscal year.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p>None — no fields were estimated.</p>
+      <p>Supporting (non-estimated) computed figures:</p>
+      <ul>
+        <li>EBITDA/SDE margin = $41,515 &divide; $1,036,842 = 0.0400 = <strong>4.0%</strong>.</li>
+        <li>Implied valuation multiple = $1,495,000 &divide; $41,515 = <strong>36.01x SDE</strong>.</li>
+        <li>Earnings-based fair value at the 4.0x ceiling = $41,515 &times; 4.0 = <strong>$166,060</strong>; at the 5.5x negotiation cap = $41,515 &times; 5.5 = <strong>$228,333</strong>.</li>
+      </ul>
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li><code>output/screenshots/maya0n.png</code> — DealStream listing screenshot, captured 2026-05-21. Corroborated business name, South Dakota location, $1,495,000 asking price, and the Finances block (Cash Flow $41,515, Sales $1,036,842). Image legible at headline level; fine print not fully resolvable.</li>
+        <li>No CIM, P&amp;L, tax returns, or data-room documents were provided. None exist for this lead at this stage.</li>
+      </ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>Request 3+ years of tax returns and P&amp;Ls — is the listed $41,515 a one-off low year, and what does normalized EBITDA look like after add-backs?</li>
+        <li>What does the $1,495,000 asking price actually value? Confirm whether owned real estate and/or FF&amp;E are included, and obtain assessor-backed values.</li>
+        <li>How many full-time employees, part-time employees, and 1099 contractors are there?</li>
+        <li>What is the revenue mix — new-construction installation vs. service/repair vs. recurring maintenance agreements? How large is the maintenance-agreement book, if any?</li>
+        <li>Is there a general manager or operations lead, or is the owner the primary operator/technician?</li>
+        <li>What is customer concentration (largest customer % and top-5 %)?</li>
+        <li>What is the reason for sale (retirement vs. distress)?</li>
+        <li>Confirm the legal entity, ownership, and South Dakota contractor/mechanical license status (SD Secretary of State; SD licensing authority).</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources.</footer>
+</div>
+</body>
+</html>

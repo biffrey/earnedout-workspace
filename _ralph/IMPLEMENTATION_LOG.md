@@ -648,3 +648,71 @@ honest BLOCKED, not a faked PASS and not a fabricated run.
 on the Mac, execute the 13 Verification checks, and commit the evidence to
 `_ralph/evidence/s9_e2e_verification_<date>.md`. A future iteration then retries
 s9. Until then the loop idles each run until B2 clears or the 60-cap is reached.
+
+---
+
+## Iteration 48 (2026-05-21T16:41:28Z) — IMPLEMENT s9_end_to_end (live pipeline run)
+
+**Phase:** Blocker re-check → resolved B2 → IMPLEMENT s9.
+
+**B2 resolved (Step 1 blocker re-check).** The loop is now running via
+`run-ralph-cli.sh` (Claude Code CLI) on Biffrey's macOS machine, NOT the
+ephemeral Linux sandbox. Blocker re-check observed, all genuinely run:
+`which op` → `/opt/homebrew/bin/op`, `op --version` → 2.33.1; `op read
+"op://Personal/dealstream.com/username"` and `.../password` → success
+(lengths 24 / 15; secrets not logged); `op whoami` → signed in (bb@braxton.ai);
+Playwright MCP navigation to dealstream.com → page loaded. Both halves of B2
+precondition (a) met → `open_blockers` 1→0, `s9_end_to_end` blocked→not_started,
+B2 marked RESOLVED in BLOCKERS.md. (Note: `op` needs a desktop-approval window;
+calls with a <20s timeout failed "authorization timeout", a 45-60s window
+succeeded. Recorded as an operating note, not a blocker — retrieval works.)
+
+**s9 IMPLEMENT — live pipeline run executed (deliberately small scope: 1
+industry = HVAC / Home Services, DealStream only, limited pagination):**
+
+1. **Auth.** `op read` retrieved DealStream creds; Playwright filled the
+   `/login` form and logged in → redirected to `/member`, "Welcome back,
+   Biffrey Braxton" + Log Out link confirmed. Screenshot:
+   `output/screenshots/s9_dealstream_login_2026-05-21.png`.
+2. **Search + pagination.** `dealstream.com/businesses-for-sale?q=HVAC` →
+   "Showing 1-25 of 243"; `&page=2` → "Showing 26-50 of 243". Listing URL
+   pattern `/d/biz-sale/hvac/{id}` confirmed. Screenshot:
+   `s9_dealstream_search_hvac_2026-05-21.png`.
+3. **URL validation + screenshots.** 3 live listings validated and full-page
+   screenshots captured: `cvkfxz.png`, `maya0n.png`, `so8acs.png`. 1 dead URL
+   (`/d/biz-sale/hvac/zzzz99`) → "DealStream - Page Not Found", correctly
+   flagged; screenshot `s9_dead_url_check_2026-05-21.png`.
+4. **Data extraction.** Structured data saved to
+   `output/reports/{id}/listing-data.json` for cvkfxz, maya0n, so8acs.
+5. **Prospect evaluation.** prospect-evaluation skill run (3 subagents) →
+   `.md` + `.html` reports in `output/reports/{id}/`:
+   cvkfxz 50/100 (Buy Box FAIL 2/6), maya0n 35/100 (FAIL 1/6),
+   so8acs 20/100 (FAIL — non-US).
+6. **Airtable records created** (all Notes-tagged `[RALPH TEST]`):
+   - cvkfxz → `recDUV3S985L7ytXK` — Source "Overnight Search", Disposition
+     Active, all 16 new fields populated.
+   - maya0n → `rec5Pz99DMbpG8KhH` — Source "Overnight Search". Created at
+     Asking Price $1,800,000 then PRICE-DROP re-run: live price $1,495,000 <
+     stored → Previous Asking Price $1,800,000 saved, Asking Price → $1,495,000,
+     Date Updated set, score re-evaluated, Notes "PRICE DROP" line appended.
+     Disposition set to "Revisit for Roll-up" (test classification).
+   - so8acs → `reccLQrb5S84uBsEj` — Source "Manual Submission" (submit-url
+     pipeline), Disposition Passed (non-US reject).
+7. **Outreach** drafted to `search_reports/outreach_drafts_2026-05-21.md` and
+   the cvkfxz Notes field (default template, A/B subject variant). maya0n
+   outreach deferred (Revisit for Roll-up); so8acs none (Passed). Never sent.
+8. **Dashboard** `output/dashboards/dashboard_2026-05-21.html` rendered from
+   `templates/daily-dashboard.html` via Jinja2 — Sections A (3 new finds, incl.
+   price-drop badge), B (18 live Active records from Airtable), C (3 Revisit),
+   D (run summary). Rendered in-browser, no dashboard console errors (only a
+   favicon 404 from the local http.server). Screenshot `s9_dashboard_2026-05-21.png`.
+9. **Run log** `search_reports/run_log_2026-05-21.md` written.
+
+**Known limitation (for the s9 SELF-TEST to weigh):** the `Listing Screenshot`
+multipleAttachments field was NOT populated — Airtable attachments require a
+hosted URL and the screenshots are local files. They exist under
+`output/screenshots/` and are referenced by path in each record's Notes.
+
+**Result:** s9 pipeline genuinely ran end-to-end against live systems.
+`s9_end_to_end` → `implemented`. Next phase: SELF-TEST (walk the plan's 13
+Verification checks PASS/FAIL against this evidence).
