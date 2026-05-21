@@ -309,3 +309,90 @@ that is the honest state and is correct per the anti-deception rules. The loop
 can still make progress: iterations 15+ will SELF-TEST the other `implemented`
 stages (s4–s8), which do not depend on `op`.
 
+## Iteration 15 — s4_airtable self-test
+
+**Phase:** SELF-TEST. **Stage:** `s4_airtable` (Appendix A Stage 4).
+**Run at:** 2026-05-21T02:24:38Z. **Executed via:** the Airtable MCP against the
+live base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS` ("Master Deal
+Pipeline"). Blocker re-check at the start of this iteration: B1 (`op` CLI) still
+open — `op --version` → `op: command not found` (exit 127) in the iteration-15
+sandbox, precondition not cleared.
+
+Stage 4 has two SELF-TEST checks. Both were executed against the live Airtable
+schema and observed. Result: **all checks PASS → `s4_airtable` → `self_tested`.**
+No findings raised. No fields were created or modified — SELF-TEST is read-only;
+this iteration only *re-listed* the schema.
+
+### Check 1 — All 16 plan Step-1 fields exist with correct types; single-select option sets match exactly — PASS
+
+`list_tables_for_base("appOsvuyy5eK43QTx")` returned the full schema of table
+`tblSmNrHROMLm7vOS` (**87 fields total**). `get_table_schema` was then called for
+the 16 plan fields to read their `type` and (for single-selects) their
+`config.choices`. All 16 plan Step-1 fields are present with the correct type
+(plan field label → live field name → field ID → live type → plan type):
+
+```
+Listing ID            → "Listing ID"           fld81k0uFwqkHaEEI  singleLineText      = Single line text  OK
+Direct Listing URL    → "Direct Listing URL"   fldMCmSVQjYv3odok  url                 = URL               OK
+Listing Screenshot    → "Listing Screenshot"   fldrPuxZHGsYZuxTO  multipleAttachments = Attachment        OK
+Date Added            → "Date Added"           fldoZVwrhWaGGMlFR  date (ISO YYYY-MM-DD)= Date              OK
+Date Updated          → "Date Updated"         fld3TRpVYopXL7LLm  date (ISO YYYY-MM-DD)= Date              OK
+Previous Asking Price → "Previous Asking Price"fldySRjfm1P8Nodes  currency ($, prec 0)= Currency          OK
+Link Health Status    → "Link Health Status"   fldlsuLeSFhFKQuFc  singleSelect        = Single select     OK
+Link Last Checked     → "Link Last Checked"    fldMXwyQbEWPXbqE2  date (ISO YYYY-MM-DD)= Date              OK
+Disposition           → "Disposition"          fldw0xk1YBkmP7sBD  singleSelect        = Single select     OK
+Lead Score            → "Lead Score"           fld2ipICYNLjaDm39  number (prec 0)     = Number (0-100)    OK
+Prospect Eval Report  → "Prospect Eval Report" fld9InVXs4RqgtNDo  url                 = URL               OK
+2025 Revenue          → "Revenue 2025"         fld8Pmhi9M7m5qaUf  currency ($, prec 0)= Currency          OK
+2025 Cash Flow        → "Cash Flow 2025"       flde6Fr88nm4BAoE1  currency ($, prec 0)= Currency          OK
+2024 Revenue          → "Revenue 2024"         fldfUOMF98BAk8Qeo  currency ($, prec 0)= Currency          OK
+2024 Cash Flow        → "Cash Flow 2024"       fldwX2NkTE2E66pln  currency ($, prec 0)= Currency          OK
+Source                → "Source"               fldiGyXTk6Ybb6J1L  singleSelect        = Single select     OK
+```
+
+All 16 field IDs match the field-ID map recorded in `REVAMP_PLAN.md` Step 1's
+"Live field-name reconciliation" annotation (finding F3 resolution). Honoring F3:
+the four financial fields are canonically named `Revenue 2024` / `Revenue 2025` /
+`Cash Flow 2024` / `Cash Flow 2025` (live convention, matching the base's
+pre-existing `Revenue/Cash Flow 2022` & `2023` fields) — **not** the plan table's
+"YYYY Revenue" word-order. The plan's annotation already records these live names
+as canonical, so this is the expected, resolved state, not a discrepancy.
+
+Single-select option sets (read from `get_table_schema` → `config.choices`):
+
+```
+Disposition  (fldw0xk1YBkmP7sBD): Active, Contacted, Maybe Later,
+                                  Revisit for Roll-up, Passed, Dead Link   6/6 exact  OK
+Link Health Status (fldlsuLeSFhFKQuFc): Live, Dead, Redirect               3/3 exact  OK
+Source       (fldiGyXTk6Ybb6J1L): Overnight Search, Manual Submission      2/2 exact  OK
+```
+
+All three option sets match Appendix A Stage 4 / plan Step 1 + Step 8 **exactly**
+— same option names, same count, no extras, no omissions. **PASS.**
+
+### Check 2 — All existing fields retained — PASS
+
+The `list_tables_for_base` schema confirms every pre-existing field mapping named
+in plan Step 1 ("Existing fields retained") and Appendix A Stage 4 is still
+present: Business Name (`fldquYtYnHJ1YzUR7`, primary field), Industry Match
+(`fldyJH0ZsOJD29wEg`), Business Address (`fldkVBunWYKdXkgpB`), Website
+(`fldTRaz0PzBYS9ICl`), **Links (`fldwo7ui7aIGoMxAG`, multilineText)**, Lead Source
+(`fldI1h3qmNI6vc5rr`), Broker Name (`fldXdZC8Tbrbk8ysk`), Asking Price
+(`fldhqAXiAWh2ktXln`), EBITDA (`fldFK17soNXcUsxbg`), EBITDA Margin
+(`fldufGAWn6iv9axWa`), Years in Business (`fldhdqJ0Ow0Z608Pl`), Qty FT Employees
+(`fldgvFTCdDauWZDr3`), NAICS Code (`fldNoi4yt9l4oHwcu`), Status
+(`fldB0LCiJMUuKVd6y`), Track (`fldAZYJlGy2R95TSn`), Tier (`fldCGASC27dR0fJz8`),
+Notes (`fldbEqYoyoPNthNoV`). The base's pre-existing financial set (`Revenue 2022`
+`fldKEgHGYPyE5bLGt`, `Cash Flow 2022` `fldQ8gw6xRXGB9AD9`, `Revenue 2023`
+`fldwmM2jq4LKliud8`, `Cash Flow 2023` `fldeQR4uLjTtOeqk7`) is also intact.
+
+Naming-variance note (not a failure): plan Step 1 lists "Priority Geography"; the
+live field is "Priority Geography?" (`fld1x82ld7D0UYjHw`, checkbox) — a trailing
+"?" variance on a pre-existing field. The field exists and is retained; Appendix A
+Stage 4's existing-fields check requires *presence*, which holds. s4's IMPLEMENT
+scope is the 16 new fields, none of which is affected.
+
+**PASS.** No fields created or modified — the table already carried all 16 new
+fields (recorded in iteration 6 IMPLEMENT); SELF-TEST only re-listed and
+confirmed. Total live field count: 87.
+

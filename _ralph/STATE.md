@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 14
+iteration: 15
 max_iterations: 40
-last_iteration_at: 2026-05-21T02:15:09Z
+last_iteration_at: 2026-05-21T02:24:38Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -11,7 +11,7 @@ stages:
   s1_repo:            { status: self_tested }
   s2_playwright:      { status: self_tested }
   s3_onepassword:     { status: blocked }
-  s4_airtable:        { status: implemented }
+  s4_airtable:        { status: self_tested }
   s5_overnight_skill: { status: implemented }
   s6_submit_url:      { status: implemented }
   s7_outreach:        { status: implemented }
@@ -264,6 +264,33 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   honest BLOCKED, not a faked PASS. Evidence in `TEST_LOG.md` under
   `## Iteration 14 — s3_onepassword self-test`.
 
+- Iteration 15 (2026-05-21T02:24:38Z): SELF-TEST phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127) in the iteration-15 sandbox; precondition (an installed,
+  signed-in `op` reachable by the SELF-TEST) did not clear, so B1 stays open and
+  `open_blockers` stays 1. `unresolved_findings == 0` so Step 1 fell through
+  RESOLVE; the IMPLEMENT scan found no actionable `not_started` stage (s9 needs
+  s1–s8 `verified`, s10 needs s9 `verified`) so it fell through to SELF-TEST; the
+  s1→s10 scan skipped `s1_repo`/`s2_playwright` (`self_tested`) and
+  `s3_onepassword` (`blocked`, not `implemented`) and landed on the first
+  `implemented` stage, `s4_airtable`. Ran SELF-TEST on `s4_airtable` (Appendix A
+  Stage 4), both checks executed against the live Airtable schema via the
+  Airtable MCP: (1) **PASS** — `list_tables_for_base` (87 fields total) +
+  `get_table_schema` confirm all 16 plan Step-1 fields exist with correct types
+  and matching field IDs (per the F3 field-ID map in `REVAMP_PLAN.md` Step 1);
+  all three single-select option sets match exactly — Disposition {Active,
+  Contacted, Maybe Later, Revisit for Roll-up, Passed, Dead Link} 6/6, Link
+  Health Status {Live, Dead, Redirect} 3/3, Source {Overnight Search, Manual
+  Submission} 2/2. Finding F3 honored: financial fields are canonically
+  `Revenue/Cash Flow 2024/2025` (live names). (2) **PASS** — all pre-existing
+  fields retained (Business Name, Industry Match, Business Address, Website,
+  Links `fldwo7ui7aIGoMxAG`, Lead Source, Broker Name, Asking Price, EBITDA,
+  EBITDA Margin, Years in Business, Qty FT Employees, NAICS Code, Status, Track,
+  Tier, Notes, plus Revenue/Cash Flow 2022–2023). No fields created or modified
+  (SELF-TEST is read-only). **Both checks PASS → no findings raised →
+  `s4_airtable` → `self_tested`.** Evidence in `TEST_LOG.md` under
+  `## Iteration 15 — s4_airtable self-test`.
+
 ## Next iteration (expected)
 SELF-TEST phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
@@ -272,20 +299,17 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 `unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`) so it falls through to
-**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`
-(`self_tested`) and `s3_onepassword` (`blocked`, not `implemented`) and lands on
-the first `implemented` stage, `s4_airtable`. SELF-TEST on `s4_airtable`
-(Appendix A Stage 4): via the Airtable MCP, re-list the fields of table
-`tblSmNrHROMLm7vOS` in base `appOsvuyy5eK43QTx`; confirm all 16 plan Step-1
-fields exist with correct types; confirm the single-select option sets match
-exactly (Disposition = {Active, Contacted, Maybe Later, Revisit for Roll-up,
-Passed, Dead Link}; Link Health Status = {Live, Dead, Redirect}; Source =
-{Overnight Search, Manual Submission}); confirm existing fields retained
-(Business Name, Industry Match, Asking Price, EBITDA, Notes, Links field
-`fldwo7ui7aIGoMxAG`). Honor finding F3's resolution: the four financial fields
-are canonically `Revenue 2024/2025` + `Cash Flow 2024/2025` (live names), not
-the plan's "YYYY Revenue" label word-order. Record the full field list and all
-commands/outputs in `TEST_LOG.md` under `## Iteration N — s4_airtable self-test`.
+**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`/
+`s4_airtable` (`self_tested`) and `s3_onepassword` (`blocked`, not `implemented`)
+and lands on the first `implemented` stage, `s5_overnight_skill`. SELF-TEST on
+`s5_overnight_skill` (Appendix A Stage 5): read
+`.claude/skills/overnight-search/skill.md`; confirm the frontmatter is valid YAML
+with `name` and `description`; build the coverage checklist proving the file
+addresses plan Steps 2a–2e, 3, 4, 5, 7, 8 (record which section covers each);
+confirm it uses the correct base/table IDs and the exact live field names
+(`Revenue/Cash Flow 2024/2025` per F3), states the "never store search-results
+URLs" rule, and spells out the price-drop detection logic. Record all evidence in
+`TEST_LOG.md` under `## Iteration N — s5_overnight_skill self-test`.
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
 loop can still progress on s4–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
 COMPLETE (`open_blockers == 0` required) until B1 clears.
