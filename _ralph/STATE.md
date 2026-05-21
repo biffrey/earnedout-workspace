@@ -1,7 +1,7 @@
 ---
 active: true
 iteration: 47
-max_iterations: 60
+max_iterations: 75
 last_iteration_at: 2026-05-21T15:44:51Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
