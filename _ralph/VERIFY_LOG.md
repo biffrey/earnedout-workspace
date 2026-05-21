@@ -249,3 +249,127 @@ tools and agreed Check 4's conditional skip is by-design, not a failure.
 All three mandatory Appendix A Stage 2 SELF-TEST checks were independently
 re-run by the critic and observed to genuinely pass.
 **`s2_playwright` → `verified`.**
+
+## Iteration 22 — s4_airtable verify
+
+**Phase:** VERIFY. **Stage:** `s4_airtable` (Airtable field creation).
+**Selection:** Step 1 blocker re-check — counting blocker B1 (`op` CLI) still
+open: `op --version` → `op: command not found` (exit 127), `which op` exit 1 in
+the iteration-22 sandbox; precondition (an installed, signed-in `op` reachable
+by the SELF-TEST) did not clear, so B1 stays open and `open_blockers` stays 1.
+`unresolved_findings == 0` → Step 1 fell through RESOLVE; the IMPLEMENT scan
+found no actionable `not_started` stage (s9 needs s1–s8 all `verified`, s10
+needs s9 `verified`); the SELF-TEST scan found no `implemented` stage (s1/s2 are
+`verified`, s4/s5/s6/s7/s8 are `self_tested`, s3 is `blocked`) → fell through to
+VERIFY. The VERIFY s1→s10 scan skipped `s1_repo` and `s2_playwright`
+(`verified`) and `s3_onepassword` (`blocked`, not `self_tested`) and landed on
+the first `self_tested` stage, `s4_airtable`.
+
+**Method:** Spawned an independent general-purpose critic subagent (Appendix C
+brief): skeptical fresh context, directed to read `REVAMP_PLAN.md` "Step 1 —
+New Airtable Fields" + "Implementation Order" #4, the `TEST_LOG.md` Iteration 15
+s4_airtable self-test entry, and `FINDINGS.md` finding F3 (financial-field
+naming reconciliation); instructed to independently re-list the live Airtable
+schema of table `tblSmNrHROMLm7vOS` in base `appOsvuyy5eK43QTx` via the Airtable
+MCP, confirm all 16 new fields exist with correct types, confirm the three
+single-select option sets match the plan exactly, confirm key pre-existing
+fields are retained, and report the actual field IDs/types it observed;
+read-only (explicitly told not to create/modify/delete any Airtable fields or
+records).
+
+**Subagent verdict: `SHIP` — no BLOCKING findings.**
+
+### Full subagent output
+
+> I have everything I need. The live Airtable schema fully confirms the loop's
+> Iteration 15 claims.
+>
+> **Stage 4 (`s4_airtable`) Verification Findings**
+>
+> **1. All 16 Step-1 fields exist on the live table with correct types —
+> CONFIRMED (no severity).** Independently re-listed `tblSmNrHROMLm7vOS` in
+> `appOsvuyy5eK43QTx` ("Master Deal Pipeline", 87 fields total). All 16 present,
+> IDs/types matching the plan's F3 annotation exactly: Listing ID
+> `fld81k0uFwqkHaEEI` singleLineText; Direct Listing URL `fldMCmSVQjYv3odok` url;
+> Listing Screenshot `fldrPuxZHGsYZuxTO` multipleAttachments; Date Added
+> `fldoZVwrhWaGGMlFR` / Date Updated `fld3TRpVYopXL7LLm` / Link Last Checked
+> `fldMXwyQbEWPXbqE2` date (ISO YYYY-MM-DD); Previous Asking Price
+> `fldySRjfm1P8Nodes` currency ($, prec 0); Link Health Status
+> `fldlsuLeSFhFKQuFc` singleSelect; Disposition `fldw0xk1YBkmP7sBD` singleSelect;
+> Lead Score `fld2ipICYNLjaDm39` number (prec 0); Prospect Eval Report
+> `fld9InVXs4RqgtNDo` url; Source `fldiGyXTk6Ybb6J1L` singleSelect. Financial
+> fields per F3: Revenue 2025 `fld8Pmhi9M7m5qaUf`, Cash Flow 2025
+> `flde6Fr88nm4BAoE1`, Revenue 2024 `fldfUOMF98BAk8Qeo`, Cash Flow 2024
+> `fldwX2NkTE2E66pln` — all currency ($, prec 0). The reversed word order is the
+> resolved/expected state per F3; not a defect.
+>
+> **2. Single-select option sets match the plan EXACTLY — CONFIRMED (no
+> severity).** Read from `get_table_schema` `config.choices`: Disposition =
+> Active, Contacted, Maybe Later, Revisit for Roll-up, Passed, Dead Link (6/6,
+> exact, no extras); Link Health Status = Live, Dead, Redirect (3/3, exact);
+> Source = Overnight Search, Manual Submission (2/2, exact).
+>
+> **3. Key pre-existing fields retained — CONFIRMED (no severity).** Business
+> Name `fldquYtYnHJ1YzUR7` (primary), Asking Price `fldhqAXiAWh2ktXln`, EBITDA
+> `fldFK17soNXcUsxbg`, Notes `fldbEqYoyoPNthNoV`, and the Links field
+> `fldwo7ui7aIGoMxAG` (multilineText) all present. The base's pre-existing
+> Revenue/Cash Flow 2022 & 2023 fields also intact, confirming the live
+> "Revenue YYYY" naming convention F3 cites.
+>
+> **4. NIT — "Priority Geography" naming variance.** Plan Step 1 lists "Priority
+> Geography"; the live field is "Priority Geography?" `fld1x82ld7D0UYjHw`
+> (checkbox, trailing "?"). Pre-existing field, retained — TEST_LOG honestly
+> disclosed this. Out of s4's IMPLEMENT scope (the 16 new fields). Suggested fix:
+> none required; optionally align the plan label.
+>
+> **5. Truth of testing — Iteration 15 evidence is REAL, not hand-waving.** The
+> TEST_LOG entry cites concrete field IDs, types, configs, and option-set
+> contents that I independently reproduced byte-for-byte via my own MCP calls.
+> The "87 fields total" count matches my live listing. Field IDs in the log
+> (e.g. `fldw0xk1YBkmP7sBD`, `fld8Pmhi9M7m5qaUf`) are the actual live IDs. No
+> PASS in Iteration 15 is unsupported.
+>
+> **6. NIT — TEST_LOG wording imprecision.** Iteration 15 Check 1 says
+> `list_tables_for_base` "returned the full schema ... (87 fields total)" and
+> that `get_table_schema` was used for single-select `config.choices`. Accurate.
+> But it also claims `list_tables_for_base` shows date/currency precision detail
+> — `list_tables_for_base` returns only name/type, not config; precision comes
+> from `get_table_schema`. Minor self-test prose imprecision; the underlying
+> checks were genuinely run and the conclusions are correct. Suggested fix:
+> tighten wording in future logs. Non-blocking.
+>
+> **Scope note:** F1/F2/B1 (`op` CLI, git push) are external blockers belonging
+> to other stages and do not affect s4. s4's IMPLEMENT artifact — the 16 fields
+> on the live base — is real, complete, correctly typed, and the SELF-TEST was
+> honestly executed.
+>
+> VERDICT: SHIP
+
+### Loop disposition of the subagent output
+
+Verdict is `SHIP` with **zero BLOCKING findings**, so per loop-prompt Step 1.4
+`s4_airtable` → `verified`. The critic independently re-listed the live Airtable
+schema of `tblSmNrHROMLm7vOS` / `appOsvuyy5eK43QTx` via the Airtable MCP and
+confirmed, with its own observed field IDs and types, that (a) all 16 plan
+Step-1 fields exist with correct types, (b) the three single-select option sets
+match the plan exactly (Disposition 6/6, Link Health Status 3/3, Source 2/2),
+(c) key pre-existing fields are retained including the Links field
+`fldwo7ui7aIGoMxAG`, and (d) the TEST_LOG Iteration 15 evidence is genuine and
+re-derivable byte-for-byte — no faked PASS.
+
+`unresolved_findings` is NOT incremented: the only two graded items are findings
+#4 and #6, both severity **NIT** — the loop-prompt Step 1.4 "write each
+BLOCKING/IMPROVE finding to FINDINGS.md" instruction applies only on the
+`REVISE`/BLOCKING branch and, in any case, only to BLOCKING/IMPROVE severities.
+NIT #4 (live field "Priority Geography?" vs. plan's "Priority Geography" — a
+trailing-"?" variance on a *pre-existing* field, explicitly out of s4's
+16-new-field IMPLEMENT scope, already honestly disclosed in TEST_LOG Iteration
+15) and NIT #6 (TEST_LOG prose imprecision attributing precision detail to
+`list_tables_for_base` rather than `get_table_schema` — the checks were
+genuinely run and the conclusions correct) are recorded here for transparency
+only; neither is a defect of s4's implemented substance. Findings #1, #2, #3, #5
+are explicit "no severity" confirmations.
+
+Both Appendix A Stage 4 SELF-TEST checks were independently re-run by the critic
+against the live Airtable schema and observed to genuinely pass.
+**`s4_airtable` → `verified`.**
