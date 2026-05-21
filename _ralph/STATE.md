@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 4
+iteration: 5
 max_iterations: 40
-last_iteration_at: 2026-05-21T00:18:30Z
+last_iteration_at: 2026-05-21T00:23:54Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 1
+unresolved_findings: 0
 open_blockers: 0
 stages:
   s1_repo:            { status: implemented }
@@ -70,15 +70,31 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   text is now plan-aligned but the real-vault path cannot be verified without
   `op`. `s3_onepassword` → `implemented`.
 
+- Iteration 5 (2026-05-21T00:23:54Z): RESOLVE phase (`unresolved_findings == 1`
+  forces RESOLVE first). Re-checked `BLOCKERS.md` — no counting blockers, no
+  precondition cleared (advisory note A1 still stands; `mcp__playwright__*`
+  tools still absent). Took the oldest unresolved finding — F2 — and closed it.
+  Re-read `REVAMP_PLAN.md` Step 0 (canonical path `op://Private/DealStream/...`)
+  and `config/credentials-setup.md` (now plan-aligned: documents the canonical
+  item path, `op` CLI install/signin, fail-loud behavior, and a reconciliation
+  section preserving the old `op://Personal/dealstream.com/...` path). The
+  plan-vs-disk *text* mismatch — F2's substance — is fully resolved. The
+  real-vault "which path actually resolves" question is delegated to the
+  s3_onepassword SELF-TEST `op read` check (and its `op`-unavailable blocker
+  handling); no separate counting blocker opened (would be premature +
+  duplicative + risk a false COMPLETE deadlock — same rationale as F1).
+  Appended a `RESOLUTION:` line to F2. `unresolved_findings` → 0. `s3_onepassword`
+  stays `implemented` (never `self_tested`/`verified`, no demotion).
+
 ## Next iteration (expected)
-RESOLVE phase expected: `unresolved_findings == 1` forces RESOLVE first (Step 1
-selection rule). The next iteration takes the oldest unresolved finding — F2 —
-and resolves it. Likely outcome: F2 is closed as "credentials-setup.md aligned
-to the canonical plan; the real-vault path confirmation is delegated to the s3
-SELF-TEST `op read` check (and that check's `op`-unavailable blocker handling),"
-decrementing `unresolved_findings` back to 0 with no new counting blocker. After
-RESOLVE, the IMPLEMENT scan resumes at `s4_airtable` (first `not_started`
-stage).
+IMPLEMENT phase expected: `unresolved_findings == 0` and `open_blockers == 0`,
+so Step 1 falls through RESOLVE to IMPLEMENT. The s1→s10 scan skips `s1_repo`,
+`s2_playwright`, `s3_onepassword` (all `implemented`) and lands on the first
+`not_started` stage — `s4_airtable` (Airtable field creation; no stage
+dependencies, needs the Airtable MCP). IMPLEMENT on `s4_airtable`: list the
+fields on table `tblSmNrHROMLm7vOS` in base `appOsvuyy5eK43QTx` via the Airtable
+MCP, then create any missing field from the plan's Step 1 table (the 16 new
+fields with their specified types and single-select options).
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

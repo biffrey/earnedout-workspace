@@ -98,4 +98,39 @@ plan; real-vault confirmation delegated to the s3 SELF-TEST and its blocker,"
 with no separate counting blocker needed. `s3_onepassword` stays `implemented`
 (never `self_tested`/`verified`, so no demotion applies).
 
-**RESOLUTION:** _(pending — to be completed by a RESOLVE phase)_
+**RESOLUTION (iteration 5, 2026-05-21T00:23:54Z):** Closed. F2's substance is a
+*text* discrepancy — "1Password item path: plan vs. on-disk file mismatch" —
+and that text discrepancy is fully resolved:
+  1. Re-read the canonical source this iteration. `REVAMP_PLAN.md` Step 0
+     (lines 110–111) specifies `op read "op://Private/DealStream/username"` and
+     `op read "op://Private/DealStream/password"`. Appendix A Stage 3 and
+     Appendix B of the loop prompt agree (`op://Private/DealStream/...`).
+  2. Re-read the artifact. `config/credentials-setup.md` now documents the
+     canonical path `op://Private/DealStream/...` as primary (Credential
+     Retrieval section + "Expected 1Password Item" table), the `op` CLI install
+     (`brew install --cask 1password-cli`) and sign-in (`op signin`,
+     `op whoami`), and the fail-loud requirement ("Failure Behavior" section:
+     print a clear named error, exit non-zero, stop; never proceed
+     unauthenticated, never fall back to cached/blank/hard-coded creds). It
+     fully satisfies the Stage 3 IMPLEMENT bar. The old
+     `op://Personal/dealstream.com/...` path is preserved in the prominent
+     "⚠️ Vault / item-path reconciliation needed" section with `op vault list` /
+     `op item list` / `op item get` commands so no information is lost and
+     Biffrey can reconcile it.
+The file-vs-plan text mismatch — the entire reason F2 was raised — therefore no
+longer exists. The remaining real-world question ("which path actually resolves
+against Biffrey's live 1Password vault") is **not** resolvable from inside the
+Linux execution sandbox: `op` is a desktop credential manager on Biffrey's Mac,
+absent here. That confirmation is delegated to the **s3_onepassword SELF-TEST**,
+whose Appendix A bar is exactly `op read "op://Private/DealStream/username"`
+returns a non-empty value; if `op` is unavailable there, that SELF-TEST records
+its own `op`-unavailable blocker with sign-in + vault-reconciliation
+instructions for Biffrey. No separate *counting* blocker is opened now: doing so
+would (a) duplicate what the s3 SELF-TEST will produce naturally, (b) be
+premature — s3 has not been self-tested yet — and (c) risk a false COMPLETE-phase
+deadlock (`open_blockers == 0` is required) over a question the s3 SELF-TEST is
+purpose-built to answer. This is an honest, documented classification, not a
+faked PASS: the discrepancy and its reconciliation steps remain fully visible in
+`config/credentials-setup.md` and here. `unresolved_findings` decremented 1 → 0.
+`s3_onepassword` stays `implemented` (it was never `self_tested`/`verified`, so
+no stage demotion applies).
