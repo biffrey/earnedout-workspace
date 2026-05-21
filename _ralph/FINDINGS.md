@@ -179,4 +179,25 @@ phases use the exact live names. Optionally annotate `REVAMP_PLAN.md` Step 1 wit
 the live names. No counting blocker — this is fully resolvable inside the loop.
 `s4_airtable` stays `implemented` (never `self_tested`/`verified`, no demotion).
 
-**RESOLUTION:** _(pending — to be completed by a RESOLVE phase)_
+**RESOLUTION (iteration 7, 2026-05-21T00:35:11Z):** Closed. Resolved per the
+recommended path: the live Airtable field names are adopted as canonical.
+Concrete change — `REVAMP_PLAN.md` Step 1 was annotated (a new "Live field-name
+reconciliation (build-loop finding F3...)" paragraph inserted directly after the
+Step-1 field table, before "Existing fields retained"). That annotation records:
+(a) all 16 Step-1 fields already exist with correct types; (b) the four
+financial fields are canonically named **`Revenue 2024`** (`fldfUOMF98BAk8Qeo`),
+**`Revenue 2025`** (`fld8Pmhi9M7m5qaUf`), **`Cash Flow 2024`**
+(`fldwX2NkTE2E66pln`), **`Cash Flow 2025`** (`flde6Fr88nm4BAoE1`) — no rename,
+they hold data and match the base's pre-existing `Revenue/Cash Flow 2022–2023`
+convention; (c) the plan's "YYYY Revenue / YYYY Cash Flow" table labels denote
+those exact existing fields; (d) the s5/s6 skills MUST write to the live names;
+(e) the full field-ID map for all 16 fields, so the later s5_overnight_skill and
+s6_submit_url IMPLEMENT phases author the skill against verified live field
+names rather than the plan's label word-order. Because `REVAMP_PLAN.md` is the
+canonical artifact re-read every iteration, this annotation makes the resolution
+durable — the discrepancy cannot silently resurface when s5 is implemented.
+No counting blocker (fully resolved inside the loop). No live-base mutation
+(the fields were not renamed). `unresolved_findings` decremented 1 → 0.
+`s4_airtable` stays `implemented` (never `self_tested`/`verified`, so no stage
+demotion applies; the annotation does not change s4's implemented substance —
+all 16 fields verified present).

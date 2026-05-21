@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 6
+iteration: 7
 max_iterations: 40
-last_iteration_at: 2026-05-21T00:28:12Z
+last_iteration_at: 2026-05-21T00:35:11Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 1
+unresolved_findings: 0
 open_blockers: 0
 stages:
   s1_repo:            { status: implemented }
@@ -102,16 +102,31 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   (`unresolved_findings` → 1); no duplicate fields created (would split data).
   `s4_airtable` → `implemented`.
 
+- Iteration 7 (2026-05-21T00:35:11Z): RESOLVE phase (`unresolved_findings == 1`
+  forces RESOLVE first). Re-checked `BLOCKERS.md` — no counting blockers,
+  advisory A1 still stands (`mcp__playwright__*` still absent). Took the oldest
+  unresolved finding — F3 — and closed it. Adopted the live Airtable field names
+  as canonical: annotated `REVAMP_PLAN.md` Step 1 with a "Live field-name
+  reconciliation" paragraph recording that all 16 Step-1 fields already exist
+  with correct types, that the 4 financial fields are canonically
+  `Revenue 2024/2025` + `Cash Flow 2024/2025` (no rename — they hold data and
+  match the base's 2022/2023 convention), and the full field-ID map for all 16
+  fields. Because the plan is re-read every iteration, this makes the resolution
+  durable so s5/s6 IMPLEMENT author the skill against verified live field names.
+  Appended a `RESOLUTION:` line to F3. No counting blocker, no live-base
+  mutation. `unresolved_findings` → 0. `s4_airtable` stays `implemented` (never
+  `self_tested`/`verified`, no demotion).
+
 ## Next iteration (expected)
-RESOLVE phase expected: `unresolved_findings == 1` forces RESOLVE first (Step 1
-selection rule). The next iteration takes the oldest unresolved finding — F3 —
-and resolves it. Likely outcome: F3 closed by adopting the live field names
-("Revenue 2024/2025", "Cash Flow 2024/2025") as canonical (no rename — they
-match the base's 2022/2023 convention and hold data), recording that the plan's
-Step-1 labels denote those existing fields, so the later s5/s6 IMPLEMENT phases
-author the skill against the exact live names; `unresolved_findings` → 0, no new
-counting blocker. After RESOLVE, the IMPLEMENT scan resumes at `s5_overnight_skill`
-(first `not_started` stage; dependency s1 is `implemented` — met).
+IMPLEMENT phase expected: `unresolved_findings == 0` and `open_blockers == 0`,
+so Step 1 falls through RESOLVE to IMPLEMENT. The s1→s10 scan skips `s1_repo`,
+`s2_playwright`, `s3_onepassword`, `s4_airtable` (all `implemented`) and lands on
+the first `not_started` stage — `s5_overnight_skill` (dependency: s1, which is
+`implemented` — met). IMPLEMENT on `s5_overnight_skill`: rewrite
+`.claude/skills/overnight-search/skill.md` with valid YAML frontmatter covering
+the full revamped workflow (plan Steps 2a–2e, 3, 4, 5, 7, 8), using the correct
+base/table IDs and the exact live field names recorded in the F3 resolution
+annotation in `REVAMP_PLAN.md` Step 1.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
