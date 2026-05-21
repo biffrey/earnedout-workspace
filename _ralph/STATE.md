@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 25
+iteration: 26
 max_iterations: 40
-last_iteration_at: 2026-05-21T04:04:17Z
+last_iteration_at: 2026-05-21T04:14:36Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -15,7 +15,7 @@ stages:
   s5_overnight_skill: { status: verified }
   s6_submit_url:      { status: verified }
   s7_outreach:        { status: verified }
-  s8_dashboard:       { status: self_tested }
+  s8_dashboard:       { status: verified }
   s9_end_to_end:      { status: not_started }
   s10_schedule:       { status: not_started }
 ---
@@ -620,27 +620,79 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   the two NITs do not qualify). Full critic output in `VERIFY_LOG.md` under
   `## Iteration 25 — s7_outreach verify`.
 
+- Iteration 26 (2026-05-21T04:14:36Z): VERIFY phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-26 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`); the SELF-TEST scan
+  found no `implemented` stage (s1/s2/s4/s5/s6/s7 `verified`, s3 `blocked`, s8
+  `self_tested`) so Step 1 fell through to **VERIFY**. The VERIFY s1→s10 scan
+  skipped `s1_repo`/`s2_playwright`/`s4_airtable`/`s5_overnight_skill`/
+  `s6_submit_url`/`s7_outreach` (`verified`) and `s3_onepassword` (`blocked`,
+  not `self_tested`) and landed on the first `self_tested` stage, `s8_dashboard`.
+  Spawned an independent general-purpose critic subagent (Appendix C brief):
+  skeptical fresh context, read `REVAMP_PLAN.md` "Step 7" + "Implementation
+  Order" #8, `TEST_LOG.md` Iteration 19, the artifact
+  `templates/daily-dashboard.html`, `templates/single-report.html`, and the
+  committed evidence under `_ralph/evidence/iter19/`; read-only. The critic
+  **independently re-ran the Appendix A Stage 8 SELF-TEST**: it installed
+  `jinja2 3.0.3` and rendered the real `templates/daily-dashboard.html` with both
+  a populated context (11,560 B) and an all-empty context (8,966 B, exercising
+  every `{% else %}` branch), confirmed both renders are tag-balanced with no
+  leftover `{{`/`{%` delimiters, verified all four sections (A New Finds /
+  B Running Queue / C Revisit Bucket / D Run Summary) with the price-drop badge,
+  the Date Added column and all four empty-state strings, confirmed the `:root`
+  CSS palette is byte-identical to `single-report.html`, checked `colspan="9"`
+  matches the 9 `<th>` headers in all three table sections, and viewed the
+  committed 188,486-byte `_ralph/evidence/iter19/dashboard_render.png`
+  screenshot — confirming TEST_LOG Iteration 19's PASS claims are genuine and
+  re-derivable (no faked PASS). **Verdict: `SHIP`, zero BLOCKING findings.** The
+  only graded item is NIT #6, explicitly flagged "No fix needed" (an observation
+  that all three table sections share a 9-column layout so the `colspan="9"`
+  empty-state rows are consistent); findings #1–#5 are "no severity" PASS
+  confirmations. Per Step 1.4 (SHIP + no BLOCKING → `verified`), `s8_dashboard`
+  → `verified`; `unresolved_findings` NOT incremented (the write-findings
+  instruction applies only on the REVISE/BLOCKING branch, and only to
+  BLOCKING/IMPROVE severities — NIT #6 does not qualify). Full critic output in
+  `VERIFY_LOG.md` under `## Iteration 26 — s8_dashboard verify`. **All eight
+  implementable stages other than the `op`-blocked s3 are now `verified`; the
+  loop is now fully blocked on B1 — see "Next iteration" below.**
+
 ## Next iteration (expected)
-VERIFY phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
-B1 (`op` unavailable) will almost certainly still be open — its precondition (an
+**The loop is now blocked on B1 and cannot advance any stage until Biffrey
+resolves it.** Step 1 will first re-check `BLOCKERS.md`: counting blocker B1
+(`op` unavailable) will almost certainly still be open — its precondition (an
 installed, signed-in `op` reachable by the SELF-TEST) cannot clear from inside
 the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
-`unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
-finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
-`verified`; `s10_schedule` needs s9 `verified`); the SELF-TEST scan finds no
-`implemented` stage (s1/s2/s4/s5/s6/s7 are now `verified`; s8 is `self_tested`;
-s3 is `blocked`) so it falls through to **VERIFY**. The VERIFY s1→s10 scan
-skips `s1_repo`, `s2_playwright`, `s4_airtable`, `s5_overnight_skill`,
-`s6_submit_url`, `s7_outreach` (`verified`) and `s3_onepassword` (`blocked`, not
-`self_tested`) and lands on the first `self_tested` stage, `s8_dashboard`:
-spawn an independent critic subagent (Appendix C brief) for `s8_dashboard`,
-append its full output to `VERIFY_LOG.md` under `## Iteration N — s8_dashboard
-verify`, and on a `SHIP` verdict with no BLOCKING findings set `s8_dashboard` →
-`verified` (else write findings and increment `unresolved_findings`).
-NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
-loop can still progress through the s8 VERIFY phase meanwhile, but cannot
-reach COMPLETE (`open_blockers == 0` required, all 10 stages `verified`) until
-B1 clears and s3/s9/s10 finish.
+`unresolved_findings == 0`, Step 1 falls through RESOLVE. Then every remaining
+phase is non-actionable:
+- **IMPLEMENT** — no actionable `not_started` stage. `s9_end_to_end` requires
+  s1–s8 ALL `verified`, but `s3_onepassword` is `blocked` (not `verified`), so
+  s9's dependency is unmet; `s10_schedule` requires s9 `verified`, also unmet.
+- **SELF-TEST** — no `implemented` stage (s1/s2/s4/s5/s6/s7/s8 `verified`, s3
+  `blocked`, s9/s10 `not_started`).
+- **VERIFY** — no `self_tested` stage (all seven implemented stages other than
+  s3 are now `verified`; s3 is `blocked`).
+- **FINAL AUDIT** — requires all 10 stages `verified` AND `open_blockers == 0`;
+  neither holds.
+- **COMPLETE** — same gate; not reachable.
+
+Therefore Step 1's terminal rule applies: "If `open_blockers > 0` and no other
+phase is actionable, output a status note describing the blockers and exit —
+the next scheduled run may find them resolved by Biffrey." Each subsequent
+10-minute run will re-check B1, find it still open, and idle with a status note
+until **Biffrey completes the B1 fix instructions in `BLOCKERS.md`** (install +
+sign in to the `op` 1Password CLI somewhere the loop's SELF-TEST can reach, and
+confirm `op read "op://Private/DealStream/username"` returns a value).
+
+Once B1 clears: the blocker re-check marks B1 RESOLVED, decrements
+`open_blockers` 1 → 0, resets `s3_onepassword` `blocked` → `implemented`; the
+loop then runs SELF-TEST on s3, VERIFY on s3, IMPLEMENT (the live end-to-end
+run) + SELF-TEST + VERIFY on s9, then s10, then FINAL AUDIT, then COMPLETE.
+That is roughly 9–10 more iterations of real work after B1 is resolved — well
+within the 40-iteration cap (currently at 26).
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

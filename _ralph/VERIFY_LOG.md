@@ -725,3 +725,117 @@ NITs do not qualify and are recorded here for transparency only.
 All six Appendix A Stage 7 SELF-TEST checks were independently confirmed by the
 critic against the real `config/outreach_templates.md` file.
 **`s7_outreach` → `verified`.**
+
+---
+
+## Iteration 26 — s8_dashboard verify
+
+**Phase:** VERIFY. **Stage:** `s8_dashboard` (was `self_tested`).
+**Timestamp:** 2026-05-21T04:14:36Z
+
+Step 1 blocker re-check: counting blocker B1 (`op` CLI) still open — `op
+--version` → `op: command not found` (exit 127), `which op` exit 1 in the
+iteration-26 sandbox. Precondition (an installed, signed-in `op` reachable by
+the SELF-TEST) did not clear, so B1 stays open, `open_blockers` stays 1.
+`unresolved_findings == 0` → Step 1 fell through RESOLVE; the IMPLEMENT scan
+found no actionable `not_started` stage (s9 needs s1–s8 `verified`, s10 needs s9
+`verified`); the SELF-TEST scan found no `implemented` stage (s1/s2/s4/s5/s6/s7
+`verified`, s3 `blocked`, s8 `self_tested`) → fell through to VERIFY. The VERIFY
+s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable`/`s5_overnight_skill`/
+`s6_submit_url`/`s7_outreach` (`verified`) and `s3_onepassword` (`blocked`, not
+`self_tested`) and landed on the first `self_tested` stage, `s8_dashboard`.
+
+Spawned an independent general-purpose critic subagent (Appendix C brief):
+skeptical fresh context, told to read `REVAMP_PLAN.md` "Step 7" +
+"Implementation Order" #8, `_ralph/TEST_LOG.md` Iteration 19, the artifact
+`templates/daily-dashboard.html`, `templates/single-report.html`, and the
+committed evidence under `_ralph/evidence/iter19/`; read-only (no file
+modification).
+
+### Critic subagent — full output
+
+> All checks pass independently. The colspan="9" matches the 9-column headers in
+> all three table sections. STATE.md honestly records `s8_dashboard:
+> self_tested` (not falsely `verified`). My verification is complete.
+>
+> ## Findings — Stage 8 `s8_dashboard` verification
+>
+> 1. **Existence & completeness — PASS (no severity).**
+> `templates/daily-dashboard.html` exists (396 lines, ~14.4 KB). It is a
+> self-contained Jinja2 template with all four plan Step 7 sections present and
+> correctly anchored: Section A `id="section-a"` (New Finds), B `id="section-b"`
+> (Running Queue), C `id="section-c"` (Revisit Bucket), D `id="section-d"` (Run
+> Summary). Section A renders a price-drop badge (`<span class="chip
+> price-drop">PRICE DROP</span>`, line 233) and "was {{ previous_price }}"
+> notation (line 240); Section B includes the required Date Added column (line
+> 268); D has Search Totals, Leads by Platform, Leads by Industry, Errors &
+> Warnings (lines 339–382). Header docblock documents the full expected context.
+> Matches plan Step 7 fully.
+>
+> 2. **CSS matches `single-report.html` — PASS (no severity).** The `:root`
+> palette (lines 56–68) is byte-identical to `single-report.html` (same 11
+> variables, same values), same font stack and same `header.banner`
+> linear-gradient. Aesthetic claim in TEST_LOG is accurate.
+>
+> 3. **Truth of testing — PASS (no severity).** The Iteration 19 TEST_LOG entry
+> is NOT hand-waving. Real evidence is committed under `_ralph/evidence/iter19/`:
+> `s8_validate.py` (Jinja2 structural test), `s8_render.js` (Playwright headless
+> test), `dashboard_render.html` (11,964-byte actual render), and
+> `dashboard_render.png` (188,486-byte real screenshot). I viewed the screenshot
+> — it shows a correctly laid-out dark dashboard with the header + 4 stat cards,
+> all four populated data tables, the PRICE DROP badge and MANUAL chip visible
+> in Section A, and Section D's four summary cards. The scripts genuinely render
+> the real template and assert on output.
+>
+> 4. **Independent re-check — PASS (no severity).** I installed `jinja2 3.0.3`
+> (`pip install jinja2 --break-system-packages`) and ran my own `verify_s8.py`
+> against the real `templates/daily-dashboard.html`: populated render = 11,560
+> bytes OK, all-empty render = 8,966 bytes OK (exercises every `{% else %}`
+> branch). Both renders are tag-balanced (`errs=[] leftover=[]` via an
+> html.parser stack walker). No leftover `{{`/`{%` delimiters. Populated output
+> contains all four section headings, PRICE DROP, MANUAL, "was $4.9M", and "Date
+> Added". Empty output contains all four empty-state strings. The template uses
+> `StrictUndefined` correctly (raises `UndefinedError` on missing context vars —
+> a robustness positive). I also confirmed `colspan="9"` (3 occurrences) matches
+> the 9 `<th>` headers in all three table sections — no column-misalignment bug.
+> The committed `dashboard_render.html` evidence is a genuine, complete render.
+>
+> 5. **Honesty of TEST_LOG PASSes — PASS (no severity).** Every PASS in the
+> Iteration 19 entry is backed by reproducible evidence I re-verified. The byte
+> counts I observed (~11.5K populated, 8,966 empty) match the log within
+> rounding (log says 11,956 — the small delta is just my shorter sample
+> strings; structurally identical). STATE.md correctly records `s8_dashboard:
+> self_tested`, not a false `verified`. No fabricated PASS detected.
+>
+> 6. **NIT — minor.** Section A's empty-state row uses `colspan="9"` (line 247),
+> correct for its 9 columns. No defect; noting only that all three sections
+> happen to share 9 columns so the count is consistent. No fix needed.
+>
+> Stage 8 is genuinely implemented, genuinely self-tested with real committed
+> evidence, and independently reproduces clean.
+>
+> VERDICT: SHIP
+
+### Loop decision
+
+Critic verdict: **`SHIP`**, zero BLOCKING findings, zero IMPROVE findings. The
+only graded item is NIT #6, explicitly flagged "No fix needed" by the critic
+(an observation that all three table sections share a 9-column layout, so the
+`colspan="9"` empty-state rows are consistent — not a defect). Findings #1–#5
+are "no severity" PASS confirmations. The critic independently re-ran the Stage
+8 SELF-TEST: it installed `jinja2 3.0.3` and rendered the real
+`templates/daily-dashboard.html` with both a populated and an all-empty context,
+confirmed both renders are tag-balanced with no leftover Jinja delimiters,
+verified all four sections / the price-drop badge / the Date Added column / the
+four empty-state strings, confirmed the `:root` CSS palette is byte-identical to
+`single-report.html`, and viewed the committed 188,486-byte
+`_ralph/evidence/iter19/dashboard_render.png` screenshot — no faked PASS in
+TEST_LOG Iteration 19. Per Step 1.4 (SHIP + no BLOCKING → `verified`),
+`s8_dashboard` → `verified`. `unresolved_findings` is NOT incremented: the
+"write each BLOCKING/IMPROVE finding to FINDINGS.md" instruction applies only on
+the `REVISE`/BLOCKING branch and only to BLOCKING/IMPROVE severities — NIT #6
+does not qualify and is recorded here for transparency only.
+
+Both Appendix A Stage 8 SELF-TEST checks were independently confirmed by the
+critic against the real `templates/daily-dashboard.html` file.
+**`s8_dashboard` → `verified`.**
