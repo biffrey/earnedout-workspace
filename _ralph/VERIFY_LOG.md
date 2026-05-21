@@ -621,3 +621,107 @@ substance.
 All three Appendix A Stage 6 SELF-TEST checks were independently re-run by the
 critic against the real `skill.md` file and observed to genuinely pass.
 **`s6_submit_url` → `verified`.**
+
+## Iteration 25 — s7_outreach verify
+
+**Phase:** VERIFY. **Stage:** `s7_outreach` (Broker outreach templates).
+**Selection:** Step 1 blocker re-check — counting blocker B1 (`op` CLI) still
+open: `op --version` → `op: command not found` (exit 127), `which op` exit 1 in
+the iteration-25 sandbox; precondition (an installed, signed-in `op` reachable
+by the SELF-TEST) did not clear, so B1 stays open and `open_blockers` stays 1.
+`unresolved_findings == 0` → Step 1 fell through RESOLVE; the IMPLEMENT scan
+found no actionable `not_started` stage (s9 needs s1–s8 all `verified`, s10
+needs s9 `verified`); the SELF-TEST scan found no `implemented` stage
+(s1/s2/s4/s5/s6 `verified`, s7/s8 `self_tested`, s3 `blocked`) → fell through to
+VERIFY. The VERIFY s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable`/
+`s5_overnight_skill`/`s6_submit_url` (`verified`) and `s3_onepassword`
+(`blocked`, not `self_tested`) and landed on the first `self_tested` stage,
+`s7_outreach`.
+
+An independent general-purpose critic subagent was spawned with the Appendix C
+brief: skeptical fresh context, instructed to read `REVAMP_PLAN.md` "Step 5",
+`_ralph/TEST_LOG.md` Iteration 18 (s7_outreach self-test), the artifact
+`config/outreach_templates.md`, and `_ralph/FINDINGS.md`; read-only.
+
+### Critic subagent — full output
+
+> ## Verification Findings — `s7_outreach` (Broker Outreach Templates)
+>
+> **1. Existence & completeness — PASS.** `config/outreach_templates.md` exists,
+> is 277 lines, and contains every element plan Step 5 / Appendix A Stage 7
+> requires:
+> - Revised default template (Template A, L50–106) — body L68–100 matches
+>   `REVAMP_PLAN.md` Step 5 verbatim (same firm list, buy-box bullets, 3-point
+>   NDA/CIM/call ask, `smbsteward.com` link, signature).
+> - Price-drop follow-up (Template D, L162–205) — built from plan suggestion #7,
+>   references `[PREVIOUS_PRICE]`→`[CURRENT_PRICE]`.
+> - Aviation Template C (L110–158) — Part 135/145/MRO language.
+> - Template-selection logic (L14–27) — first-match order: Aviation→C,
+>   price-drop→D, all others→A, plus deferred clause for "Revisit for Roll-up".
+>   Matches plan L293–297.
+> - A/B testing rotates subject line only (L31–47) — body held constant, cites
+>   plan suggestion #8, per-lead alternation.
+> - Response-rate guidance (L209–256) — all 8 plan suggestions reproduced.
+> - Storage rules (L260–277) — Notes field + `search_reports/outreach_drafts_YYYY-MM-DD.md`
+>   + Revisit-for-Roll-up deferral.
+>
+> **2. Truth of testing — PASS (genuine evidence).** TEST_LOG Iteration 18
+> (L571–661) is a real self-test, not hand-waving. It cites a real `wc -l`
+> (→277), names specific header line numbers for all six checks, and describes
+> content accurately. Severity: none.
+>
+> **3. Independent re-check — confirmed.** I re-ran the structural checks myself
+> against the live file:
+> - `wc -l` → **277** (matches TEST_LOG claim exactly).
+> - `grep -nE '^##'` confirms every cited header at its claimed line:
+>   `## Template Selection Logic` L14, `## A/B Testing — Subject Line Only` L31,
+>   `## Template A` L50, `## Template C` L110, `## Template D` L162,
+>   `## Response-Rate Guidance` L209, `## Storage & Handling` L260. **All seven
+>   line citations in TEST_LOG Iteration 18 are accurate.**
+> - Selection-logic body (L16–27): verified first-match order Aviation→C,
+>   price-drop→D, others→A, plus the "Revisit for Roll-up → no outreach"
+>   deferral clause. Matches plan L293–301.
+> - Storage section (L260–277): verified the dated drafts file
+>   `search_reports/outreach_drafts_YYYY-MM-DD.md` at L271 and the Airtable
+>   Notes-field append at L267. Both present as TEST_LOG claims.
+>
+> **4. Honesty check — no false PASS found.** Every PASS in Iteration 18 is
+> backed by a citation that matches the real file. The one nuance TEST_LOG flags
+> honestly (Template A body trims trailing whitespace vs. plan source —
+> "invisible, non-semantic") is correct and not a defect.
+>
+> **Minor observations (NIT, non-blocking):**
+> - NIT — Template A subject is the only template cited as plan-verbatim;
+>   Template D's subject uses a single anchored line (no A/B) which is a
+>   reasonable, documented design choice (L173–175), not a plan violation. No
+>   fix needed.
+> - NIT — Plan Step 5's "Updated Default Template" code block shows a `Subject:`
+>   line inside the email block; Template A instead lifts the subject into a
+>   separate "Subject Line" section to enable subject-only A/B. This is a
+>   deliberate, correct adaptation (the plan itself mandates subject-only A/B in
+>   suggestion #8), not a discrepancy. No fix needed.
+>
+> This stage is genuinely implemented and genuinely self-tested. The artifact
+> fully satisfies plan Step 5, and the TEST_LOG evidence is real and
+> independently reproducible.
+>
+> VERDICT: SHIP
+
+### Loop decision
+
+Critic verdict: **`SHIP`**, zero BLOCKING findings, zero IMPROVE findings. The
+two graded items are NITs — both explicitly flagged "No fix needed" by the
+critic — describing deliberate, correct adaptations (Template D's anchored
+subject; lifting Template A's subject into a separate section to enable the
+plan-mandated subject-only A/B). The critic independently re-ran SELF-TEST
+checks (`wc -l` → 277, `grep -nE '^##'` confirming all seven header line
+citations) and reproduced TEST_LOG Iteration 18's evidence exactly — no faked
+PASS. Per Step 1.4 (SHIP + no BLOCKING → `verified`), `s7_outreach` →
+`verified`. `unresolved_findings` is NOT incremented: the
+"write each BLOCKING/IMPROVE finding to FINDINGS.md" instruction applies only on
+the `REVISE`/BLOCKING branch and only to BLOCKING/IMPROVE severities — the two
+NITs do not qualify and are recorded here for transparency only.
+
+All six Appendix A Stage 7 SELF-TEST checks were independently confirmed by the
+critic against the real `config/outreach_templates.md` file.
+**`s7_outreach` → `verified`.**
