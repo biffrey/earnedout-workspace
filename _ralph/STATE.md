@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 46
+iteration: 47
 max_iterations: 60
-last_iteration_at: 2026-05-21T15:35:05Z
+last_iteration_at: 2026-05-21T15:44:51Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -1158,7 +1158,52 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   not cleared, the loop will idle each run until the cap and terminate without
   reaching COMPLETE.
 
+- Iteration 47 (2026-05-21T15:44:51Z): IDLE — loop blocked on B2, no actionable
+  phase. Step 0: `active: true`, `iteration` 46 → 47 (`47 >= 60` false → no cap
+  termination). Step 1 blocker re-check: B1 RESOLVED (operator manual review),
+  advisory A1 still non-counting; counting blocker **B2** (`s9_end_to_end` live
+  end-to-end run) still OPEN — its precondition was genuinely re-tested this run
+  and did NOT clear: (a) `op` still unavailable in the sandbox — `which op` →
+  no output, `op --version` → `op: command not found` (exit 127); (b) the
+  sandbox network still cannot reach the platforms — `curl` `%{http_code}`
+  returned `000` for `https://www.dealstream.com` and `https://api.airtable.com`
+  (exit 56, no route); and (c) no operator-recorded evidence file
+  `_ralph/evidence/s9_e2e_verification_<date>.md` exists — `_ralph/evidence/`
+  holds only `s3_op_verification_2026-05-21.md` (the B1 evidence) and the
+  `iter19/` dashboard-render evidence. So B2 stays OPEN and `open_blockers`
+  stays 1. `unresolved_findings == 0` → RESOLVE skipped. Every remaining phase
+  is non-actionable: **IMPLEMENT** — no actionable `not_started` stage
+  (`s9_end_to_end` is `blocked`, not `not_started`; `s10_schedule` needs s9
+  `verified`); **SELF-TEST** — no `implemented` stage (s1–s8 `verified`, s9
+  `blocked`, s10 `not_started`); **VERIFY** — no `self_tested` stage;
+  **FINAL AUDIT** / **COMPLETE** — require all 10 stages `verified` AND
+  `open_blockers == 0`, neither holds. Per Step 1's terminal rule ("If
+  `open_blockers > 0` and no other phase is actionable, output a status note
+  describing the blockers and exit"), this run idled with a status note. No
+  stage status changed; no findings raised; no STATE counters changed except
+  `iteration`/`last_iteration_at`. The loop remains blocked on B2 until Biffrey
+  records a genuine live s9 run per the `BLOCKERS.md` B2 fix instructions. Note:
+  13 iterations remain before the 60-iteration cap; if B2 is not cleared, the
+  loop will idle each run until the cap and terminate without reaching COMPLETE.
+
 ## Next iteration (expected)
+> **Updated after iteration 47.** Unchanged from iterations 44–46 —
+> `s9_end_to_end` is `blocked` on **counting blocker B2** (live end-to-end
+> pipeline run requires the `op` 1Password CLI, absent from the sandbox, and
+> network access to DealStream / BizQuest / BizBuySell, unreachable: `000`).
+> `open_blockers: 1`, `unresolved_findings: 0`. The next run is **iteration
+> 48**: Step 1's blocker re-check will again test B2's precondition — `op`
+> installed + signed in AND a reachable live run, OR an operator-recorded s9
+> evidence file. That precondition cannot clear from inside the no-human
+> ephemeral sandbox, so B2 will almost certainly still be open and iteration 48
+> will **IDLE** with a status note per Step 1's terminal rule. **To unblock:**
+> Biffrey runs the overnight-search pipeline manually on his Mac (where `op`
+> works and DealStream is reachable) at small scope, executes the plan's 13
+> Verification checks, and records the evidence into
+> `_ralph/evidence/s9_e2e_verification_<date>.md` — exactly the model that
+> resolved B1 for s3. See `BLOCKERS.md` B2 for the full instructions.
+
+## Next iteration (superseded — kept for history)
 > **Updated after iteration 46.** Unchanged from iterations 44–45 —
 > `s9_end_to_end` is `blocked` on **counting blocker B2** (live end-to-end
 > pipeline run requires the `op` 1Password CLI, absent from the sandbox, and
