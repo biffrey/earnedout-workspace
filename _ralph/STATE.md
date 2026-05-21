@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 38
+iteration: 39
 max_iterations: 40
-last_iteration_at: 2026-05-21T06:14:36Z
+last_iteration_at: 2026-05-21T06:24:28Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -903,6 +903,27 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   iterations remain before the 40-iteration cap; if B1 is not cleared, the loop
   will idle each run until the cap and terminate without reaching COMPLETE.
 
+- Iteration 39 (2026-05-21T06:24:28Z): IDLE — loop blocked on B1, no actionable
+  phase. Step 1 blocker re-check: counting blocker B1 (`op` CLI) still open —
+  `op --version` → `op: command not found` (exit 127), `which op` exit 1 in the
+  iteration-39 sandbox; the precondition (an installed, signed-in `op` reachable
+  by the SELF-TEST) did not clear, so B1 stays open and `open_blockers` stays 1.
+  `unresolved_findings == 0` so Step 1 fell through RESOLVE. Every remaining
+  phase is non-actionable: **IMPLEMENT** — no actionable `not_started` stage
+  (`s9_end_to_end` needs s1–s8 ALL `verified` but `s3_onepassword` is `blocked`;
+  `s10_schedule` needs s9 `verified`); **SELF-TEST** — no `implemented` stage
+  (s1/s2/s4/s5/s6/s7/s8 `verified`, s3 `blocked`, s9/s10 `not_started`);
+  **VERIFY** — no `self_tested` stage; **FINAL AUDIT** / **COMPLETE** — require
+  all 10 stages `verified` AND `open_blockers == 0`, neither holds. Per Step 1's
+  terminal rule ("If `open_blockers > 0` and no other phase is actionable,
+  output a status note describing the blockers and exit"), this run idled with a
+  status note. No stage status changed; no findings raised; no STATE counters
+  changed except `iteration`/`last_iteration_at`. The loop remains blocked on B1
+  until Biffrey completes the B1 fix instructions in `BLOCKERS.md`. Note: only 1
+  iteration remains before the 40-iteration cap; if B1 is not cleared, the next
+  run (iteration 40) will idle, and the run after that will hit the cap and
+  terminate the loop without reaching COMPLETE.
+
 ## Next iteration (expected)
 **The loop is now blocked on B1 and cannot advance any stage until Biffrey
 resolves it.** Step 1 will first re-check `BLOCKERS.md`: counting blocker B1
@@ -934,8 +955,13 @@ Once B1 clears: the blocker re-check marks B1 RESOLVED, decrements
 `open_blockers` 1 → 0, resets `s3_onepassword` `blocked` → `implemented`; the
 loop then runs SELF-TEST on s3, VERIFY on s3, IMPLEMENT (the live end-to-end
 run) + SELF-TEST + VERIFY on s9, then s10, then FINAL AUDIT, then COMPLETE.
-That is roughly 9–10 more iterations of real work after B1 is resolved — well
-within the 40-iteration cap (currently at 26).
+That is roughly 9–10 more iterations of real work after B1 is resolved. As of
+iteration 39, only 1 iteration of headroom remains before the 40-iteration cap.
+Realistically the loop will now hit the cap and terminate without reaching
+COMPLETE unless B1 is cleared and the cap is raised — there is no longer enough
+iteration budget to complete the post-B1 work even if B1 cleared immediately.
+This is the honest, correct outcome: the loop did not fake the credential check
+it never ran.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
