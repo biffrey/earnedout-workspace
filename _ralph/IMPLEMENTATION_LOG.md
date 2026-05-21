@@ -783,3 +783,15 @@ Also created `output/logs/` with a `.gitkeep`.
 launchd. No findings raised, no blockers. `s10_schedule` → `implemented`. Next
 phase: SELF-TEST `s10_schedule` (Appendix A Stage 10 — list scheduled tasks,
 confirm the overnight-search task exists with the intended cadence + prompt).
+
+## Iteration 58 (2026-05-21T17:47:55Z) — RESOLVE F6
+
+RESOLVE phase. `unresolved_findings == 1` at start → oldest (only) unresolved
+finding F6 (IMPROVE — three `[RALPH TEST]` records linger in live base).
+Deleted all three test records (cvkfxz `recDUV3S985L7ytXK`, maya0n
+`rec5Pz99DMbpG8KhH`, so8acs `reccLQrb5S84uBsEj`) from base `appOsvuyy5eK43QTx`
+table `tblSmNrHROMLm7vOS` via the Airtable MCP `delete_records_for_table`
+(each `deleted: true`). Verified: a `RALPH TEST` Notes filter now returns
+`totalRecordCount: 0` — production base is clean. `s9_end_to_end` stays
+`verified` (F6 is IMPROVE, no demotion). `unresolved_findings` 1 → 0.
+See `TEST_LOG.md` / `FINDINGS.md` F6.

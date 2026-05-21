@@ -370,3 +370,25 @@ the three records via `delete_records_for_table` so no test data — marked or n
 — lingers in the production pipeline view. This is fully resolvable inside the
 loop (Airtable MCP). After deletion, `unresolved_findings` decrements; s9 stays
 `verified`.
+
+**RESOLUTION (iteration 58, 2026-05-21T17:47:55Z):** Closed. The three
+`[RALPH TEST]` records are deleted from the live base. Concrete steps this
+RESOLVE phase:
+  1. Re-listed the three records (`recDUV3S985L7ytXK` cvkfxz,
+     `rec5Pz99DMbpG8KhH` maya0n, `reccLQrb5S84uBsEj` so8acs) via the Airtable
+     MCP `list_records_for_table` on base `appOsvuyy5eK43QTx` / table
+     `tblSmNrHROMLm7vOS` — confirmed all three genuinely carry the `[RALPH TEST]`
+     tag in BOTH the Business Name field and the Notes field, i.e. they are the
+     loop's own test data and safe to remove.
+  2. `delete_records_for_table` on all three record IDs — response returned
+     `{"id": "...", "deleted": true}` for each of the three.
+  3. Verified the cleanup: `list_records_for_table` filtered on Notes
+     (`fldbEqYoyoPNthNoV`) `contains "RALPH TEST"` returned
+     `{"records": [], "metadata": {"totalRecordCount": 0}}` — no test data,
+     marked or unmarked, remains anywhere in the production base.
+The plan's Stage 9 requirement ("delete **or clearly mark** every `[RALPH TEST]`
+record … leave no unmarked test data in the live base") is now satisfied by the
+stronger option — deletion. `s9_end_to_end` stays `verified` (F6 is IMPROVE; the
+records were already clearly marked, so Stage 9 passed before and still passes).
+`unresolved_findings` decremented 1 → 0. No counting blocker — fully resolved
+inside the loop via the Airtable MCP.

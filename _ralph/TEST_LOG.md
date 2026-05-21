@@ -1053,3 +1053,39 @@ artifacts.
 
 **Result: all SELF-TEST checks PASS → `s10_schedule` → `self_tested`.** No
 findings raised; `unresolved_findings` stays 0; `open_blockers` stays 0.
+
+## Iteration 58 — F6 RESOLVE: delete [RALPH TEST] records (cleanup verification)
+
+RESOLVE phase, finding F6 (s9_end_to_end — three `[RALPH TEST]` records linger
+in the live production base). Not a stage SELF-TEST, but the cleanup actions and
+their evidence are logged here for the audit trail.
+
+**Action 1 — re-list the three records (confirm they are test data):**
+`list_records_for_table` base `appOsvuyy5eK43QTx` table `tblSmNrHROMLm7vOS`,
+recordIds `[recDUV3S985L7ytXK, rec5Pz99DMbpG8KhH, reccLQrb5S84uBsEj]`.
+Result: all 3 returned. Each carries `[RALPH TEST]` in BOTH Business Name and
+Notes:
+  - recDUV3S985L7ytXK — Listing ID cvkfxz — "HVAC Business, Very Profitable,
+    Recurring Clients [RALPH TEST]" — Disposition Active, Source Overnight Search.
+  - rec5Pz99DMbpG8KhH — Listing ID maya0n — "Thriving HVAC Business (Southwestern
+    South Dakota) [RALPH TEST]" — Disposition Revisit for Roll-up, Source
+    Overnight Search.
+  - reccLQrb5S84uBsEj — Listing ID so8acs — "Profitable HVAC & Plumbing
+    Contractor With Land [RALPH TEST]" — Disposition Passed, Source Manual
+    Submission.
+  → Confirmed: all three are the loop's own test data; safe to delete.
+
+**Action 2 — delete:** `delete_records_for_table` base `appOsvuyy5eK43QTx`
+table `tblSmNrHROMLm7vOS`, recordIds `[recDUV3S985L7ytXK, rec5Pz99DMbpG8KhH,
+reccLQrb5S84uBsEj]`.
+Result: `{"records": [{"id":"recDUV3S985L7ytXK","deleted":true},
+{"id":"rec5Pz99DMbpG8KhH","deleted":true},
+{"id":"reccLQrb5S84uBsEj","deleted":true}]}` — all 3 deleted.
+
+**Action 3 — verify cleanup:** `list_records_for_table` base
+`appOsvuyy5eK43QTx` table `tblSmNrHROMLm7vOS`, filter Notes (`fldbEqYoyoPNthNoV`)
+`contains "RALPH TEST"`.
+Result: `{"records": [], "metadata": {"totalRecordCount": 0}}`.
+→ **PASS** — no test data, marked or unmarked, remains in the production base.
+Stage 9's "leave no unmarked test data in the live base" requirement is now
+satisfied by deletion. F6 resolved; `unresolved_findings` 1 → 0.

@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 57
+iteration: 58
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:45:35Z
+last_iteration_at: 2026-05-21T17:47:55Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 1
+unresolved_findings: 0
 open_blockers: 0
 stages:
   s1_repo:            { status: verified }
@@ -1416,18 +1416,37 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   they are re-SELF-TESTED and re-VERIFIED. Appended a `RESOLUTION:` line to F5.
   `unresolved_findings` 2 → 1. Full detail in `FINDINGS.md` F5.
 
+- Iteration 58 (2026-05-21T17:47:55Z): RESOLVE phase. Step 0: `active: true`,
+  `iteration` 57 → 58 (`58 >= 75` false → no cap). Step 1 blocker re-check: B1
+  and B2 both RESOLVED, advisory A1 non-counting; `open_blockers == 0`, no
+  pending precondition. `unresolved_findings == 1` → **RESOLVE** phase, oldest
+  (only) unresolved finding = **F6** (IMPROVE — three `[RALPH TEST]` records
+  linger in the live production base). Resolved it: first re-listed the three
+  records (`recDUV3S985L7ytXK` cvkfxz, `rec5Pz99DMbpG8KhH` maya0n,
+  `reccLQrb5S84uBsEj` so8acs) via the Airtable MCP and confirmed all three are
+  genuinely `[RALPH TEST]`-tagged in both Business Name and Notes — then deleted
+  all three via `delete_records_for_table` (response: each `deleted: true`).
+  Verified the cleanup: a `list_records_for_table` filtered on Notes
+  `contains "RALPH TEST"` returned `totalRecordCount: 0` — no test data, marked
+  or unmarked, remains in base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS`.
+  Stage 9's "delete or clearly mark every `[RALPH TEST]` record / leave no
+  unmarked test data" requirement is now satisfied by deletion. `s9_end_to_end`
+  stays `verified` (F6 is IMPROVE; no demotion). Appended a `RESOLUTION:` line
+  to F6. `unresolved_findings` 1 → 0. Full detail in `TEST_LOG.md` /
+  `FINDINGS.md` F6.
+
 ## Next iteration (expected)
-> **Updated after iteration 57.** RESOLVE closed F5 (the non-resolving
-> `op://` path is now corrected to `op://Personal/dealstream.com/...` in all
-> three skill files). `unresolved_findings: 1` (F6 IMPROVE only), `open_blockers:
-> 0`, `final_audit_passed: false`, s5/s6 demoted to `implemented`. The next run
-> is **iteration 58**: `unresolved_findings > 0` → **RESOLVE** phase again,
-> oldest finding = **F6** — delete the three `[RALPH TEST]` Airtable records
-> (cvkfxz `recDUV3S985L7ytXK`, maya0n `rec5Pz99DMbpG8KhH`, so8acs
-> `reccLQrb5S84uBsEj`) via `delete_records_for_table`. Then `unresolved_findings`
-> → 0; iterations 59–62 SELF-TEST + VERIFY s5 and s6 (the s5/s6 SELF-TEST must
-> now include an explicit `op://` grep confirming the canonical path), then
-> FINAL AUDIT re-runs and — if clean — COMPLETE emits the promise.
+> **Updated after iteration 58.** RESOLVE closed F6 (the three `[RALPH TEST]`
+> records are deleted; the live base is clean — `RALPH TEST` filter returns 0).
+> `unresolved_findings: 0`, `open_blockers: 0`, `final_audit_passed: false`,
+> s5/s6 still `implemented` (demoted by iter 57's F5 RESOLVE). The next run is
+> **iteration 59**: `unresolved_findings == 0` → RESOLVE skipped; IMPLEMENT
+> finds no `not_started` stage → **SELF-TEST** phase, first `implemented` stage
+> = **s5_overnight_skill** — re-run the s5 SELF-TEST, which must now include an
+> explicit `grep` for `op://` confirming the skill uses the canonical
+> `op://Personal/dealstream.com/...` path. Then iter 60 SELF-TESTs s6, iters
+> 61–62 VERIFY s5 and s6, then FINAL AUDIT re-runs and — if clean — COMPLETE
+> emits the promise.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 56.** The FINAL AUDIT returned `VERDICT: REVISE`
