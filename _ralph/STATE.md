@@ -1,14 +1,14 @@
 ---
 active: true
-iteration: 19
+iteration: 20
 max_iterations: 40
-last_iteration_at: 2026-05-21T03:04:28Z
+last_iteration_at: 2026-05-21T03:14:22Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
 open_blockers: 1
 stages:
-  s1_repo:            { status: self_tested }
+  s1_repo:            { status: verified }
   s2_playwright:      { status: self_tested }
   s3_onepassword:     { status: blocked }
   s4_airtable:        { status: self_tested }
@@ -407,6 +407,36 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `s8_dashboard` → `self_tested`.** Evidence in `TEST_LOG.md` under
   `## Iteration 19 — s8_dashboard self-test`.
 
+- Iteration 20 (2026-05-21T03:14:22Z): VERIFY phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 127), `which op` exit 1 in the iteration-20 sandbox; precondition
+  (an installed, signed-in `op` reachable by the SELF-TEST) did not clear, so B1
+  stays open and `open_blockers` stays 1. `unresolved_findings == 0` so Step 1
+  fell through RESOLVE; the IMPLEMENT scan found no actionable `not_started`
+  stage (s9 needs s1–s8 `verified`, s10 needs s9 `verified`); the SELF-TEST scan
+  found no `implemented` stage (s1/s2/s4/s5/s6/s7/s8 `self_tested`, s3
+  `blocked`) so Step 1 fell through to **VERIFY**. The VERIFY s1→s10 scan landed
+  on the first `self_tested` stage, `s1_repo`. Spawned an independent
+  general-purpose critic subagent (Appendix C brief): skeptical fresh context,
+  read `REVAMP_PLAN.md` "Repository Reorganization" + "Implementation Order" #1,
+  `TEST_LOG.md` Iteration 12, `FINDINGS.md` F1, `STATE.md` Environment notes;
+  read-only. The critic **independently re-ran SELF-TEST Checks 1 and 3** against
+  the real filesystem + git repo: all 10 required dirs present/non-empty
+  (`output/screenshots/.gitkeep` 0 B is the intentional placeholder), all 7
+  prospect-evaluation skill/reference/template files present with sizes matching
+  `TEST_LOG.md` Iteration 12 byte-for-byte and genuine (non-stub) content; it
+  confirmed `git log` commit `f631502` is real and `git remote -v` shows
+  `origin`. **Verdict: `SHIP`, zero BLOCKING findings.** The two `IMPROVE` items
+  are not new s1 defects — #3 (`git status` dirty) is this iteration's own
+  in-progress `STATE.md` edit, committed as normal flow; #5 (`git push` never
+  succeeded) IS finding F1, already raised+resolved via Option C, which the
+  critic explicitly "accept[s] as documented." Two NITs (#4 stale `git log`
+  snippet, #6 prospect-evaluation `name` title-case, out of s1's migrate-as-is
+  scope) are informational. Per Step 1.4 (SHIP + no BLOCKING → `verified`),
+  `s1_repo` → `verified`; `unresolved_findings` NOT incremented (the
+  write-findings instruction applies only on the REVISE/BLOCKING branch). Full
+  critic output in `VERIFY_LOG.md` under `## Iteration 20 — s1_repo verify`.
+
 ## Next iteration (expected)
 VERIFY phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
@@ -415,15 +445,16 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 `unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`); the SELF-TEST scan finds no
-`implemented` stage (s1/s2/s4/s5/s6/s7/s8 are now `self_tested`, s3 is
-`blocked`) so it falls through to **VERIFY**. The VERIFY s1→s10 scan lands on
-the first `self_tested` stage, `s1_repo`: spawn an independent critic subagent
-(Appendix C brief) for `s1_repo`, append its full output to `VERIFY_LOG.md`
-under `## Iteration N — s1_repo verify`, and on a `SHIP` verdict with no
-BLOCKING findings set `s1_repo` → `verified` (else write findings and increment
-`unresolved_findings`).
+`implemented` stage (s1 is now `verified`; s2/s4/s5/s6/s7/s8 are `self_tested`;
+s3 is `blocked`) so it falls through to **VERIFY**. The VERIFY s1→s10 scan
+skips `s1_repo` (`verified`) and lands on the first `self_tested` stage,
+`s2_playwright`: spawn an independent critic subagent (Appendix C brief) for
+`s2_playwright`, append its full output to `VERIFY_LOG.md` under
+`## Iteration N — s2_playwright verify`, and on a `SHIP` verdict with no
+BLOCKING findings set `s2_playwright` → `verified` (else write findings and
+increment `unresolved_findings`).
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
-loop can still progress through the s1–s8 VERIFY phase meanwhile, but cannot
+loop can still progress through the s2–s8 VERIFY phase meanwhile, but cannot
 reach COMPLETE (`open_blockers == 0` required, all 10 stages `verified`) until
 B1 clears and s3/s9/s10 finish.
 
