@@ -1133,3 +1133,73 @@ finding is genuine and is precisely the failure mode this loop exists to catch:
 a pre-correction credential path frozen into the skills before the 2026-05-21
 operator correction, never re-grepped by the s5/s6 SELF-TEST/VERIFY phases. Next
 iteration: RESOLVE F5.
+
+## Iteration 61 — s5_overnight_skill verify
+
+**Phase:** VERIFY. **Stage:** s5_overnight_skill. **Verdict: SHIP** (zero BLOCKING findings).
+Independent general-purpose critic subagent, skeptical fresh context, read-only.
+Brief per Appendix C: read REVAMP_PLAN.md Steps 2(2a–2e)/3/4/5/7/8 + Implementation
+Order #5, TEST_LOG.md Iteration 59, FINDINGS.md F5, BLOCKERS.md B1, and the artifact
+`.claude/skills/overnight-search/skill.md`.
+
+Critic output (verbatim):
+
+---
+
+### Verification Findings — s5_overnight_skill
+
+**1. Existence & frontmatter — PASS (no finding).** `.claude/skills/overnight-search/skill.md`
+exists, 209 lines. Frontmatter (lines 1-4) is a clean two-key YAML mapping:
+`name: overnight-search` (matches the skill directory) and a non-empty 584-char
+`description`. The TEST_LOG Iter 59 claim of valid YAML is accurate.
+
+**2. Plan-step coverage — PASS (no finding).** All ten required plan steps are covered
+by dedicated, plan-step-labelled `##` headings (verified by `grep -nE '^## '`):
+2a → L10 + L19; 2b → L36; 2c → L58; 2d → L68; 2e → L88; Step 3 → L112; Step 4 → L123;
+Step 5 → L159; Step 7 → L188; Step 8 → L173. Each section carries substantive,
+plan-aligned content (Playwright login/verify, direct-URL+listing-ID extraction,
+validate+screenshot, extraction table incl. 2024/2025 financials with "do not
+fabricate", dedup branches, prospect-eval invocation, full field mapping, outreach
+template selection, 6-value Disposition table, 4-section dashboard).
+
+**3. F5 op:// canonical-path re-check — PASS (no finding).** Independently ran
+`grep -n 'op://' .claude/skills/overnight-search/skill.md` → exactly two hits, both
+canonical: `op read "op://Personal/dealstream.com/username"` (L26) and `.../password`
+(L27). `grep -rn "op://Private/DealStream" .claude/skills/` → exit 1, no matches;
+`grep "Private/DealStream"` on the skill file → exit 1. The dead, non-resolving path
+is fully removed. The L23 citation ("canonical item path (per `REVAMP_PLAN.md` Step 0
+and `config/credentials-setup.md`)") is now accurate — all three sources agree on
+`op://Personal/dealstream.com/...`.
+
+**4. IDs / field names / rules re-check — PASS (no finding).** Independently confirmed
+via grep: base `appOsvuyy5eK43QTx` and table `tblSmNrHROMLm7vOS` at L17 + L90; Links
+field `fldwo7ui7aIGoMxAG` at L17. The four F3-canonical financial field names
+`Revenue 2024`/`Cash Flow 2024`/`Revenue 2025`/`Cash Flow 2025` appear at L140-143;
+`Previous Asking Price` at L103 + L157. The never-store rule is an explicit dedicated
+section (L55-56: "NEVER store a search-results page URL as a listing link… skip it"),
+reinforced at L131, L146, L154. Price-drop detection is fully spelled out at L102-110
+(store old price → `Previous Asking Price`, update `Asking Price`, set `Date Updated`,
+re-run prospect-eval, append `PRICE DROP: was $[OLD], now $[NEW]` note, price-drop
+outreach template, Section-A "PRICE DROP" badge).
+
+**5. TEST_LOG Iteration 59 honesty — PASS with one NIT.** The Iter 59 entry shows real
+evidence: a YAML-parse result with keys/name/description, a `grep -nE '^## '` heading
+map with line numbers, and the literal `grep -n 'op://'` output showing both canonical
+lines. Every PASS is backed by a cited command + observed output. Critic reproduced all
+three checks independently and got identical results. **NIT:** Iter 59 states the file
+is "210 lines"; `wc -l` reports 209 (the file ends without a trailing newline).
+Immaterial off-by-one — no functional impact. Suggested fix: none required.
+
+**6. No BLOCKING or IMPROVE findings.** F5 — the specific reason this stage was demoted
+and re-self-tested — is genuinely resolved in the artifact and verified by the critic's
+independent grep. No operative `op read` uses the dead path. The Iter 59 self-test was
+actually executed, not hand-waved.
+
+VERDICT: SHIP
+
+---
+
+**Loop disposition:** Per Step 1.4 (SHIP + no BLOCKING → `verified`), `s5_overnight_skill`
+→ `verified`. `unresolved_findings` NOT incremented — the lone graded item is a NIT
+(off-by-one line count, "no fix required"); the write-findings instruction applies only
+on the REVISE/BLOCKING branch and only to BLOCKING/IMPROVE severities.

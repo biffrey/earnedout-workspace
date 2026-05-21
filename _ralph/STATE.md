@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 60
+iteration: 61
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:52:44Z
+last_iteration_at: 2026-05-21T17:54:06Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -12,7 +12,7 @@ stages:
   s2_playwright:      { status: verified }
   s3_onepassword:     { status: verified }
   s4_airtable:        { status: verified }
-  s5_overnight_skill: { status: self_tested }
+  s5_overnight_skill: { status: verified }
   s6_submit_url:      { status: self_tested }
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
@@ -1488,16 +1488,51 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   Counters unchanged (`unresolved_findings: 0`, `open_blockers: 0`). Evidence in
   `TEST_LOG.md` under `## Iteration 60 — s6_submit_url self-test`.
 
+- Iteration 61 (2026-05-21T17:54:06Z): VERIFY phase. Step 0: `active: true`,
+  `iteration` 60 → 61 (`61 >= 75` false → no cap). Step 1 blocker re-check: B1
+  and B2 both RESOLVED, advisory A1 non-counting; `open_blockers == 0`, no
+  pending precondition. `unresolved_findings == 0` → RESOLVE skipped. IMPLEMENT
+  scan s1→s10: no `not_started` stage. SELF-TEST scan: no `implemented` stage
+  (s1–s4/s7–s10 `verified`, s5/s6 `self_tested`). → **VERIFY** phase; first
+  `self_tested` stage = `s5_overnight_skill`. Spawned an independent
+  general-purpose critic subagent (Appendix C brief): skeptical fresh context,
+  read `REVAMP_PLAN.md` Steps 2 (2a–2e)/3/4/5/7/8 + "Implementation Order" #5,
+  `TEST_LOG.md` Iteration 59, `FINDINGS.md` F5, `BLOCKERS.md` B1, and the
+  artifact `.claude/skills/overnight-search/skill.md`; read-only. The critic
+  **independently re-ran the Appendix A Stage 5 SELF-TEST checks** against the
+  real file (209 lines): Check 1 — frontmatter parses as a 2-key YAML mapping
+  (`name: overnight-search`, 584-char `description`); Check 2 — `grep -nE '^## '`
+  confirms all ten plan steps covered by dedicated labelled headings (2a L10/L19,
+  2b L36, 2c L58, 2d L68, 2e L88, Step 3 L112, Step 4 L123, Step 5 L159,
+  Step 7 L188, Step 8 L173); Check 3 — base `appOsvuyy5eK43QTx` + table
+  `tblSmNrHROMLm7vOS` + Links `fldwo7ui7aIGoMxAG` at L17/L90, the four
+  F3-canonical financial fields at L140–143, `Previous Asking Price` at
+  L103/L157, the never-store-search-URL rule at L55–56, price-drop logic at
+  L102–110. **F5 re-check PASS** — `grep -n 'op://'` returns exactly two hits,
+  both the verified canonical `op://Personal/dealstream.com/{username,password}`
+  (L26/L27); `grep -rn 'op://Private/DealStream' .claude/skills/` → exit 1, no
+  matches — the dead non-resolving path is fully absent. The critic confirmed
+  TEST_LOG Iteration 59's PASS claims are honest and re-derivable (no faked
+  PASS). **Verdict: `SHIP`, zero BLOCKING findings.** The lone graded item is
+  NIT #5 (TEST_LOG Iter 59 says "210 lines"; `wc -l` reports 209 — an immaterial
+  off-by-one from the missing trailing newline, "no fix required"); findings
+  #1/#2/#3/#4/#6 are PASS confirmations. Per Step 1.4 (SHIP + no BLOCKING →
+  `verified`), `s5_overnight_skill` → `verified`; `unresolved_findings` NOT
+  incremented (the write-findings instruction applies only on the
+  REVISE/BLOCKING branch, and only to BLOCKING/IMPROVE severities — the NIT does
+  not qualify). Full critic output in `VERIFY_LOG.md` under `## Iteration 61 —
+  s5_overnight_skill verify`.
+
 ## Next iteration (expected)
-> **Updated after iteration 60.** SELF-TEST re-passed `s6_submit_url` after the
-> F5 fix (skill now uses the canonical `op://Personal/dealstream.com/...` path,
-> confirmed by an explicit `op://` grep). `unresolved_findings: 0`,
-> `open_blockers: 0`, `final_audit_passed: false`, both s5 and s6 `self_tested`.
-> The next run is **iteration 61**: `unresolved_findings == 0` → RESOLVE skipped;
-> IMPLEMENT finds no `not_started` stage; SELF-TEST finds no `implemented` stage
-> → **VERIFY** phase, first `self_tested` stage = **s5_overnight_skill**. Then
-> iter 62 VERIFYs s6, then FINAL AUDIT re-runs and — if clean — COMPLETE emits
-> the promise.
+> **Updated after iteration 61.** VERIFY passed `s5_overnight_skill` (SHIP, zero
+> BLOCKING; F5 fix confirmed — skill uses only the canonical
+> `op://Personal/dealstream.com/...` path). `unresolved_findings: 0`,
+> `open_blockers: 0`, `final_audit_passed: false`; s5 now `verified`, s6 still
+> `self_tested`. The next run is **iteration 62**: `unresolved_findings == 0` →
+> RESOLVE skipped; IMPLEMENT finds no `not_started` stage; SELF-TEST finds no
+> `implemented` stage → **VERIFY** phase, first `self_tested` stage =
+> **s6_submit_url**. Then iter 63 runs FINAL AUDIT (all 10 stages `verified`),
+> and — if clean — iter 64 COMPLETE emits the promise.
 
 ## Next iteration (superseded — kept for history)
 > **Updated after iteration 58.** RESOLVE closed F6 (the three `[RALPH TEST]`
