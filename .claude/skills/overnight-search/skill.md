@@ -23,8 +23,8 @@ You are running the EarnedOut overnight published-listing search pipeline. This 
 Retrieve the DealStream login at runtime via the 1Password CLI. The **canonical item path** (per `REVAMP_PLAN.md` Step 0 and `config/credentials-setup.md`) is:
 
 ```bash
-op read "op://Private/DealStream/username"
-op read "op://Private/DealStream/password"
+op read "op://Personal/dealstream.com/username"
+op read "op://Personal/dealstream.com/password"
 ```
 
 **Fail loudly.** Before searching, check authentication (`op whoami`, or a trial `op read`). If `op` is not installed, not signed in, or the item cannot be read, **stop immediately**: print a clear error naming the missing/blocked step, exit non-zero, and do not continue. NEVER proceed to DealStream unauthenticated and NEVER fall back to cached, blank, or hard-coded credentials — unauthenticated access silently returns incomplete results.

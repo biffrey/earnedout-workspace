@@ -324,6 +324,33 @@ include an explicit grep for `op://` confirming the canonical path) and
 re-VERIFIED. No counting blocker — fully fixable inside the loop (it is an
 on-disk text edit, no external dependency).
 
+**RESOLUTION (iteration 57, 2026-05-21T17:45:35Z):** Closed. The non-resolving
+1Password path was corrected to the verified canonical path
+`op://Personal/dealstream.com/...` in every operative location, via the `Edit`
+tool (it worked directly on `.claude/` paths this iteration — the
+author-elsewhere-and-copy workaround was not needed):
+  1. `.claude/skills/overnight-search/skill.md` — the `op read` command block
+     (was L26–27) now reads `op read "op://Personal/dealstream.com/username"`
+     and `op read "op://Personal/dealstream.com/password"`. The L23 citation
+     ("the **canonical item path** (per `REVAMP_PLAN.md` Step 0 and
+     `config/credentials-setup.md`)") is now accurate — those two sources
+     specify exactly this path.
+  2. `.claude/skills/submit-url/skill.md` — the L14 inline `op read` pair now
+     uses `op://Personal/dealstream.com/username` and `.../password`.
+  3. `.claude/ralph-loop.local.md` — the L22 verification command now uses the
+     canonical path (audit NIT #2).
+A repo-wide `grep` for `op://Private/DealStream` confirms the only remaining
+hits are intentional "this old path is wrong / was corrected" references in
+`REVAMP_PLAN.md` L113, `REVAMP_LOOP_PROMPT.md` L184/L281, and
+`config/credentials-setup.md` L51/L55 — no operative `op read` command anywhere
+still uses the dead path. Per Step 1's RESOLVE rule ("if fixing it materially
+changed a stage that was already `self_tested` or `verified`, demote that stage
+one level"): s5 and s6 — already demoted `verified` → `self_tested` by the
+iteration-56 FINAL AUDIT — are demoted one further level `self_tested` →
+`implemented` so they are re-SELF-TESTED (the SELF-TEST will grep `op://` to
+confirm the canonical path) and re-VERIFIED. No counting blocker.
+`unresolved_findings` decremented 2 → 1.
+
 ## F6 — s9_end_to_end — three `[RALPH TEST]` records remain live in the production base (IMPROVE)
 
 **Iteration raised:** 56 (2026-05-21T17:40:12Z) — FINAL AUDIT, audit finding #4.

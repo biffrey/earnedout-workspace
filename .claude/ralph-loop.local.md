@@ -19,7 +19,7 @@ Complete when TODO.md shows [x] ALL_TASKS_COMPLETE
 
 Run these to check progress after each phase:
 
-- `op read "op://Private/DealStream/username"` — 1Password CLI retrieves credentials
+- `op read "op://Personal/dealstream.com/username"` — 1Password CLI retrieves credentials
 - `npx @anthropic/mcp-playwright --help` — Playwright MCP is installed
 - Airtable: `list_table_fields` on `tblSmNrHROMLm7vOS` — all 16 new fields exist
 - Playwright navigates to a known-good listing URL and captures a screenshot to `output/screenshots/`

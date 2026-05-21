@@ -1,19 +1,19 @@
 ---
 active: true
-iteration: 56
+iteration: 57
 max_iterations: 75
-last_iteration_at: 2026-05-21T17:40:12Z
+last_iteration_at: 2026-05-21T17:45:35Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 2
+unresolved_findings: 1
 open_blockers: 0
 stages:
   s1_repo:            { status: verified }
   s2_playwright:      { status: verified }
   s3_onepassword:     { status: verified }
   s4_airtable:        { status: verified }
-  s5_overnight_skill: { status: self_tested }
-  s6_submit_url:      { status: self_tested }
+  s5_overnight_skill: { status: implemented }
+  s6_submit_url:      { status: implemented }
   s7_outreach:        { status: verified }
   s8_dashboard:       { status: verified }
   s9_end_to_end:      { status: verified }
@@ -1393,7 +1393,43 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   "delete **or** clearly mark"). `final_audit_passed` stays `false`. Full auditor
   output in `VERIFY_LOG.md` under `## Iteration 56 — FINAL AUDIT`.
 
+- Iteration 57 (2026-05-21T17:45:35Z): RESOLVE phase. Step 0: `active: true`,
+  `iteration` 56 → 57 (`57 >= 75` false → no cap). Step 1 blocker re-check: B1
+  and B2 both RESOLVED, advisory A1 non-counting; `open_blockers == 0`, no
+  pending precondition. `unresolved_findings == 2` → **RESOLVE** phase, oldest
+  unresolved finding first = **F5** (BLOCKING — skills use the non-resolving
+  `op://Private/DealStream/...` 1Password path). Fixed it: replaced the dead
+  path with the verified canonical `op://Personal/dealstream.com/...` in all
+  three operative locations via the `Edit` tool (which worked directly on
+  `.claude/` paths this iteration — the author-elsewhere-and-copy workaround was
+  not needed): (1) `.claude/skills/overnight-search/skill.md` `op read` command
+  block; (2) `.claude/skills/submit-url/skill.md` L14 inline `op read` pair;
+  (3) `.claude/ralph-loop.local.md` L22 verification command (audit NIT #2). A
+  repo-wide `grep` for `op://Private/DealStream` confirms the only remaining
+  hits are intentional "this old path was corrected" references in
+  `REVAMP_PLAN.md`, `REVAMP_LOOP_PROMPT.md`, and `config/credentials-setup.md` —
+  no operative `op read` still uses the dead path; the overnight-search L23
+  "canonical item path (per `REVAMP_PLAN.md` Step 0 and
+  `config/credentials-setup.md`)" citation is now accurate. Per Step 1's RESOLVE
+  demotion rule, s5 and s6 — already demoted `verified` → `self_tested` by
+  iteration 56 — are demoted one further level `self_tested` → `implemented` so
+  they are re-SELF-TESTED and re-VERIFIED. Appended a `RESOLUTION:` line to F5.
+  `unresolved_findings` 2 → 1. Full detail in `FINDINGS.md` F5.
+
 ## Next iteration (expected)
+> **Updated after iteration 57.** RESOLVE closed F5 (the non-resolving
+> `op://` path is now corrected to `op://Personal/dealstream.com/...` in all
+> three skill files). `unresolved_findings: 1` (F6 IMPROVE only), `open_blockers:
+> 0`, `final_audit_passed: false`, s5/s6 demoted to `implemented`. The next run
+> is **iteration 58**: `unresolved_findings > 0` → **RESOLVE** phase again,
+> oldest finding = **F6** — delete the three `[RALPH TEST]` Airtable records
+> (cvkfxz `recDUV3S985L7ytXK`, maya0n `rec5Pz99DMbpG8KhH`, so8acs
+> `reccLQrb5S84uBsEj`) via `delete_records_for_table`. Then `unresolved_findings`
+> → 0; iterations 59–62 SELF-TEST + VERIFY s5 and s6 (the s5/s6 SELF-TEST must
+> now include an explicit `op://` grep confirming the canonical path), then
+> FINAL AUDIT re-runs and — if clean — COMPLETE emits the promise.
+
+## Next iteration (superseded — kept for history)
 > **Updated after iteration 56.** The FINAL AUDIT returned `VERDICT: REVISE`
 > with one genuine BLOCKING finding — exactly the kind of drift this loop exists
 > to catch: a previous iteration "corrected" the 1Password path in the skills to

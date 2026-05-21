@@ -11,7 +11,7 @@ You are adding a manually-submitted business listing to the EarnedOut acquisitio
 
 1. **Read configuration:** Load `config/search_config.md` for Airtable field IDs, the canonical live field names, output paths, and platform URL patterns.
 2. **Read outreach templates:** Load `config/outreach_templates.md` for the broker email templates and the template-selection logic.
-3. **Read credential setup:** Load `config/credentials-setup.md`. If the submitted URL is a DealStream listing behind a login wall, retrieve the DealStream credentials via the 1Password CLI exactly as the overnight-search skill does (`op read "op://Private/DealStream/username"` and `op read "op://Private/DealStream/password"`) and **fail loudly** if `op` is not installed or not signed in. Public-platform URLs (BizBuySell, BizQuest, etc.) do not require authentication.
+3. **Read credential setup:** Load `config/credentials-setup.md`. If the submitted URL is a DealStream listing behind a login wall, retrieve the DealStream credentials via the 1Password CLI exactly as the overnight-search skill does (`op read "op://Personal/dealstream.com/username"` and `op read "op://Personal/dealstream.com/password"`) and **fail loudly** if `op` is not installed or not signed in. Public-platform URLs (BizBuySell, BizQuest, etc.) do not require authentication.
 4. **Read the prospect-evaluation skill:** Load `.claude/skills/prospect-evaluation/skill.md` — you invoke it in Step 5 to score the lead.
 
 **Airtable target:** base `appOsvuyy5eK43QTx`, table `tblSmNrHROMLm7vOS` ("Master Deal Pipeline"). Existing Links field: `fldwo7ui7aIGoMxAG`.
