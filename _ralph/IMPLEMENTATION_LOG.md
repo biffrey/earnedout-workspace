@@ -115,3 +115,59 @@ genuinely succeeded this run.
 parse, `npm ls -g`, headless Chromium smoke test capturing a screenshot, and —
 only if the MCP tools are present — one live MCP navigation) will run in a
 later iteration.
+
+## Iteration 4 — 2026-05-21T00:18:30Z — IMPLEMENT on s3_onepassword
+
+**Phase selected:** Step 1 IMPLEMENT. `unresolved_findings == 0` and
+`open_blockers == 0` at the start of this iteration, so RESOLVE was skipped.
+Scanning s1→s10: `s1_repo` and `s2_playwright` are both `implemented` (skipped
+by IMPLEMENT); the first `not_started` stage with met dependencies is
+`s3_onepassword` (dependencies: none). One phase only — IMPLEMENT — was run; the
+`op --version` / `op read` SELF-TEST checks were NOT run or claimed here.
+
+**s3_onepassword IMPLEMENT actions (Appendix A Stage 3):**
+
+1. *`config/credentials-setup.md` exists* — Yes; a 1,433-byte version dated
+   2026-04-16 was already on disk. It already documented the `op` CLI install,
+   `op signin`, a credential-retrieval section, and a fail-loud "Failure
+   Behavior" section.
+
+2. *Discrepancy found — 1Password item path* — The pre-existing file documented
+   `op read "op://Personal/dealstream.com/username"` / `.../password` (vault
+   `Personal`, item `dealstream.com`). The canonical `REVAMP_PLAN.md` Step 0
+   (lines 110–111) and the loop prompt's Appendix A Stage 3 + Appendix B all
+   specify `op://Private/DealStream/username` / `op://Private/DealStream/password`
+   (vault `Private`, item `DealStream`). This is a genuine two-part mismatch
+   (vault name AND item name).
+
+3. *Resolution applied* — Per Step 3 self-correction principle #1 ("re-read
+   `REVAMP_PLAN.md` every iteration; it is canonical") and Appendix B ("trust
+   the plan ... record the discrepancy as a finding"), `config/credentials-setup.md`
+   was rewritten so it documents the plan's canonical path
+   `op://Private/DealStream/...` as primary. A prominent "⚠️ Vault / item-path
+   reconciliation needed" section preserves the old `op://Personal/dealstream.com/...`
+   path and gives Biffrey exact `op vault list` / `op item list` / `op item get`
+   commands to confirm the true location. No information was destroyed — the
+   "distrust prior artifacts" rule cuts both ways, so the old path is flagged,
+   not silently deleted.
+
+4. *Confirmed the file documents all three required items (Appendix A Stage 3)* —
+   (a) the 1Password item path `op://Private/DealStream/username` and
+   `op://Private/DealStream/password`; (b) how to install (`brew install --cask
+   1password-cli`) and sign in (`op signin`, desktop-app integration) to the
+   `op` CLI, plus verification (`op --version`, `op whoami`); (c) the fail-loud
+   requirement — an explicit "Failure Behavior — fail loudly, never proceed
+   unauthenticated" section stating the skill must print a clear error, exit
+   non-zero, and stop, and must never proceed unauthenticated or fall back to
+   cached/blank credentials.
+
+5. *Finding recorded* — F2 written to `FINDINGS.md`, `unresolved_findings`
+   incremented 0 → 1. The finding documents that the file-vs-plan *text*
+   discrepancy is fixed but the *real-world* question (which path resolves
+   against Biffrey's actual vault) cannot be settled from inside the sandbox
+   (`op` is not a sandbox tool) — it is delegated to the s3 SELF-TEST `op read`
+   check and that check's blocker handling.
+
+**Result:** `s3_onepassword` status set to `implemented`. `unresolved_findings`
+→ 1 (F2). `open_blockers` stays 0. Next iteration will run RESOLVE on F2 (per
+the Step 1 selection rule: `unresolved_findings > 0` forces RESOLVE first).

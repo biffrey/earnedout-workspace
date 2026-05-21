@@ -60,3 +60,42 @@ an honest documented decision, not a faked PASS — the push genuinely fails and
 that fact remains recorded here and in STATE.md. `unresolved_findings`
 decremented 1 → 0. `s1_repo` stays `implemented` (it was never `self_tested` or
 `verified`, so no stage demotion applies).
+
+## F2 — s3_onepassword — 1Password item path: plan vs. on-disk file mismatch (IMPROVE)
+
+**Iteration raised:** 4 (2026-05-21T00:18:30Z)
+**Observed:** `REVAMP_PLAN.md` Step 0 (lines 110–111), and the loop prompt's
+Appendix A Stage 3 and Appendix B "Key paths & identifiers", all specify the
+DealStream 1Password item path as `op://Private/DealStream/username` and
+`op://Private/DealStream/password` (vault `Private`, item `DealStream`). The
+pre-existing `config/credentials-setup.md` (created 2026-04-16, before this
+loop) instead documented `op://Personal/dealstream.com/username` and
+`.../password` (vault `Personal`, item `dealstream.com`) — a different vault
+**and** a different item name.
+
+**Action taken this iteration (IMPLEMENT s3):** Per the loop's canonical-plan
+rule (Step 3 #1) and Appendix B ("trust the plan ... record the discrepancy as
+a finding"), `config/credentials-setup.md` was rewritten to document the plan's
+canonical path `op://Private/DealStream/...` as primary, with a prominent
+"Vault / item-path reconciliation needed" section that preserves the old
+`op://Personal/dealstream.com/...` path so no information is lost.
+
+**Open question (why this stays an unresolved finding):** It cannot be
+determined from inside the execution sandbox which path actually resolves
+against Biffrey's real 1Password vault — `op` is a credential manager on
+Biffrey's Mac, not present in the Linux sandbox. The file-vs-plan *text*
+discrepancy is fixed; the *real-world* question "which path is correct" is
+unresolved.
+
+**Severity:** IMPROVE. **Recommended resolution for the next RESOLVE phase:** the
+discrepancy is only truly settled by running `op read "op://Private/DealStream/username"`
+(the s3 SELF-TEST check). If `op` is unavailable in the execution environment
+(expected — it is a desktop credential manager, not a sandbox tool), the s3
+SELF-TEST already records an `op`-unavailable blocker with sign-in instructions
+for Biffrey; reconciling the vault/item name should be folded into that
+blocker's fix instructions. RESOLVE may therefore close F2 as "file aligned to
+plan; real-vault confirmation delegated to the s3 SELF-TEST and its blocker,"
+with no separate counting blocker needed. `s3_onepassword` stays `implemented`
+(never `self_tested`/`verified`, so no demotion applies).
+
+**RESOLUTION:** _(pending — to be completed by a RESOLVE phase)_

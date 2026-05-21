@@ -1,16 +1,16 @@
 ---
 active: true
-iteration: 3
+iteration: 4
 max_iterations: 40
-last_iteration_at: 2026-05-20T23:56:28Z
+last_iteration_at: 2026-05-21T00:18:30Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
-unresolved_findings: 0
+unresolved_findings: 1
 open_blockers: 0
 stages:
   s1_repo:            { status: implemented }
   s2_playwright:      { status: implemented }
-  s3_onepassword:     { status: not_started }
+  s3_onepassword:     { status: implemented }
   s4_airtable:        { status: not_started }
   s5_overnight_skill: { status: not_started }
   s6_submit_url:      { status: not_started }
@@ -57,16 +57,28 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   runnable via the `npx playwright`/Node CLI fallback and the MCP-navigation
   check is explicitly conditional — escalating would falsely deadlock COMPLETE
   (same rationale as F1). `s2_playwright` → `implemented`.
+- Iteration 4 (2026-05-21T00:18:30Z): IMPLEMENT phase (`unresolved_findings == 0`,
+  `open_blockers == 0` at start). Scanned s1→s10; `s1_repo`/`s2_playwright` are
+  `implemented` so skipped; first `not_started` stage is `s3_onepassword` (no
+  deps). IMPLEMENT on `s3_onepassword`: `config/credentials-setup.md` already
+  existed but documented `op://Personal/dealstream.com/...` while the canonical
+  plan (REVAMP_PLAN.md Step 0 + Appendix A/B) specifies `op://Private/DealStream/...`.
+  Rewrote the file to the plan's canonical path, preserving the old path in a
+  prominent reconciliation section; confirmed it documents the item path, the
+  `op` CLI install/signin, and the fail-loud requirement. Recorded the
+  plan-vs-disk mismatch as finding F2 (`unresolved_findings` → 1) — the file
+  text is now plan-aligned but the real-vault path cannot be verified without
+  `op`. `s3_onepassword` → `implemented`.
 
 ## Next iteration (expected)
-IMPLEMENT phase expected: `unresolved_findings == 0`, `open_blockers == 0`. The
-IMPLEMENT scan runs s1→s10 for the first `not_started` stage with met
-dependencies. `s1_repo` and `s2_playwright` are both `implemented` (skipped by
-IMPLEMENT); the first `not_started` stage is `s3_onepassword` (dependencies:
-none) — expect IMPLEMENT on `s3_onepassword` (creating/confirming
-`config/credentials-setup.md`). SELF-TEST of the `implemented` stages
-(`s1_repo`, `s2_playwright`) follows once all earlier IMPLEMENT work is done,
-per the s1→s10 phase-scan order.
+RESOLVE phase expected: `unresolved_findings == 1` forces RESOLVE first (Step 1
+selection rule). The next iteration takes the oldest unresolved finding — F2 —
+and resolves it. Likely outcome: F2 is closed as "credentials-setup.md aligned
+to the canonical plan; the real-vault path confirmation is delegated to the s3
+SELF-TEST `op read` check (and that check's `op`-unavailable blocker handling),"
+decrementing `unresolved_findings` back to 0 with no new counting blocker. After
+RESOLVE, the IMPLEMENT scan resumes at `s4_airtable` (first `not_started`
+stage).
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that
