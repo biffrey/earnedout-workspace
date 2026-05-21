@@ -583,3 +583,68 @@ the s3 SELF-TEST.
 Loop terminated at iteration 40 (cap reached). `git push` to `origin` remains
 unavailable from the sandbox (finding F1, accepted by design); the local commit
 persists in Biffrey's real workspace `.git`.
+
+## Iteration 43 — 2026-05-21T15:08:15Z — IMPLEMENT on s9_end_to_end → BLOCKED
+
+**Phase selected:** Step 1 IMPLEMENT. Blocker re-check: B1 RESOLVED, advisory A1
+non-counting → `open_blockers == 0` at start. `unresolved_findings == 0` →
+RESOLVE skipped. IMPLEMENT scan s1→s10: s1–s8 all `verified`; first
+`not_started` stage with met dependencies is `s9_end_to_end` (deps: s1–s8 all
+`verified` — satisfied since iteration 42). So this run performed IMPLEMENT on
+`s9_end_to_end`.
+
+**What s9 IMPLEMENT requires (Appendix A Stage 9):** "implement" for this stage
+means *actually running the pipeline* — execute the overnight-search skill
+end-to-end against live systems at small scope, run the submit-url skill on a
+known-good URL, trigger a price-drop scenario, tag created Airtable records
+`[RALPH TEST]`.
+
+**Honest attempt and observed block (no run was faked):**
+
+1. *Credentials gate.* The overnight-search skill Step 1 retrieves DealStream
+   credentials via the `op` 1Password CLI and is explicitly designed to fail
+   loud and stop if `op` is unavailable. Observed this iteration:
+   - `which op` → exit 1 (no output)
+   - `op --version` → `op: command not found` (exit 127)
+   - `op whoami` → `op: command not found` (exit 127)
+   `op` is a desktop credential manager on Biffrey's Mac, absent from the
+   ephemeral Linux sandbox (the permanent limitation behind B1). The pipeline
+   cannot authenticate to DealStream, so it cannot begin.
+
+2. *Network gate.* Even if credentials were in hand, the sandbox cannot reach
+   the target platforms. `curl -s -o /dev/null -w '%{http_code}'`:
+   - `https://www.dealstream.com` → `000` (no route)
+   - `https://www.bizquest.com` → `000` (no route)
+   - `https://www.bizbuysell.com` → `403`
+   - `https://api.airtable.com` → `000`
+   The pipeline cannot log into DealStream, paginate search results, or validate
+   listing detail URLs / capture screenshots against live sites.
+
+3. *Playwright MCP.* `mcp__playwright__*` tools remain absent from the tool list
+   (advisory A1) — a third, lesser obstacle.
+
+**Decision:** s9's IMPLEMENT bar ("Execute the overnight-search skill end-to-end
+against live systems") is unmet because of external dependencies the loop
+cannot resolve itself. Per Step 1's IMPLEMENT rule — "If the stage cannot be
+implemented because of an external blocker, record it in `BLOCKERS.md`, set
+`status: blocked`, increment `open_blockers`" — recorded **counting blocker B2**
+in `BLOCKERS.md` (with full operator fix instructions, Option b mirroring the
+B1 evidence-file resolution), set `s9_end_to_end` → `blocked`, `open_blockers`
+0 → 1.
+
+**Why B2 counts (vs. non-counting A1 / F1):** Stage 9 is the live end-to-end
+verification — plan Implementation Order #9 and the entire 13-check
+"Verification" section — the functional heart of the revamp, not optional or
+cosmetic. Unlike s2 (which had a genuine `npx playwright` CLI fallback), there
+is no honest fallback by which the loop can run the live pipeline from the
+sandbox. Classifying B2 non-counting just to unblock COMPLETE would be the exact
+deception this loop forbids.
+
+**No side effects:** No Airtable records were created (no `[RALPH TEST]` data
+left in the live base). No secrets printed — `op` never executed. This is an
+honest BLOCKED, not a faked PASS and not a fabricated run.
+
+**To resume:** Biffrey resolves B2 per `BLOCKERS.md` — run the pipeline manually
+on the Mac, execute the 13 Verification checks, and commit the evidence to
+`_ralph/evidence/s9_e2e_verification_<date>.md`. A future iteration then retries
+s9. Until then the loop idles each run until B2 clears or the 60-cap is reached.

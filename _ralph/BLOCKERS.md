@@ -112,7 +112,96 @@ available, mark B1 RESOLVED, decrement `open_blockers` 1 → 0, reset
 `s3_onepassword` from `blocked` back to `implemented`, and retry the s3
 SELF-TEST.
 
-_B1 is RESOLVED (2026-05-21 operator manual review). There are no open counting blockers — `open_blockers: 0`._
+_B1 is RESOLVED (2026-05-21 operator manual review)._
+
+### B2 — s9_end_to_end — live end-to-end pipeline run cannot execute in the sandbox — ⛔ OPEN
+
+**Raised:** iteration 43 (2026-05-21T15:08:15Z)
+**Stage blocked:** `s9_end_to_end` (status set `not_started` → `blocked` —
+IMPLEMENT could not be performed)
+**`open_blockers`:** incremented 0 → 1.
+
+**What is blocked:** Stage 9's IMPLEMENT bar (Appendix A Stage 9) is *actually
+running the pipeline end-to-end against live systems* — execute the
+overnight-search skill (one industry, limited pagination), run the submit-url
+skill on a known-good URL, and trigger a price-drop scenario, then satisfy the
+plan's 13 Verification checks. None of that can run from the ephemeral Linux
+execution sandbox.
+
+**Observed (iteration 43):**
+```
+$ which op            ; echo $?      ->  (no output) 1
+$ op --version                       ->  op: command not found   (exit 127)
+$ op whoami                          ->  op: command not found   (exit 127)
+$ curl -s -o /dev/null -w '%{http_code}' https://www.dealstream.com   ->  000
+$ curl -s -o /dev/null -w '%{http_code}' https://www.bizquest.com     ->  000
+$ curl -s -o /dev/null -w '%{http_code}' https://www.bizbuysell.com   ->  403
+$ curl -s -o /dev/null -w '%{http_code}' https://api.airtable.com     ->  000
+```
+
+**Root cause — two independent, sandbox-permanent reasons:**
+1. **No `op`.** The overnight-search skill Step 1 retrieves DealStream
+   credentials via the `op` 1Password CLI and is explicitly designed to *fail
+   loud and stop* when `op` is unavailable. `op` is a desktop credential manager
+   on Biffrey's Mac, not a sandbox tool (the same permanent limitation that
+   produced B1). Without it the pipeline cannot authenticate to DealStream, so
+   it cannot begin.
+2. **No network route to the platforms.** Even with credentials, the sandbox
+   network allowlist does not reach DealStream / BizQuest (`000`, no route) or
+   BizBuySell (`403`). The pipeline cannot log in, paginate search results, or
+   validate listing detail URLs / capture screenshots against live sites.
+The Playwright MCP tools (`mcp__playwright__*`) are also still absent from the
+tool list (advisory A1) — a third, lesser obstacle.
+
+**Why this is a COUNTING blocker (unlike advisory A1 and finding F1):**
+Stage 9 is the live end-to-end verification — the functional heart of the
+revamp. It maps to plan Implementation Order #9 and the *entire* "Verification"
+section (all 13 checks). It is in no sense optional or cosmetic, and — unlike s2,
+whose SELF-TEST had a genuine `npx playwright` CLI fallback — there is **no
+honest fallback** by which the loop can run the live pipeline (real DealStream
+login, real crawl, real Playwright URL validation) from this sandbox. The s9
+SELF-TEST's 13 checks fundamentally require live systems. Marking B2
+non-counting purely to let COMPLETE proceed would be exactly the deception this
+loop forbids. So B2 counts and gates the COMPLETE phase — the honest outcome.
+
+**Precondition to clear:** EITHER (a) the loop's execution environment can run
+`op` (installed + signed in) AND reach DealStream so the pipeline genuinely
+runs; OR (b) an operator-recorded evidence file exists at
+`_ralph/evidence/s9_e2e_verification_<date>.md` documenting a genuine live run —
+the same model that resolved B1 for s3.
+
+**Fix instructions for Biffrey (recommended — Option b, mirrors the B1 fix):**
+1. On your Mac (where `op` is signed in and DealStream is reachable), run the
+   overnight-search skill end-to-end at deliberately small scope: one industry,
+   limited pagination. The skill is `.claude/skills/overnight-search/skill.md`.
+2. Then run the submit-url skill on one known-good listing URL, and trigger the
+   price-drop scenario from plan Verification check #7 (set a test record's
+   Asking Price higher than the live price, re-run, confirm the update).
+3. Tag every Airtable record created during the run with `[RALPH TEST]` in the
+   Notes field so they are identifiable, and delete/clearly-mark them afterward.
+4. Walk the plan's 13 "Verification" checks and record, for each, PASS/FAIL with
+   real evidence (command output, screenshot file paths under
+   `output/screenshots/`, generated report paths under `output/reports/`,
+   Airtable record IDs, the dashboard path). Save this as
+   `_ralph/evidence/s9_e2e_verification_<date>.md` and commit it (an operator
+   identity, e.g. `Cowork Manual Review`, like the B1 evidence commit `fb0b560`).
+5. The next scheduled run's Step 1 blocker re-check will detect that evidence
+   file, mark B2 RESOLVED, decrement `open_blockers` 1 → 0, reset
+   `s9_end_to_end` `blocked` → `not_started`, and a later iteration's SELF-TEST
+   will confirm the 13 checks against the evidence rather than re-running the
+   live pipeline in the sandbox (the mechanism the operator-rewritten Appendix A
+   Stage 3 SELF-TEST already uses for s3).
+
+Alternative (Option a): give the loop's execution environment a signed-in `op`
+and network access to DealStream/BizQuest/BizBuySell so the loop runs s9 itself.
+This is unlikely to be feasible for an ephemeral sandbox; Option b is expected.
+
+**When resolved:** a future iteration's Step 1 blocker re-check marks B2
+RESOLVED, decrements `open_blockers` 1 → 0, and resets `s9_end_to_end` to
+`not_started` for retry.
+
+_B2 is OPEN. `open_blockers: 1`. COMPLETE is gated until B2 resolves or the
+60-iteration cap is reached._
 
 ## Advisory notes (non-counting — do NOT add to `open_blockers`)
 
