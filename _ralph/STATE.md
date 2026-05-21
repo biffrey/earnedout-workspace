@@ -1,8 +1,8 @@
 ---
 active: true
-iteration: 15
+iteration: 16
 max_iterations: 40
-last_iteration_at: 2026-05-21T02:24:38Z
+last_iteration_at: 2026-05-21T02:34:17Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
@@ -12,7 +12,7 @@ stages:
   s2_playwright:      { status: self_tested }
   s3_onepassword:     { status: blocked }
   s4_airtable:        { status: self_tested }
-  s5_overnight_skill: { status: implemented }
+  s5_overnight_skill: { status: self_tested }
   s6_submit_url:      { status: implemented }
   s7_outreach:        { status: implemented }
   s8_dashboard:       { status: implemented }
@@ -291,6 +291,33 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   `s4_airtable` → `self_tested`.** Evidence in `TEST_LOG.md` under
   `## Iteration 15 — s4_airtable self-test`.
 
+- Iteration 16 (2026-05-21T02:34:17Z): SELF-TEST phase. Step 1 blocker re-check:
+  counting blocker B1 (`op` CLI) still open — `op --version` → `op: command not
+  found` (exit 1) in the iteration-16 sandbox; precondition (an installed,
+  signed-in `op` reachable by the SELF-TEST) did not clear, so B1 stays open and
+  `open_blockers` stays 1. `unresolved_findings == 0` so Step 1 fell through
+  RESOLVE; the IMPLEMENT scan found no actionable `not_started` stage (s9 needs
+  s1–s8 `verified`, s10 needs s9 `verified`) so it fell through to SELF-TEST; the
+  s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable` (`self_tested`) and
+  `s3_onepassword` (`blocked`, not `implemented`) and landed on the first
+  `implemented` stage, `s5_overnight_skill`. Ran SELF-TEST on `s5_overnight_skill`
+  (Appendix A Stage 5), all three checks executed against the real file
+  (`.claude/skills/overnight-search/skill.md`, 13,905 B, 209 lines): (1) **PASS**
+  — a Python `yaml.safe_load` of the frontmatter parses as a dict with exactly
+  `name` (= `overnight-search`) and `description` (584-char non-empty string).
+  (2) **PASS** — coverage checklist: every plan step 2a/2b/2c/2d/2e/3/4/5/7/8 has
+  a dedicated, plan-step-labelled section in skill.md (Before-you-start+Step 1 →
+  2a, Step 2 → 2b, Step 3 → 2c, Step 4 → 2d, Step 5 → 2e, Step 6 → 3, Step 7 → 4,
+  Step 8 → 5, Step 10 → 7, Step 9 → 8); full section/line map in `TEST_LOG.md`.
+  (3) **PASS** — base `appOsvuyy5eK43QTx` + table `tblSmNrHROMLm7vOS` + Links
+  `fldwo7ui7aIGoMxAG` all present (L17, L90); Step 7 writes all 16 new fields by
+  their canonical live names incl. `Revenue/Cash Flow 2024/2025` per F3 (L140–143)
+  + `Previous Asking Price` (L103, L157); the never-store-search-results rule has
+  a dedicated section at L55–56 (reinforced L131, L154); price-drop detection
+  logic is spelled out explicitly in Step 5 L102–110. **All three mandatory
+  checks PASS → no findings raised → `s5_overnight_skill` → `self_tested`.**
+  Evidence in `TEST_LOG.md` under `## Iteration 16 — s5_overnight_skill self-test`.
+
 ## Next iteration (expected)
 SELF-TEST phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
 B1 (`op` unavailable) will almost certainly still be open — its precondition (an
@@ -300,18 +327,16 @@ the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
 finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
 `verified`; `s10_schedule` needs s9 `verified`) so it falls through to
 **SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`/
-`s4_airtable` (`self_tested`) and `s3_onepassword` (`blocked`, not `implemented`)
-and lands on the first `implemented` stage, `s5_overnight_skill`. SELF-TEST on
-`s5_overnight_skill` (Appendix A Stage 5): read
-`.claude/skills/overnight-search/skill.md`; confirm the frontmatter is valid YAML
-with `name` and `description`; build the coverage checklist proving the file
-addresses plan Steps 2a–2e, 3, 4, 5, 7, 8 (record which section covers each);
-confirm it uses the correct base/table IDs and the exact live field names
-(`Revenue/Cash Flow 2024/2025` per F3), states the "never store search-results
-URLs" rule, and spells out the price-drop detection logic. Record all evidence in
-`TEST_LOG.md` under `## Iteration N — s5_overnight_skill self-test`.
+`s4_airtable`/`s5_overnight_skill` (`self_tested`) and `s3_onepassword`
+(`blocked`, not `implemented`) and lands on the first `implemented` stage,
+`s6_submit_url`. SELF-TEST on `s6_submit_url` (Appendix A Stage 6): read
+`.claude/skills/submit-url/skill.md`; confirm the frontmatter is valid
+(`name: submit-url`, description per plan Step 6); confirm all 9 workflow steps
+are present, in order, and consistent with the overnight-search steps they
+reference; confirm `Source` is set to `Manual Submission`. Record all evidence in
+`TEST_LOG.md` under `## Iteration N — s6_submit_url self-test`.
 NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
-loop can still progress on s4–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
+loop can still progress on s5–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
 COMPLETE (`open_blockers == 0` required) until B1 clears.
 
 ## Environment notes (read before every git commit)

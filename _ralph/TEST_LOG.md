@@ -396,3 +396,83 @@ scope is the 16 new fields, none of which is affected.
 fields (recorded in iteration 6 IMPLEMENT); SELF-TEST only re-listed and
 confirmed. Total live field count: 87.
 
+
+## Iteration 16 — s5_overnight_skill self-test
+
+Phase: SELF-TEST. Stage selected: `s5_overnight_skill` (Step 1 → blocker re-check:
+counting blocker B1 still open — `op --version` → `op: command not found` exit 1
+in the iteration-16 sandbox, precondition uncleared; `unresolved_findings == 0`
+so fell through RESOLVE; IMPLEMENT scan found no actionable `not_started` stage —
+s9 needs s1–s8 `verified`, s10 needs s9 `verified`; SELF-TEST s1→s10 scan skipped
+`s1_repo`/`s2_playwright`/`s4_airtable` (`self_tested`) and `s3_onepassword`
+(`blocked`, not `implemented`) and landed on the first `implemented` stage,
+`s5_overnight_skill`). Target file: `.claude/skills/overnight-search/skill.md`
+(13,905 B, 209 lines, dated 2026-05-21 00:40 — the iteration-8 rewrite). All
+checks below were executed this iteration against the real file.
+
+### Check 1 — Frontmatter is valid YAML with `name` and `description` — PASS
+
+Ran a Python `yaml.safe_load` on the `---`-delimited frontmatter block:
+```
+parsed type: dict
+keys: ['description', 'name']
+has name: True -> 'overnight-search'
+has description: True -> len 584
+```
+The frontmatter parses cleanly as a YAML mapping; `name` is the exact slug
+`overnight-search` (matches the skill directory and Appendix A Stage 5); the
+`description` is a non-empty 584-char string covering the full pipeline. **PASS.**
+
+### Check 2 — Coverage checklist: plan Steps 2a, 2b, 2c, 2d, 2e, 3, 4, 5, 7, 8 — PASS
+
+Every plan step has a dedicated, correctly-labelled section in skill.md (each
+section header names the plan step it maps to):
+
+| Plan step | skill.md section (line) | Substance confirmed |
+|-----------|-------------------------|---------------------|
+| 2a Read Config + Authenticate | "Before you start (plan Step 2a — Read Config)" L10 + "Step 1: Authenticate (plan Step 2a — Authenticate)" L19 | reads search_config / outreach_templates / credentials-setup / prospect-eval skill; `op read` creds; Playwright DealStream login + verify |
+| 2b Search All Active Platforms | "Step 2: Search All Active Platforms (plan Step 2b)" L36 | DealStream auth, BizBuySell, BizQuest, other; extracts direct URL + listing ID |
+| 2c Validate URL + Screenshot | "Step 3: Validate Each URL + Screenshot — Playwright (plan Step 2c)" L58 | navigate, validate content, full-page screenshot → `output/screenshots/{listing-id}.png`, Live/Dead/Redirect |
+| 2d Extract Structured Data | "Step 4: Extract Structured Data (plan Step 2d)" L68 | field-by-field extraction table incl. 2024/2025 revenue & cash flow; "do not fabricate" |
+| 2e Dedup + Price-Drop | "Step 5: Deduplicate Against Airtable — with Price-Drop Detection (plan Step 2e)" L88 | name+address & listing-ID match; new/duplicate/price-drop branches |
+| 3 Prospect Evaluation | "Step 6: Prospect Evaluation (plan Step 3)" L112 | output dir, invoke prospect-evaluation skill, capture .md/.html, extract score |
+| 4 Airtable Record Creation | "Step 7: Create / Update the Airtable Record (plan Step 4)" L123 | all existing + 16 new field mappings; Notes block with 4 identifiers |
+| 5 Broker Outreach | "Step 8: Draft Broker Outreach (plan Step 5)" L159 | template selection, personalize, subject-only A/B, dual storage, defer Revisit, never-send |
+| 7 Daily HTML Dashboard | "Step 10: Generate the Daily HTML Dashboard (plan Step 7)" L188 | Sections A/B/C/D from `templates/daily-dashboard.html` |
+| 8 Disposition Workflow | "Step 9: Disposition Workflow (plan Step 8)" L173 | 6-value Disposition table; dashboard filtering; Dead Link on validation failure |
+
+All 10 plan steps are covered with substantive, plan-aligned content. **PASS.**
+
+### Check 3 — Base/table IDs, exact field names, never-store rule, price-drop logic — PASS
+
+- Base/table IDs (`grep`): base `appOsvuyy5eK43QTx` and table `tblSmNrHROMLm7vOS`
+  both appear at L17 and L90; existing Links field `fldwo7ui7aIGoMxAG` at L17.
+  All three match Appendix B and plan Step 1.
+- Exact new field names: Step 7 (L129–144) writes to `Listing ID`,
+  `Direct Listing URL`, `Listing Screenshot`, `Date Added`, `Date Updated`,
+  `Link Health Status`, `Link Last Checked`, `Disposition`, `Lead Score`,
+  `Prospect Eval Report`, `Source`, plus the four financial fields as the
+  F3-canonical live names `Revenue 2024` / `Cash Flow 2024` / `Revenue 2025` /
+  `Cash Flow 2025` (L140–143) — NOT the plan's "YYYY Revenue" label word-order.
+  `Previous Asking Price` is used in the price-drop branch (L103, L157). All 16
+  Step-1 fields are referenced by their canonical live names.
+  (Note: L83–84's *extraction* table uses the prose phrasing "2024 Revenue /
+  2024 Cash Flow" — that table describes financial data to read off a listing
+  page, not Airtable field writes; the Airtable write mapping at L140–143 uses
+  the canonical live names. Not a defect, no finding.)
+- Never-store-search-results rule: explicit dedicated section "Critical rule —
+  never store a search-results page URL" at L55–56 ("NEVER store a
+  search-results page URL as a listing link... skip it"), reinforced at L131 and
+  L154. **Explicit.**
+- Price-drop detection logic: Step 5 L102–110 spells out the full branch — store
+  old price in `Previous Asking Price`, update `Asking Price`, set `Date
+  Updated`, re-run prospect eval, update score/report, append
+  `PRICE DROP: was $[OLD], now $[NEW]` note, price-drop outreach template,
+  Section-A "PRICE DROP" badge. **Explicit.**
+
+**PASS.**
+
+### Result
+
+All three mandatory Appendix A Stage 5 SELF-TEST checks PASS — no findings
+raised. `s5_overnight_skill` → `self_tested`.
