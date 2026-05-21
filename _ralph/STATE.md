@@ -1,16 +1,16 @@
 ---
 active: true
-iteration: 13
+iteration: 14
 max_iterations: 40
-last_iteration_at: 2026-05-21T02:04:17Z
+last_iteration_at: 2026-05-21T02:15:09Z
 promise_token: REVAMP_VERIFIED
 final_audit_passed: false
 unresolved_findings: 0
-open_blockers: 0
+open_blockers: 1
 stages:
   s1_repo:            { status: self_tested }
   s2_playwright:      { status: self_tested }
-  s3_onepassword:     { status: implemented }
+  s3_onepassword:     { status: blocked }
   s4_airtable:        { status: implemented }
   s5_overnight_skill: { status: implemented }
   s6_submit_url:      { status: implemented }
@@ -240,25 +240,55 @@ Stage `status` values: `not_started` → `implemented` → `self_tested` → `ve
   raised → `s2_playwright` → `self_tested`.** Evidence in `TEST_LOG.md` under
   `## Iteration 13 — s2_playwright self-test`.
 
+- Iteration 14 (2026-05-21T02:15:09Z): SELF-TEST phase. `unresolved_findings == 0`
+  and `open_blockers == 0` at start, so Step 1 fell through RESOLVE; the IMPLEMENT
+  scan found no actionable `not_started` stage (s9 needs s1–s8 `verified`, s10
+  needs s9 `verified`) so it fell through to SELF-TEST; the s1→s10 scan skipped
+  `s1_repo` and `s2_playwright` (both `self_tested`) and landed on the first
+  `implemented` stage, `s3_onepassword`. Re-checked `BLOCKERS.md` — no counting
+  blockers at start; advisory A1 still stands. Ran SELF-TEST on `s3_onepassword`
+  (Appendix A Stage 3), both checks executed/observed: (1) **PASS** —
+  `config/credentials-setup.md` exists, non-empty, and genuinely documents the
+  canonical 1Password item path (`op://Private/DealStream/username` + `/password`),
+  the `op` CLI install + `op signin` + `op whoami` steps, and the fail-loud
+  "never proceed unauthenticated" requirement (read in full this iteration).
+  (2) **BLOCKED** — `op --version` → `op: command not found` (exit 127),
+  `which op` exit 1; `op` is the 1Password **desktop** CLI on Biffrey's Mac and
+  is absent from the ephemeral Linux execution sandbox (anticipated by Appendix A
+  Stage 3 and iteration 13's "Next iteration" note). Per Appendix A Stage 3
+  SELF-TEST and Step 1's SELF-TEST rule ("a check that cannot run due to an
+  external dependency → record a blocker, set `status: blocked`, increment
+  `open_blockers`"), recorded **counting blocker B1** in `BLOCKERS.md` with
+  full sign-in/reconciliation instructions for Biffrey, set `s3_onepassword` →
+  `blocked`, `open_blockers` → 1. No secret printed (`op` never ran). This is an
+  honest BLOCKED, not a faked PASS. Evidence in `TEST_LOG.md` under
+  `## Iteration 14 — s3_onepassword self-test`.
+
 ## Next iteration (expected)
-SELF-TEST phase expected. `unresolved_findings == 0` and `open_blockers == 0`,
-so Step 1 falls through RESOLVE. The IMPLEMENT scan finds no actionable
-`not_started` stage — `s9_end_to_end` depends on s1–s8 all `verified` and
-`s10_schedule` depends on s9 `verified` — so Step 1 falls through IMPLEMENT to
-**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo` and `s2_playwright`
-(both now `self_tested`) and lands on the first `implemented` stage,
-`s3_onepassword`. SELF-TEST on `s3_onepassword` (Appendix A Stage 3): confirm
-`config/credentials-setup.md` documents the canonical 1Password item path
-(`op://Private/DealStream/username` + `/password`) and the fail-loud
-requirement; then run `op --version` and `op read "op://Private/DealStream/username"`.
-NOTE — `op` is a desktop credential manager on Biffrey's Mac and is not present
-in the Linux execution sandbox; per Appendix A Stage 3 the expected outcome is
-that the `op` checks cannot run, so the next iteration should record an
-`op`-unavailable blocker in `BLOCKERS.md` with sign-in instructions for Biffrey
-and set `s3_onepassword` to `blocked` (this would make `open_blockers == 1`).
-The file-documentation sub-check is fully runnable and should be recorded
-independently. Record all commands and outputs in `TEST_LOG.md` under
-`## Iteration N — s3_onepassword self-test`.
+SELF-TEST phase expected. Step 1 first re-checks `BLOCKERS.md`: counting blocker
+B1 (`op` unavailable) will almost certainly still be open — its precondition (an
+installed, signed-in `op` reachable by the SELF-TEST) cannot clear from inside
+the no-human ephemeral Linux sandbox, only Biffrey can clear it. With
+`unresolved_findings == 0`, Step 1 falls through RESOLVE; the IMPLEMENT scan
+finds no actionable `not_started` stage (`s9_end_to_end` needs s1–s8 all
+`verified`; `s10_schedule` needs s9 `verified`) so it falls through to
+**SELF-TEST**. The SELF-TEST s1→s10 scan skips `s1_repo`/`s2_playwright`
+(`self_tested`) and `s3_onepassword` (`blocked`, not `implemented`) and lands on
+the first `implemented` stage, `s4_airtable`. SELF-TEST on `s4_airtable`
+(Appendix A Stage 4): via the Airtable MCP, re-list the fields of table
+`tblSmNrHROMLm7vOS` in base `appOsvuyy5eK43QTx`; confirm all 16 plan Step-1
+fields exist with correct types; confirm the single-select option sets match
+exactly (Disposition = {Active, Contacted, Maybe Later, Revisit for Roll-up,
+Passed, Dead Link}; Link Health Status = {Live, Dead, Redirect}; Source =
+{Overnight Search, Manual Submission}); confirm existing fields retained
+(Business Name, Industry Match, Asking Price, EBITDA, Notes, Links field
+`fldwo7ui7aIGoMxAG`). Honor finding F3's resolution: the four financial fields
+are canonically `Revenue 2024/2025` + `Cash Flow 2024/2025` (live names), not
+the plan's "YYYY Revenue" label word-order. Record the full field list and all
+commands/outputs in `TEST_LOG.md` under `## Iteration N — s4_airtable self-test`.
+NOTE — `s3_onepassword` stays `blocked` until B1 is resolved by Biffrey; the
+loop can still progress on s4–s8 SELF-TEST/VERIFY meanwhile, but cannot reach
+COMPLETE (`open_blockers == 0` required) until B1 clears.
 
 ## Environment notes (read before every git commit)
 The loop's execution sandbox mounts the workspace with a filesystem that

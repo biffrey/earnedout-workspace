@@ -224,3 +224,88 @@ re-installed at SELF-TEST time (anticipated by advisory note A1). The workspace
 `.git` and all `_ralph/` files persist (they live in Biffrey's real folder), so
 loop continuity is unaffected.
 
+## Iteration 14 — s3_onepassword self-test
+
+**Phase:** SELF-TEST. **Stage:** `s3_onepassword` (Appendix A Stage 3).
+**Run at:** 2026-05-21T02:15:09Z. **Executed in:** workspace bash mount
+`/sessions/nice-serene-mccarthy/mnt/published-listing-search` (session ID
+changes per run — read fresh, never hardcoded).
+
+Stage 3 has two SELF-TEST checks. Check 1 (file documentation) was executed and
+**PASSED**. Check 2 (the `op` CLI credential read) **cannot run** — the
+1Password CLI is not present in the Linux execution sandbox. Per Appendix A
+Stage 3 SELF-TEST ("If `op` is missing or not signed in, record a blocker with
+sign-in instructions; this stage becomes `blocked`") and Step 1's SELF-TEST rule
+("If a check cannot run due to an external dependency: record a blocker, set
+`status: blocked`, increment `open_blockers`"), counting blocker **B1** was
+recorded in `BLOCKERS.md`, `s3_onepassword` → `blocked`, `open_blockers` → 1.
+Result: **Check 1 PASS, Check 2 BLOCKED → `s3_onepassword` → `blocked`.**
+
+### Check 1 — `config/credentials-setup.md` documents the item path + fail-loud behavior — PASS
+
+`config/credentials-setup.md` exists and is non-empty (it was authored/rewritten
+in iteration 4 and confirmed plan-aligned in iteration 5 / finding F2). Read in
+full this iteration; it genuinely documents every element Appendix A Stage 3
+requires:
+
+- **1Password item path** — the "Credential Retrieval" section and the "Expected
+  1Password Item (canonical, per REVAMP_PLAN.md)" table specify
+  `op read "op://Private/DealStream/username"` and
+  `op read "op://Private/DealStream/password"` (vault `Private`, item
+  `DealStream`) — the canonical path from `REVAMP_PLAN.md` Step 0 and loop
+  Appendix B.
+- **How to install / sign in to `op`** — the "Prerequisites" section gives
+  `brew install --cask 1password-cli`, the other-platform docs URL, `op signin`,
+  the desktop-app integration toggle, and `op --version` / `op whoami`
+  verification.
+- **Fail-loud requirement** — the "Failure Behavior — fail loudly, never proceed
+  unauthenticated" section states the skill must print a clear named error, exit
+  non-zero, and stop; must never proceed to DealStream unauthenticated; must
+  never fall back to cached, blank, or hard-coded credentials; and checks auth at
+  startup (`op whoami` or a trial `op read`).
+- It also carries the F2 "Vault / item-path reconciliation needed" section
+  preserving the old `op://Personal/dealstream.com/...` path and listing
+  `op vault list` / `op item list` / `op item get` reconciliation commands.
+
+The file-documentation sub-check is fully satisfied. **PASS.**
+
+### Check 2 — `op --version` succeeds; `op read` returns a non-empty value — BLOCKED
+
+Commands run in the workspace bash sandbox and their actual output:
+
+```
+$ op --version
+bash: line 1: op: command not found            (exit 127)
+
+$ which op
+[no output]                                    (exit 1)
+
+$ op read "op://Private/DealStream/username"
+bash: line 1: op: command not found
+```
+
+`op` is the 1Password **desktop** CLI — it lives on Biffrey's Mac and integrates
+with the 1Password desktop app for biometric unlock. The loop's execution
+environment is an ephemeral Linux sandbox with no 1Password app and no `op`
+binary on `PATH`. This outcome was explicitly anticipated by Appendix A Stage 3
+("NOTE — `op` is a desktop credential manager on Biffrey's Mac and is not
+present in the Linux execution sandbox") and by the STATE.md "Next iteration
+(expected)" note written in iteration 13.
+
+This is an **external dependency that cannot run**, not a FAIL of implemented
+work — the IMPLEMENT artifact (`config/credentials-setup.md`) is correct and
+passed Check 1. Per Appendix A Stage 3 SELF-TEST and Step 1's SELF-TEST rule,
+counting blocker **B1** is recorded in `BLOCKERS.md` with sign-in instructions
+for Biffrey, `s3_onepassword` is set to `blocked`, and `open_blockers` is
+incremented to 1. No secret was printed (none could be — `op` did not run). This
+is recorded honestly as **BLOCKED**, never as a faked PASS.
+
+### Sandbox note
+The blocker B1 precondition (an installed, signed-in `op` reachable by the
+SELF-TEST) cannot clear from inside this no-human, ephemeral Linux sandbox. If it
+never clears, `s3_onepassword` cannot reach `verified`, `s9_end_to_end` (which
+needs s1–s8 all `verified`) cannot start, and the loop cannot reach COMPLETE —
+that is the honest state and is correct per the anti-deception rules. The loop
+can still make progress: iterations 15+ will SELF-TEST the other `implemented`
+stages (s4–s8), which do not depend on `op`.
+
