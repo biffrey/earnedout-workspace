@@ -41,11 +41,13 @@ Class 2 — licensed SBIC management firms acquired for the license itself.
 1. Read `config/offmarket_sources.md`, `config/search_config.md`,
    `config/outreach_templates.md`, and the off-market outreach template.
 2. Read `.claude/skills/prospect-evaluation/skill.md`.
-3. **Schema preflight (fail loud).** Confirm the Airtable `Source` field has the
-   values `Off-Market — ASL Bolt-on` and `Off-Market — SBIC` and that the §8.4
-   fields + `Gov Entity ID` exist with the correct types. If anything is
-   missing, **stop immediately** with a clear operator message — never silently
-   create or skip. _(Preflight logic: s2.)_
+3. **Schema preflight (fail loud).** Run the procedure in
+   `references/airtable_schema_preflight.md`: confirm the Airtable `Source` field
+   has the values `Off-Market — ASL Bolt-on` and `Off-Market — SBIC` and that the
+   five §8.4 fields (`Gov Entity ID`, `SBIC License #`, `SBIC License Status`,
+   `Gov Data Source`, `Federal Award History $`) exist with the correct types.
+   If anything is missing, **stop immediately** with the operator message in that
+   reference — never silently create or skip. _(Preflight logic: s2.)_
 
 ## Step 2 — Query government sources
 *Built by s3 (source adapters).*

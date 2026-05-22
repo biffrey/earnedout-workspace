@@ -43,10 +43,22 @@ text in any file.
 **Why:** s2 must add the §8.3 `Source` values (`Off-Market — ASL Bolt-on`,
 `Off-Market — SBIC`) and the §8.4 fields plus `Gov Entity ID` to base
 `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS`.
-**Fix:** confirm the Airtable MCP connection has schema-write permission on that
-base, or Biffrey creates the fields/values manually per `OFFMARKET_BUILD_PLAN.md`
-s2 and the PRD §8.3 / §8.4.
-**Status:** OPEN.
+**Progress (2026-05-22, iter 4):** the five §8.4 fields were created live via the
+Airtable MCP `create_field` tool — `Gov Entity ID`, `SBIC License #`,
+`SBIC License Status`, `Gov Data Source`, `Federal Award History $` (field IDs in
+`evidence/s2-airtable-schema.md`). **This half of B4 is DONE.** The remaining
+half: the `Source` single-select still has only `Overnight Search` /
+`Manual Submission`. The MCP `update_field` tool **cannot add `choices` to an
+existing single-select**, so the loop cannot create the two off-market `Source`
+values itself.
+**Fix (remaining):** Biffrey opens base `appOsvuyy5eK43QTx` → table
+"Master Deal Pipeline" → the `Source` field, and adds two single-select values,
+matching the em dash (—, U+2014) and spacing exactly:
+  - `Off-Market — ASL Bolt-on`
+  - `Off-Market — SBIC`
+Once added, the loop un-blocks s2, the schema preflight passes, and s2 can
+proceed to SELF-TEST/VERIFY.
+**Status:** OPEN (narrowed — only the two `Source` values remain).
 
 ---
 

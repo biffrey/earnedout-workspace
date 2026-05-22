@@ -28,3 +28,33 @@ is explicitly excluded; SAM.gov Contract Awards API named as the successor;
 USAspending.gov is the primary award source.
 
 Stage s1 → `drafted`. Next phase for s1: SELF-TEST.
+
+## iter 4 — 2026-05-22 — s2 (Airtable schema) — IMPLEMENT
+
+Applied the s2 schema deliverables to base `appOsvuyy5eK43QTx` / table
+`tblSmNrHROMLm7vOS`:
+
+- **Five §8.4 fields created live** via the Airtable MCP `create_field` tool —
+  `Gov Entity ID` (singleLineText), `SBIC License #` (singleLineText),
+  `SBIC License Status` (singleSelect: Good Standing / Under Review /
+  Surrendered / Revoked / Unknown), `Gov Data Source` (multipleSelects),
+  `Federal Award History $` (currency, $, precision 0). Tool responses confirm
+  creation; field IDs recorded in `evidence/s2-airtable-schema.md`. The
+  `Gov Data Source` choice set follows the §13 resolution (FPDS-NG → SAM.gov
+  Contract Awards, DSBS → SBS, RID added) rather than the literal PRD §8.4 list.
+- **Schema-preflight reference written** —
+  `.claude/skills/off-market-search/references/airtable_schema_preflight.md`: the
+  fail-loud Step-1 check that verifies all six fields, both off-market `Source`
+  values, and the `SBIC License Status` options before any write, halting with a
+  specific operator message (never auto-creating) on any miss. `skill.md` Step 1
+  updated to point at it.
+
+**Blocked — the two §8.3 `Source` values were NOT added.** The `Source`
+single-select still has only `Overnight Search` / `Manual Submission`. The
+Airtable MCP `update_field` tool cannot add `choices` to an existing
+single-select, so the loop cannot create `Off-Market — ASL Bolt-on` /
+`Off-Market — SBIC` itself — an operator action is required. B4 updated and
+narrowed to this remaining item; stage s2 set to `blocked`.
+
+Stage s2 → `blocked` (B4). The loop continues with the next non-blocked stage
+(s3).
