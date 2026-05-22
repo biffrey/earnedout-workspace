@@ -1,0 +1,16 @@
+Iteration 12 complete — one step executed and committed.
+
+**Step:** s5 (Enrichment & qualification pre-filters) — **SELF-TEST** → `drafted` → `self_checked`
+
+**What ran:** Hand-executed the s5 §7.4 pre-filters, §3 enrichment, §4 SBIC good-standing cross-check, and §5 `LeadPacket` assembly over the s4 output (4 `CanonicalEntity`, all `new`). All 6 checks PASS:
+- C1 — Class-1 pre-filter passes a genuine ASL/interpreting fit (R1, core keyword tier)
+- C2 — an obvious non-fit (synthetic document-translation firm) dropped *before* any enrichment; the adjacent case kept
+- C3 — Class-2 pre-filter passes the 3 current SBIC licensees
+- C4/C5 — a Class-1 and a Class-2 `LeadPacket` each assemble complete, every unknown logged in `enrichment_gaps`, zero fabricated values
+- C6 — SBIC good-standing cross-check resolved `Good Standing` via a live `WebSearch` (no adverse action found; a real Federal Register surrender notice surfaced, proving the §4 source is queryable) — **no directory flag used**
+
+**Artifacts:** `evidence/s5-selftest.md` (new), `TEST_LOG.md` (iter 12 entry), `STATE.md` (iteration 12, s5 → `self_checked`). Committed locally as `720bcd3`.
+
+**Carry-note for the VERIFY critic:** B1 (priority-state list) being OPEN makes formation date / years-in-business a universal gap on every off-market `LeadPacket` — exercised and behaving as designed.
+
+**Signal:** `CONTINUE` — s5 VERIFY is next; s6–s10 remain `not_started`; s2 still `blocked` on B4. State: 4 open blockers, 9 unresolved findings, iteration 12/80.

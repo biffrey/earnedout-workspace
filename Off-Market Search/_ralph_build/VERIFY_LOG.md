@@ -120,3 +120,48 @@ Findings (non-blocking, filed in `FINDINGS.md`):
   embeds a slash; harmless in a text field but mildly fragile.
 
 Stage s4 → `verified`. `unresolved_findings` → 9.
+
+## iter 13 — 2026-05-22 — s5 (Enrichment & qualification pre-filters) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s5 artifacts on
+disk — `.claude/skills/off-market-search/references/enrichment.md`, `skill.md`
+enrichment/pre-filter steps, `references/airtable_schema_preflight.md`,
+`config/offmarket_sources.md`, `references/source_adapters.md`,
+`references/entity_resolution.md`, `evidence/s5-selftest.md` — and cross-checked
+the §3/§7/§11 PRD requirements and the §13 resolution doc. Not given the loop's
+logs or reasoning. The critic also cross-checked the live `Gov Data Source`
+choice set against `evidence/s2-airtable-schema.md`.
+
+**Verdict: FAIL (1 BLOCKING).**
+
+The s5 spec is largely sound — the §7.4 pre-filters are specified to run before
+enrichment, the SBIC good-standing cross-check goes beyond the directory, the
+"never fabricate" rule is honored, no new scorer is introduced, and the
+SBA-prior-approval change-of-control fact is carried on every Class-2 packet
+(`enrichment.md:187-189`). One Done-when / hard-constraint violation blocks it:
+
+- **BLOCKING-s5-1** — `LeadPacket.gov_data_source` points at a non-existent
+  mapping table and the self-test emits an **invalid Airtable choice**.
+  `enrichment.md:64` and `:231` say `source_ids` are "mapped to the
+  `Gov Data Source` Airtable choice (per `airtable_schema_preflight.md`)", but
+  that file contains no `source_id → choice` mapping table. `s5-selftest.md:97`
+  then emits `["SAM.gov Entity Management", "SAM.gov Contract Awards"]` — but
+  `"SAM.gov Entity Management"` is not one of the eight live `Gov Data Source`
+  choices (`evidence/s2-airtable-schema.md:15`: USAspending / SAM.gov / SAM.gov
+  Contract Awards / SBA SBIC / SBS / GSA eLibrary / State / RID). The correct S2
+  value is `SAM.gov`. Because multi-select choices auto-grow on write
+  (`s2-airtable-schema.md:23`), writing the wrong string would silently create a
+  spurious 9th choice — violating the "fail loud, never silently create"
+  invariant and breaking field-value consistency with the s7 Airtable write.
+
+Findings filed in `FINDINGS.md`: BLOCKING-s5-1 (above), IMPROVE-s5-1 (screenshot
+path not filesystem-safe for `entity_id`s containing `:`/`|`/spaces),
+IMPROVE-s5-2 (Class-2 pre-filter §2.2 condition 2 is a no-op on a first run —
+state that plainly), IMPROVE-s5-3 (good-standing cross-check demonstrated for
+only one Class-2 entity — s10 must repeat across all), NIT-s5-1
+(`s4-selftest.md:29` provenance note cites the wrong source record), NIT-s5-2
+(`enrichment.md:53` `employee_count` typed `number | string`, inconsistent with
+the `... | null` unknown-able fields).
+
+Stage s5 → `not_started` (BLOCKING → return to IMPLEMENT). `unresolved_findings`
+→ 15.

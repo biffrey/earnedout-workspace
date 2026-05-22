@@ -95,3 +95,77 @@ in a plain-text `Gov Entity ID` field but mildly fragile as an identifier key.
 **Fix:** optionally note that slashes in source license numbers are retained
 verbatim, or normalize them in the `SBIC:` key.
 **Status:** OPEN.
+
+### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:64` and
+`:231`; `evidence/s5-selftest.md:97`.
+**Problem:** `LeadPacket.gov_data_source` is specified as `source_ids` "mapped to
+the `Gov Data Source` Airtable choice (per `airtable_schema_preflight.md`)", but
+no `source_id → choice` mapping table exists in that file. The self-test then
+emits `"SAM.gov Entity Management"`, which is NOT one of the eight live
+`Gov Data Source` choices (`evidence/s2-airtable-schema.md:15`: USAspending /
+SAM.gov / SAM.gov Contract Awards / SBA SBIC / SBS / GSA eLibrary / State / RID).
+Since multi-select choices auto-grow on write, the wrong string would silently
+create a spurious 9th choice — violating "fail loud, never silently create" and
+breaking field-value consistency with the s7 Airtable write.
+**Fix:** add an explicit `source_id → Gov Data Source choice` mapping table to
+`enrichment.md` §5 (or `airtable_schema_preflight.md`) using only the eight live
+choices — e.g. `S1→USAspending`, `S2→SAM.gov`, `S3→SAM.gov Contract Awards`,
+`S4/S5→SBA SBIC`, `S6→SBS`, `S7→GSA eLibrary`, `S8→State`, `S9→RID`. Correct
+`s5-selftest.md:97` to `["SAM.gov", "SAM.gov Contract Awards"]`.
+**Status:** OPEN — sends s5 back to `not_started`/IMPLEMENT.
+
+### IMPROVE-s5-1 — IMPROVE — s5 — screenshot path not filesystem-safe for `entity_id`
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:135`.
+**Problem:** screenshot path is `output/screenshots/{entity-id}.png`, claimed to
+match the `overnight-search` convention. But `overnight-search` uses a plain
+alphanumeric `listing-id`, whereas the off-market `entity_id` is e.g.
+`UEI:ZZTEST00FIX1` or `NAME:abacus finance group|new york ny` — containing `:`,
+`|`, and spaces, which are illegal/fragile in filenames. Never exercised in the
+self-test (R1 `screenshot_path` was `null`).
+**Fix:** specify a slugified/sanitized form of `entity_id` for the filename
+(replace `:`, `|`, spaces), or note the existing convention does not transfer.
+**Status:** OPEN.
+
+### IMPROVE-s5-2 — IMPROVE — s5 — Class-2 pre-filter §2.2 condition 2 is a no-op on first run
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:106-109`.
+**Problem:** §2.2 condition 2 ("good standing not already disproven") depends on
+the §4 cross-check, but §2 pre-filters run BEFORE §3/§4 enrichment. On a first
+run the cross-check has not run, so the condition can only fire on a re-run —
+it reads as a substantive gate that it is not on the first pass.
+**Fix:** reword §2.2 condition 2 to state it applies only to a prior-run/cached
+standing result; otherwise the candidate passes.
+**Status:** OPEN.
+
+### IMPROVE-s5-3 — IMPROVE — s5 — good-standing cross-check demonstrated for only one Class-2 entity
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` C6 (lines
+133-155).
+**Problem:** the §4 good-standing cross-check (WebSearch for adverse actions)
+was demonstrably run only for R2; R3/R4 passed the pre-filter but the beyond-the-
+directory cross-check was not shown for them.
+**Fix:** s10's end-to-end run must repeat the §4 cross-check across all Class-2
+entities; carry this forward to the s10 self-test.
+**Status:** OPEN.
+
+### NIT-s5-1 — NIT — s5 — s4 self-test provenance note cites the wrong record
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md:29`.
+**Problem:** R1's `psc [R608]` is described as coming "from rec 3-shape", but
+record 3 is a different entity (an S1 record). Cosmetic provenance error in the
+s4 evidence, carried implicitly into the s5 input description.
+**Fix:** correct the provenance note to cite the actual contributing record.
+**Status:** OPEN.
+
+### NIT-s5-2 — NIT — s5 — `employee_count` type inconsistent with other unknown-able fields
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:53`.
+**Problem:** `employee_count` is typed `number | string`, while every other
+unknown-able field uses `... | null` plus the `"needs follow-up"` sentinel.
+Cosmetic schema inconsistency.
+**Fix:** align `employee_count` to the `number | null` + `"needs follow-up"`
+pattern.
+**Status:** OPEN.
