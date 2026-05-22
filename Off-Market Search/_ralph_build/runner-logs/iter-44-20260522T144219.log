@@ -1,0 +1,10 @@
+Iteration 75 complete — RESOLVE phase.
+
+**Step taken:** Resolved finding **NIT-s9-3** (stale blocker reference in the skill spec).
+
+- Rewrote §5 ("Dry-run / fixture mode") of `orchestration.md` — dropped the stale "and any run while B3/B4 are open" clause (B3/B4 resolved 2026-05-22) and re-attributed dry-run usage to its real current reasons: avoiding SAM.gov public-tier quota spend and unconfirmed state-portal ToS.
+- Moved NIT-s9-3 from Open to Resolved in `FINDINGS.md` with the resolution note.
+- `STATE.md`: iteration 74→75, `unresolved_findings` 8→7.
+- Committed locally; signal set to `CONTINUE`.
+
+Spec-text clarity only — no orchestration, adapter, or write behavior changed; s9 stays `verified`. 7 IMPROVE/NIT findings remain for the RESOLVE phase.

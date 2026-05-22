@@ -23,7 +23,7 @@ typed output; s9 owns the hand-off, not the per-step logic.
 |------|-----------|----------|----------|
 | 1 Preflight | `airtable_schema_preflight.md` | live Airtable schema | pass / **fail-loud halt** |
 | 2 Query | `source_adapters.md` | target class + params | `RawRecord[]` + `AdapterMeta[]` |
-| 3 Resolve/dedup | `entity_resolution.md` | `RawRecord[]` | `CanonicalEntity[]` tagged `new` / `existing` / `needs_operator_review` |
+| 3 Resolve/dedup | `entity_resolution.md` | `RawRecord[]` | `CanonicalEntity[]`, each carrying `dedup_verdict` `new` / `existing`; entities missing all identifiers **and** address are excluded as `needs_operator_review` [†] |
 | 4 Enrich | `enrichment.md` | `new` entities | `LeadPacket[]` (`prefilter_verdict: pass`) |
 | 5 Score | `scoring_integration.md` | `LeadPacket[]` | `ScoredLead[]` |
 | 6 Airtable write | `airtable_write.md` | `ScoredLead[]` (`new`) + `existing` entities | one row per lead in `tblSmNrHROMLm7vOS` |
@@ -35,6 +35,15 @@ typed output; s9 owns the hand-off, not the per-step logic.
 run before any source is queried (never write blind). Steps 2–8 degrade
 gracefully per §2. Step 9 always runs — even on an aborted run it records what
 happened and why.
+
+[†] **`dedup_verdict` enum vs. `needs_operator_review`.** Step 3 produces exactly
+two `dedup_verdict` values — `new` and `existing` — and only an entity that
+survives §2 resolution is assigned one (`entity_resolution.md:61`).
+`needs_operator_review` is **not** a `dedup_verdict` value: it is the run-log
+exclusion status applied to an entity missing **all** identifiers **and** address
+(`entity_resolution.md` §4). Such an entity is excluded from the write *before*
+§3 dedup runs and is never passed downstream — Step 4 consumes only `new`
+entities — so the hand-off carries no third verdict tag.
 
 ## 2. Failure containment (what halts vs. what degrades)
 

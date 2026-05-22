@@ -42,20 +42,6 @@ available) and not a Done-when breach, but worth tightening.
 principal-titled contact during s5 enrichment or soften the OM-2 body wording.
 **Status:** OPEN.
 
-### NIT-s9-1 — NIT — s9 — `dedup_verdict` enum omits the third hand-off state
-**Raised:** iter 27 VERIFY (s9 critic).
-**Where:** `references/orchestration.md:26` vs.
-`references/entity_resolution.md:61`.
-**Problem:** the §1 hand-off table lists Step 3 output tags as
-`new / existing / needs_operator_review`, but `entity_resolution.md:61` types
-the `dedup_verdict` field as only `new | existing`. `needs_operator_review` is
-real (`entity_resolution.md:188`) but is a run-log/exclusion status, not a
-`dedup_verdict` enum value. Cosmetic; does not break the hand-off (needs-review
-entities are excluded from the write, not passed downstream).
-**Fix:** tighten the `dedup_verdict` type union or add a footnote distinguishing
-the enum from the exclusion status.
-**Status:** OPEN.
-
 ### NIT-s9-2 — NIT — s9 — dry-run run log omits enrichment-only sources
 **Raised:** iter 27 VERIFY (s9 critic).
 **Where:** `evidence/s9-offmarket_run_log_dryrun.md` "Sources queried" table.
@@ -101,6 +87,36 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s9-1 — NIT — s9 — `dedup_verdict` enum omits the third hand-off state
+**Raised:** iter 27 VERIFY (s9 critic).
+**Where:** `references/orchestration.md:26` vs.
+`references/entity_resolution.md:61`.
+**Problem:** the §1 hand-off table lists Step 3 output tags as
+`new / existing / needs_operator_review`, but `entity_resolution.md:61` types
+the `dedup_verdict` field as only `new | existing`. `needs_operator_review` is
+real (`entity_resolution.md:188`) but is a run-log/exclusion status, not a
+`dedup_verdict` enum value. Cosmetic; does not break the hand-off (needs-review
+entities are excluded from the write, not passed downstream).
+**Fix:** tighten the `dedup_verdict` type union or add a footnote distinguishing
+the enum from the exclusion status.
+**Resolution (iter 76, RESOLVE):** chose the footnote fix. Reworded the §1
+hand-off table Step 3 "Produces" cell in `orchestration.md` so it no longer
+presents `needs_operator_review` as a third `dedup_verdict` tag — it now reads
+`CanonicalEntity[]`, each carrying `dedup_verdict` `new` / `existing`, with
+identifier-and-address-less entities excluded as `needs_operator_review` and a
+`[†]` marker. Added the matching `[†]` footnote immediately after the table: it
+states Step 3 produces exactly two `dedup_verdict` values (`new`, `existing`),
+that only an entity surviving §2 resolution is assigned one
+(cross-referencing `entity_resolution.md:61`), and that `needs_operator_review`
+is the run-log exclusion status (`entity_resolution.md` §4) applied before §3
+dedup runs — never passed downstream, since Step 4 consumes only `new` entities.
+This aligns `orchestration.md` with the `entity_resolution.md:61` note already
+added by the IMPROVE-s4-1 resolution (iter 56). Spec-text clarity only; no
+orchestration, resolution, or dedup behavior changed — needs-review entities
+were already excluded from the write, not handed downstream. s9 stays
+`verified`.
+**Status:** RESOLVED.
 
 ### NIT-s9-3 — NIT — s9 — dry-run mode passage cites resolved blockers B3/B4 as open
 **Raised:** iter 49 SELF-TEST (s9 re-run).

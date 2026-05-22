@@ -1337,3 +1337,36 @@ scorer touched, no outreach sent.
 
 IMPROVE-s4-4 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 11 → 10. 10 findings remain. RESOLVE phase continues.
+
+---
+
+## iter 76 — RESOLVE — NIT-s9-1 (`dedup_verdict` enum vs. hand-off table)
+
+RESOLVE phase. All 10 stages `verified`, `final_audit_passed: true`,
+`open_blockers: 0`; cleared one NIT finding.
+
+NIT-s9-1 — the §1 stage hand-off table in `orchestration.md` listed Step 3's
+output as `CanonicalEntity[]` tagged `new / existing / needs_operator_review`,
+presenting `needs_operator_review` as if it were a third `dedup_verdict` enum
+value. `entity_resolution.md:61` types `dedup_verdict` as only `new | existing`;
+`needs_operator_review` is a run-log exclusion status (§4), not a verdict.
+Cosmetic — needs-review entities are excluded from the write before §3 dedup,
+never handed downstream.
+
+Fix (footnote option):
+- reworded the §1 table Step 3 "Produces" cell — now `CanonicalEntity[]`, each
+  carrying `dedup_verdict` `new` / `existing`; identifier-and-address-less
+  entities excluded as `needs_operator_review`, with a `[†]` marker;
+- added a `[†]` footnote after the table stating Step 3 yields exactly two
+  `dedup_verdict` values, that only entities surviving §2 resolution are
+  assigned one (cross-ref `entity_resolution.md:61`), and that
+  `needs_operator_review` is the §4 exclusion status applied before §3 dedup —
+  never passed downstream since Step 4 consumes only `new` entities.
+
+Aligns `orchestration.md` with the `entity_resolution.md:61` note from the
+IMPROVE-s4-1 resolution (iter 56). Spec-text clarity only; no orchestration,
+resolution, or dedup behavior changed. Constraints honored: no data fabricated,
+no parallel tracker, no scorer touched, no outreach sent.
+
+NIT-s9-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+7 → 6. 6 findings remain. RESOLVE phase continues.
