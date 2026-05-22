@@ -67,6 +67,8 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
+## Resolved
+
 ### NIT-s9-4 — NIT — s9 — frozen s9 dry-run evidence run log lists B4 as an open blocker
 **Raised:** iter 50 VERIFY (s9 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s9-offmarket_run_log_dryrun.md`
@@ -84,9 +86,30 @@ or a live run log — and the s9 Done-when criteria are all met.
 the "Open blockers" / operator-follow-up lines to re-attribute the fixture
 usage to the still-open `IMPROVE-s3-2`/`-s3-3`/`-s5-5` adapter-rebuild findings.
 Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
-**Status:** OPEN.
-
-## Resolved
+**Resolution (iter 77, RESOLVE):** refreshed
+`evidence/s9-offmarket_run_log_dryrun.md`. Added an "Iter-77 refresh note
+(NIT-s9-4)" paragraph to the SELF-TEST callout box recording that the run log
+is frozen at its iter-26 state, that B1–B4 are all resolved
+(`open_blockers: 0`), and that the fixture/dry-run usage it documents is now
+governed by the recorded-fixture practice of the (since RESOLVED) adapter-
+rebuild findings `IMPROVE-s3-2`/`-s3-3`/`-s5-5`, not by any open blocker.
+Refreshed the stale lines: "Outcome" no longer says "blocked adapters"
+(now "quota-limited and ToS-gated adapters used recorded fixtures"); "Open
+blockers affecting this run" changed from "B1, B3, B4" to "none — B1–B4 are all
+RESOLVED"; the "Sources queried" status column changed S2/S3 `blocked (B3)` and
+S8 `blocked (B1)` to `fixture` with recorded-fixture notes (conserve the
+SAM.gov public ~10/day quota; S8 per-jurisdiction ToS gate not exercised); the
+"Airtable writes" line dropped the "B4-blocked (Step 1 preflight halt)" claim
+and now states the preflight passes (all four `Source` choices live, confirmed
+by the iter-38 s7 live write `recklDY7vHFmKauQD`); and the "Follow-ups for the
+operator" B1/B3/B4 bullets were removed (all resolved) with the
+needs-operator-review bullet re-attributed to `IMPROVE-s3-1` (RESOLVED iter 55,
+which rewired the S1 `uei` population). Evidence-refresh only; no skill code,
+spec, orchestration, scoring, or write behavior changed — the dry run's counts
+and the s9 `Done-when` criteria are unchanged and s9 stays `verified`. Same
+stale-blocker refresh class as the iter-73 IMPROVE-s10-3 and iter-75 NIT-s9-3
+resolutions.
+**Status:** RESOLVED.
 
 ### NIT-s9-1 — NIT — s9 — `dedup_verdict` enum omits the third hand-off state
 **Raised:** iter 27 VERIFY (s9 critic).

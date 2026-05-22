@@ -1370,3 +1370,46 @@ no parallel tracker, no scorer touched, no outreach sent.
 
 NIT-s9-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 7 → 6. 6 findings remain. RESOLVE phase continues.
+
+---
+
+## iter 77 — RESOLVE — NIT-s9-4 (frozen s9 dry-run run log cited B4 as open)
+
+RESOLVE phase. All 10 stages `verified`, `final_audit_passed: true`,
+`open_blockers: 0`; cleared one NIT finding.
+
+NIT-s9-4 — `evidence/s9-offmarket_run_log_dryrun.md`, the frozen iter-26 s9
+SELF-TEST dry-run run log, still listed B4 as an open blocker ("a live run
+would halt at Step 1 preflight") and carried a B4 operator follow-up. B4 — and
+B1/B3 — are all RESOLVED (`BLOCKERS.md`; `open_blockers: 0`). Same stale-blocker
+class as the already-resolved IMPROVE-s10-3 / NIT-s9-3. Not BLOCKING: a frozen
+SELF-TEST artifact, not a skill/spec deliverable or a live run log.
+
+Fix (refresh option):
+- added an "Iter-77 refresh note (NIT-s9-4)" paragraph to the SELF-TEST callout
+  box — records the run log is frozen at its iter-26 state, B1–B4 are all
+  resolved, and the fixture/dry-run usage is now governed by the recorded-
+  fixture practice of the (since RESOLVED) `IMPROVE-s3-2`/`-s3-3`/`-s5-5`
+  adapter-rebuild findings, not any open blocker;
+- "Outcome" — "blocked adapters used fixtures" → "quota-limited and ToS-gated
+  adapters used recorded fixtures";
+- "Open blockers affecting this run" — "B1, B3, B4" → "none — B1–B4 are all
+  RESOLVED";
+- "Sources queried" status column — S2/S3 `blocked (B3)` and S8 `blocked (B1)`
+  → `fixture`, with recorded-fixture notes (conserve the SAM.gov public ~10/day
+  quota; S8 per-jurisdiction ToS gate not exercised this dry run);
+- "Airtable writes" — dropped the "B4-blocked (Step 1 preflight halt)" claim;
+  now states the preflight passes (all four `Source` choices live, confirmed by
+  the iter-38 s7 live write `recklDY7vHFmKauQD`);
+- "Follow-ups for the operator" — removed the B1/B3/B4 bullets (all resolved);
+  re-attributed the needs-operator-review bullet to `IMPROVE-s3-1` (RESOLVED
+  iter 55, which rewired S1 `uei` population).
+
+Evidence-refresh only; no skill code, spec, orchestration, scoring, or write
+behavior changed — the dry run's counts and the s9 `Done-when` criteria are
+unchanged and s9 stays `verified`. Constraints honored: no data fabricated, no
+parallel tracker, no scorer touched, no outreach sent.
+
+NIT-s9-4 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+6 → 5. 5 findings remain (IMPROVE-s5-3, IMPROVE-s6-2, IMPROVE-s8-1, NIT-s9-2,
+NIT-s10-1). RESOLVE phase continues.
