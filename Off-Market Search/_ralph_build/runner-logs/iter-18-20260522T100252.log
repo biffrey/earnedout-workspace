@@ -1,0 +1,16 @@
+Iteration 19 complete — **s6 (Scoring integration) VERIFY**.
+
+**What I did:**
+- Stop checks: not COMPLETE (s7–s10 not started, blockers open); iteration 19 < 80; not all non-verified stages blocked → proceeded with build work.
+- Picked the lowest non-verified, non-blocked stage: **s6** (`self_checked`), advanced it one phase: **VERIFY**.
+- Spawned a fresh-context critic subagent that independently inspected the real artifacts — `scoring_integration.md`, `skill.md` Step 5, `s6-selftest.md`, the two captured report directories — and confirmed via git that `prospect-evaluation/` is unmodified.
+
+**Verdict: PASS (0 BLOCKING).** Both Done-when criteria met:
+- A Class-1 (30/110) and a Class-2 (30/100 informational) candidate each produced a score + `.md`+`.html` report via the unmodified scorer, scores internally consistent.
+- "No asking price" handled as "insufficient data — not awarded", no crash.
+
+**4 non-blocking findings filed** (IMPROVE-s6-1: dangling `buy-box-and-scoring.md` reference; IMPROVE-s6-2: both scored candidates are test inputs, real Class-1 deferred to s10; NIT-s6-1/2: stale line citation, file mode).
+
+**State updated:** s6 → `verified`; iteration 19; `unresolved_findings` 15 → 19; `open_blockers` 4. Committed as `38e3e0c`.
+
+**Signal: CONTINUE** — s7 (Airtable write & dashboard badge) is the next non-blocked stage, awaiting IMPLEMENT. s2 remains blocked on B4 (operator must add the two `Source` single-select values).

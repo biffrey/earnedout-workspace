@@ -39,6 +39,8 @@
     previous_price str    pre-formatted; only required when price_drop is true
     ebitda         str    pre-formatted
     source         str    "Overnight Search" | "Manual Submission"
+                          | "Off-Market — ASL Bolt-on" | "Off-Market — SBIC"
+                          (a value starting "Off-Market" => render OFF-MARKET badge)
     report_link    str    relative path to the prospect-eval HTML report,
                           e.g. "../reports/6a89ka/acme-aviation-mro-report.html"
     date_added     str    "YYYY-MM-DD"  (Sections B & C)
@@ -149,6 +151,11 @@
     background: rgba(90,167,255,.15); color: var(--accent);
     border: 1px solid rgba(90,167,255,.3);
   }
+  /* Off-market badge — set on rows whose Source starts with "Off-Market" */
+  .chip.offmarket {
+    background: rgba(47,191,113,.15); color: var(--pass);
+    border: 1px solid rgba(47,191,113,.4);
+  }
 
   /* Run-summary grid */
   .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -232,6 +239,7 @@
             {{ lead.business_name }}
             {% if lead.price_drop %}<span class="chip price-drop">PRICE DROP</span>{% endif %}
             {% if lead.source == 'Manual Submission' %}<span class="chip manual">MANUAL</span>{% endif %}
+            {% if lead.source.startswith('Off-Market') %}<span class="chip offmarket">OFF-MARKET</span>{% endif %}
           </td>
           <td>{{ lead.industry }}</td>
           <td>{{ lead.state }}</td>
@@ -277,6 +285,7 @@
           <td>
             {{ lead.business_name }}
             {% if lead.price_drop %}<span class="chip price-drop">PRICE DROP</span>{% endif %}
+            {% if lead.source.startswith('Off-Market') %}<span class="chip offmarket">OFF-MARKET</span>{% endif %}
           </td>
           <td>{{ lead.industry }}</td>
           <td>{{ lead.state }}</td>
@@ -316,7 +325,10 @@
         <tr>
           <td>{{ loop.index }}</td>
           <td><span class="score {{ score_cls(lead.score) }}">{{ lead.score }}</span></td>
-          <td>{{ lead.business_name }}</td>
+          <td>
+            {{ lead.business_name }}
+            {% if lead.source.startswith('Off-Market') %}<span class="chip offmarket">OFF-MARKET</span>{% endif %}
+          </td>
           <td>{{ lead.industry }}</td>
           <td>{{ lead.state }}</td>
           <td>{{ lead.asking_price }}</td>

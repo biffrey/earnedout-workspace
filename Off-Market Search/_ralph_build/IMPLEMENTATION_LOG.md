@@ -308,3 +308,66 @@ Stage s6 → `drafted`. Next phase for s6: SELF-TEST (drive the procedure over t
 s5 SELF-TEST `LeadPacket`s — R1 Class 1 `rollup_addon` /110, R2 Class 2 `sbic`
 informational with a `buybox_gate` from `sbic_license_status`; confirm the
 "no asking price" handling and the filesystem-safe `report_slug`).
+
+## iter 20 — 2026-05-22 — s7 (Airtable write & dashboard badge) — IMPLEMENT
+
+Built the stage-s7 deliverable: the procedure that persists each s6 `ScoredLead`
+to the **existing** Master Deal Pipeline tracker and the off-market dashboard
+badge — no parallel tracker, off-market rows interchangeable with on-market.
+
+- **`.claude/skills/off-market-search/references/airtable_write.md`** — the s7
+  reference. Contents:
+  - **Stage I/O** — input is the s6 `ScoredLead` list (`new` entities) plus the
+    s4 `existing`-tagged `CanonicalEntity`s (each with a `tracker_record_id`);
+    `new` → create, `existing` → update in place. Output: one Airtable row per
+    lead, the record URL written back into `Notes`, and the dashboard
+    regenerated with the badge.
+  - **§2 preconditions — never write blind** — the Step-1 schema preflight must
+    have passed (a missing `Source` value already halted the skill; s7 never
+    re-checks or auto-creates); a failed s4 tracker read halts the write step.
+  - **§3 field-by-field mapping (PRD §8)** for a new record — §3.1 existing
+    fields, §3.2 the 16 reused fields, §3.3 the five new §8.4 fields, each with
+    its live field ID (existing/reused from `config/search_config.md`; new from
+    `evidence/s2-airtable-schema.md`). `Source` = `Off-Market — ASL Bolt-on`
+    (Class 1) / `Off-Market — SBIC` (Class 2); `Disposition` = `Active`;
+    `Listing ID` left blank (off-market uses the dedicated `Gov Entity ID`
+    field per the §13 decision); `Asking Price`/EBITDA/Revenue/Cash-Flow written
+    only for real disclosed figures, never signals. §3.4 the adapted
+    4-identifier `Notes` block (carries the SBA-prior-approval fact for Class 2).
+  - **§4 update an existing record** — refresh `Link Last Checked`/`Date
+    Updated`, fill only blank gov fields without overwriting, update
+    `Lead Score`/`Prospect Eval Report`, append a dated `Notes` line; never flip
+    an on-market row's `Source`/`Disposition`.
+  - **§5 the dashboard badge** — a `.chip.offmarket` class, sibling to the
+    existing chips; rendered when `lead.source` starts with `"Off-Market"`;
+    on-market rows unchanged; no `Source` column added.
+  - **§6 failure/edge handling** — write retry-once then log for manual entry;
+    `lead_score: null` still written (score blank, noted); Class-2
+    `fail`/`conditional` gate still written as a normal `Active` row; never
+    fabricate to fill a field; never auto-create a `Source` value/field.
+- **`templates/daily-dashboard.html` — badge added** — new `.chip.offmarket`
+  style (green, matching the `--pass` palette); the data-contract comment
+  extended with the two off-market `source` values; the conditional
+  `{% if lead.source.startswith('Off-Market') %}<span class="chip offmarket">
+  OFF-MARKET</span>{% endif %}` added to Section A (New Finds), Section B
+  (Running Queue), and Section C (Revisit Bucket) next to the business name.
+  The condition is additive — `Overnight Search` / `Manual Submission` rows
+  render exactly as before; the Section A `Source` column is unchanged.
+- **`skill.md` Steps 6 and 8 updated** to point at `references/airtable_write.md`
+  and describe the create/update split, the fail-loud-not-fabricate posture, and
+  the badge render condition.
+
+Constraints honored: no parallel tracker / no new scorer (s7 writes only
+`tblSmNrHROMLm7vOS` and consumes the unmodified scorer's `ScoredLead`); never
+fabricate (unknown fields left blank, signals never written into disclosed-
+figure fields); fail loud (preflight is Step 1's job — s7 writes against a
+confirmed schema, never auto-creates); never auto-send outreach (drafting is
+s8, not here); SBA-prior-approval fact carried in the Class-2 `Notes` block;
+B4 does not block this IMPLEMENT — the mapping reference and badge are built
+regardless; the live record write is exercised in SELF-TEST.
+
+Stage s7 → `drafted`. Next phase for s7: SELF-TEST (drive the procedure over the
+s6 SELF-TEST `ScoredLead`s — confirm a Class-1 and a Class-2 record map
+field-by-field per §3 with no fabricated field, an `existing` entity updates in
+place per §4, and the `.chip.offmarket` badge renders on an off-market row while
+an on-market row is unchanged).

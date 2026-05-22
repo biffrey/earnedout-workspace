@@ -122,11 +122,16 @@ of the `Gov Entity ID`). _(Scoring integration: s6 — see
 ## Step 6 — Create / update the Airtable record
 *Built by s7.*
 
-Write each scored prospect into `tblSmNrHROMLm7vOS`, mapped field-by-field per
-PRD §8 — existing fields, the 16 reused fields, the new §8.4 fields +
-`Gov Entity ID`, and `Source = "Off-Market — ASL Bolt-on"` or
-`"Off-Market — SBIC"`. `Disposition = Active`. Off-market and on-market rows are
-interchangeable. _(Record mapping + write: s7.)_
+Run the procedure in `references/airtable_write.md`. It writes each `ScoredLead`
+from Step 5 into `tblSmNrHROMLm7vOS`, mapped field-by-field per PRD §8 —
+existing fields, the 16 reused fields, the five new §8.4 fields + `Gov Entity ID`,
+and `Source = "Off-Market — ASL Bolt-on"` or `"Off-Market — SBIC"`;
+`Disposition = "Active"`. An s4 `existing`-tagged entity **updates its matched
+row in place** (never a duplicate, never a `Source`/`Disposition` flip on an
+on-market row). Unknown fields are left blank — never fabricated; the gov record
+URL goes in `Direct Listing URL`/`Links`, never a search-results page.
+Off-market and on-market rows are interchangeable. _(Record mapping + write: s7 —
+see `references/airtable_write.md`.)_
 
 ## Step 7 — Draft outreach
 *Built by s8.*
@@ -142,7 +147,10 @@ drafting: s8.)_
 
 Regenerate `output/dashboards/dashboard_YYYY-MM-DD.html` from
 `templates/daily-dashboard.html`. Off-market leads appear alongside on-market
-leads with an **"Off-Market" badge** on their rows. _(Badge: s7; wiring: s9.)_
+leads with an **"Off-Market" badge** (`.chip.offmarket`, rendered when
+`lead.source` starts with `"Off-Market"`) on their rows in Sections A, B, and C
+— no `Source` column is added and on-market rows are unchanged. See
+`references/airtable_write.md` §5. _(Badge: s7; wiring: s9.)_
 
 ## Step 9 — Write run logs
 *Built by s9.*
