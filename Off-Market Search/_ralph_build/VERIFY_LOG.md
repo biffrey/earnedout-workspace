@@ -688,3 +688,58 @@ Findings (non-blocking, filed in `FINDINGS.md`):
 
 Stage s9 → `verified`. All 10 stages are now `verified`; next phase is FINAL
 AUDIT. `unresolved_findings` 30 → 31 (NIT-s9-4 added). `open_blockers` 0.
+
+## iter 51 — 2026-05-23 — FINAL AUDIT — SHIP
+
+Fresh-context independent auditor subagent audited the whole `off-market-search`
+build end-to-end against `OFFMARKET_BUILD_PLAN.md` and the PRD. It independently
+inspected real files, live Airtable state (`get_table_schema` of
+`tblSmNrHROMLm7vOS`), git history, and live cron state (`launchctl list` /
+`launchctl print`). Not given the loop's logs or reasoning as truth — treated
+all loop logs as claims.
+
+**Verdict: SHIP (0 BLOCKING).**
+
+All seven deliverables independently confirmed PASS:
+- The skill (`skill.md` + 8 reference files); §9.1 nine-step workflow wired in
+  fixed order 1→9; manual single-entity path (`orchestration.md` §4, mirrors
+  `submit-url`).
+- `config/offmarket_sources.md` — 11 sources S1–S11, NAICS 541930 / PSC R608,
+  no `⚠ VERIFY:` placeholders, no fabricated codes/endpoints.
+- **Live Airtable schema** — `Source` carries both off-market values with the
+  exact U+2014 em dash (`0x2014` codepoint check) + spacing; the five §8.4
+  fields + `Gov Entity ID` exist with correct types; test row
+  `recklDY7vHFmKauQD` is well-formed with no fabricated value.
+- Dashboard off-market badge (`daily-dashboard.html:242/288/330`, CSS line 155);
+  the `<th>Source</th>` predates the build (`git blame` → on-market commit
+  `2d49486`); on-market rows unchanged; no `Source` column added.
+- Off-market outreach template (`config/offmarket_outreach_template.md`),
+  distinct from the broker `config/outreach_templates.md` (git: zero
+  `offmarket-build` commits to the broker file).
+- Weekly cron LIVE — `launchctl` confirms `ai.earnedout.offmarket-search`
+  scheduled `Weekday=1 Hour=6 Minute=0`; repo plist byte-identical to the loaded
+  `~/Library/LaunchAgents/` copy (`diff` rc 0); `run-offmarket-search.sh` passes
+  `bash -n`.
+- **Honesty (highest-priority check):** both s10 lead packets read
+  field-by-field against their `.md`/`.html` reports and outreach drafts — no
+  fabricated field; the SBIC fund vintage 1983 is never rendered as a company
+  formation date / operating track record (BLOCKING-s10-1 / BLOCKING-s10-2
+  fixes both confirmed holding).
+
+Constraints all PASS: no parallel tracker; `prospect-evaluation/` has zero
+build-era commits (used verbatim); no auto-send path (every `send`/`smtp`/
+`gmail`/`mailto` hit is a prohibition or the NOT-SENT marker); fail-loud schema
+preflight; SBA prior-approval change-of-control fact on the Class-2
+record/report/template.
+
+The auditor independently re-judged the three fixture-shell adapter findings
+(`IMPROVE-s3-2`/`-s3-3`/`-s5-5`) and concurred they are **correctly classified
+IMPROVE, not BLOCKING** — the primary discovery sources (S1 USAspending, S4 SBA
+SBIC directory) are built for real and the shells degrade gracefully without
+fabricating. An IMPROVE/NIT backlog of 31 does not block ship.
+
+**0 BLOCKING findings; no new findings filed.** Per the FINAL AUDIT contract,
+SHIP with 0 BLOCKING → `final_audit_passed: true`. Stages stay all `verified`.
+`unresolved_findings` unchanged at 31; `open_blockers` 0. Next phase: RESOLVE —
+burn down the 31 open `IMPROVE`/`NIT` findings in `FINDINGS.md`, one per
+iteration, before COMPLETE.

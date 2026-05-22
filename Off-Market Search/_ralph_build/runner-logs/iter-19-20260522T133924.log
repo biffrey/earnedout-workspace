@@ -1,0 +1,9 @@
+Iteration 50 complete — **s9 VERIFY**.
+
+- Spawned a fresh-context critic subagent; it independently inspected the s9 artifacts and live system state (`launchctl`).
+- **Verdict: PASS (0 BLOCKING)** — all three s9 Done-when criteria met: §9.1 Steps 1–9 wired end-to-end, the manual single-entity path is specified, and the weekly cron is live (`ai.earnedout.offmarket-search`, Weekday=1/Hour=6, Monday 06:00).
+- Stage **s9 → `verified`**. All 10 stages are now `verified`.
+- New finding **NIT-s9-4** logged (frozen iter-26 s9 dry-run evidence log still cites resolved blocker B4); two other NITs were already tracked (NIT-s9-1, NIT-s9-3). `unresolved_findings` 30 → 31.
+- Updated `VERIFY_LOG.md`, `FINDINGS.md`, `STATE.md` (iteration 50); committed locally.
+
+Next phase: **FINAL AUDIT** (all 10 stages verified). Signal: `CONTINUE`.
