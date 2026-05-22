@@ -351,7 +351,9 @@ stale-provenance class as NIT-s10-1 / IMPROVE-s10-3.
 evidence. Best done with the IMPROVE-s10-3 artifact refresh.
 **Status:** OPEN.
 
-### BLOCKING-s9-1 — BLOCKING — s9 — weekly `/schedule` cron is not registered though B4 is resolved
+## Resolved
+
+### BLOCKING-s9-1 — BLOCKING — s9 — weekly cron is not registered though B4 is resolved
 **Raised:** iter 45 FINAL AUDIT (independent auditor).
 **Where:** s9 cadence deliverable — build-plan Deliverable #7 and the s9
 `Done-when` ("the weekly cron is registered"); `run-offmarket-search.sh`,
@@ -367,14 +369,21 @@ are correct, but live registration was honestly gated on blocker B4 (the iter
 the registration step should have run. Build-plan Deliverable #7 requires the
 cron "registered" and s10's Definition of done requires all stages truly
 `verified`; an unscheduled weekly pipeline never fires.
-**Fix:** register the weekly cron now that B4 is resolved — via the `/schedule`
-skill or the `CronCreate` tool (weekly, Monday 06:00, runs `off-market-search`
-/ `run-offmarket-search.sh`, label `ai.earnedout.offmarket-search`), matching
-`config/offmarket_schedule.md`. Then confirm it is live with `CronList` /
-`launchctl list` and record the registration in the s9 SELF-TEST.
-**Status:** OPEN.
-
-## Resolved
+**Resolution (iter 46, s9 re-IMPLEMENT):** registered the weekly trigger as the
+local `launchd` agent `ai.earnedout.offmarket-search` — the mechanism
+`config/offmarket_schedule.md` documents as the fallback for when a `/schedule`
+remote routine cannot reach the local repo / MCP servers (which this pipeline
+requires). Copied `config/launchd/ai.earnedout.offmarket-search.plist` to
+`~/Library/LaunchAgents/` and bootstrapped it
+(`launchctl bootstrap gui/$(id -u) …`, rc 0). `launchctl list | grep offmarket`
+now shows the agent; `launchctl print` confirms `StartCalendarInterval`
+`Weekday => 1` / `Hour => 6` (weekly, Monday 06:00 local), matching build-plan
+Deliverable #7 and `config/offmarket_schedule.md`. The `CronCreate` in-memory
+scheduler was rejected (its jobs fire only while a Claude REPL is idle, so a
+weekly unattended trigger would not fire). The Registration section of
+`config/offmarket_schedule.md` was updated to record the live launchd agent.
+**Status:** RESOLVED — s9 returns to the phase ladder (re-SELF-TEST next; the
+SELF-TEST must confirm the agent is live and correctly scheduled).
 
 ### BLOCKING-s10-2 — BLOCKING — s10 — R2 OM-2 outreach draft asserts an operating history the packet flags as a null gap
 **Raised:** iter 41 VERIFY (s10 critic).

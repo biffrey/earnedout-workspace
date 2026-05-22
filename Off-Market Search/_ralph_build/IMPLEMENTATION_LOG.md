@@ -780,3 +780,51 @@ Stage s10 → `drafted`. Next phase for s10: SELF-TEST — re-run the s10 end-to
 dry-run checks, reading the outreach drafts field-by-field against each lead
 packet to confirm no draft asserts an operating history its packet flags as a
 `null` gap.
+
+## iter 46 — 2026-05-22 — s9 (Orchestration & cadence) — IMPLEMENT (re-IMPLEMENT, BLOCKING-s9-1)
+
+The iter-45 FINAL AUDIT returned s9 to `not_started` on **BLOCKING-s9-1**: the
+weekly cron was never live. `CronList` returned "No scheduled jobs" and
+`launchctl list | grep offmarket` returned nothing. The script
+(`run-offmarket-search.sh`), the launchd plist
+(`config/launchd/ai.earnedout.offmarket-search.plist`) and
+`config/offmarket_schedule.md` all existed and were correct, but live
+registration had been honestly gated on blocker B4 (the iter-27 s9 VERIFY
+documented it as the post-B4 install step). B4 is now RESOLVED — the gate has
+cleared — so this iteration runs the registration.
+
+- **Mechanism chosen: local `launchd` agent.** `config/offmarket_schedule.md`
+  names a `/schedule` cron as the primary mechanism but explicitly directs the
+  **local launchd fallback** when the `/schedule` environment cannot run the
+  Airtable / Playwright MCP servers. The off-market skill writes to local repo
+  files (`search_reports/`, `output/`, the dashboard) and drives the local
+  Airtable + Playwright MCP servers, so a remote `/schedule` routine cannot run
+  it — launchd is the correct, proven mechanism (it mirrors the on-market
+  `ai.earnedout.overnight-search` agent). The `CronCreate` in-memory scheduler
+  was rejected: its jobs only fire while a Claude REPL is idle, so a weekly
+  Monday-06:00 trigger would not fire unattended.
+- **Registered the weekly agent.** Copied
+  `config/launchd/ai.earnedout.offmarket-search.plist` to
+  `~/Library/LaunchAgents/` and bootstrapped it:
+  `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ai.earnedout.offmarket-search.plist`
+  (rc 0). `launchctl list | grep offmarket` now shows
+  `ai.earnedout.offmarket-search`; `launchctl print` confirms the
+  `StartCalendarInterval` is `Weekday => 1` (Monday), `Hour => 6` — matching
+  `config/offmarket_schedule.md` (weekly, Monday 06:00 local) and
+  build-plan Deliverable #7. State is `not running` (correct — `RunAtLoad` is
+  `false`; the agent fires only on the calendar trigger).
+- **`config/offmarket_schedule.md` Registration section updated** to record
+  that the launchd agent is the registered mechanism (B4 cleared, the
+  `/schedule` environment cannot reach the local repo / MCP), and that it is
+  now live.
+
+Constraints honored: never auto-send (the agent only invokes the skill, which
+drafts outreach; no email path); no parallel tracker / no new scorer (the agent
+runs the existing `off-market-search` skill against `tblSmNrHROMLm7vOS`);
+nothing fabricated. BLOCKING-s9-1 is resolved — moved to the FINDINGS.md
+"Resolved" section; `unresolved_findings` 30 → 29.
+
+Stage s9 → `drafted`. Next phase for s9: SELF-TEST — exercise the assembled
+skill / manual path and confirm the weekly agent is live and correctly
+scheduled (`launchctl print` calendar interval), recording each check in
+`TEST_LOG.md`.

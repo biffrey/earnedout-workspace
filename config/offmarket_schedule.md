@@ -51,24 +51,29 @@ draft proprietary-approach outreach to files and the `Notes` field only
 
 ## Registration
 
-> **Gated on blocker B4.** The skill's Step 1 schema preflight **fails loud**
-> until the two off-market `Source` values exist in Airtable (B4 — see
-> `Off-Market Search/_ralph_build/BLOCKERS.md`). Registering the cron before B4
-> clears would produce a fail-loud halt every Monday. **Register the cron once
-> B4 is resolved** — at which point the weekly run succeeds end-to-end.
+> **REGISTERED — 2026-05-22 (build loop iter 46).** Blocker B4 is RESOLVED (both
+> off-market `Source` values are live, so the Step 1 schema preflight passes),
+> which cleared the registration gate. The weekly trigger is now live as the
+> **local `launchd` agent** `ai.earnedout.offmarket-search`.
 
-To register the weekly cron (run once, after B4 clears):
+**Mechanism: local `launchd` agent (not a `/schedule` cron).** A `/schedule`
+remote routine cannot run this pipeline — the off-market skill writes to local
+repo paths (`search_reports/`, `output/`, the dashboard) and drives the local
+Airtable + Playwright MCP servers, which a remote routine does not have. Per the
+fallback this file already documents, registration uses the proven `launchd`
+pattern (mirroring the on-market `ai.earnedout.overnight-search` agent). It was
+registered once, after B4 cleared:
 
 ```bash
-# Via the /schedule skill — register a weekly recurring routine:
-#   Schedule:  weekly, Monday 06:00 local
-#   Command:   ./run-offmarket-search.sh   (repo root)
-#   Label:     ai.earnedout.offmarket-search
+cp config/launchd/ai.earnedout.offmarket-search.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/ai.earnedout.offmarket-search.plist
+launchctl list | grep ai.earnedout.offmarket-search   # confirms it is loaded
 ```
 
-Use the `/schedule` skill (or the runtime's cron mechanism) to create the
-routine with the above schedule and command. Confirm it is registered with the
-`/schedule` list view.
+The agent's `StartCalendarInterval` fires **weekly, Monday 06:00 local**
+(`Weekday=1`, `Hour=6`); `RunAtLoad` is `false`, so it fires only on the
+calendar trigger. See the **Local launchd fallback** section below for the
+manual-test and reload commands.
 
 ## Local launchd fallback
 
