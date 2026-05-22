@@ -6,15 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### F2 — NIT — s1 — literal placeholder string trips automated scans
-**Raised:** iter 3 VERIFY (s1 critic).
-**Where:** `config/offmarket_sources.md` line 7.
-**Problem:** the line contains the literal string `⚠ VERIFY:` inside a negation
-sentence ("No `⚠ VERIFY:` placeholders remain"); a future automated placeholder
-scan could false-positive on it.
-**Fix:** reword to avoid the literal token (e.g. describe it without quoting it).
-**Status:** OPEN.
-
 ### NIT-s3-1 — NIT — s3 — SBIC CSV column label mismatch
 **Raised:** iter 7 VERIFY (s3 critic).
 **Where:** `.claude/skills/off-market-search/references/source_adapters.md:174`
@@ -381,6 +372,18 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### F2 — NIT — s1 — literal placeholder string trips automated scans
+**Raised:** iter 3 VERIFY (s1 critic).
+**Where:** `config/offmarket_sources.md` line 7.
+**Problem:** the line contained the literal string `⚠ VERIFY:` inside a negation
+sentence ("No `⚠ VERIFY:` placeholders remain"); a future automated placeholder
+scan could false-positive on it.
+**Resolution (iter 53, RESOLVE):** reworded the sentence to describe the marker
+without quoting the literal token — now reads "No verify-this-value placeholder
+markers remain". Confirmed `config/offmarket_sources.md` no longer contains the
+`⚠ VERIFY:` literal anywhere. Cosmetic; no source-config fact changed.
+**Status:** RESOLVED.
 
 ### F1 — IMPROVE — s1 — non-standard Markdown comment delimiter
 **Raised:** iter 3 VERIFY (s1 critic).

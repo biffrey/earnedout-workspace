@@ -4,8 +4,9 @@ Source config for the `off-market-search` skill. Companion to
 `config/search_config.md` (Airtable IDs, output paths, on-market platforms).
 Every code, endpoint, and access fact here is **verified** — see
 `Off-Market Search/PRD_OFF_MARKET_SEARCH_Section13_Resolution.md` Part 2. No
-`⚠ VERIFY:` placeholders remain; items still pending an operator decision are
-carried as blockers in `Off-Market Search/_ralph_build/BLOCKERS.md`.
+verify-this-value placeholder markers remain; items still pending an operator
+decision are carried as blockers in
+`Off-Market Search/_ralph_build/BLOCKERS.md`.
 
 <!-- Built by build-loop stage s1. Source adapters that consume this config are
 built by s3. -->

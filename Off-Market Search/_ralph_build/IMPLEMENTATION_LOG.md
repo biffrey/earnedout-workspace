@@ -878,3 +878,19 @@ the file.
 
 F1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings` 31 → 30.
 30 findings remain (F2 next). RESOLVE phase continues.
+
+## iter 53 — 2026-05-23 — RESOLVE — F2 (s1 literal placeholder string)
+
+All 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0` —
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **F2** (NIT, s1) — `config/offmarket_sources.md` line 7 carried the
+literal string `⚠ VERIFY:` inside a negation sentence ("No `⚠ VERIFY:`
+placeholders remain"), which a future automated placeholder scan could
+false-positive on. Reworded the sentence to describe the marker without
+quoting the literal token — now "No verify-this-value placeholder markers
+remain". Confirmed the file no longer contains the `⚠ VERIFY:` literal
+anywhere. Cosmetic only — no source-config fact changed.
+
+F2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings` 30 → 29.
+29 findings remain. RESOLVE phase continues.
