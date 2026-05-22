@@ -65,10 +65,16 @@ For each off-market lead from s7, in order:
    - `[LOCATION]` (OM-1) ← `location`. If `null`, remove the "in [LOCATION]"
      clause rather than guessing.
    - `[SPECIFIC_DETAIL]` ← **one** sentence built from a single verified fact
-     in the lead packet (a service line, federal-contract history, years
-     operating, SBIC license type/vintage). **If no verified detail exists,
+     in the lead packet (a service line, federal-contract history, SBIC
+     license status, investment strategy). **If no verified detail exists,
      omit the entire `[SPECIFIC_DETAIL]` paragraph** — never fabricate one to
-     fill the slot.
+     fill the slot. **The packet's `sbic_gp_economics.vintage` is the SBIC
+     *fund's* vintage year, not the management company's formation date —
+     never render it as a company operating history ("operating since YYYY",
+     "since YYYY", years in business, or a track-record-length claim). State
+     years operating only from a non-null `formation_date` /
+     `years_in_business`; when those are a `null` enrichment gap, the draft
+     asserts no start year.**
    - No bracketed placeholder may survive into the stored draft. If a required
      placeholder cannot be filled and has no documented fallback, that is a
      drafting defect — log it, do not store a draft with a raw `[...]` token.
@@ -134,6 +140,12 @@ never silently drops a draft, and never blocks the rest of the run.
   `needs follow-up`, so the operator knows what to complete before sending.
 - **No verified specific detail** → omit the `[SPECIFIC_DETAIL]` paragraph;
   the draft is still valid and still stored.
+- **Fund vintage is not a company operating history** → `sbic_gp_economics.
+  vintage` is the SBIC fund's vintage year, never the management company's
+  formation date or years in business. It must not appear in a draft as
+  "operating since YYYY" or any track-record-length claim. When
+  `formation_date` / `years_in_business` are a `null` enrichment gap, the
+  draft states no operating-start year at all.
 - **A single lead's drafting error** degrades that lead only — log it and
   continue; one failed draft is not a failed run.
 - **Class 2 always carries the SBA-prior-approval sentence** — it is fixed

@@ -181,9 +181,20 @@ https://smbsteward.com/
   use the neutral greeting `Hello,` — never invent a name.
 - `[BUSINESS_NAME]` — the canonical management-firm name.
 - `[SPECIFIC_DETAIL]` — **one** sentence stating a single concrete, real fact
-  (SBIC license type, license vintage, investment focus). Drawn from
-  enrichment data only. **If no real, verified detail is available, omit this
+  drawn from the lead packet's enrichment data only: the SBIC license status
+  (e.g. "in good standing"), the investment strategy / focus, or the SBIC
+  license type. **If no real, verified detail is available, omit this
   paragraph entirely** — never fabricate.
+
+  **Never render the SBIC fund vintage as a company operating history.** The
+  lead packet's `sbic_gp_economics.vintage` is the *fund's* vintage year — it
+  is **not** the management company's formation date, incorporation year, or
+  years in business. The detail sentence must never say the firm "has operated
+  since [vintage]", is a "[vintage]-vintage firm", or carry any company
+  operating-start or track-record-length claim derived from it. Company
+  operating history may be stated **only** from a non-null `formation_date` /
+  `years_in_business` in the packet; when those are an enrichment gap (`null`),
+  the draft asserts no start year and no track-record-length claim at all.
 
 > The SBA-prior-approval-of-change-of-control sentence is a **fixed part of
 > the body**, not a placeholder — every Class-2 draft carries it. This is the

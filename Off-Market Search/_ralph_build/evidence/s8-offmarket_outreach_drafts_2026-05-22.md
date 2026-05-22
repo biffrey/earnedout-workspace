@@ -82,9 +82,9 @@ management company itself — the team, the license, and the go-forward platform
 — is something you would ever consider transitioning, whether through a sale, a
 succession plan, or a partnership.
 
-1st Source Capital Corporation has operated as a licensed SBIC pursuing a
-direct-lending strategy since 1983 — a long, durable track record in the
-program.
+1st Source Capital Corporation is a licensed SBIC in good standing, pursuing
+a direct-lending investment strategy — exactly the kind of platform I follow
+closely.
 
 I understand that a change of control of a licensed SBIC requires SBA prior
 approval, and I would approach any process with that fully in mind and with

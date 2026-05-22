@@ -731,3 +731,52 @@ Stage s7 → `drafted`. Next phase for s7: SELF-TEST — re-run the write proced
 including the live `create_records_for_table` of R2, now with `Lead Source`
 left blank; confirm the row lands in `tblSmNrHROMLm7vOS` with `Disposition =
 Active` (C5), and re-confirm C1–C4 and the badge.
+
+## iter 42 — 2026-05-22 — s10 (Assembly, end-to-end dry run) — IMPLEMENT (re-IMPLEMENT, BLOCKING-s10-2)
+
+The iter-41 VERIFY returned s10 to `not_started` on **BLOCKING-s10-2**: the R2
+OM-2 outreach draft asserted "1st Source Capital Corporation has operated as a
+licensed SBIC pursuing a direct-lending strategy **since 1983** — a long,
+durable track record in the program." But the R2 lead packet
+(`output/reports/name-1st-source-capital-south-bend-in/lead-packet.json`) sets
+`formation_date: null` / `years_in_business: null` and lists "formation date —
+needs follow-up (B1)" as an enrichment gap. `1983` is
+`sbic_gp_economics.vintage` — the SBIC **fund's** vintage year — not a verified
+company operating-start date. This is the BLOCKING-s10-1 fabrication defect
+class recurring in the s10 dry run's outreach deliverable (Step 7). This
+iteration fixes the draft and hardens the drafting logic so it cannot recur.
+
+- **OM-2 draft rewritten** in
+  `evidence/s8-offmarket_outreach_drafts_2026-05-22.md` (lines 85–87). The
+  `[SPECIFIC_DETAIL]` sentence now reads "1st Source Capital Corporation is a
+  licensed SBIC in good standing, pursuing a direct-lending investment
+  strategy — exactly the kind of platform I follow closely." Both facts —
+  `sbic_license_status: "Good Standing"` and `sbic_gp_economics.strategy:
+  "Direct Lending"` — are verified in the R2 packet. The fabricated "since
+  1983" operating-start year and the "long, durable track record" claim
+  derived from it are removed.
+- **`config/offmarket_outreach_template.md` OM-2 hardened.** The
+  `[SPECIFIC_DETAIL]` placeholder spec — which previously listed "license
+  vintage" as an allowed fact — now lists license status / investment
+  strategy / license type, and adds an explicit rule: the packet's
+  `sbic_gp_economics.vintage` is the *fund's* vintage year, **never** the
+  management company's formation date / incorporation year / years in
+  business; it must never be rendered as "operating since [vintage]" or any
+  operating-start / track-record-length claim. Company operating history may
+  be stated only from a non-null `formation_date` / `years_in_business`.
+- **`references/outreach_drafting.md` hardened.** §2 step 5's `[SPECIFIC_DETAIL]`
+  description drops "years operating, SBIC license type/vintage" in favor of
+  "SBIC license status, investment strategy", with the same fund-vintage
+  prohibition spelled out; §5 (Edge & failure handling) gains a dedicated
+  "Fund vintage is not a company operating history" bullet.
+
+Constraints honored: never fabricate (the `[SPECIFIC_DETAIL]` now traces
+field-by-field to the packet; the fund-vintage rule prevents the same defect
+class recurring); no new scorer / no parallel tracker; never auto-send (the
+draft retains its NOT-SENT markers). BLOCKING-s10-2 is resolved — moved to the
+FINDINGS.md "Resolved" section; `unresolved_findings` 30 → 29.
+
+Stage s10 → `drafted`. Next phase for s10: SELF-TEST — re-run the s10 end-to-end
+dry-run checks, reading the outreach drafts field-by-field against each lead
+packet to confirm no draft asserts an operating history its packet flags as a
+`null` gap.
