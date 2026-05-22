@@ -6,14 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### F1 — IMPROVE — s1 — non-standard Markdown comment delimiter
-**Raised:** iter 3 VERIFY (s1 critic).
-**Where:** `config/offmarket_sources.md` lines 10–12.
-**Problem:** the "Built by stage s1" note uses a `/ … /` delimiter, which is not
-valid Markdown comment syntax, so the text renders literally.
-**Fix:** wrap the note in `<!-- … -->`.
-**Status:** OPEN.
-
 ### F2 — NIT — s1 — literal placeholder string trips automated scans
 **Raised:** iter 3 VERIFY (s1 critic).
 **Where:** `config/offmarket_sources.md` line 7.
@@ -389,6 +381,17 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### F1 — IMPROVE — s1 — non-standard Markdown comment delimiter
+**Raised:** iter 3 VERIFY (s1 critic).
+**Where:** `config/offmarket_sources.md` lines 10–12.
+**Problem:** the "Built by stage s1" note used a `/ … /` delimiter, which is not
+valid Markdown comment syntax, so the text rendered literally.
+**Resolution (iter 52, RESOLVE):** wrapped the note in a proper HTML/Markdown
+comment — `<!-- Built by build-loop stage s1. Source adapters that consume this
+config are built by s3. -->` — so it no longer renders. Verified the file has
+no remaining `/ … /` pseudo-comment.
+**Status:** RESOLVED.
 
 ### BLOCKING-s9-1 — BLOCKING — s9 — weekly cron is not registered though B4 is resolved
 **Raised:** iter 45 FINAL AUDIT (independent auditor).

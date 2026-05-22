@@ -7,8 +7,8 @@ Every code, endpoint, and access fact here is **verified** — see
 `⚠ VERIFY:` placeholders remain; items still pending an operator decision are
 carried as blockers in `Off-Market Search/_ralph_build/BLOCKERS.md`.
 
-/ Built by build-loop stage s1. Source adapters that consume this config are
-built by s3. /
+<!-- Built by build-loop stage s1. Source adapters that consume this config are
+built by s3. -->
 
 ---
 

@@ -862,3 +862,19 @@ live in the iter-47 SELF-TEST T3 — `ai.earnedout.offmarket-search` loaded,
 
 Stage s9 → `drafted`. Next phase for s9: SELF-TEST — re-run the five checks,
 which T5 (skill self-documentation matches the registered state) must now pass.
+
+## iter 52 — 2026-05-23 — RESOLVE — F1 (s1 Markdown comment delimiter)
+
+All 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0` —
+the loop is in the RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per
+iteration before COMPLETE.
+
+Resolved **F1** (IMPROVE, s1) — `config/offmarket_sources.md` lines 10–12
+used a `/ … /` delimiter for the "Built by stage s1" note, which is not valid
+Markdown comment syntax and rendered literally. Wrapped the note in a proper
+`<!-- … -->` HTML comment so it no longer renders. No content or source-config
+fact changed — cosmetic only. Confirmed no remaining `/ … /` pseudo-comment in
+the file.
+
+F1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings` 31 → 30.
+30 findings remain (F2 next). RESOLVE phase continues.
