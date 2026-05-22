@@ -1,7 +1,14 @@
-# s5 Enrichment & Qualification Pre-Filters — SELF-TEST evidence (iter 12, 2026-05-22)
+# s5 Enrichment & Qualification Pre-Filters — SELF-TEST evidence
+
+**Re-run iter 15, 2026-05-22** — re-executed after the iter-14 re-IMPLEMENT that
+resolved BLOCKING-s5-1 (added `enrichment.md` §5.1, the `source_id → Gov Data
+Source` mapping table, and corrected the choice strings on lines 97 / 125 of
+this file). C1–C6 below were first run in iter 12 and re-confirmed unchanged
+(§2–§4 / §3 enrichment logic was not touched by the re-IMPLEMENT); **C7 is new**
+— it verifies the §5.1 fix directly.
 
 Hand-executing the §7.4 pre-filters, the §3 enrichment steps, the §4 SBIC
-good-standing cross-check, and the §5 `LeadPacket` assembly from
+good-standing cross-check, and the §5 `LeadPacket` assembly (incl. §5.1) from
 `references/enrichment.md` over the **s4 output** (4 `CanonicalEntity` objects,
 all `dedup_verdict: new`, from `evidence/s4-selftest.md`). Markdown-driven
 logic, exercised the same way the s3/s4 SELF-TESTs exercised their procedures.
@@ -154,15 +161,52 @@ read off a page:
 (none exists).** The procedure also demonstrably yields `Surrendered`/`Revoked`
 when a Federal Register action names the firm. **PASS.**
 
+## C7 — `gov_data_source` maps to live `Gov Data Source` choices only; fail-loud on unmapped (§5.1)
+
+The iter-14 re-IMPLEMENT added `enrichment.md` §5.1 — the `source_id → Gov Data
+Source` mapping table — to resolve BLOCKING-s5-1. Re-driven here against the
+**eight live choices** confirmed in `evidence/s2-airtable-schema.md:15`
+(`USAspending` / `SAM.gov` / `SAM.gov Contract Awards` / `SBA SBIC` / `SBS` /
+`GSA eLibrary` / `State` / `RID`):
+
+1. **R1 (Class 1).** s4 discovery `source_ids: [S2, S3]`. §5.1: `S2→SAM.gov`,
+   `S3→SAM.gov Contract Awards` → `gov_data_source: ["SAM.gov", "SAM.gov
+   Contract Awards"]`. Both strings are members of the eight-choice live set.
+   Matches line 97 of this file. ✓
+2. **R2 (Class 2).** s4 discovery `source_id: [S4]`. §5.1: `S4→SBA SBIC` →
+   `gov_data_source: ["SBA SBIC"]`. `SBA SBIC` is a live choice. Matches line
+   125. ✓ The `S5` good-standing cross-check also maps to `SBA SBIC` — a
+   re-mapped duplicate, deduplicated to one value (§5/§5.1 "deduplicated set").
+3. **No spurious choice.** Neither packet emits the iter-13 offender
+   `"SAM.gov Entity Management"`, nor any free-text/mistyped string — every
+   value traces to a §5.1 table row. The multi-select would not auto-grow on
+   write. ✓
+4. **`S10` / `S11` enrichment-only.** IAPD (S10) and U.S. Courts (S11) are not
+   discovery sources (`config/offmarket_sources.md`), never appear as a
+   `CanonicalEntity` discovery `source_id`, and contribute **no**
+   `gov_data_source` value — their evidence rides in `provenance_urls`. ✓
+5. **Fail-loud on unmapped `source_id`.** Drove the §5.1 fail-loud rule with an
+   in-memory synthetic `source_id` `S99` (not a table row): the rule halts the
+   skill with a schema-preflight-style operator message naming `S99`, and
+   **never** writes a free-text value or lets the multi-select auto-grow. The
+   behavior is specified explicitly (`enrichment.md:266-273`) and is the direct
+   countermeasure to BLOCKING-s5-1. ✓
+
+`gov_data_source` now yields only live `Gov Data Source` choices via the §5.1
+table, and an unmapped source halts loudly instead of silently creating a 9th
+choice. **PASS.**
+
 ---
 
 ## Result
 
-All **6** SELF-TEST checks PASS. The §7.4 pre-filters run first and drop an
+All **7** SELF-TEST checks PASS. The §7.4 pre-filters run first and drop an
 obvious non-fit (SYN-NF1) before any enrichment; a Class-1 (R1) and a Class-2
 (R2) entity each produce a complete `LeadPacket` with every unknown enumerated
 in `enrichment_gaps` and zero fabricated values; the SBIC good-standing
-cross-check resolves a status without relying on a directory flag.
+cross-check resolves a status without relying on a directory flag; and (C7, the
+iter-14 fix) `gov_data_source` maps through §5.1 to live `Gov Data Source`
+choices only, failing loud on an unmapped `source_id`.
 
 **Carry-note to the VERIFY critic** (not a Done-when failure): B1 (priority-
 state list) is OPEN, so `formation_date` / `years_in_business` / `sos_status`

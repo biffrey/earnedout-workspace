@@ -145,3 +145,36 @@ one carry-note to the VERIFY critic — B1 (priority-state list) being OPEN make
 `formation_date` / `years_in_business` / `sos_status` a universal gap on every
 off-market `LeadPacket` until B1 clears (the §3.2 B1-gated skip is exercised
 and behaves as designed). Next phase for s5: VERIFY.
+
+## iter 15 — 2026-05-22 — s5 (Enrichment & qualification pre-filters) — SELF-TEST (re-run)
+
+Re-ran the s5 SELF-TEST after the iter-14 re-IMPLEMENT that resolved
+BLOCKING-s5-1 (added `enrichment.md` §5.1, the `source_id → Gov Data Source`
+mapping table + fail-loud rule, and corrected the choice strings in
+`evidence/s5-selftest.md`). Hand-executed the §7.4 pre-filters, the §3
+enrichment steps, the §4 SBIC good-standing cross-check, and the §5/§5.1
+`LeadPacket` assembly over the s4 output (4 `CanonicalEntity`, all
+`dedup_verdict: new`). Full evidence in `evidence/s5-selftest.md`.
+
+- **C1–C6** — re-confirmed unchanged. The re-IMPLEMENT touched only §5.1 and
+  the §1/§5 `gov_data_source` rows; the §2 pre-filters, §3 enrichment, §4
+  good-standing cross-check, and the `LeadPacket` assembly were not modified,
+  so the iter-12 verdicts hold: Class-1 pre-filter passes a genuine fit (R1);
+  an obvious non-fit (SYN-NF1) is dropped BEFORE enrichment; Class-2 pre-filter
+  passes current licensees (R2/R3/R4); the Class-1 and Class-2 `LeadPacket`s
+  are complete with zero fabrication; the SBIC good-standing cross-check
+  resolves a status without a directory flag. All PASS.
+- **C7 (new) — `gov_data_source` §5.1 mapping.** PASS. R1 `source_ids [S2,S3]`
+  → `["SAM.gov", "SAM.gov Contract Awards"]`; R2 `source_id [S4]` →
+  `["SBA SBIC"]` — every value is one of the eight live `Gov Data Source`
+  choices (`evidence/s2-airtable-schema.md:15`). The iter-13 offender
+  `"SAM.gov Entity Management"` no longer appears. `S10`/`S11` are
+  enrichment-only and contribute no choice. The §5.1 fail-loud rule, driven
+  with a synthetic unmapped `source_id` `S99`, halts the skill with an operator
+  message and never auto-grows the multi-select.
+
+**Result: all 7 checks PASS.** Stage s5 → `self_checked`. No new findings. The
+iter-12 carry-note still stands — B1 (priority-state list) OPEN makes
+`formation_date` / `years_in_business` / `sos_status` a universal `LeadPacket`
+gap until B1 clears (designed B1-gated skip, not a failure). Next phase for s5:
+VERIFY (fresh-context critic).
