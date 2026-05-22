@@ -1,0 +1,14 @@
+Iteration 37 complete.
+
+**Step executed:** s7 (Airtable write & dashboard badge) — IMPLEMENT phase (`not_started → drafted`).
+
+**What it fixed — BLOCKING-s7-1:** The iter-36 SELF-TEST failed C5 because `airtable_write.md` §3.1 mapped `Lead Source` to a free-text gov-source string, but the live field is a **singleSelect** restricted to 14 broker-platform options. A live `create_records_for_table` was rejected atomically with `HTTP 422: Insufficient permissions to create new select option`.
+
+The fix:
+- **§3.1 `Lead Source` row** rewritten — off-market value is now **blank**, documenting that gov provenance is carried by the `Gov Data Source` multi-select and `Links` (no information lost).
+- **§6 hardened** — added a "never auto-create a select option on any field" rule naming the exact 422 failure mode.
+- BLOCKING-s7-1 moved to FINDINGS.md "Resolved"; `unresolved_findings` 28 → 27.
+
+**State:** iteration 37, s7 `drafted`, `open_blockers: 0`, `unresolved_findings: 27`. Committed locally.
+
+**Signal:** `CONTINUE` — next iteration runs the s7 SELF-TEST, which must re-attempt the live R2 write with `Lead Source` blank.

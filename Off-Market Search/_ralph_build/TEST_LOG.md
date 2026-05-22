@@ -560,3 +560,58 @@ contract a failed check returns the stage to IMPLEMENT: stage s7 →
 already carried by the dedicated `Gov Data Source` multi-select and `Links` —
 or map to an existing option), then re-run this SELF-TEST including the live
 write of R2.
+
+## iter 38 — 2026-05-22 — s7 (Airtable write & dashboard badge) — SELF-TEST (re-run)
+
+Re-ran the s7 SELF-TEST after the iter-37 re-IMPLEMENT that resolved
+**BLOCKING-s7-1** (rewrote `airtable_write.md` §3.1 so `Lead Source` is left
+**blank** for off-market rows, and hardened §6 with a "never auto-create a
+select option on any field" rule). Drove the `airtable_write.md` write
+procedure for real against the live base, attempting an actual create of the
+Class-2 SBIC lead R2 (1st Source Capital Corporation,
+`NAME:1st source capital|south bend in`, score 20/100). R1 remains a synthetic
+fixture and was deliberately **not** written to the live tracker (writing
+`EXAMPLE INTERPRETING FIXTURE LLC` into production would insert fabricated
+data — the real Class-1 row stays gated on the IMPROVE-s3-1 chain). Checks
+against the `OFFMARKET_BUILD_PLAN.md` s7 `Done-when` criteria:
+
+- **Preflight — live schema confirmed.** PASS. `get_table_schema` of the write
+  targets: `Industry Match` singleSelect has `SBIC` (`selwe1CYRoCvC5R8V`);
+  `Disposition` has `Active` (`selKN12meneKypCem`); `Source` has
+  `Off-Market — SBIC` (`seltqCid0e9t6aijI`); `SBIC License Status` has
+  `Good Standing` (`selmeIWvIAUqVwV9h`); `Gov Data Source` multipleSelects has
+  `SBA SBIC` (`selnRzXzjifJ8Cc5X`); `Gov Entity ID` / `SBIC License #`
+  singleLineText; `Federal Award History $` currency; `Prospect Eval Report`
+  url; `Date Added` date (ISO); `Lead Score` number. Preflight passes.
+- **Dedup — R2 is `new`.** PASS. `search_records` for "1st Source Capital" over
+  `tblSmNrHROMLm7vOS` returns zero rows → `dedup_verdict: new` → create path.
+- **C1 — badge style block present & well-formed.** PASS. `.chip.offmarket`
+  rule at `daily-dashboard.html:155`; base `.chip` rule unchanged.
+- **C2 — badge renders on off-market rows only.** PASS.
+  `{% if lead.source.startswith('Off-Market') %}` at lines 242/288/330 (New
+  Finds, Running Queue, Revisit Bucket); additive — on-market rows unchanged.
+- **C3 — every s7 field ID maps to a live field of the correct type.** PASS.
+  Confirmed live via `get_table_schema` this iteration (see Preflight).
+- **C4 — create/update split & no-fabrication mapping.** PASS. R2 written via
+  the `new` → create path; every R2 unknown left blank — `SBIC License #`,
+  `Federal Award History $`, website, EBITDA, revenue, cash flow,
+  years-in-business, NAICS, screenshot, `Listing ID`, `Direct Listing URL`,
+  `Asking Price`, `Lead Source` (blank per the iter-37 fix). No fabricated
+  value; the gov-record URL gap is recorded as "needs follow-up" in `Notes`.
+- **C5 — a scored off-market prospect writes as a live row in
+  `tblSmNrHROMLm7vOS` with `Disposition = Active`.** **PASS.** A live
+  `create_records_for_table` per `airtable_write.md` §3 — with `Lead Source`
+  **blank** — succeeded: record **`recklDY7vHFmKauQD`** created with
+  `Source = "Off-Market — SBIC"`, `Disposition = "Active"`,
+  `Industry Match = "SBIC"`, `Lead Score = 20`,
+  `Gov Entity ID = "NAME:1st source capital|south bend in"`,
+  `SBIC License Status = "Good Standing"`, `Gov Data Source = ["SBA SBIC"]`.
+  The iter-36 `HTTP 422` no longer fires — leaving `Lead Source` blank removed
+  the invalid select-option write. A follow-up `update_records_for_table` wrote
+  the Airtable record URL back into `Notes` per §3.4. No 422, no auto-created
+  option, no fabricated field.
+
+**Result: all checks PASS (Preflight + Dedup + C1–C5).** The central s7
+`Done-when` is met — a scored off-market prospect now appears as a normal
+`Active` row in `tblSmNrHROMLm7vOS`. Stage s7 → `self_checked`. No new
+findings. Next phase for s7: VERIFY (fresh-context critic).
