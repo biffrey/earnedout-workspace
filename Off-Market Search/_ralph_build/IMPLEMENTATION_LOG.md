@@ -1015,3 +1015,38 @@ or scorer touched.
 
 NIT-s4-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 24 → 23. 23 findings remain. RESOLVE phase continues.
+
+---
+
+## Iteration 60 — RESOLVE — IMPROVE-s4-3
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s4-3** (IMPROVE, s4) — the iter-10 s4 critic flagged that
+the s4 SELF-TEST evidence asserts R1's merged `naics`/`psc`/`award_total`
+values in the §6.1 cluster bullet without showing the per-field union
+derivation, so the merge spot-check was not fully reproducible from the
+evidence alone.
+
+Fix (evidence-only change): added an "R1 per-field merge trace" subsection to
+`evidence/s4-selftest.md`, immediately after the §6.1 output line. It is an
+8-row table covering every R1 field (`legal_name`, `uei`, `cage_code`, `naics`,
+`psc`, `award_total`, `source_ids`, `source_urls`) and shows
+`rec 4 (S2) value` ⊕ `rec 5 (S3) value` → `merged value` plus the union step
+for each — deduped set union for the multi-valued fields, single non-null /
+identical value for the scalars. Each merged value was cross-checked against
+the s3 fixtures (`evidence/s3-fixtures/S2.json`, `S3.json`): `cage_code 0ZZ11`
+is rec 4 only; `psc [R608]` and `award_total 480000` are rec 5 only (S3
+`pscCode` / `obligatedAmount`); `naics [541930]`, `uei`, `legal_name` are
+identical in both contributors. The trace also footnotes that the cluster
+bullet's inline `psc … (from rec 3-shape)` provenance label is a separate
+cosmetic mis-citation tracked as NIT-s5-1 (the correct contributor is rec 5/S3,
+as the trace shows) — so the new trace introduces no hidden contradiction.
+
+Constraints honored: evidence-only change — no resolution, dedup, or merge
+behavior changed; the §6.1 cluster bullet's asserted values are unchanged, the
+trace only makes them reproducible; no pipeline logic, parallel tracker, or
+scorer touched.
+
+IMPROVE-s4-3 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+23 → 22. 22 findings remain. RESOLVE phase continues.

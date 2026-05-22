@@ -45,6 +45,30 @@ adapter mappings.
 §6.1 output: **4 `CanonicalEntity`** (R1 + R2 + R3 + R4) + 3
 `needs_operator_review`.
 
+### R1 per-field merge trace (merge trace added iter 60, RESOLVE — IMPROVE-s4-3)
+
+Per-field union for the **rec 4 (S2) + rec 5 (S3) → R1** merge asserted in the
+cluster bullet above. Each row shows `rec 4 value` ⊕ `rec 5 value` → `merged`,
+so every merged R1 value is reproducible from the two contributing records:
+
+| field | rec 4 (S2) | rec 5 (S3) | merged | union step |
+|---|---|---|---|---|
+| `legal_name` | EXAMPLE INTERPRETING FIXTURE LLC | EXAMPLE INTERPRETING FIXTURE LLC | EXAMPLE INTERPRETING FIXTURE LLC | identical — value kept |
+| `uei` | ZZTEST00FIX1 | ZZTEST00FIX1 | ZZTEST00FIX1 | identical — the merge key itself |
+| `cage_code` | 0ZZ11 | _(none)_ | 0ZZ11 | scalar — single non-null contributor (rec 4) |
+| `naics` | [541930] | [541930] | [541930] | set union, deduped |
+| `psc` | _(none)_ | [R608] | [R608] | set union — sole contributor is rec 5 (S3) |
+| `award_total` | _(none)_ | 480000 | 480000 | sole contributor rec 5 (S3 `obligatedAmount`) |
+| `source_ids` | [S2] | [S3] | [S2, S3] | set union |
+| `source_urls` | rec-4 source URL | rec-5 source URL | both | set union |
+
+Each multi-valued field (`naics`, `psc`, `source_ids`, `source_urls`) is a
+deduped **set union** of the two records; each scalar (`legal_name`, `uei`,
+`cage_code`, `award_total`) takes the single non-null / identical value. No
+field is invented. (The cluster bullet's inline `psc … (from rec 3-shape)`
+provenance label is a separate cosmetic mis-citation tracked as **NIT-s5-1** —
+the correct contributor is rec 5 (S3), as this trace shows.)
+
 ## §6.2 — dedup against the live tracker
 
 Live read: Airtable MCP `list_records_for_table` on

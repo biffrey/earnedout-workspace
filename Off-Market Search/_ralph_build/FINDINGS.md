@@ -6,15 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### IMPROVE-s4-3 — IMPROVE — s4 — self-test merge trace not shown
-**Raised:** iter 10 VERIFY (s4 critic).
-**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md` lines 28-29.
-**Problem:** the self-test asserts R1's merged `naics`/`psc`/`award_total`
-values without showing the per-field union derivation, so the spot-check is not
-fully reproducible from the evidence alone.
-**Fix:** add a one-line merge trace showing each field's union step.
-**Status:** OPEN.
-
 ### IMPROVE-s4-4 — IMPROVE — s4 — S1 contributes zero resolvable entities until IMPROVE-s3-1 closes
 **Raised:** iter 10 VERIFY (s4 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md` lines 42-43.
@@ -311,6 +302,30 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s4-3 — IMPROVE — s4 — self-test merge trace not shown
+**Raised:** iter 10 VERIFY (s4 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md` lines 28-29.
+**Problem:** the self-test asserts R1's merged `naics`/`psc`/`award_total`
+values without showing the per-field union derivation, so the spot-check is not
+fully reproducible from the evidence alone.
+**Fix:** add a one-line merge trace showing each field's union step.
+**Resolution (iter 60, RESOLVE):** added an "R1 per-field merge trace"
+subsection to `evidence/s4-selftest.md`, immediately after the §6.1 output
+line. It is an 8-row table covering every R1 field (`legal_name`, `uei`,
+`cage_code`, `naics`, `psc`, `award_total`, `source_ids`, `source_urls`),
+showing `rec 4 (S2) value` ⊕ `rec 5 (S3) value` → `merged value` and the union
+step for each — set union (deduped) for the multi-valued fields, single
+non-null / identical value for the scalars. Each merged value cross-checked
+against the s3 fixtures: `cage_code 0ZZ11` is rec 4 only (S2 `cageCode`); `psc
+[R608]` and `award_total 480000` are rec 5 only (S3 `pscCode` /
+`obligatedAmount`); `naics [541930]` and `uei`/`legal_name` are identical in
+both. The merge in the cluster bullet is now fully reproducible from the
+evidence. The trace also footnotes that the cluster bullet's inline `psc …
+(from rec 3-shape)` provenance label is a separate cosmetic mis-citation
+tracked as NIT-s5-1 (correct contributor is rec 5/S3). Evidence-only change; no
+resolution, dedup, or merge behavior changed.
+**Status:** RESOLVED.
 
 ### NIT-s4-1 — NIT — s4 — slash in example `entity_id`
 **Raised:** iter 10 VERIFY (s4 critic).
