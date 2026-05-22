@@ -15,7 +15,8 @@ decision (B1).
 | `S4.json` | **Live recording** — actual rows from the SBA SBIC directory CSV (`sba.gov/export/contacts/sbic`), captured 2026-05-22. Real licensees. |
 | `S2.json` | **Structural fixture** — shape of a SAM.gov Entity Management API entity record, per the public API field schema. Identifiers are placeholder/illustrative, NOT a real entity. Used only to prove the S2 normalization mapping; must never be written to the tracker as a discovered prospect outside a test context. |
 | `S3.json` | **Structural fixture** — shape of a SAM.gov Contract Awards API award record. Same caveat as `S2.json`. |
+| `S8.json` | **Structural fixture** — one sample record per Phase-1 state-portal jurisdiction (DC, VA, MD, PA, WV), each with the eProcurement-solicitation + Secretary-of-State-registry shape the S8 adapter maps. Names/addresses/dates are illustrative placeholders, NOT real entities. Used to exercise the S8 normalization mapping and to stand in for any jurisdiction whose live ToS is not yet confirmed (B1 mandate). Same caveat as `S2.json`. |
 
 Live-recorded fixtures (S1, S4) carry real data and may flow downstream.
-Structural fixtures (S2, S3) exist only to test the mapping; the s10 dry run
+Structural fixtures (S2, S3, S8) exist only to test the mapping; the s10 dry run
 flags any record whose sole provenance is a structural fixture.

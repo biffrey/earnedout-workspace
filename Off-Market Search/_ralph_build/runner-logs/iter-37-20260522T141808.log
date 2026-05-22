@@ -1,0 +1,13 @@
+Iteration 68 complete — **RESOLVE phase**, finding **IMPROVE-s3-3** resolved.
+
+**What this iteration did:**
+- The build is past FINAL AUDIT (`final_audit_passed: true`, `open_blockers: 0`), so the loop is clearing non-blocking findings one per iteration.
+- Resolved **IMPROVE-s3-3** — the SAM.gov S2/S3 adapters were fixture-shells built while blocker B3 was open. With B3 now resolved, I rewrote both adapter sections of `source_adapters.md` into working adapters:
+  - **S2** (Entity Management API): pinned to `api.sam.gov/entity-information/v3/entities`, runtime key retrieval via `security find-generic-password -s samgov-api-key -a off-market-search -w` → `x-api-key` header, one-time keychain-prompt note, real query params + v3-precise field mapping.
+  - **S3** (Contract Awards API): same key/keychain command, `api.sam.gov` host per `open.gsa.gov/api/contract-awards/`.
+  - Shared ~10/day public-tier quota rule (S2+S3 share one budget; 429 → `degraded`, never a halt), registry status flipped `blocked (B3)` → `ok`, recorded fixtures (`S2.json`/`S3.json`) named as the recorded-fixture query.
+- No live SAM.gov call made — that would spend the scarce 10/day quota and risk a headless keychain prompt; adapters are spec-complete with documented fixture fallback.
+
+**State updated:** `iteration: 68`, `unresolved_findings: 15 → 14`. Committed locally as `b0c99cb`.
+
+**Signal:** `CONTINUE` — 14 findings remain in RESOLVE; the next-largest are the IMPROVE-s3-2 (state-source S8 adapter) and IMPROVE-s5-5 (SOS formation-date lookup) rebuilds.

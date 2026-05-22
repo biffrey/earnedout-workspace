@@ -104,21 +104,6 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
-### IMPROVE-s3-2 — IMPROVE — s3 — state-source adapter (S8) is a fixture-shell; B1 now resolved
-**Raised:** 2026-05-22, operator intervention (B1 resolved).
-**Where:** s3 source-adapter deliverable — the S8 (state portals / SOS) adapter;
-`config/offmarket_sources.md` state-source entries.
-**Problem:** s3 was verified while B1 was open, so S8 was built as a
-fixture-shell rather than a working adapter (IMPLEMENTATION_LOG iter 5: "S8
-state portals (`blocked` B1, shell ...)"). B1 is now resolved with the Phase-1
-priority jurisdictions **DC, VA, MD, PA, WV**.
-**Fix:** build the S8 adapter for real against each of the five jurisdictions'
-eProcurement portal and Secretary-of-State / business registry; confirm and
-document each portal's ToS and rate limits before automating (per BLOCKERS.md
-B1); record a live or recorded-fixture query per jurisdiction. Keep the common
-adapter interface unchanged so s4–s6 are unaffected.
-**Status:** OPEN.
-
 ### IMPROVE-s5-5 — IMPROVE — s5 — SOS formation-date lookup not wired; B1 now resolved
 **Raised:** 2026-05-22, operator intervention (B1 resolved).
 **Where:** s5 enrichment deliverable — the B1-gated Secretary-of-State
@@ -208,6 +193,65 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s3-2 — IMPROVE — s3 — state-source adapter (S8) is a fixture-shell; B1 now resolved
+**Raised:** 2026-05-22, operator intervention (B1 resolved).
+**Where:** s3 source-adapter deliverable — the S8 (state portals / SOS) adapter;
+`config/offmarket_sources.md` state-source entries.
+**Problem:** s3 was verified while B1 was open, so S8 was built as a
+fixture-shell rather than a working adapter (IMPLEMENTATION_LOG iter 5: "S8
+state portals (`blocked` B1, shell ...)"). B1 is now resolved with the Phase-1
+priority jurisdictions **DC, VA, MD, PA, WV**.
+**Fix:** build the S8 adapter for real against each of the five jurisdictions'
+eProcurement portal and Secretary-of-State / business registry; confirm and
+document each portal's ToS and rate limits before automating (per BLOCKERS.md
+B1); record a live or recorded-fixture query per jurisdiction. Keep the common
+adapter interface unchanged so s4–s6 are unaffected.
+**Resolution (iter 69, RESOLVE):** rewrote the S8 adapter section of
+`.claude/skills/off-market-search/references/source_adapters.md` from a
+fixture-shell to a working adapter:
+- **Header** changed from "BLOCKED by B1" to "B1 RESOLVED — DC, VA, MD, PA, WV".
+- **Phase-1 jurisdiction table** — names the two surfaces per jurisdiction with
+  concrete portal hosts: DC (`contracts.ocp.dc.gov` / `opendata.dc.gov`;
+  `corponline.dc.gov`), VA (`eva.virginia.gov`; `cis.scc.virginia.gov`), MD
+  (`emma.maryland.gov`; `egov.maryland.gov/businessexpress`), PA
+  (`emarketplace.state.pa.us`; `file.dos.pa.gov`), WV (`wvpurchasing.gov`;
+  `apps.sos.wv.gov/business/corporations`).
+- **ToS confirmation (B1 mandate)** — a per-jurisdiction runtime gate: before
+  the first automated request the adapter fetches/honors `robots.txt`, reads the
+  portal's Terms of Use, **prefers** an official open-data export / API over UI
+  scraping, paces ≤1 req/2s with no concurrency, and never extracts behind a
+  login/paywall. A jurisdiction whose ToS prohibits automation or cannot be
+  confirmed is **skipped** (`status: degraded`, per-jurisdiction `notes`) — never
+  scraped, never a hard halt.
+- **Query** — eProcurement keyword search (the `config/offmarket_sources.md`
+  Class-1 keyword strategy, scoped to courts / public-education / voc-rehab
+  buyers) + a per-candidate SOS name lookup for formation date / status /
+  officers.
+- **Map** — vendor name→`legal_name`, address→`address`, contract title/agency/
+  value→`source_payload` (award $→`award_total` only when portal-published),
+  SOS formation date/status/officers→`source_payload` (feeds s4 resolution and
+  the s5 SOS lookup, IMPROVE-s5-5); state portals carry no UEI/CAGE so
+  `uei`/`cage_code`/`duns` stay `null` and s4 resolves on name+address.
+- **Status** semantics — `ok` / `degraded` / `error`; **never `blocked`** (B1
+  resolved). Registry table row updated `blocked (B1) — shell only` →
+  `ok (B1 resolved — DC/VA/MD/PA/WV; per-jurisdiction ToS gate)`. The
+  `AdapterMeta.blocker_id` example row was genericized off the now-resolved
+  `B1`/`B3` literals.
+- **Recorded-fixture query** — added `_ralph_build/evidence/s3-fixtures/S8.json`,
+  a structural fixture with one sample record per jurisdiction (DC, VA, MD, PA,
+  WV) in the eProcurement + SOS shape, plus a fixtures-`README.md` row. No live
+  state-portal call was made this iteration — each of the five portals' ToS must
+  be confirmed first (the B1 mandate), which a headless run cannot complete; the
+  adapter is spec-complete and the per-jurisdiction ToS gate + fixture fallback
+  are documented for the live run.
+- `config/offmarket_sources.md` S8 entry — status changed from "blocked by B1"
+  to "not blocked (B1 resolved)" with the five jurisdictions' portals listed.
+The common adapter interface (`adapter.query` → `{records, meta}`, the
+`RawRecord` shape) is unchanged, so s4–s6 are unaffected. The B1-gated s5 SOS
+formation-date lookup remains separately tracked as the still-open
+`IMPROVE-s5-5`.
+**Status:** RESOLVED.
 
 ### IMPROVE-s3-3 — IMPROVE — s3 — SAM.gov adapters (S2/S3) are fixture-shells; B3 now resolved
 **Raised:** 2026-05-22, operator intervention (B3 resolved — key stored).

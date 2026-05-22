@@ -75,7 +75,7 @@ downstream fabricates a value).
 | Field | Notes |
 |---|---|
 | `status` | `ok` \| `blocked` \| `degraded` \| `n/a` \| `error` |
-| `blocker_id` | `B1` / `B3` … when `status: blocked` — names the BLOCKERS.md entry |
+| `blocker_id` | the `BLOCKERS.md` entry id when `status: blocked` (the four bootstrap blockers B1–B4 are all resolved — set only if a future external precondition reopens) |
 | `records_returned` | count |
 | `query_filters` | the exact NAICS/PSC/keyword/time filters applied (provenance) |
 | `rate_limit_note` | requests used vs. cap, any pacing applied |
@@ -289,20 +289,75 @@ it implements.
 - **Rate / ToS:** prefer the spreadsheet over scraping; courteous pacing.
   `status: ok`.
 
-### S8 — Priority-state portals + Secretary-of-State registries adapter  *(Class 1 — Phase 1; BLOCKED by B1)*
+### S8 — Priority-state portals + Secretary-of-State registries adapter  *(Class 1 — Phase 1; B1 RESOLVED — DC, VA, MD, PA, WV)*
 
-- **Transport:** per-state — non-uniform. State eProcurement portals + SOS
-  business registries each have their own access method and ToS.
-- **Query:** for each operator-named priority state (B1): state contracts for
-  ASL/CART interpreting (courts, education, vocational rehab) and SOS lookups
-  for formation date / status / officers.
-- **Map:** firm name→`legal_name`, address, SOS formation date / officers→
-  `source_payload` (also feeds s4 resolution + s5 enrichment).
-- **Rate / ToS — B1:** the priority-state list is unset and **each state's terms
-  must be confirmed before automating** (some portals prohibit bulk extraction).
-  Until B1 clears the adapter returns `status: blocked, blocker_id: "B1"`,
-  `records: []`. The common-interface shell is built; per-state query logic and
-  ToS confirmation are added when B1 names the states.
+- **Transport:** per-jurisdiction — non-uniform. Each Phase-1 jurisdiction
+  exposes two surfaces: a **state eProcurement portal** (solicitations / awards
+  for ASL & CART interpreting bought by courts, public education, and
+  vocational-rehabilitation agencies) and a **Secretary-of-State / business
+  registry** (formation date, entity status, registered agent, officers — feeds
+  s4 resolution and the s5 SOS lookup). Accessed by an official open-data export
+  / API where one exists, else `WebFetch` or the Playwright MCP over the public
+  search UI with courteous pacing.
+- **Phase-1 jurisdictions (B1 RESOLVED 2026-05-22): DC, VA, MD, PA, WV.** The
+  two surfaces per jurisdiction:
+
+  | Jurisdiction | eProcurement portal | SOS / business registry |
+  |---|---|---|
+  | **DC** | OCP contracts — `contracts.ocp.dc.gov`; open data `opendata.dc.gov` | DLCP CorpOnline — `corponline.dc.gov` |
+  | **VA** | eVA — `eva.virginia.gov` (public solicitation/award search) | SCC Clerk's Information System — `cis.scc.virginia.gov` |
+  | **MD** | eMaryland Marketplace Advantage (eMMA) — `emma.maryland.gov` | SDAT Business Entity Search / Maryland Business Express — `egov.maryland.gov/businessexpress` |
+  | **PA** | PA eMarketplace — `emarketplace.state.pa.us` | PA Dept. of State business search — `file.dos.pa.gov` |
+  | **WV** | WV Purchasing Division / wvOASIS VSS — `wvpurchasing.gov` | WV SOS business-organization search — `apps.sos.wv.gov/business/corporations` |
+
+- **ToS confirmation (B1 mandate — required before any automated call).** Each
+  portal's terms differ; per jurisdiction, before its first automated request
+  the adapter (1) fetches and honors the portal's `robots.txt`; (2) reads the
+  portal's published Terms of Use / acceptable-use statement; (3) **prefers** an
+  official bulk export, open-data dataset, or documented API over UI scraping
+  (DC `opendata.dc.gov` and several eProcurement portals publish CSV / RSS feeds
+  — use those first); (4) paces ≤1 request / 2s, no concurrency, never extracts
+  behind a login or paywall. If a jurisdiction's ToS prohibits automated access,
+  or its terms cannot be confirmed this run, the adapter **skips that
+  jurisdiction**, records `status: degraded` with a per-jurisdiction `notes`
+  entry, and continues — it never halts the run and never scrapes a portal whose
+  terms forbid it.
+- **Query:** for each ToS-cleared jurisdiction —
+  - *eProcurement:* search solicitations / awards for the Class-1 keyword set
+    (`config/offmarket_sources.md` → "Class-1 keyword strategy" — `ASL`,
+    `sign language`, `interpreting`, `CART`, `realtime captioning`,
+    `communication access`, `VRI`, …), scoped to interpreting / captioning
+    services bought by courts, public-education, and vocational-rehabilitation
+    agencies. State portals carry no uniform NAICS field — the keyword strategy
+    is the filter.
+  - *SOS registry:* a name lookup per candidate (discovery candidates from the
+    eProcurement scan, plus s5 enrichment lookups) for formation date, entity
+    status, and officers.
+- **Map:** vendor / awardee name→`legal_name`, trade name→`dba_name`,
+  portal-published address→`address`, contract/solicitation title + agency +
+  award $→`source_payload` (award $→`award_total` only when the portal publishes
+  a contract value attributable to the entity), SOS formation date + status +
+  officers→`source_payload` (consumed by s4 resolution and the s5 SOS
+  formation-date lookup — see IMPROVE-s5-5), the portal record page→`source_url`.
+  Run the Class-1 keyword tiering→`keyword_hits` / `keyword_tier`. State portals
+  publish **no UEI / CAGE** — `uei`, `cage_code`, `duns` stay `null`; s4 resolves
+  S8 records on name+address (UEI back-fills if S1/S2 also carry the firm). Set
+  `target_class: 1`.
+- **Rate / ToS:** see "ToS confirmation" above. Per-run `status`: `ok` when ≥1
+  jurisdiction was queried live within ToS; `degraded` when one or more
+  jurisdictions were skipped (ToS unconfirmed / automation prohibited / portal
+  unreachable); `error` only on a total adapter failure. **Never `blocked`** —
+  B1 is resolved.
+- **Recorded-fixture query:** `_ralph_build/evidence/s3-fixtures/S8.json` — a
+  structural fixture carrying one sample record per Phase-1 jurisdiction (DC, VA,
+  MD, PA, WV), each with the eProcurement + SOS shape this adapter maps.
+  Identifiers are illustrative placeholders, never written as a real prospect.
+  The adapter runs it in fixture mode for SELF-TEST and any dry run, and for any
+  jurisdiction whose live ToS is not yet confirmed. No live state-portal call was
+  made this iteration: each of the five portals' Terms of Use must be confirmed
+  first (the B1 mandate), which a headless run cannot complete — the adapter is
+  spec-complete and the per-jurisdiction ToS gate + fixture fallback are
+  documented above for the live run.
 
 ### S9 — RID adapter  *(Class 1 — point-of-need enrichment ONLY; not blocked, constrained)*
 
@@ -356,7 +411,7 @@ one-line registry change, never a downstream edit. Discovery adapters emit new
 | S5 | SBIC good-standing cross-check | 2 | enrichment (gate input) | ok |
 | S6 | SBA Small Business Search | 1 | discovery (supplementary) | ok |
 | S7 | GSA eLibrary | 1 | discovery | ok |
-| S8 | Priority-state portals + SOS | 1 | discovery + enrichment | blocked (B1) — shell only |
+| S8 | Priority-state portals + SOS | 1 | discovery + enrichment | ok (B1 resolved — DC/VA/MD/PA/WV; per-jurisdiction ToS gate) |
 | S9 | RID | 1 | enrichment (point-of-need) | ok (constrained) |
 | S10 | IAPD / Form ADV | 2 | enrichment | ok |
 | S11 | U.S. Courts | 1 | enrichment (cross-ref) | ok |

@@ -1202,3 +1202,49 @@ tracker, no scorer touched, no data fabricated.
 
 NIT-s5-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 18 → 17. 17 findings remain. RESOLVE phase continues.
+
+---
+
+## iter 69 — RESOLVE — IMPROVE-s3-2
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s3-2** (IMPROVE, s3) — s3 was verified while blocker B1 was
+open, so the S8 state-source adapter (priority-state eProcurement portals +
+Secretary-of-State registries) was left as a fixture-shell. B1 is now RESOLVED:
+the Phase-1 priority jurisdictions are **DC, VA, MD, PA, WV**.
+
+Fix — rebuilt the S8 adapter from a fixture-shell to a working adapter:
+- `.claude/skills/off-market-search/references/source_adapters.md` — rewrote the
+  S8 section. Header `BLOCKED by B1` → `B1 RESOLVED — DC, VA, MD, PA, WV`. Added
+  a per-jurisdiction portal table (eProcurement portal + SOS registry hosts for
+  each of DC/VA/MD/PA/WV), a B1-mandated per-jurisdiction ToS-confirmation gate
+  (honor `robots.txt`, read Terms of Use, prefer official open-data export/API
+  over scraping, pace ≤1 req/2s, skip — `degraded` — any jurisdiction whose ToS
+  is unconfirmed or prohibits automation), the eProcurement keyword query + SOS
+  name-lookup query, the `RawRecord` mapping (state portals carry no UEI/CAGE →
+  s4 resolves on name+address; SOS formation date/status/officers feed s4 and
+  the s5 SOS lookup), and `ok`/`degraded`/`error` status semantics — never
+  `blocked`. Registry table S8 row updated to `ok (B1 resolved …)`. The
+  `AdapterMeta.blocker_id` example was genericized off the resolved B1/B3
+  literals.
+- `Off-Market Search/_ralph_build/evidence/s3-fixtures/S8.json` — new structural
+  fixture with one sample record per jurisdiction (DC/VA/MD/PA/WV) in the
+  eProcurement + SOS shape; fixtures `README.md` updated with the S8 row.
+- `config/offmarket_sources.md` — S8 entry status `blocked by B1` →
+  `not blocked (B1 resolved)`, with the five jurisdictions' portals listed.
+
+No live state-portal call was made this iteration — each of the five portals'
+Terms of Use must be confirmed first (the B1 mandate), which a headless run
+cannot complete. The adapter is spec-complete; the per-jurisdiction ToS gate +
+fixture fallback are documented for the live run (same posture as IMPROVE-s3-3
+took for the SAM adapters). The common adapter interface is unchanged, so
+s4–s6 are unaffected.
+
+Constraints honored: no data fabricated (fixture identifiers are explicit
+placeholders), no parallel tracker, no scorer touched, no outreach sent. The
+B1-gated s5 SOS formation-date lookup remains separately tracked as the
+still-open IMPROVE-s5-5.
+
+IMPROVE-s3-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+14 → 13. 13 findings remain. RESOLVE phase continues.

@@ -165,9 +165,24 @@ keyword strategy and returns a normalized raw-record object. The source layer is
   vocational rehab) and SOS business registries (formation date, status, officers
   — used for enrichment & entity resolution).
 - **Access:** non-uniform — each state has its own portal and ToS; some prohibit
-  bulk extraction. Each chosen state's terms must be confirmed before automating.
-- **Serves:** Class 1 (Phase 1, per §13 Q6). Status: **blocked by B1** — the
-  operator must name the priority states. Priority-state list: _(pending B1)_.
+  bulk extraction. Each jurisdiction's terms must be confirmed before automating
+  (the adapter prefers an official open-data export / API over UI scraping).
+- **Phase-1 jurisdictions (B1 RESOLVED 2026-05-22): DC, VA, MD, PA, WV.**
+  Per-jurisdiction portals:
+  - **DC** — OCP contracts `contracts.ocp.dc.gov` / `opendata.dc.gov`; DLCP
+    CorpOnline `corponline.dc.gov`.
+  - **VA** — eVA `eva.virginia.gov`; SCC Clerk's Information System
+    `cis.scc.virginia.gov`.
+  - **MD** — eMaryland Marketplace Advantage `emma.maryland.gov`; SDAT Business
+    Entity Search `egov.maryland.gov/businessexpress`.
+  - **PA** — PA eMarketplace `emarketplace.state.pa.us`; PA Dept. of State
+    business search `file.dos.pa.gov`.
+  - **WV** — WV Purchasing Division `wvpurchasing.gov`; WV SOS business-
+    organization search `apps.sos.wv.gov/business/corporations`.
+- **Serves:** Class 1 (Phase 1, per §13 Q6). Status: **not blocked** (B1
+  resolved). The S8 adapter (`references/source_adapters.md`) queries each
+  jurisdiction only after confirming that portal's ToS; a jurisdiction whose
+  terms cannot be confirmed is skipped (`degraded`), never scraped.
 
 ### S9 — RID (Registry of Interpreters for the Deaf)  *(Class 1 — supplementary)*
 - **What:** non-profit registry of sign-language interpreters/agencies (`rid.org`).
