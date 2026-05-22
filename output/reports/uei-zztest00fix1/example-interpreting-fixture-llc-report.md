@@ -3,6 +3,11 @@
 > off-market-search build loop (stage s6 SELF-TEST) to exercise the s6 → `prospect-evaluation`
 > integration in roll-up add-on mode. Every figure here is fixture data or an honest
 > "insufficient data" mark. Do not act on it, do not contact anyone, do not treat it as a lead.
+>
+> **Stage reuse (NIT-s10-1):** this report is reused unchanged as the R1 Class-1 report of the
+> s10 end-to-end assembly dry run (see `_ralph_build/evidence/s10-e2e-dryrun.md`). The
+> "stage s6 SELF-TEST" label above records where the artifact was first produced — it is not
+> the only stage that consumes it.
 
 # EXAMPLE INTERPRETING FIXTURE LLC — Prospect Evaluation
 

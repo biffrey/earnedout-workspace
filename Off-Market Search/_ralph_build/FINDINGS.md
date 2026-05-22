@@ -39,22 +39,41 @@ exercise, but a live run should list every source attempted.
 sources) in the run-log table.
 **Status:** OPEN.
 
-### NIT-s10-1 — NIT — s10 — reused fixture artifacts carry stale stage-provenance labels
-**Raised:** iter 30 VERIFY (s10 critic).
-**Where:** `output/reports/uei-zztest00fix1/lead-packet.json` `_fixture_note`
-and the R1 report headers.
-**Problem:** the R1 fixture artifacts label their provenance "stage s6
-SELF-TEST"; they are now reused as the s10 dry-run inputs, so the provenance
-labels lag the current stage. Harmless.
-**Fix:** when fixture artifacts are reused across stages, note the reuse (or
-add an s10-reuse line) so provenance labels do not mislead.
-**Status:** OPEN.
-
 _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
 ## Resolved
+
+### NIT-s10-1 — NIT — s10 — reused fixture artifacts carry stale stage-provenance labels
+**Raised:** iter 30 VERIFY (s10 critic).
+**Where:** `output/reports/uei-zztest00fix1/lead-packet.json` `_fixture_note`
+and the R1 report headers (`example-interpreting-fixture-llc-report.md` / `.html`).
+**Problem:** the R1 fixture artifacts label their provenance "stage s6
+SELF-TEST"; they are now reused as the s10 dry-run inputs, so the provenance
+labels lag the current stage. Harmless.
+**Fix:** when fixture artifacts are reused across stages, note the reuse (or
+add an s10-reuse line) so provenance labels do not mislead.
+**Resolution (iter 79, RESOLVE):** added an explicit stage-reuse note to each of
+the three R1 fixture artifacts, without altering any fixture data or score:
+(1) `output/reports/uei-zztest00fix1/lead-packet.json` — added a new
+`_stage_reuse_note` field beside `_fixture_note`, recording that the packet is
+reused unchanged as the R1 Class-1 input of the s10 end-to-end assembly dry run
+(iter 28+; cross-references `evidence/s10-e2e-dryrun.md`) and that the "s6
+SELF-TEST" provenance records where the fixture was first produced, not the only
+stage that consumes it; JSON re-validated with `python3 -m json.tool`.
+(2) `example-interpreting-fixture-llc-report.md` — added a "Stage reuse
+(NIT-s10-1)" paragraph to the header callout box stating the report is reused
+unchanged as the R1 Class-1 report of the s10 dry run. (3)
+`example-interpreting-fixture-llc-report.html` — added the same reuse sentence
+to the `fixture-banner` div and the footer, and appended "— reused as s10
+dry-run input" to the `<title>`. The original "s6 SELF-TEST" labels are kept
+(they correctly record first production); only a reuse line is added so the
+labels no longer mislead. Provenance-label only; no fixture value, scorecard,
+score (30/110), or report body changed — the artifacts remain SYNTHETIC
+build-loop fixtures and s10 stays `verified`. Same stale-provenance refresh
+class as the iter-74 IMPROVE-s10-4 resolution.
+**Status:** RESOLVED.
 
 ### IMPROVE-s8-1 — IMPROVE — s8 — OM-2 drafted to a non-principal contact
 **Raised:** iter 24 VERIFY (s8 critic).

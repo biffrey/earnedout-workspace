@@ -1457,3 +1457,37 @@ touched, no outreach sent.
 IMPROVE-s8-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 5 → 4. 4 findings remain (IMPROVE-s5-3, IMPROVE-s6-2, NIT-s9-2, NIT-s10-1).
 RESOLVE phase continues.
+
+---
+
+## iter 79 — RESOLVE — NIT-s10-1 (reused fixture artifacts carry stale stage-provenance labels)
+
+All 10 stages `verified`, `final_audit_passed: true`. RESOLVE phase: cleared one
+non-blocking finding. Target: **NIT-s10-1** — the R1 fixture artifacts
+(`output/reports/uei-zztest00fix1/`) label their provenance "stage s6 SELF-TEST"
+but are reused unchanged as the R1 Class-1 inputs of the s10 end-to-end assembly
+dry run, so the provenance labels lag the artifact's cross-stage reuse.
+
+Fix chosen (per the finding's recommended fix): add an explicit s10-reuse note
+to each artifact rather than rewriting the original s6 label — the s6 label
+correctly records first production. Three artifacts edited, no fixture data /
+score touched:
+
+- `lead-packet.json` — added a new `_stage_reuse_note` field beside
+  `_fixture_note`, recording reuse as the R1 Class-1 input of the s10 dry run
+  (cross-references `evidence/s10-e2e-dryrun.md`). JSON re-validated.
+- `example-interpreting-fixture-llc-report.md` — added a "Stage reuse
+  (NIT-s10-1)" paragraph to the header callout box.
+- `example-interpreting-fixture-llc-report.html` — added the same reuse
+  sentence to the `fixture-banner` div and the footer; appended "— reused as
+  s10 dry-run input" to the `<title>`.
+
+Provenance-label only; no fixture value, scorecard, 30/110 score, or report
+body changed — the artifacts remain SYNTHETIC build-loop fixtures and s10 stays
+`verified`. Same stale-provenance refresh class as the iter-74 IMPROVE-s10-4
+resolution. Constraints honored: no data fabricated, no parallel tracker, no
+scorer touched, no outreach sent.
+
+NIT-s10-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+4 → 3. 3 findings remain (IMPROVE-s5-3, IMPROVE-s6-2, NIT-s9-2). RESOLVE phase
+continues.
