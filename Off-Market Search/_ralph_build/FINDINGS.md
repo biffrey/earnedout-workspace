@@ -96,26 +96,6 @@ in a plain-text `Gov Entity ID` field but mildly fragile as an identifier key.
 verbatim, or normalize them in the `SBIC:` key.
 **Status:** OPEN.
 
-### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
-**Raised:** iter 13 VERIFY (s5 critic).
-**Where:** `.claude/skills/off-market-search/references/enrichment.md:64` and
-`:231`; `evidence/s5-selftest.md:97`.
-**Problem:** `LeadPacket.gov_data_source` is specified as `source_ids` "mapped to
-the `Gov Data Source` Airtable choice (per `airtable_schema_preflight.md`)", but
-no `source_id → choice` mapping table exists in that file. The self-test then
-emits `"SAM.gov Entity Management"`, which is NOT one of the eight live
-`Gov Data Source` choices (`evidence/s2-airtable-schema.md:15`: USAspending /
-SAM.gov / SAM.gov Contract Awards / SBA SBIC / SBS / GSA eLibrary / State / RID).
-Since multi-select choices auto-grow on write, the wrong string would silently
-create a spurious 9th choice — violating "fail loud, never silently create" and
-breaking field-value consistency with the s7 Airtable write.
-**Fix:** add an explicit `source_id → Gov Data Source choice` mapping table to
-`enrichment.md` §5 (or `airtable_schema_preflight.md`) using only the eight live
-choices — e.g. `S1→USAspending`, `S2→SAM.gov`, `S3→SAM.gov Contract Awards`,
-`S4/S5→SBA SBIC`, `S6→SBS`, `S7→GSA eLibrary`, `S8→State`, `S9→RID`. Correct
-`s5-selftest.md:97` to `["SAM.gov", "SAM.gov Contract Awards"]`.
-**Status:** OPEN — sends s5 back to `not_started`/IMPLEMENT.
-
 ### IMPROVE-s5-1 — IMPROVE — s5 — screenshot path not filesystem-safe for `entity_id`
 **Raised:** iter 13 VERIFY (s5 critic).
 **Where:** `.claude/skills/off-market-search/references/enrichment.md:135`.
@@ -169,3 +149,29 @@ Cosmetic schema inconsistency.
 **Fix:** align `employee_count` to the `number | null` + `"needs follow-up"`
 pattern.
 **Status:** OPEN.
+
+## Resolved
+
+### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:64` and
+`:231`; `evidence/s5-selftest.md:97`.
+**Problem:** `LeadPacket.gov_data_source` was specified as `source_ids` "mapped to
+the `Gov Data Source` Airtable choice (per `airtable_schema_preflight.md`)", but
+no `source_id → choice` mapping table existed in that file. The self-test then
+emitted `"SAM.gov Entity Management"`, which is NOT one of the eight live
+`Gov Data Source` choices. Since multi-select choices auto-grow on write, the
+wrong string would silently create a spurious 9th choice — violating "fail loud,
+never silently create".
+**Fix:** add an explicit `source_id → Gov Data Source choice` mapping table
+using only the eight live choices; make `gov_data_source` fail-loud on an
+unmapped `source_id`; correct the self-test choice strings.
+**Resolution (iter 14, s5 IMPLEMENT):** added §5.1 to `enrichment.md` — a
+`source_id → Gov Data Source` mapping table (S1→USAspending, S2→SAM.gov,
+S3→SAM.gov Contract Awards, S4/S5→SBA SBIC, S6→SBS, S7→GSA eLibrary, S8→State,
+S9→RID; S10/S11 enrichment-only, no choice) plus an explicit fail-loud rule
+(an unmapped `source_id` halts the skill; the multi-select is never auto-grown).
+Updated the `gov_data_source` rows in §1 and §5 to reference §5.1. Corrected
+`s5-selftest.md` lines 97 (`["SAM.gov", "SAM.gov Contract Awards"]`) and 125
+(`["SBA SBIC"]`) to live choices. **Status:** RESOLVED — s5 returns to the phase
+ladder (re-SELF-TEST next).

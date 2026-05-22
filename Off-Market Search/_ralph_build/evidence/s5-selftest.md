@@ -94,7 +94,7 @@ All 3 → `verdict: pass`. **PASS.**
 | `federal_award_total` | `480000` | from s4 `award_total` |
 | `asking_price` | `"not for sale — no asking price"` | off-market literal |
 | `contact` | `{name: "Pat Sample", title: "Owner", email: null, phone: null}` | from S2 `governmentBusinessPOC`; email/phone are gaps |
-| `gov_data_source` | `["SAM.gov Entity Management", "SAM.gov Contract Awards"]` | mapped from `source_ids [S2,S3]` |
+| `gov_data_source` | `["SAM.gov", "SAM.gov Contract Awards"]` | mapped from `source_ids [S2,S3]` via §5.1 (S2→SAM.gov, S3→SAM.gov Contract Awards) |
 | `provenance_urls` | both s4 `source_urls` | |
 | `prefilter_verdict` | `pass` | |
 | `enrichment_gaps` | `["website — needs follow-up", "formation date — needs follow-up (state SOS not in Phase-1 scope — B1)", "employee count — needs follow-up", "contact email — needs follow-up", "contact phone — needs follow-up"]` | every unknown enumerated |
@@ -122,7 +122,7 @@ contact detail. **PASS.**
 | `federal_award_total` | `null` | n/a for Class 2 |
 | `asking_price` | `"not for sale — no asking price"` | |
 | `contact` | `{name: "Ryan Fenstermaker", title: "Investor Relations", email: "fenstermakerr@1stsource.com", phone: "574-235-2180"}` | from the directory POC — **investor-relations**, not the GP deal principal |
-| `gov_data_source` | `["SBA SBIC Directory"]` | |
+| `gov_data_source` | `["SBA SBIC"]` | mapped from `source_id [S4]` via §5.1 (S4→SBA SBIC) |
 | `prefilter_verdict` | `pass` | |
 | `enrichment_gaps` | `["GP managing principal — needs follow-up (directory POC is investor-relations, not the deal principal)", "website — needs follow-up", "formation date — needs follow-up (B1)", "SBIC license number — needs follow-up (not published by the directory)"]` | |
 

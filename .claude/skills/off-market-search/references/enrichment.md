@@ -61,7 +61,7 @@ reason) in the s9 run log — they are not enriched, not scored, not written.
 | `sbic_license_no` | string \| null | Class 2 — from `CanonicalEntity` |
 | `sbic_license_status` | string | Class 2 — §4 good-standing cross-check result |
 | `sbic_gp_economics` | object \| null | Class 2 — §3.5 GP economics |
-| `gov_data_source` | string[] | `source_ids` mapped to the `Gov Data Source` choices |
+| `gov_data_source` | string[] | `source_ids` mapped to `Gov Data Source` choices — §5.1 |
 | `provenance_urls` | string[] | `source_urls` from `CanonicalEntity` |
 | `prefilter_verdict` | `pass` | only `pass` packets are emitted |
 | `enrichment_gaps` | string[] | every field left `"needs follow-up"` — audit trail |
@@ -228,14 +228,49 @@ After the pre-filter and enrichment, assemble the `LeadPacket` (§1 schema):
 - `asking_price` — always the literal `"not for sale — no asking price"` for
   off-market; this drives the scorer's "insufficient data — not awarded" on
   Buy Box check 5 / rubric line 8 (§7.2), which is expected, not a failure.
-- `gov_data_source` — map each `source_id` to its `Gov Data Source` Airtable
-  choice (per `airtable_schema_preflight.md`).
+- `gov_data_source` — the deduplicated set of `Gov Data Source` Airtable
+  choices for the entity's discovery `source_ids`, per the §5.1 mapping table.
 - `enrichment_gaps` — list **every** field left `"needs follow-up"`; this list
   is carried to s7 (written into `Notes`) and to s8 (the outreach draft asks
   for exactly these unknowns).
 
 Hand the `pass` packets to s6 (scoring); hand the `drop` list and the
 `needs_operator_review` carryover to s9 (run log).
+
+### 5.1 `source_id` → `Gov Data Source` mapping (fail-loud, never auto-grow)
+
+`gov_data_source` is the deduplicated set of `Gov Data Source` Airtable choices
+covering the entity's discovery `source_ids`. The `Gov Data Source` multi-select
+has **eight** live choices (`evidence/s2-airtable-schema.md`): `USAspending`,
+`SAM.gov`, `SAM.gov Contract Awards`, `SBA SBIC`, `SBS`, `GSA eLibrary`,
+`State`, `RID`. Each discovery `source_id` maps to exactly one of them:
+
+| `source_id` | adapter | `Gov Data Source` choice |
+|---|---|---|
+| `S1` | USAspending.gov | `USAspending` |
+| `S2` | SAM.gov Entity Management API | `SAM.gov` |
+| `S3` | SAM.gov Contract Awards API | `SAM.gov Contract Awards` |
+| `S4` | SBA SBIC Directory | `SBA SBIC` |
+| `S5` | SBIC good-standing cross-check | `SBA SBIC` |
+| `S6` | SBA Small Business Search (SBS) | `SBS` |
+| `S7` | GSA eLibrary | `GSA eLibrary` |
+| `S8` | Priority-state portals / SOS registries | `State` |
+| `S9` | RID | `RID` |
+
+`S10` (IAPD / Form ADV) and `S11` (U.S. Courts) are **enrichment-only** — per
+`config/offmarket_sources.md` neither is a discovery source, so neither ever
+appears as a discovery `source_id` on a `CanonicalEntity` and neither
+contributes a `Gov Data Source` value (their evidence lives in
+`provenance_urls`).
+
+**Fail-loud rule.** Multi-select choices auto-grow silently on write, so a
+free-text or mistyped value would create a spurious 9th choice and break
+field-value consistency with the s7 Airtable write. To prevent that, **every**
+value placed in `gov_data_source` must be one of the eight live choices,
+produced **only** via the table above. A discovery `source_id` not in this
+table is an **error** — the skill halts with the schema-preflight-style
+operator message naming the unmapped `source_id`; it **never** writes an
+unmapped or free-text value and **never** lets the multi-select auto-grow.
 
 ---
 

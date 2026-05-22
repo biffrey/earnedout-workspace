@@ -210,3 +210,38 @@ SBA-prior-approval fact carried on every Class-2 packet; B1 handled as a
 graceful gap, not a hard stop.
 
 Stage s5 → `drafted`. Next phase for s5: SELF-TEST.
+
+## iter 14 — 2026-05-22 — s5 (Enrichment & qualification pre-filters) — IMPLEMENT (re-implement)
+
+Re-IMPLEMENT after iter-13 VERIFY returned s5 to `not_started` on **BLOCKING-s5-1**
+(`LeadPacket.gov_data_source` pointed at a non-existent `source_id → choice`
+mapping table; the self-test emitted `"SAM.gov Entity Management"`, not a live
+`Gov Data Source` choice — which would silently auto-grow the multi-select).
+
+Fix applied:
+- **`references/enrichment.md` §5.1 added** — an explicit
+  `source_id → Gov Data Source` mapping table using only the eight live choices
+  (`evidence/s2-airtable-schema.md`): `S1→USAspending`, `S2→SAM.gov`,
+  `S3→SAM.gov Contract Awards`, `S4→SBA SBIC`, `S5→SBA SBIC`, `S6→SBS`,
+  `S7→GSA eLibrary`, `S8→State`, `S9→RID`. `S10` (IAPD) and `S11` (U.S. Courts)
+  are documented as enrichment-only — not discovery sources — so neither ever
+  contributes a `Gov Data Source` value.
+- **Fail-loud rule** stated in §5.1: every `gov_data_source` value must come
+  from the table; an unmapped `source_id` halts the skill with a
+  schema-preflight-style operator message; the multi-select is never auto-grown
+  with a free-text/mistyped string.
+- **`enrichment.md` §1 and §5** `gov_data_source` rows re-pointed at §5.1
+  (was the dangling "per `airtable_schema_preflight.md`" reference).
+- **`evidence/s5-selftest.md`** corrected — line 97
+  `["SAM.gov", "SAM.gov Contract Awards"]` and line 125 `["SBA SBIC"]`, both now
+  live choices, each annotated with its §5.1 derivation.
+- **`FINDINGS.md`** — BLOCKING-s5-1 moved to a new `## Resolved` section with
+  the resolution recorded; `unresolved_findings` 15 → 14.
+
+Constraints honored: fail-loud / never silently create a choice (the core of
+the finding); no fabricated values; no new scorer or parallel tracker; field-
+value consistency with the s7 Airtable write preserved.
+
+Stage s5 → `drafted`. Next phase for s5: SELF-TEST (re-run the pre-filters +
+enrichment + `LeadPacket` assembly, confirming §5.1 yields only live
+`Gov Data Source` choices).
