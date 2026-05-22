@@ -1,0 +1,38 @@
+{
+  "entity_id": "NAME:1st source capital|south bend in",
+  "target_class": 2,
+  "business_name": "1st Source Capital Corporation",
+  "industry": "Licensed SBIC — GP / management company",
+  "location": { "city": "South Bend", "state": "IN" },
+  "website": null,
+  "website_status": "none_found",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sbic_license_no": null,
+  "sbic_license_status": "Good Standing",
+  "sbic_gp_economics": {
+    "vintage": 1983,
+    "fund_size": 2850000,
+    "avg_investment": 283740,
+    "strategy": "Direct Lending",
+    "making_new_investments": false
+  },
+  "federal_award_total": null,
+  "asking_price": "not for sale — no asking price",
+  "contact": {
+    "name": "Ryan Fenstermaker",
+    "title": "Investor Relations",
+    "email": "fenstermakerr@1stsource.com",
+    "phone": "574-235-2180"
+  },
+  "gov_data_source": ["SBA SBIC"],
+  "prefilter_verdict": "pass",
+  "enrichment_gaps": [
+    "GP managing principal — needs follow-up (directory POC is investor-relations, not the deal principal)",
+    "website — needs follow-up",
+    "formation date — needs follow-up (B1)",
+    "SBIC license number — needs follow-up (not published by the directory)"
+  ],
+  "government_fact": "Acquiring a licensed SBIC requires SBA prior approval of the change of control."
+}

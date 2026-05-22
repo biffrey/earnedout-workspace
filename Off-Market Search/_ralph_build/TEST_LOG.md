@@ -178,3 +178,56 @@ iter-12 carry-note still stands — B1 (priority-state list) OPEN makes
 `formation_date` / `years_in_business` / `sos_status` a universal `LeadPacket`
 gap until B1 clears (designed B1-gated skip, not a failure). Next phase for s5:
 VERIFY (fresh-context critic).
+
+## iter 18 — 2026-05-22 — s6 (Scoring integration) — SELF-TEST
+
+Drove the s6 procedure (`references/scoring_integration.md`) over the two s5
+SELF-TEST `LeadPacket`s — the Class-1 fixture R1 (`UEI:ZZTEST00FIX1`,
+EXAMPLE INTERPRETING FIXTURE LLC) and the Class-2 real SBIC R2
+(`NAME:1st source capital|south bend in`, 1st Source Capital Corporation). Each
+packet was scored by invoking the **unmodified** `prospect-evaluation` skill in
+the s6-selected mode; reports captured to `output/reports/{report_slug}/`. Full
+evidence — per-candidate scores, mode/gate/slug derivations, the artifact
+listing — in `evidence/s6-selftest.md`. Seven checks against the
+`OFFMARKET_BUILD_PLAN.md` s6 `Done-when` criteria:
+
+- **C1 — Class-1 produces a score + report via the unmodified scorer.** PASS.
+  R1 → `eval_mode: rollup_addon` (Applied Development, NAICS 541930, no size
+  floor, /110), `keyword_tier: core` → full +10 line-10 bonus. Score **30/110**,
+  internally consistent across header / scorecard field 26 / breakdown total;
+  both `.md` + `.html` on disk under `output/reports/uei-zztest00fix1/`.
+- **C2 — Class-2 produces a score + report via the unmodified scorer.** PASS.
+  R2 → `eval_mode: sbic`, score **30/100** explicitly **informational only**;
+  SBIC License Gate **✅ PASS** derived per §4 from `sbic_license_status:
+  Good Standing` → `buybox_gate: pass`; `sbic_gp_economics` kept informational,
+  never mapped onto an EBITDA/valuation line. Both `.md`+`.html` on disk under
+  `output/reports/name-1st-source-capital-south-bend-in/`.
+- **C3 — "no asking price" handled gracefully (§3.2).** PASS. In both reports
+  the scorer ran to completion — no crash, no abort, candidate not dropped:
+  Buy Box line 5 → ⚠️ "insufficient data"; the valuation-multiple rubric line →
+  **0 / "insufficient data — not awarded"** (not a ❌). Neither run hit the
+  §3.2 BLOCKING defect (a scorer that crashes/refuses purely on absent ask).
+- **C4 — `report_slug` filesystem-safe & deterministic (§5.1).** PASS.
+  `UEI:ZZTEST00FIX1` → `uei-zztest00fix1`; `NAME:1st source capital|south bend
+  in` → `name-1st-source-capital-south-bend-in`. Both contain only `[a-z0-9-]`
+  (the `:`/`|` removed), both created without error as the on-disk dir names.
+- **C5 — both `.md` and `.html` captured (§5).** PASS. Each report directory
+  holds `{company-slug}-report.md`, `{company-slug}-report.html`, and
+  `lead-packet.json`; the dashboard-linked `.html` skipped in neither.
+- **C6 — no fabrication; gaps stay gaps.** PASS. Every undisclosed field scores
+  "insufficient data — not awarded" in both reports — the `revenue_signal` /
+  `$480K` award total were not fabricated into an EBITDA tier; no invented
+  financials, contacts, dates, or URLs.
+- **C7 — Class-2 report carries the SBA prior-approval fact.** PASS. R2's
+  report has a dedicated "SBIC Closing Condition — SBA Prior Approval of Change
+  of Control" section (13 CFR Part 107) plus a Risk-Factors mention.
+
+**Result: all 7 checks PASS.** Stage s6 → `self_checked`. **No BLOCKING
+defect.** Two carry-notes to the VERIFY critic (not Done-when failures):
+(1) R1 is a fixture — the genuine Class-1 *end-to-end* score on a real ASL/CART
+company is deferred to s10's larger live sample, the same IMPROVE-s3-1 /
+IMPROVE-s4-4 chain the s4/s5 critics already flagged; R1's 30/110 is an honest
+plumbing artifact. (2) A pre-existing EBITDA-band wording inconsistency lives
+inside the **unmodified** `prospect-evaluation` skill (resources say "$1M–$4M",
+front-matter says "$1M or more"); it did not affect either run and is out of
+scope for this loop. Next phase for s6: VERIFY (fresh-context critic).
