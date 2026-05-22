@@ -282,3 +282,57 @@ satisfied while B4 is open. Per the loop blocker rule, stage s7 → `blocked`
 (B4); B4 updated to record that it now blocks **both** s2 and s7. The loop
 continues with the next non-blocked stage (s8). s7 retries SELF-TEST → VERIFY
 automatically once the two `Source` values are added.
+
+## iter 23 — 2026-05-22 — s8 (Outreach drafting) — SELF-TEST
+
+Drove the s8 procedure (`references/outreach_drafting.md` +
+`config/offmarket_outreach_template.md`) over the s5/s6 SELF-TEST leads — the
+Class-1 fixture R1 (EXAMPLE INTERPRETING FIXTURE LLC) and the Class-2 real SBIC
+R2 (1st Source Capital Corporation) — plus one constructed no-contact case
+(SYN-NC1). Full evidence — the two generated draft blocks, the daily-file
+artifact, the placeholder-fill tables — in `evidence/s8-selftest.md` and
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md`. Six checks against the
+`OFFMARKET_BUILD_PLAN.md` s8 `Done-when` criteria:
+
+- **C1 — a Class-1 OM-1 draft is generated for a candidate with a direct
+  contact; no raw placeholder survives.** PASS. R1 has `contact.name =
+  "Pat Sample"` → contact gate passes (partial contact, no email → still drafted
+  per §5). OM-1, Subject Variant 1; `[OWNER_NAME]`/`[BUSINESS_NAME]`/
+  `[LOCATION]`/`[SPECIFIC_DETAIL]` all filled from real packet data
+  (`[SPECIFIC_DETAIL]` from the verified `federal_award_total: 480000`); zero
+  raw `[...]` tokens survive; the missing email shows as `needs follow-up` in
+  the `Recipient:` block.
+- **C2 — a Class-2 OM-2 draft is generated; the SBA-prior-approval sentence is
+  present.** PASS. R2 → OM-2, Subject Variant 2; the SBA prior-approval
+  change-of-control sentence appears verbatim as fixed body text (not a
+  placeholder); no raw placeholder survives.
+- **C3 — the no-contact case yields no draft.** PASS. SYN-NC1 (in-memory only,
+  `name`/`email` both `null`) → contact gate → no draft, logged `outreach:
+  skipped — no direct contact (needs follow-up: contact discovery)`; no contact
+  fabricated; the skip consumes no subject-variant slot.
+- **C4 — nothing is auto-sent; the NOT SENT markers are present.** PASS. Both
+  draft blocks carry the `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---` header
+  and `--- END DRAFT (review and send manually) ---` footer; the s8 deliverable
+  has no send capability (no Gmail/SMTP/send path in either file). The daily-file
+  storage is exercised; the Airtable `Notes` append is B4-blocked (no off-market
+  row exists) — the designed degradation path (draft still lands in the daily
+  file) is what is exercised.
+- **C5 — the broker templates are untouched.** PASS. `config/outreach_templates.md`
+  last modified at `323a782` (2026-05-21, on-market revamp loop) — no
+  `offmarket-build` commit touches it, working tree clean. s8 added a new sibling
+  file, `config/offmarket_outreach_template.md`.
+- **C6 — subject-variant alternation across drafted leads.** PASS. R1 → Variant
+  1; SYN-NC1 skipped (no slot); R2 → Variant 2 — alternation correct, skip did
+  not shift the count.
+
+**Result: all 6 checks PASS. No BLOCKING defect.** Two carry-notes to the
+VERIFY critic (not Done-when failures): (1) the §4 two-place storage's `Notes`
+append is B4-dependent — no off-market tracker row exists yet, so only the
+daily-file half is exercised; the `Notes` half is deferred to s10's end-to-end
+run once B4 clears (does not block s8, whose `Done-when` is satisfied without a
+live row). (2) OM-2 candidate IMPROVE: R2's only enriched contact is the
+directory POC titled *Investor Relations*, not the GP principal the OM-2 body
+addresses ("reaching out to you as a principal") — the s5 `enrichment_gaps`
+already flags this; the critic should weigh whether s8 should prefer a
+principal-titled contact for Class 2 or soften the body. Stage s8 →
+`self_checked`. Next phase for s8: VERIFY (fresh-context critic).
