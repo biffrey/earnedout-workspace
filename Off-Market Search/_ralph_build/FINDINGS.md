@@ -93,20 +93,6 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
-### IMPROVE-s5-5 — IMPROVE — s5 — SOS formation-date lookup not wired; B1 now resolved
-**Raised:** 2026-05-22, operator intervention (B1 resolved).
-**Where:** s5 enrichment deliverable — the B1-gated Secretary-of-State
-formation-date lookup.
-**Problem:** s5 was verified while B1 was open, so the SOS formation-date /
-years-in-business lookup was left as a logged gap rather than a working lookup
-("B1-blocked SOS leaves a gap" in the s5 implementation notes). B1 is now
-resolved (DC, VA, MD, PA, WV).
-**Fix:** wire the SOS formation-date lookup for the five priority jurisdictions
-so a candidate registered in one of them gets a real formation date /
-years-in-business instead of a "needs follow-up" gap. Candidates in other
-states remain a logged gap, as designed.
-**Status:** OPEN.
-
 ### IMPROVE-s10-3 — IMPROVE — s10 — dry-run artifacts cite resolved blockers as open
 **Raised:** iter 40 SELF-TEST (s10 re-run).
 **Where:** `Off-Market Search/_ralph_build/evidence/s10-e2e-dryrun.md`
@@ -182,6 +168,48 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s5-5 — IMPROVE — s5 — SOS formation-date lookup not wired; B1 now resolved
+**Raised:** 2026-05-22, operator intervention (B1 resolved).
+**Where:** s5 enrichment deliverable — the B1-gated Secretary-of-State
+formation-date lookup.
+**Problem:** s5 was verified while B1 was open, so the SOS formation-date /
+years-in-business lookup was left as a logged gap rather than a working lookup
+("B1-blocked SOS leaves a gap" in the s5 implementation notes). B1 is now
+resolved (DC, VA, MD, PA, WV).
+**Fix:** wire the SOS formation-date lookup for the five priority jurisdictions
+so a candidate registered in one of them gets a real formation date /
+years-in-business instead of a "needs follow-up" gap. Candidates in other
+states remain a logged gap, as designed.
+**Resolution (iter 71, RESOLVE):** rewrote §3.2 of
+`.claude/skills/off-market-search/references/enrichment.md` from a B1-gated
+"skip the lookup" placeholder to a wired SOS formation-date lookup:
+- **Phase-1 scope** — the lookup now **runs** for any entity whose canonical
+  `address.state` is one of the five B1-resolved jurisdictions (DC, VA, MD, PA,
+  WV), driving the matching s3 adapter **S8** SOS / business-registry surface,
+  each named with its concrete host (DC DLCP CorpOnline `corponline.dc.gov`; VA
+  SCC CIS `cis.scc.virginia.gov`; MD SDAT / Maryland Business Express
+  `egov.maryland.gov/businessexpress`; PA Dept. of State `file.dos.pa.gov`; WV
+  SOS `apps.sos.wv.gov/business/corporations`). The lookup runs under the S8
+  per-jurisdiction **ToS gate** (`robots.txt` honored, official export/API
+  preferred over UI, ≤1 req/2s, no login/paywall bypass); a name lookup on
+  `legal_name` + city resolves the record → `formation_date`, `sos_status`,
+  officers (→ §3.4 contact discovery).
+- **Out-of-Phase-1 entity** — the lookup is skipped by design with
+  `formation_date`/`years_in_business` `null` and the gap reworded to drop the
+  now-resolved B1 reference: `"formation date — needs follow-up (state SOS not
+  in Phase-1 scope)"`.
+- **In-scope but no match / registry skipped by the ToS gate** — a distinct gap
+  (`"… (SOS lookup returned no match)"` / `"… (state registry skipped this run
+  — ToS unconfirmed)"`); never fabricate a formation date.
+- `years_in_business = current_year − formation_year` only when a date is found.
+Also updated the file intro paragraph (state SOS / portals are "in Phase 1,
+with the B1-resolved priority jurisdictions wired into the §3.2 SOS lookup")
+and the §6 edge-handling bullet ("State SOS unreachable, out of Phase-1 scope,
+or skipped by the ToS gate") to drop the stale "B1 unresolved" wording. Wires
+the deliverable IMPROVE-s3-2 (the S8 adapter) made available last iteration;
+no fabrication path is introduced — every not-found case stays a logged gap.
+**Status:** RESOLVED.
 
 ### IMPROVE-s5-2 — IMPROVE — s5 — Class-2 pre-filter §2.2 condition 2 is a no-op on first run
 **Raised:** iter 13 VERIFY (s5 critic).

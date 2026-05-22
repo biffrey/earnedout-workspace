@@ -8,9 +8,10 @@ contacts, and the `LeadPacket` object handed to s6 for scoring.
 
 Implements PRD **§7.1** (the enrich → lead-packet pipeline), **§7.4** (the
 cost-control pre-filters), and the §7.2 / §7.3 per-class enrichment notes, with
-the §13 resolution decisions applied: state SOS / portals are in Phase 1 but
-gated by **B1** (priority-state list); the SBIC directory publishes **no**
-standing flag, so good standing is cross-referenced (§13).
+the §13 resolution decisions applied: state SOS / portals are in Phase 1, with
+the **B1**-resolved priority jurisdictions (DC, VA, MD, PA, WV) wired into the
+§3.2 SOS lookup; the SBIC directory publishes **no** standing flag, so good
+standing is cross-referenced (§13).
 
 Companion files:
 - `references/entity_resolution.md` — produces the `CanonicalEntity` input.
@@ -159,17 +160,37 @@ screenshot path convention:
 
 ### 3.2 SOS formation-date lookup (feeds Buy Box "years in business")
 
-Look up the entity in its state Secretary-of-State business registry (s3
-adapter S8 path) to get `formation_date`, `sos_status` (active / good
-standing), registered agent, and officers:
+Look up the entity in its state Secretary-of-State business registry via the s3
+adapter **S8** SOS-registry path to get `formation_date`, `sos_status` (active /
+good standing), registered agent, and officers.
 
-- **Phase-1 scope is gated by B1.** If the entity's state is on the operator's
-  priority-state list, run the SOS lookup. If B1 is unresolved or the state is
-  not prioritized, skip the lookup — `formation_date: null`,
-  `years_in_business: null`, gap `"formation date — needs follow-up (state SOS
-  not in Phase-1 scope — B1)"`. Skipping is **not** a fabrication and **not** a
-  failure.
-- When found, `years_in_business = current_year − formation_year`.
+- **Phase-1 scope (B1 RESOLVED 2026-05-22 — DC, VA, MD, PA, WV).** The SOS
+  lookup is **wired and run** for any entity whose canonical `address.state` is
+  one of the five Phase-1 jurisdictions, driving the matching S8 SOS / business
+  registry surface (`source_adapters.md` S8 — DC DLCP CorpOnline
+  `corponline.dc.gov`; VA SCC Clerk's Information System `cis.scc.virginia.gov`;
+  MD SDAT / Maryland Business Express `egov.maryland.gov/businessexpress`; PA
+  Dept. of State business search `file.dos.pa.gov`; WV SOS business-organization
+  search `apps.sos.wv.gov/business/corporations`). The lookup runs under the S8
+  per-jurisdiction **ToS gate** — `robots.txt` honored, an official export / API
+  preferred over the public search UI, ≤1 request / 2s, no login/paywall
+  bypass. A name lookup on `legal_name` + city resolves the registry record;
+  read `formation_date` (date of incorporation / organization), entity status →
+  `sos_status`, and officers (carried to §3.4 contact discovery).
+- **Entity not in a Phase-1 jurisdiction.** If `address.state` is not one of
+  DC / VA / MD / PA / WV, the SOS lookup is **skipped by design** — that
+  registry is not yet in scope. Set `formation_date: null`,
+  `years_in_business: null`, and record the gap `"formation date — needs
+  follow-up (state SOS not in Phase-1 scope)"`. Skipping an out-of-scope state
+  is **not** a fabrication and **not** a failure.
+- **In-scope but not found / registry unreachable.** If the entity *is* in a
+  Phase-1 jurisdiction but no registry record matches, or the jurisdiction was
+  skipped this run by the S8 ToS gate (`status: degraded`), leave
+  `formation_date` / `years_in_business` `null` and record `"formation date —
+  needs follow-up (SOS lookup returned no match)"` (or `"… (state registry
+  skipped this run — ToS unconfirmed)"`). Never invent a formation date.
+- When a formation date is found, `years_in_business = current_year −
+  formation_year`.
 
 ### 3.3 Financial-signal enrichment
 
@@ -308,8 +329,8 @@ unmapped or free-text value and **never** lets the multi-select auto-grow.
 - **A pre-filter-passing candidate that enriches to zero usable signal** — it
   is still scored; the scorer handles thin data via "insufficient data — not
   awarded". Do not drop a pre-filter pass just because enrichment was sparse.
-- **State SOS unreachable / B1 unresolved** — formation date is left a gap, not
-  fabricated; see §3.2.
+- **State SOS unreachable, out of Phase-1 scope, or skipped by the ToS gate** —
+  formation date is left a gap, not fabricated; see §3.2.
 - **Conflicting signals** (e.g. two different formation dates) — keep the
   most authoritative (SOS over website), note the conflict in
   `enrichment_gaps`.

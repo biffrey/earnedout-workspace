@@ -1,0 +1,7 @@
+Iteration 70 complete — RESOLVE phase, one finding cleared.
+
+**Resolved IMPROVE-s5-2** (s5): the Class-2 SBIC pre-filter §2.2 condition 2 ("good standing not already disproven") referenced the §4 cross-check, which runs *after* the §2 pre-filter — so the gate read as substantive on a first pass when it can only fire on a re-run. Reworded §2.2 condition 2 in `enrichment.md` to state explicitly that it checks only a prior-run/cached standing result; on a first run nothing has been disproven and the candidate passes. Spec-clarity only — no behavior change.
+
+State updated: `iteration: 70`, `unresolved_findings: 13 → 12`. Logged to `IMPLEMENTATION_LOG.md`, finding moved to FINDINGS.md "Resolved", committed locally (`iter 70 — RESOLVE IMPROVE-s5-2`).
+
+12 findings remain in the RESOLVE phase. Signal: **CONTINUE**.

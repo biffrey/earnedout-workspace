@@ -1274,3 +1274,32 @@ parallel tracker, no scorer touched, no outreach sent.
 
 IMPROVE-s5-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 13 → 12. 12 findings remain. RESOLVE phase continues.
+
+## iter 71 — RESOLVE — IMPROVE-s5-5
+
+Resolved **IMPROVE-s5-5** (IMPROVE, s5) — the §3.2 Secretary-of-State
+formation-date lookup was left as a B1-gated "skip the lookup" placeholder when
+s5 was verified with B1 open. B1 is resolved (DC, VA, MD, PA, WV) and last
+iteration's IMPROVE-s3-2 turned the s3 S8 adapter into a working adapter with
+named SOS / business-registry surfaces — so the s5 lookup is now wirable.
+
+Fix — rewrote §3.2 of
+`.claude/skills/off-market-search/references/enrichment.md`:
+- the SOS lookup now **runs** for any entity in one of the five Phase-1
+  jurisdictions, driving the matching S8 SOS-registry surface (DC CorpOnline,
+  VA SCC CIS, MD SDAT / Business Express, PA Dept. of State, WV SOS), each
+  named with its host, under the S8 per-jurisdiction ToS gate; a `legal_name` +
+  city name lookup yields `formation_date`, `sos_status`, officers;
+- an out-of-Phase-1 entity is skipped by design with the gap reworded to drop
+  the resolved-B1 reference (`"… (state SOS not in Phase-1 scope)"`);
+- an in-scope no-match / ToS-skipped registry is a distinct logged gap — never
+  a fabricated date.
+Also updated the file intro paragraph and the §6 edge-handling bullet to drop
+the stale "B1 unresolved" wording.
+
+Spec-clarity + wiring of a now-available deliverable; no fabrication path
+introduced — every not-found case stays a logged gap. Constraints honored: no
+data fabricated, no parallel tracker, no scorer touched, no outreach sent.
+
+IMPROVE-s5-5 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+12 → 11. 11 findings remain. RESOLVE phase continues.
