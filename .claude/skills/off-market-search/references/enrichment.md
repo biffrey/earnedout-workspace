@@ -102,11 +102,15 @@ A Class-2 candidate **passes** only when:
 
 1. **Current licensee.** The entity appears on the **current** SBA SBIC
    directory export (s3 adapter S4) — not a lapsed/historical-only row.
-2. **Good standing not already disproven.** If the §4 good-standing
-   cross-check has already surfaced a `Revoked` / `Surrendered` status, the
-   candidate is dropped. An *unconfirmed* standing is **not** a drop — it
-   passes the pre-filter and the scorer's SBIC gate handles it as CONDITIONAL
-   (§7.3).
+2. **Good standing not already disproven.** This condition checks only a
+   *prior-run or cached* standing result — the §2 pre-filter runs **before** the
+   §3/§4 enrichment of this run, so on a first run no §4 cross-check has executed
+   yet and there is nothing to disprove. If a cached / prior-run §4 good-standing
+   cross-check has already surfaced a `Revoked` / `Surrendered` status for this
+   entity, the candidate is dropped here. Otherwise — no cached standing, or an
+   *unconfirmed* standing — the candidate **passes** the pre-filter; the §4
+   cross-check then runs in this run's enrichment and the scorer's SBIC gate
+   handles an unconfirmed standing as CONDITIONAL (§7.3).
 
 Pre-filter outcome is logged per candidate: `pass`, or `drop` + reason. Only
 `pass` candidates proceed to §3.

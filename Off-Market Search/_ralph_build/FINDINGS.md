@@ -18,17 +18,6 @@ source is never tested against the ≥95% target.
 closed, so the target is tested against real S1 data.
 **Status:** OPEN.
 
-### IMPROVE-s5-2 — IMPROVE — s5 — Class-2 pre-filter §2.2 condition 2 is a no-op on first run
-**Raised:** iter 13 VERIFY (s5 critic).
-**Where:** `.claude/skills/off-market-search/references/enrichment.md:106-109`.
-**Problem:** §2.2 condition 2 ("good standing not already disproven") depends on
-the §4 cross-check, but §2 pre-filters run BEFORE §3/§4 enrichment. On a first
-run the cross-check has not run, so the condition can only fire on a re-run —
-it reads as a substantive gate that it is not on the first pass.
-**Fix:** reword §2.2 condition 2 to state it applies only to a prior-run/cached
-standing result; otherwise the candidate passes.
-**Status:** OPEN.
-
 ### IMPROVE-s5-3 — IMPROVE — s5 — good-standing cross-check demonstrated for only one Class-2 entity
 **Raised:** iter 13 VERIFY (s5 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` C6 (lines
@@ -193,6 +182,28 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s5-2 — IMPROVE — s5 — Class-2 pre-filter §2.2 condition 2 is a no-op on first run
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:106-109`.
+**Problem:** §2.2 condition 2 ("good standing not already disproven") depends on
+the §4 cross-check, but §2 pre-filters run BEFORE §3/§4 enrichment. On a first
+run the cross-check has not run, so the condition can only fire on a re-run —
+it reads as a substantive gate that it is not on the first pass.
+**Fix:** reword §2.2 condition 2 to state it applies only to a prior-run/cached
+standing result; otherwise the candidate passes.
+**Resolution (iter 70, RESOLVE):** reworded §2.2 condition 2 in
+`enrichment.md` to state explicitly that it checks only a *prior-run or cached*
+§4 good-standing result: the §2 pre-filter runs **before** the §3/§4 enrichment
+of the current run, so on a first run no §4 cross-check has executed yet and
+there is nothing to disprove — the candidate passes. A cached / prior-run
+`Revoked` / `Surrendered` standing drops the candidate here; otherwise (no
+cached standing, or an *unconfirmed* standing) it passes the pre-filter, the §4
+cross-check then runs in this run's enrichment, and the scorer's SBIC gate
+handles an unconfirmed standing as CONDITIONAL (§7.3). Spec-clarity only; no
+pre-filter, enrichment, or scoring behavior changed — an unconfirmed standing
+already passed the pre-filter and the §4 cross-check already runs as enrichment.
+**Status:** RESOLVED.
 
 ### IMPROVE-s3-2 — IMPROVE — s3 — state-source adapter (S8) is a fixture-shell; B1 now resolved
 **Raised:** 2026-05-22, operator intervention (B1 resolved).

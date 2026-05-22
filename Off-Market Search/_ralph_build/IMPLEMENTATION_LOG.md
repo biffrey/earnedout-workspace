@@ -1248,3 +1248,29 @@ still-open IMPROVE-s5-5.
 
 IMPROVE-s3-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 14 → 13. 13 findings remain. RESOLVE phase continues.
+
+## iter 70 — RESOLVE — IMPROVE-s5-2
+
+Resolved **IMPROVE-s5-2** (IMPROVE, s5) — the Class-2 SBIC pre-filter §2.2
+condition 2 ("good standing not already disproven") depends on the §4
+good-standing cross-check, but §2 pre-filters run **before** §3/§4 enrichment.
+On a first run the cross-check has not executed, so the condition can only fire
+on a re-run with a cached/prior-run result — it read as a substantive
+first-pass gate that it is not.
+
+Fix — reworded §2.2 condition 2 in
+`.claude/skills/off-market-search/references/enrichment.md` to state explicitly
+that it checks only a *prior-run or cached* §4 standing result: on a first run
+no §4 cross-check has executed yet, so there is nothing to disprove and the
+candidate passes; a cached `Revoked`/`Surrendered` standing drops it here, and
+otherwise (no cached standing, or unconfirmed) the candidate passes the
+pre-filter, the §4 cross-check then runs in this run's enrichment, and the
+scorer's SBIC gate handles an unconfirmed standing as CONDITIONAL (§7.3).
+
+Spec-clarity only; no pre-filter, enrichment, or scoring behavior changed — an
+unconfirmed standing already passed the pre-filter, and the §4 cross-check
+already runs as enrichment. Constraints honored: no data fabricated, no
+parallel tracker, no scorer touched, no outreach sent.
+
+IMPROVE-s5-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+13 → 12. 12 findings remain. RESOLVE phase continues.
