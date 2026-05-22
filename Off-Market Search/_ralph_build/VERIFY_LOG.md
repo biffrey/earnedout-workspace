@@ -208,3 +208,48 @@ Findings (non-blocking, filed in `FINDINGS.md`):
 - IMPROVE-s5-1, IMPROVE-s5-2, NIT-s5-2 — carried open from iter 13 (still valid).
 
 Stage s5 → `verified`. `unresolved_findings` → 15.
+
+## iter 19 — 2026-05-22 — s6 (Scoring integration) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s6 artifacts on
+disk — `.claude/skills/off-market-search/references/scoring_integration.md`,
+`skill.md` Step 5, `evidence/s6-selftest.md`, the two captured report
+directories `output/reports/uei-zztest00fix1/` and
+`output/reports/name-1st-source-capital-south-bend-in/` (opened the `.md` + `.html`
+reports, checked header/scorecard/breakdown score consistency) — and independently
+confirmed via `git status` / `git log` that `.claude/skills/prospect-evaluation/`
+is unmodified by the build. Not given the loop's logs or reasoning.
+
+**Verdict: PASS (0 BLOCKING).**
+
+Both Done-when criteria met:
+- DW1 — a Class-1 and a Class-2 candidate each produce a score + report via the
+  UNMODIFIED `prospect-evaluation` skill. PASS. R1 → 30/110 (header line 29,
+  scorecard field 26, breakdown total line 85 — all agree), `.md`+`.html` on
+  disk under `output/reports/uei-zztest00fix1/`. R2 → 30/100 informational
+  (header line 37, scorecard line 85, breakdown line 104), `.md`+`.html` on
+  disk. `prospect-evaluation/` git-clean, no build-era commits — used verbatim.
+- DW2 — "no asking price" handled as "insufficient data — not awarded", not a
+  failure. PASS. Buy Box line 5 → ⚠️ (not ❌); valuation rubric line →
+  `0 / "insufficient data — not awarded"`; neither run crashed/aborted/dropped
+  the candidate.
+
+Hard constraints honored: no new scorer (mode selection driven by target class —
+`scoring_integration.md` §2 maps class 1→`rollup_addon` /110 no size floor,
+class 2→`sbic` good-standing gate informational); no fabrication (every
+undisclosed field "insufficient data", `$480K` award total not converted to
+EBITDA, R2 contact carried verbatim from the s5 lead packet); SBA prior-approval
+change-of-control fact carried on the Class-2 report (dedicated section, Risk
+Factors, 13 CFR Part 107); `report_slug` filesystem-safe and deterministic.
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- IMPROVE-s6-1 — `scoring_integration.md:20` / `skill.md:43` / build-plan:229
+  cite `prospect-evaluation/references/buy-box-and-scoring.md`, which does not
+  exist; the rubric lives inside `prospect-evaluation/skill.md`.
+- IMPROVE-s6-2 — both scored candidates are build-loop test inputs (R1 a
+  synthetic fixture); a genuine real-company Class-1 score is deferred to s10.
+- NIT-s6-1 — `s6-selftest.md:18` cites a stale R1 score line (70, actually 85).
+- NIT-s6-2 — `prospect-evaluation/skill.md` has owner-only file mode (cosmetic,
+  pre-existing).
+
+Stage s6 → `verified`. `unresolved_findings` → 19.

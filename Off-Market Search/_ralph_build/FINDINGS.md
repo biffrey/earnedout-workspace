@@ -162,6 +162,50 @@ packet "Matches line 125". After the iter-15 self-test rewrite, the actual
 line citations.
 **Status:** OPEN.
 
+### IMPROVE-s6-1 — IMPROVE — s6 — dangling `buy-box-and-scoring.md` reference
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `.claude/skills/off-market-search/references/scoring_integration.md:20`;
+also `OFFMARKET_BUILD_PLAN.md:229` and `.claude/skills/off-market-search/skill.md:43`.
+**Problem:** the s6 spec (and the build plan) cite
+`.claude/skills/prospect-evaluation/references/buy-box-and-scoring.md` as a file
+used verbatim by the scorer. That file does not exist on disk and never existed
+in any commit — `prospect-evaluation/` contains only `skill.md`, with the buy-box
+rubric embedded inside it. Not an s6 functional defect (the scorer ran fine),
+but the off-market docs cite a non-existent companion file.
+**Fix:** point the reference at `.claude/skills/prospect-evaluation/skill.md`
+(or drop the `references/` path) in `scoring_integration.md`, `skill.md`, and the
+build plan's constraints section.
+**Status:** OPEN.
+
+### IMPROVE-s6-2 — IMPROVE — s6 — both scored candidates are build-loop test inputs
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md`;
+`output/reports/uei-zztest00fix1/`.
+**Problem:** R1 is a synthetic fixture (`_fixture_note` in its packet) and R2 is
+a real SBIC; s6's integration plumbing is fully exercised, but neither captured
+report is a genuine real-company Class-1 ASL/CART assessment. The real Class-1
+end-to-end score is deferred to s10, gated on the S1 USAspending `uei` gap.
+**Fix:** s10's larger-sample end-to-end run must score at least one real Class-1
+ASL/CART company; gate that on IMPROVE-s3-1 / IMPROVE-s4-4 closing.
+**Status:** OPEN.
+
+### NIT-s6-1 — NIT — s6 — self-test cites a stale score line number
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md:18`.
+**Problem:** the self-test cites the R1 score lines as `report.md:29,64,70`, but
+the breakdown total is at line 85, not 70. The score itself (30/110) is correct
+and internally consistent; only the line citation is off.
+**Fix:** change `70` → `85` in the C1 evidence citation.
+**Status:** OPEN.
+
+### NIT-s6-2 — NIT — s6 — `prospect-evaluation/skill.md` has owner-only file mode
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `.claude/skills/prospect-evaluation/skill.md`.
+**Problem:** the file mode is `-rw-------` (owner-only), inconsistent with the
+other skill files. Harmless and pre-existing (not caused by the s6 build).
+**Fix:** optionally `chmod 644` for consistency; no functional impact.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
