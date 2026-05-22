@@ -1,0 +1,18 @@
+Iteration 24 complete.
+
+**Step executed:** s8 (Outreach drafting) — VERIFY phase.
+
+A fresh-context critic subagent independently inspected the s8 deliverables on disk and via git history. **Verdict: PASS, 0 BLOCKING.** All three Done-when criteria met:
+- Drafts generated for candidates with direct contacts (Class-1 OM-1 + Class-2 OM-2); no-contact case correctly skipped, no fabrication.
+- No send capability anywhere — drafts carry NOT SENT markers.
+- Broker templates (`config/outreach_templates.md`) untouched by any offmarket-build commit.
+
+SBA prior-approval change-of-control sentence confirmed present in the Class-2 draft.
+
+**Findings filed (non-blocking):** IMPROVE-s8-1 (OM-2 addresses recipient "as a principal" but accepted a non-principal IR contact) and NIT-s8-1 (stray trailing tokens in evidence files).
+
+**State updated:** iteration 24, s8 → `verified`, `unresolved_findings` 19 → 21, `open_blockers` 4.
+
+**Remaining:** s2 + s7 blocked on B4 (Airtable `Source` values); s9 + s10 not_started and not blocked.
+
+**Signal: CONTINUE** — non-blocked work (s9 orchestration) remains.

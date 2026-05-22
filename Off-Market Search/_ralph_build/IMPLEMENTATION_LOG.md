@@ -429,3 +429,79 @@ draft and a Class-2 OM-2 draft from the s6/s7 SELF-TEST leads — confirm no raw
 `[...]` placeholder survives, the no-contact case yields no draft, the
 SBA-prior-approval sentence appears in the OM-2 draft, and both storage
 locations carry the NOT SENT markers).
+
+## iter 25 — 2026-05-22 — s9 (Orchestration & cadence) — IMPLEMENT
+
+Built the stage-s9 deliverable: the orchestration layer that wires the s2–s8
+stage references into one end-to-end run, the manual single-entity path, the
+run-log format, and the weekly cadence. s9 adds **no new pipeline logic** — it
+is the glue between stages.
+
+- **`.claude/skills/off-market-search/references/orchestration.md`** — the s9
+  reference. Contents:
+  - **§1 Stage hand-off contract** — a table of the fixed 1→9 run order, each
+    step's reference, what it consumes, and the typed output it produces
+    (`RawRecord[]` → `CanonicalEntity[]` → `LeadPacket[]` → `ScoredLead[]` →
+    rows → drafts → dashboard → run log).
+  - **§2 Failure containment** — the core orchestration rule: **hard halt**
+    (Step 1 preflight fail, a failed Step 3 tracker read, an unrecoverable
+    environment fault) vs. **graceful degrade** (a blocked adapter B1/B3, a
+    single adapter error, a per-candidate enrichment/scoring failure, a
+    per-record write failure, a no-contact lead). A degraded run is still a
+    successful run — fewer/gap-flagged leads, every gap explicit in the log.
+  - **§3 Run log** — the `search_reports/offmarket_run_log_YYYY-MM-DD.md`
+    template (run type/outcome/blockers; sources queried with per-source status
+    and counts; resolution & dedup counts; enrichment & scoring per class;
+    Airtable creates/updates; outreach drafts; dashboard; operator follow-ups).
+    Counts must be real, never estimated; Step 9 runs even on a halted run.
+  - **§4 Manual single-entity path** — mirrors `submit-url`: one operator-named
+    company/SBIC (by name+state, gov identifier, or URL) + target class; runs
+    the Step 1 preflight, **seeds resolution directly** for that one entity
+    (skips Step 2 bulk discovery), then Steps 3–9 unchanged; appends a dated
+    manual section if a run log for today already exists; reports score, record
+    URL, dedup verdict, and gaps. Same no-send / no-fabricate constraints.
+  - **§5 Dry-run / fixture mode** — adapters read recorded `s3-fixtures/`
+    payloads and the write is directed at a test context (never
+    `tblSmNrHROMLm7vOS`); the run is labelled `dry-run`. Used for SELF-TEST and
+    while B3/B4 are open.
+  - **§6 Cadence** and **§7 Constraints** — point at `config/offmarket_schedule.md`.
+- **`config/offmarket_schedule.md`** — the cadence definition. Weekly `/schedule`
+  cron, **Mondays 06:00 local** (per §13 Q1); the trigger prompt summary; the
+  registration command; **registration gated on B4** so the cron does not
+  fail-loud weekly before the `Source` values exist; a local `launchd` fallback
+  (for an environment without the Airtable/Playwright MCP servers); run-log
+  locations; prerequisites. The off-market schedule is separate from the nightly
+  on-market `config/schedule.md` and needs **no `op`** credential (no
+  login-walled source) — which is why `/schedule` (not the on-market launchd)
+  is appropriate, exactly as §13 directed.
+- **`run-offmarket-search.sh`** (repo root, `chmod +x`, `bash -n` clean) — the
+  headless `claude -p` weekly entrypoint, mirroring `run-overnight-search.sh`
+  minus the `op` retrieval; logs to `output/logs/offmarket-search_YYYY-MM-DD.log`.
+- **`config/launchd/ai.earnedout.offmarket-search.plist`** (`plutil -lint` OK) —
+  the version-controlled launchd plist for the local fallback; weekly trigger
+  `Weekday=1, Hour=6`.
+- **`skill.md` updated** — the SKELETON banner replaced with a **WIRED, PENDING
+  FINAL VERIFICATION** status (dry-run only until `OFFMARKET_BUILD_VERIFIED` and
+  B4 cleared); Step 9 expanded to the §3 run-log template; a new **Orchestration**
+  section summarising the halt-vs-degrade rule; the **Manual single-entity path**
+  and **Cadence** sections expanded to point at `references/orchestration.md` §4
+  and `config/offmarket_schedule.md`.
+
+**Note on "cron registered" (s9 Done-when).** The cadence is fully *defined* and
+version-controlled (config + trigger script + plist), but the **live** cron
+registration is deliberately **not** performed by this unattended build
+iteration: registering it now — while B4 is open — would make the weekly run
+fail-loud at the schema preflight every Monday. `config/offmarket_schedule.md`
+documents the one-line registration command as the install step gated on B4
+clearing. This is the honest call (never schedule a run that is designed to
+halt); SELF-TEST validates the definition artifacts.
+
+Constraints honored: no new pipeline logic (s9 is glue only); no parallel
+tracker / no new scorer; fail-loud halt vs. graceful degrade made explicit;
+never fabricate (run-log counts are real); never auto-send outreach (Step 7
+drafts only); dry-run mode prevents a build-time live write.
+
+Stage s9 → `drafted`. Next phase for s9: SELF-TEST (exercise the end-to-end
+wiring in dry-run/fixture mode — confirm the 1→9 hand-off, the halt-vs-degrade
+behaviour, a manual single-entity run, and the run-log output; validate the
+schedule artifacts: `bash -n` the script, `plutil -lint` the plist).

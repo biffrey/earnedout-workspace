@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.earnedout.offmarket-search</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/biffreybraxton/published-listing-search/run-offmarket-search.sh</string>
+    </array>
+
+    <!-- Weekly: Mondays at 06:00 local time (Weekday 1 = Monday). -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>1</integer>
+        <key>Hour</key>
+        <integer>6</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Do not run when the agent is (re)loaded — only on the calendar trigger. -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/biffreybraxton/published-listing-search/output/logs/launchd.offmarket-search.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/biffreybraxton/published-listing-search/output/logs/launchd.offmarket-search.err.log</string>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>

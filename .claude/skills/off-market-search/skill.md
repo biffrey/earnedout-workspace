@@ -5,11 +5,15 @@ description: Runs the EarnedOut off-market target search pipeline. Mines U.S. go
 
 # Off-Market Search Skill
 
-> **⚠ BUILD STATUS — SKELETON.** This file is the stage-s1 scaffold produced by
-> the off-market build loop (`OFFMARKET_BUILD_LOOP_PROMPT.md`). The nine steps
-> below are outlined but not yet fully wired. Each step is annotated with the
-> build-loop stage that completes it. Do **not** run this skill against live
-> systems until the build loop reaches `OFFMARKET_BUILD_VERIFIED`.
+> **⚠ BUILD STATUS — WIRED, PENDING FINAL VERIFICATION.** The nine steps below
+> are fully wired end-to-end by the off-market build loop
+> (`OFFMARKET_BUILD_LOOP_PROMPT.md`): each step points at its stage reference
+> and the run order, hand-off, and failure handling are specified in
+> `references/orchestration.md`. The skill is **not yet cleared for an
+> unattended live run** — the build loop has not reached
+> `OFFMARKET_BUILD_VERIFIED`, and the Step 1 schema preflight will fail loud
+> until blocker B4 (the two off-market `Source` values) is resolved. Run only
+> in **dry-run / fixture mode** (`references/orchestration.md` §5) until then.
 
 You are running the EarnedOut **off-market** target search pipeline. Unlike the
 `overnight-search` skill (which searches broker listing sites for businesses
@@ -161,26 +165,56 @@ leads with an **"Off-Market" badge** (`.chip.offmarket`, rendered when
 — no `Source` column is added and on-market rows are unchanged. See
 `references/airtable_write.md` §5. _(Badge: s7; wiring: s9.)_
 
-## Step 9 — Write run logs
+## Step 9 — Write the run log
 *Built by s9.*
 
-Write a run summary to `search_reports/offmarket_run_log_YYYY-MM-DD.md` (counts
-per source, per class, new vs. updated, blocked sources). Report completion.
-_(Run-log output: s9.)_
+Write a run summary to `search_reports/offmarket_run_log_YYYY-MM-DD.md` using the
+template in `references/orchestration.md` §3 — sources queried (with per-source
+status and record counts), resolution & dedup counts (new / existing / needs
+operator review), enrichment & scoring outcomes per class, Airtable creates vs.
+updates, outreach drafts vs. no-contact follow-ups, the dashboard path, and the
+operator follow-up list. Counts are **real**, taken from each step's actual
+output — never estimated. Step 9 runs even on a halted run, recording what
+happened and why. Report completion to the operator. _(Run-log format:
+`references/orchestration.md` §3.)_
 
 ---
+
+## Orchestration
+
+The end-to-end run order, the typed hand-off between steps, and the
+**failure-containment rule** (what halts the run vs. what degrades a single
+source/candidate) are specified in **`references/orchestration.md`**. In short:
+Step 1 preflight and a failed Step 3 tracker read are **hard halts**; a blocked
+adapter, a per-candidate enrichment/scoring failure, or a per-record write
+failure **degrade gracefully** — logged, run continues. A degraded run still
+completes and writes an honest run log.
 
 ## Manual single-entity path
 *Built by s9 — mirrors the `submit-url` skill.*
 
-A manual path pushes one operator-supplied company or SBIC through Steps 3–9 on
-demand (resolve → enrich → score → record → outreach → dashboard). Use when a
-specific target is identified outside the scheduled run.
+A manual path pushes **one** operator-supplied company or SBIC through the
+pipeline on demand — for a target identified outside the scheduled run. The
+operator supplies a name (+ state), a gov identifier (UEI / CAGE / SBIC license
+#), or a website URL, plus the target class. The path runs the same Step 1
+preflight, **seeds resolution directly** for that single entity (skipping the
+Step 2 bulk discovery), then runs Steps 3–9 unchanged — an already-tracked
+entity updates in place. It reports the lead score, the Airtable record URL, the
+dedup verdict, and any "needs follow-up" gaps. Full procedure:
+`references/orchestration.md` §4. Same constraints — never auto-send outreach,
+never fabricate a field.
 
 ## Cadence
 *Registered by s9.*
 
-Weekly, both target classes, via a `/schedule` cron (per §13 Q1).
+Weekly, both target classes, via a `/schedule` cron (per §13 Q1) — **Mondays at
+06:00 local**. The cadence definition, the trigger prompt, the registration
+command, the local `launchd` fallback, and the prerequisites are in
+**`config/offmarket_schedule.md`**; the headless entrypoint is
+`run-offmarket-search.sh` at the repo root. The off-market run needs **no `op` /
+1Password** credential (no login-walled source); it does need the Airtable and
+Playwright MCP servers. Live cron registration is gated on blocker B4 so the
+weekly run does not fail loud before the `Source` values exist.
 
 ## Constraints (invariant)
 
