@@ -83,6 +83,28 @@ s6 never edits the `prospect-evaluation` skill (`skill.md`) or its embedded
 rubric. If the scorer's auto-detection and the `eval_mode` above ever
 disagree, that is a **BLOCKING** defect to log — not something s6 patches over.
 
+**Class-1 real-company coverage gate (IMPROVE-s6-2).** The s6 SELF-TEST scored
+two candidates — **R1**, a synthetic build-loop **fixture** (`_fixture_note` in
+its `lead-packet.json`), and **R2**, a real licensed SBIC (Class 2). It
+exercised the s6 integration plumbing fully — mode selection, the §3 field
+mapping, the §3.2 "no asking price" path, the §4 SBIC gate, report capture —
+but **neither captured report is a genuine real-company Class-1 ASL/CART
+assessment**: R1's 30/110 is an honest plumbing artifact computed off fixture
+data, and R2 is Class 2. While `IMPROVE-s3-1` was open the S1 USAspending
+adapter did not populate `uei`, so every real S1 record routed to
+`needs_operator_review` and never reached the scorer. `IMPROVE-s3-1` (S1 `uei`
+population, resolved iter 55) and `IMPROVE-s4-4` (the §6 S1 resolution-coverage
+gate, resolved iter 72) are now **both RESOLVED**, so this gate's precondition
+has cleared. It therefore **requires s10's larger-sample end-to-end run to
+score at least one real Class-1 ASL/CART company** in `rollup_addon` mode on
+the /110 scale — sourced from a live discovery query (S1 USAspending, or
+S2/S3/S8), not a fixture — and to record that real company's `lead_score`,
+per-line breakdown, and both `.md` + `.html` report paths in `TEST_LOG.md`.
+Until that live run records a real Class-1 score, R1 stays a plumbing
+demonstration only. Same coverage-gate pattern as the §6 "S1 coverage gate" of
+`entity_resolution.md` (IMPROVE-s4-4) and the §4 "Class-2 coverage gate" of
+`enrichment.md` (IMPROVE-s5-3).
+
 ---
 
 ## 3. Field mapping — `LeadPacket` → `prospect-evaluation` inputs

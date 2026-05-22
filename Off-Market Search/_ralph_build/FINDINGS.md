@@ -6,6 +6,10 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
+_None — all findings resolved._
+
+## Resolved
+
 ### IMPROVE-s6-2 — IMPROVE — s6 — both scored candidates are build-loop test inputs
 **Raised:** iter 19 VERIFY (s6 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md`;
@@ -16,13 +20,40 @@ report is a genuine real-company Class-1 ASL/CART assessment. The real Class-1
 end-to-end score is deferred to s10, gated on the S1 USAspending `uei` gap.
 **Fix:** s10's larger-sample end-to-end run must score at least one real Class-1
 ASL/CART company; gate that on IMPROVE-s3-1 / IMPROVE-s4-4 closing.
-**Status:** OPEN.
+**Resolution (iter 81, RESOLVE):** the two gating findings have both closed —
+`IMPROVE-s3-1` (S1 USAspending adapter now populates a real `uei` via the
+`recipient/{recipient_id}` follow-up, resolved iter 55) and `IMPROVE-s4-4` (the
+§6 S1 resolution-coverage gate, resolved iter 72) — so the precondition has
+cleared and the s10 live-run requirement can be made an explicit, documented
+coverage gate (the same gate pattern as IMPROVE-s4-4's "S1 coverage gate" and
+IMPROVE-s5-3's "Class-2 coverage gate"). Two edits: (1) added a **"Class-1
+real-company coverage gate (IMPROVE-s6-2)"** paragraph to §2 of
+`.claude/skills/off-market-search/references/scoring_integration.md`, after the
+"s6 never edits the `prospect-evaluation` skill" sentence — it records that the
+s6 SELF-TEST scored only R1 (a synthetic fixture, `_fixture_note` in its
+`lead-packet.json`) and R2 (a real Class-2 SBIC), that neither captured report
+is a genuine real-company Class-1 ASL/CART assessment, that the S1 `uei` gap
+(IMPROVE-s3-1) is why real S1 records never reached the scorer, that both
+gating findings are now RESOLVED, and **requires s10's larger-sample
+end-to-end run to score at least one real Class-1 ASL/CART company** in
+`rollup_addon` mode on the /110 scale — live-sourced (S1/S2/S3/S8), not a
+fixture — with its `lead_score`, per-line breakdown, and both report paths
+recorded in `TEST_LOG.md`. (2) Refreshed carry-note 1 of
+`evidence/s6-selftest.md` with an "iter 81, RESOLVE" update recording that
+`IMPROVE-s6-2` was the carried-forward finding, that its preconditions have
+closed, and that it is resolved by the new `scoring_integration.md` §2 gate;
+the C1 PASS verdict is unchanged (it verifies the s6 integration procedure,
+which the fixture exercises in full). Spec-clarity / evidence change only; no
+scoring, mode-selection, field-mapping, or report-capture behavior changed —
+s6 was always an integration layer over the unmodified `prospect-evaluation`
+scorer, and the real-company end-to-end score was always deferred to s10's
+live run; that deferral is now an enforced, documented gate rather than a
+critic carry-note. s6 stays `verified`.
+**Status:** ~~OPEN~~ → RESOLVED 2026-05-22 (iter 81).
 
 _(The critic also flagged a stray `</content>` tag at
-`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
-tracked as NIT-s8-1 — not double-counted here.)_
-
-## Resolved
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this was tracked as
+NIT-s8-1 — RESOLVED iter 57.)_
 
 ### IMPROVE-s5-3 — IMPROVE — s5 — good-standing cross-check demonstrated for only one Class-2 entity
 **Raised:** iter 13 VERIFY (s5 critic).

@@ -1523,3 +1523,40 @@ scorer touched, no outreach sent.
 
 IMPROVE-s5-3 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 2 → 1. 1 finding remains (IMPROVE-s6-2). RESOLVE phase continues.
+
+---
+
+## Iter 82 — RESOLVE — IMPROVE-s6-2 (s6 Class-1 real-company coverage gate)
+
+RESOLVE phase. `final_audit_passed: true`; cleared the **last** open finding.
+IMPROVE-s6-2 — the s6 critic flagged that the s6 SELF-TEST scored only R1 (a
+synthetic build-loop fixture) and R2 (a real Class-2 SBIC), so neither captured
+report is a genuine real-company Class-1 ASL/CART assessment; the real Class-1
+end-to-end score was deferred to s10, gated on the S1 USAspending `uei` gap.
+
+Both gating findings have since closed — IMPROVE-s3-1 (S1 `uei` population,
+iter 55) and IMPROVE-s4-4 (the §6 S1 resolution-coverage gate, iter 72) — so
+the s10 live-run requirement can be made an explicit, documented coverage gate
+(the IMPROVE-s4-4 / IMPROVE-s5-3 pattern):
+
+- `.claude/skills/off-market-search/references/scoring_integration.md` §2 —
+  added a **"Class-1 real-company coverage gate (IMPROVE-s6-2)"** paragraph
+  recording that the s6 SELF-TEST scored only the R1 fixture and the R2 Class-2
+  SBIC, that both gating findings are now RESOLVED, and **requiring s10's
+  larger-sample end-to-end run to score at least one real Class-1 ASL/CART
+  company** (`rollup_addon`, /110, live-sourced from S1/S2/S3/S8, not a
+  fixture) with `lead_score`, per-line breakdown, and both report paths logged
+  in `TEST_LOG.md`.
+- `evidence/s6-selftest.md` — refreshed carry-note 1 with an "iter 81, RESOLVE"
+  update; C1 PASS verdict unchanged (it verifies the s6 integration procedure).
+
+Spec-clarity / evidence only; no scoring, mode-selection, field-mapping, or
+report-capture behavior changed — the real-company end-to-end score was always
+deferred to s10's live run; that deferral is now an enforced, documented gate.
+s6 stays `verified`. Constraints honored: no data fabricated, no parallel
+tracker, no scorer touched, no outreach sent.
+
+IMPROVE-s6-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+1 → 0. **No findings remain.** All 10 stages `verified`, `final_audit_passed:
+true`, `unresolved_findings: 0`, `open_blockers: 0` — COMPLETE conditions now
+hold; next iteration runs the COMPLETE step.
