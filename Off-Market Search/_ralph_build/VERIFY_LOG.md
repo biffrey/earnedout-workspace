@@ -538,3 +538,60 @@ Stage s10 → `not_started`. `unresolved_findings` 28 → 30 (BLOCKING-s10-2 +
 IMPROVE-s10-4). `open_blockers` 0. Next phase for s10: IMPLEMENT — rewrite the
 OM-2 draft to drop the "since 1983" claim and harden the draft-generation logic
 so a fund `vintage` cannot be rendered as a company operating history.
+
+## iter 44 — 2026-05-22 — s10 (Assembly, end-to-end self-test) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s10 dry-run
+artifacts — `evidence/s10-e2e-dryrun.md`,
+`evidence/s10-offmarket_run_log_e2e_dryrun.md`, the Class-1 scored record
+`output/reports/uei-zztest00fix1/` and the Class-2 scored record
+`output/reports/name-1st-source-capital-south-bend-in/` (each `lead-packet.json`
++ `.md` + `.html`) — plus the s10 outreach deliverable
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md`. Not given the loop's logs
+or reasoning. Tasked to disprove the s10 dry-run `Done-when` ("the dry run
+produces at least one scored record per class into a test context with no
+fabricated fields"); the final-audit / all-stages-`verified` halves are the
+separate FINAL AUDIT phase and were explicitly out of scope.
+
+**Verdict: PASS (0 BLOCKING).**
+
+All in-scope criteria PASS:
+- **≥1 scored record per class.** Class-1 R1 `output/reports/uei-zztest00fix1/`
+  30/110 (rollup_addon mode); Class-2 R2
+  `output/reports/name-1st-source-capital-south-bend-in/` 20/100 (SBIC mode,
+  license gate PASS) — each with `lead-packet.json` + `.md` + `.html` on disk.
+- **BLOCKING-s10-2 genuinely fixed.** Case-insensitive search of the drafts
+  file for `1983|since|track record|durable|established|formation|years in
+  business` returns **zero matches**. The OM-2 `[SPECIFIC_DETAIL]` line ("a
+  licensed SBIC in good standing, pursuing a direct-lending investment
+  strategy") traces to `sbic_license_status: "Good Standing"` and
+  `sbic_gp_economics.strategy: "Direct Lending"` in the R2 packet. No
+  operating-history / formation-date / vintage-as-history claim survives. The
+  R2 report mentions `1983` only as the SBIC fund vintage, every time
+  explicitly disclaiming it is the company formation date; Buy Box line 3 and
+  the years-in-business rubric line both score 0 "insufficient data — not
+  awarded" in both `.md` and `.html`.
+- **Outreach drafts trace field-by-field to each packet.** OM-1 (R1): business
+  name, recipient Pat Sample / Owner, location Anytown VA, "$480K in awards"
+  (`federal_award_total: 480000`); missing email rendered "needs follow-up".
+  OM-2 (R2): business name, recipient Ryan Fenstermaker / Investor Relations /
+  fenstermakerr@1stsource.com, SBIC good-standing, direct-lending strategy,
+  SBA-prior-approval fact — all trace to the R2 packet. No fabricated field.
+- **Test context, not the live tracker.** Dry-run write-up + run log both record
+  0 created / 0 updated; writes never directed at `tblSmNrHROMLm7vOS`.
+- **Nothing auto-sent.** Both drafts carry the NOT-SENT / review-and-send-
+  manually markers; the no-contact candidate was correctly skipped.
+- **Same `prospect-evaluation` scorer, no new logic;** off-market "no asking
+  price" handled as "insufficient data — not awarded" (R1 rubric line 81, R2
+  rubric line 104), not a failure.
+
+The critic raised two non-blocking notes, both already tracked — the stray
+`</content>` token at drafts-file line 106 is NIT-s8-1; R1 being a synthetic
+Class-1 fixture (no real S1-discovered company until the USAspending `uei` gap
+closes) is IMPROVE-s6-2 / IMPROVE-s4-4, and the s10 `Done-when` explicitly
+permits a fixture sample. No new findings filed.
+
+Zero BLOCKING → stage s10 → `verified`. **All 10 stages are now `verified`.**
+`unresolved_findings` unchanged at 29; `open_blockers` 0. Next phase: FINAL
+AUDIT — a fresh independent auditor subagent audits the whole build end-to-end
+against `OFFMARKET_BUILD_PLAN.md` and the PRD.
