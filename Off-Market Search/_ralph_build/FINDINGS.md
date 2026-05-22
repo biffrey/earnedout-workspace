@@ -133,24 +133,6 @@ years-in-business instead of a "needs follow-up" gap. Candidates in other
 states remain a logged gap, as designed.
 **Status:** OPEN.
 
-### IMPROVE-s3-3 — IMPROVE — s3 — SAM.gov adapters (S2/S3) are fixture-shells; B3 now resolved
-**Raised:** 2026-05-22, operator intervention (B3 resolved — key stored).
-**Where:** s3 source-adapter deliverable — the S2 (SAM.gov Entity Management
-API) and S3 (SAM.gov Contract Awards API) adapters.
-**Problem:** s3 was verified while B3 was open, so S2/S3 were built as
-fixture-shells rather than working adapters (IMPLEMENTATION_LOG iter 5:
-"B1/B3 adapters built but marked `blocked`, not faked"). B3 is now resolved —
-the SAM.gov Public API Key is stored in the macOS login keychain.
-**Fix:** wire S2/S3 to read the key at runtime via
-`security find-generic-password -s samgov-api-key -a off-market-search -w`
-(never commit it to a file), send it as the `x-api-key` header, and build the
-adapters for real against `api.sam.gov`; record a live or recorded-fixture
-query for each. Handle the one-time keychain "Always Allow" prompt, and respect
-the per-account daily request limit (~10/day on the public tier until SAM.gov
-entity registration completes for the ~1,000/day tier). Keep the common adapter
-interface unchanged so s4–s6 are unaffected.
-**Status:** OPEN.
-
 ### IMPROVE-s10-3 — IMPROVE — s10 — dry-run artifacts cite resolved blockers as open
 **Raised:** iter 40 SELF-TEST (s10 re-run).
 **Where:** `Off-Market Search/_ralph_build/evidence/s10-e2e-dryrun.md`
@@ -226,6 +208,75 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s3-3 — IMPROVE — s3 — SAM.gov adapters (S2/S3) are fixture-shells; B3 now resolved
+**Raised:** 2026-05-22, operator intervention (B3 resolved — key stored).
+**Where:** s3 source-adapter deliverable — the S2 (SAM.gov Entity Management
+API) and S3 (SAM.gov Contract Awards API) adapters.
+**Problem:** s3 was verified while B3 was open, so S2/S3 were built as
+fixture-shells rather than working adapters (IMPLEMENTATION_LOG iter 5:
+"B1/B3 adapters built but marked `blocked`, not faked"). B3 is now resolved —
+the SAM.gov Public API Key is stored in the macOS login keychain.
+**Fix:** wire S2/S3 to read the key at runtime via
+`security find-generic-password -s samgov-api-key -a off-market-search -w`
+(never commit it to a file), send it as the `x-api-key` header, and build the
+adapters for real against `api.sam.gov`; record a live or recorded-fixture
+query for each. Handle the one-time keychain "Always Allow" prompt, and respect
+the per-account daily request limit (~10/day on the public tier until SAM.gov
+entity registration completes for the ~1,000/day tier). Keep the common adapter
+interface unchanged so s4–s6 are unaffected.
+**Resolution (iter 68, RESOLVE):** rewrote the S2 and S3 adapter sections of
+`.claude/skills/off-market-search/references/source_adapters.md` from
+fixture-shells to working adapters:
+- **S2 (SAM.gov Entity Management API)** — header changed from "BLOCKED above
+  10/day by B3" to "live, public ~10/day tier". Pinned the base to
+  `https://api.sam.gov/entity-information/v3/entities` (v3 — the version the
+  recorded `S2.json` fixture's `entityData` shape matches; the API is public at
+  v1–v4 per §13 item 5). Added the runtime key-retrieval step:
+  `security find-generic-password -s samgov-api-key -a off-market-search -w`
+  → `x-api-key` header, with an explicit note that the first session read may
+  raise the one-time "Always Allow" keychain prompt and that the launchd agent
+  runs in `gui/<uid>` so the login keychain is reachable. A retrieval failure
+  sets `status: error` → fixture fallback, never fabricates. Specified the
+  real query (`primaryNaics=541930`, optional
+  `physicalAddressProvinceOrStateCode`, `registrationStatus=A`,
+  `includeSections=…`, `page`/`size` paging, public tier only) and a
+  v3-field-precise `Map:` (`entityRegistration.legalBusinessName`/`dbaName`/
+  `ueiSAM`/`cageCode`, `coreData.physicalAddress`,
+  `assertions.goodsAndServices.naicsList[].naicsCode`,
+  `socioEconomic.businessTypeList`, `pointsOfContact.governmentBusinessPOC`,
+  `coreData.entityInformation.entityURL`).
+- **S3 (SAM.gov Contract Awards API)** — header changed from "BLOCKED by B3" to
+  "live, public ~10/day tier". Documented that it uses the **same** Public API
+  Key as S2, retrieved by the identical `security find-generic-password`
+  command, hosted under `api.sam.gov` with path/version per
+  `open.gsa.gov/api/contract-awards/`; kept the FPDS-NG exclusion.
+- **Shared-quota rule** — S2 and S3 share one key and therefore one daily
+  budget (~10/day public tier until entity registration completes, then
+  1,000/day); the orchestrator counts both against the single cap; an HTTP 429
+  yields `status: degraded` (stop paging, run continues), never a hard halt.
+- **Registry table** — S2/S3 live status changed from "blocked (B3) — built,
+  fixture fallback" to "ok (live key; public ~10/day tier)" / "ok (live key;
+  shares S2's ~10/day quota)".
+- **Fixture-mode paragraph** — the stale "(B1, B3)" precondition citation was
+  genericized to "a missing credential, or a portal whose ToS is not yet
+  confirmed", and fixture mode is now also justified as a way to exercise the
+  pipeline without spending a quota-limited source's live request budget.
+- **Recorded-fixture query** — each adapter section now explicitly names its
+  recorded fixture (`_ralph_build/evidence/s3-fixtures/S2.json` /
+  `S3.json`, structural placeholder samples) as the recorded-fixture query the
+  finding asks for; these exercise the normalization mapping without spending
+  the live 10/day quota. No live SAM.gov call was made this iteration — that
+  would consume the scarce public-tier quota and risk a headless keychain
+  prompt; the adapters are spec-complete and the keychain command + fixture
+  fallback are documented for the live run.
+The common adapter interface (`adapter.query` → `{records, meta}`, the
+`RawRecord` shape) is unchanged, so s4–s6 are unaffected. Remaining `B3`
+mentions in `skill.md:69` and `orchestration.md` (lines 52/78/84) are a
+general adapter-degradation statement and run-log-template example text — not
+the S2/S3 adapter deliverable this finding scopes — and are governed by the
+still-open `IMPROVE-s10-3` / `NIT-s9-3` doc-staleness findings.
+**Status:** RESOLVED.
 
 ### IMPROVE-s6-1 — IMPROVE — s6 — dangling `buy-box-and-scoring.md` reference
 **Raised:** iter 19 VERIFY (s6 critic).

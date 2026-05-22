@@ -87,12 +87,14 @@ schema preflight is fail-loud.
 
 ### Fixture mode
 
-Until the build loop verifies the skill, and for any adapter whose live
-precondition is unmet (B1, B3), an adapter may run in **fixture mode**: it reads
+Until the build loop verifies the skill, for SELF-TEST / dry runs, and for any
+adapter whose live precondition is unmet (e.g. a missing credential, or a portal
+whose ToS is not yet confirmed), an adapter may run in **fixture mode**: it reads
 a recorded sample payload from `_ralph_build/evidence/s3-fixtures/<source_id>.json`
 instead of calling the network, maps it through the identical normalization
 code, and sets `meta.notes: "fixture"`. This lets s3 SELF-TEST and downstream
-stages exercise the full pipeline without depending on a blocked credential.
+stages exercise the full pipeline without a network call — and, for a
+quota-limited source, without spending live request budget.
 
 ---
 
@@ -140,38 +142,93 @@ it implements.
 - **Rate / ToS:** no hard per-IP cap documented — pace ~1 req/sec, prefer bulk
   download for large pulls; data is U.S. Government work. `status: ok`.
 
-### S2 — SAM.gov Entity Management API adapter  *(Class 1 — entity discovery + enrichment; BLOCKED above 10/day by B3)*
+### S2 — SAM.gov Entity Management API adapter  *(Class 1 — entity discovery + enrichment; live, public ~10/day tier)*
 
-- **Transport:** REST, `x-api-key` header = the SAM.gov Public API Key from the
-  project secret store (never in any file). Base
-  `https://api.sam.gov/entity-information/v<N>` (use the current version).
-- **Query:** filter entities by NAICS `541930`, optional state; request the
-  **public tier only** — never FOUO / Sensitive.
-- **Map:** legal name + DBA→`legal_name`/`dba_name`, `uei`, `cage_code`,
-  legacy DUNS→`duns`, physical address→`address`, NAICS list→`naics`,
-  socioeconomic flags, registration status/dates→`source_payload`, public
-  POC→`poc`, public URL→`website`.
-- **Rate / ToS — B3:** a no-role account is capped at **10 requests/day**
-  (unusable for a full run); a role-assigned account gets **1,000/day**.
-  - If no key is present, or the key is no-role: return
-    `status: blocked, blocker_id: "B3"` and (when verifying the pipeline) fall
-    back to **fixture mode**. The adapter is fully built; only live use beyond
-    10/day waits on B3.
-  - With a valid keyed role: `status: ok`, pace under 1,000/day.
+- **Transport:** REST, `x-api-key` header. Base
+  `https://api.sam.gov/entity-information/v3/entities` — the Entity Management
+  API is public at `api.sam.gov/entity-information/v1`–`v4`; this adapter
+  targets **v3** (the version the recorded fixture's `entityData` shape
+  matches).
+- **API key (B3 RESOLVED).** The SAM.gov Public API Key is **never** stored in
+  any file or committed. The adapter retrieves it at runtime from the macOS
+  login keychain:
+  ```
+  security find-generic-password -s samgov-api-key -a off-market-search -w
+  ```
+  (service `samgov-api-key`, account `off-market-search`). The returned string
+  is sent as the `x-api-key` request header. The keychain item was created via
+  Keychain Access without `-A`, so the **first** read in a session may raise a
+  one-time "Always Allow" prompt — that is expected, not an error. The weekly
+  run executes in the operator's logged-in session (the launchd agent runs in
+  `gui/<uid>`), so the login keychain is unlocked and reachable. If retrieval
+  fails (no item, locked keychain, or the prompt is denied), the adapter sets
+  `status: error, notes: "SAM.gov key unavailable"` and falls back to **fixture
+  mode** — it never fabricates entity data and never halts the run.
+- **Query:** `GET /entity-information/v3/entities` with `primaryNaics=541930`
+  (Translation & Interpretation), optional
+  `physicalAddressProvinceOrStateCode=<state>` from `params`,
+  `registrationStatus=A` (active registrations only), and
+  `includeSections=entityRegistration,coreData,assertions,pointsOfContact,socioEconomic`.
+  Page with `page` (0-indexed) and `size`. Request the **public tier only** —
+  never the FOUO / Sensitive sections (those need a Federal System Account, not
+  available to a private acquirer and not needed here).
+- **Map:** from each `entityData[]` element —
+  `entityRegistration.legalBusinessName`→`legal_name`,
+  `entityRegistration.dbaName`→`dba_name`, `entityRegistration.ueiSAM`→`uei`,
+  `entityRegistration.cageCode`→`cage_code`, legacy DUNS (if present)→`duns`,
+  `coreData.physicalAddress`→`address`,
+  `assertions.goodsAndServices.naicsList[].naicsCode` / `primaryNaics`→`naics`,
+  `socioEconomic.businessTypeList`→`socioeconomic_flags`,
+  `pointsOfContact.governmentBusinessPOC`→`poc`,
+  `coreData.entityInformation.entityURL`→`website`, registration status /
+  expiration dates→`source_payload`.
+- **Rate / ToS — B3 RESOLVED.** The Public API Key is live. The SAM.gov account
+  behind it is on the **public ~10 requests/day tier** until SAM.gov entity
+  registration completes (~2–3 weeks) for the role-assigned **1,000/day** tier
+  — no code change is needed when the cap rises. While on the 10/day tier the
+  adapter budgets strictly: run S2 **after** the key-free discovery sources
+  (S1, S6, S7), cap S2 at ≤10 requests per run (shared with S3 — see below),
+  and pull the broadest useful page first. On an HTTP 429 / quota-exceeded
+  response the adapter stops paging and returns `status: degraded` with a
+  `rate_limit_note` — it does **not** halt the run; the other adapters' records
+  still flow downstream. `status: ok` on a clean keyed pull within quota.
+- **Recorded-fixture query:** `_ralph_build/evidence/s3-fixtures/S2.json` — a
+  structural sample of the v3 `entityData` response (illustrative placeholder
+  identifiers, never written as a real prospect). It exercises the S2
+  normalization mapping end-to-end without spending the live 10/day quota; the
+  adapter runs it in fixture mode for SELF-TEST and any dry run.
 
-### S3 — SAM.gov Contract Awards API adapter  *(Class 1 — FPDS-NG successor; BLOCKED by B3)*
+### S3 — SAM.gov Contract Awards API adapter  *(Class 1 — FPDS-NG successor; live, public ~10/day tier)*
 
-- **Transport:** REST, same SAM.gov key family (`x-api-key`). Docs/base per
-  `https://open.gsa.gov/api/contract-awards/`. **Do NOT build on fpds.gov or the
-  FPDS ATOM feed** — both are retired/decommissioning.
+- **Transport:** REST, hosted under `api.sam.gov`; the **same SAM.gov Public
+  API Key** as S2 (`x-api-key` header), retrieved at runtime by the
+  **identical** keychain command:
+  ```
+  security find-generic-password -s samgov-api-key -a off-market-search -w
+  ```
+  The endpoint path / version is per the live GSA documentation at
+  `https://open.gsa.gov/api/contract-awards/`. **Do NOT build on fpds.gov or
+  the FPDS ATOM feed** — the FPDS.gov public site is decommissioned and the
+  ATOM feed retires in FY2026 (§13 item 4).
 - **Query:** contract awards filtered by NAICS `541930` / PSC `R608`, time
-  period from `params`. Used to **cross-check / supplement** S1 — USAspending
-  stays primary.
-- **Map:** contractor name→`legal_name`, `uei`, award NAICS/PSC→`naics`/`psc`,
-  award $→`award_total`, dates + contracting agency→`source_payload`,
-  small-business flags→`socioeconomic_flags`.
-- **Rate / ToS — B3:** same key dependency as S2. No key → `status: blocked,
-  blocker_id: "B3"`, fixture fallback. Adapter built; live use waits on B3.
+  period from `params` (default trailing 5 FYs). Used to **cross-check /
+  supplement** S1 — USAspending stays primary.
+- **Map:** contractor name→`legal_name`, vendor UEI→`uei`, award NAICS/PSC→
+  `naics`/`psc`, obligated $→`award_total`, dates + contracting agency→
+  `source_payload`, small-business flags→`socioeconomic_flags`.
+- **Rate / ToS — B3 RESOLVED.** Shares the S2 Public API Key and therefore the
+  **same daily quota** — S2 and S3 draw from one shared budget (~10 requests/day
+  on the public tier until SAM.gov entity registration completes, then
+  1,000/day). The orchestrator counts both adapters' calls against that single
+  cap. Same key-retrieval failure handling as S2 (retrieval failure →
+  `status: error` → fixture fallback, never fabricate). On an HTTP 429 /
+  quota-exceeded response the adapter stops paging and returns
+  `status: degraded` with a `rate_limit_note`; the run continues. `status: ok`
+  on a clean keyed pull within quota.
+- **Recorded-fixture query:** `_ralph_build/evidence/s3-fixtures/S3.json` — a
+  structural sample of a Contract Awards record (placeholder values, never
+  written as a real award); exercises the S3 mapping without spending live
+  quota.
 
 ### S4 — SBA SBIC Directory adapter  *(Class 2 — PRIMARY source; not blocked)*
 
@@ -293,8 +350,8 @@ one-line registry change, never a downstream edit. Discovery adapters emit new
 | ID | Source | Class | Role | Live status |
 |---|---|---|---|---|
 | S1 | USAspending.gov | 1 | discovery (primary) | ok |
-| S2 | SAM.gov Entity API | 1 | discovery + enrichment | blocked (B3) — built, fixture fallback |
-| S3 | SAM.gov Contract Awards API | 1 | discovery (cross-check) | blocked (B3) — built, fixture fallback |
+| S2 | SAM.gov Entity API | 1 | discovery + enrichment | ok (live key; public ~10/day tier) |
+| S3 | SAM.gov Contract Awards API | 1 | discovery (cross-check) | ok (live key; shares S2's ~10/day quota) |
 | S4 | SBA SBIC Directory | 2 | discovery (primary) | ok |
 | S5 | SBIC good-standing cross-check | 2 | enrichment (gate input) | ok |
 | S6 | SBA Small Business Search | 1 | discovery (supplementary) | ok |
