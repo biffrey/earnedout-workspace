@@ -1413,3 +1413,47 @@ parallel tracker, no scorer touched, no outreach sent.
 NIT-s9-4 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 6 → 5. 5 findings remain (IMPROVE-s5-3, IMPROVE-s6-2, IMPROVE-s8-1, NIT-s9-2,
 NIT-s10-1). RESOLVE phase continues.
+
+## iter 78 — RESOLVE — IMPROVE-s8-1 (OM-2 body assumed a principal-level recipient)
+
+RESOLVE phase. All 10 stages `verified`, `final_audit_passed: true`,
+`open_blockers: 0`; cleared one IMPROVE finding.
+
+IMPROVE-s8-1 — the OM-2 (SBIC GP Principal Approach) fixed body addressed the
+recipient "as a principal", but the s8 contact gate accepts any direct contact
+(a name OR an email). In the s8 self-test, R2's only enriched contact was
+titled "Investor Relations", not a GP managing principal — a tone mismatch.
+Not fabrication and not a Done-when breach, but worth tightening.
+
+Fix (soften-the-body option — fully contained in the s8 deliverable; a
+principal-titled-contact preference would instead alter the s5 enrichment
+deliverable). Edits to `config/offmarket_outreach_template.md`:
+- OM-2 body — "I'm reaching out to you **as a principal** because…" → "…to you
+  **directly** because…", and "something **you** would ever consider
+  transitioning" → "something **the firm's leadership** would ever consider
+  transitioning"; the body no longer asserts the recipient is a principal;
+- OM-2 intro paragraph — "The recipient is a **GP principal**" reworded to
+  "the firm's best available direct contact — ideally a GP managing principal,
+  though enrichment may only surface a non-principal contact", noting the body
+  addresses any direct contact without asserting their role;
+- `[PRINCIPAL_NAME]` placeholder note — now "the firm's direct contact …
+  (a GP managing principal where one is known; otherwise whatever direct
+  contact enrichment surfaced)", stating a non-principal contact is not a
+  mis-tone;
+- added Tone Guidance item 7 — "Do not assume the recipient's role" — the
+  contact gate accepts any direct contact and the body is role-agnostic by
+  design.
+Edit to `.claude/skills/off-market-search/references/outreach_drafting.md` §5:
+- new "Non-principal Class-2 contact" edge bullet — still draft OM-2, no
+  special handling needed, the contact `title` (principal or not) shows
+  verbatim on the draft block's `Recipient:` line.
+
+Outreach-tone / spec-clarity only; no contact gate, template-selection,
+draft-storage, or no-send behavior changed — OM-2 is still selected for every
+Class-2 lead and every draft remains DRAFT ONLY. s8 stays `verified`.
+Constraints honored: no data fabricated, no parallel tracker, no scorer
+touched, no outreach sent.
+
+IMPROVE-s8-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+5 → 4. 4 findings remain (IMPROVE-s5-3, IMPROVE-s6-2, NIT-s9-2, NIT-s10-1).
+RESOLVE phase continues.

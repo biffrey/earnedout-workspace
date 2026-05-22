@@ -138,6 +138,15 @@ never silently drops a draft, and never blocks the rest of the run.
 - **Partial contact** (name but no email, or email but no name) → still
   draft; the missing piece shows in the draft block's `Recipient:` lines as
   `needs follow-up`, so the operator knows what to complete before sending.
+- **Non-principal Class-2 contact** → still draft OM-2. The contact gate (§2
+  step 1) accepts any direct contact, so enrichment may surface a
+  non-principal contact (e.g. an investor-relations contact) rather than a GP
+  managing principal. The OM-2 body addresses the recipient directly and does
+  not assert their role, so a non-principal contact title is not a mis-tone —
+  no special handling is needed beyond filling `[PRINCIPAL_NAME]` from
+  `contact.name` as usual. The contact's `title`, principal or not, is shown
+  verbatim on the draft block's `Recipient:` line so the operator sees who
+  the draft is addressed to before sending.
 - **No verified specific detail** → omit the `[SPECIFIC_DETAIL]` paragraph;
   the draft is still valid and still stored.
 - **Fund vintage is not a company operating history** → `sbic_gp_economics.

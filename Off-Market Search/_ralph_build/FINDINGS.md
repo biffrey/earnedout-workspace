@@ -29,19 +29,6 @@ end-to-end score is deferred to s10, gated on the S1 USAspending `uei` gap.
 ASL/CART company; gate that on IMPROVE-s3-1 / IMPROVE-s4-4 closing.
 **Status:** OPEN.
 
-### IMPROVE-s8-1 — IMPROVE — s8 — OM-2 drafted to a non-principal contact
-**Raised:** iter 24 VERIFY (s8 critic).
-**Where:** `config/offmarket_outreach_template.md` (OM-2 body) and
-`.claude/skills/off-market-search/references/outreach_drafting.md`.
-**Problem:** the OM-2 fixed body addresses the recipient "as a principal", but
-the contact gate accepts any direct contact (name OR email). In the self-test,
-R2's only enriched contact was titled "Investor Relations", not a GP managing
-principal — a tone mismatch. Not fabrication (it uses the only real contact
-available) and not a Done-when breach, but worth tightening.
-**Fix:** when the Class-2 contact title is not principal-level, either prefer a
-principal-titled contact during s5 enrichment or soften the OM-2 body wording.
-**Status:** OPEN.
-
 ### NIT-s9-2 — NIT — s9 — dry-run run log omits enrichment-only sources
 **Raised:** iter 27 VERIFY (s9 critic).
 **Where:** `evidence/s9-offmarket_run_log_dryrun.md` "Sources queried" table.
@@ -68,6 +55,44 @@ _(The critic also flagged a stray `</content>` tag at
 tracked as NIT-s8-1 — not double-counted here.)_
 
 ## Resolved
+
+### IMPROVE-s8-1 — IMPROVE — s8 — OM-2 drafted to a non-principal contact
+**Raised:** iter 24 VERIFY (s8 critic).
+**Where:** `config/offmarket_outreach_template.md` (OM-2 body) and
+`.claude/skills/off-market-search/references/outreach_drafting.md`.
+**Problem:** the OM-2 fixed body addressed the recipient "as a principal", but
+the contact gate accepts any direct contact (name OR email). In the self-test,
+R2's only enriched contact was titled "Investor Relations", not a GP managing
+principal — a tone mismatch. Not fabrication (it uses the only real contact
+available) and not a Done-when breach, but worth tightening.
+**Fix:** when the Class-2 contact title is not principal-level, either prefer a
+principal-titled contact during s5 enrichment or soften the OM-2 body wording.
+**Resolution (iter 78, RESOLVE):** chose the soften-the-OM-2-body fix — it is
+fully contained in the s8 deliverable (the template + the drafting reference),
+whereas a principal-titled-contact preference would alter the s5 enrichment
+deliverable. Four edits to `config/offmarket_outreach_template.md`:
+(1) the OM-2 body sentence "I'm reaching out to you **as a principal** because…"
+→ "I'm reaching out to you **directly** because…", and the same sentence's
+"something **you** would ever consider transitioning" → "something **the
+firm's leadership** would ever consider transitioning" — the body no longer
+asserts the recipient is a principal; (2) the OM-2 intro paragraph reworded
+from "The recipient is a **GP principal**" to "the firm's best available
+direct contact — ideally a GP managing principal, though enrichment may only
+surface a non-principal contact", stating the body addresses any direct
+contact without asserting their role; (3) the `[PRINCIPAL_NAME]` placeholder
+note now reads "the firm's direct contact … (a GP managing principal where
+one is known; otherwise whatever direct contact enrichment surfaced)" and
+states a non-principal contact is not a mis-tone; (4) added Tone Guidance item
+7 — "Do not assume the recipient's role" — recording that the Class-2 contact
+gate accepts any direct contact and the body is role-agnostic by design. One
+edit to `references/outreach_drafting.md` §5: a new "Non-principal Class-2
+contact" edge bullet — still draft OM-2, no special handling needed, the
+contact `title` (principal or not) shows verbatim on the draft block's
+`Recipient:` line. Outreach-tone / spec-clarity only; no contact gate,
+template-selection, draft-storage, or no-send behavior changed — OM-2 is still
+selected for every Class-2 lead and every draft remains DRAFT ONLY. s8 stays
+`verified`.
+**Status:** RESOLVED.
 
 ### NIT-s9-4 — NIT — s9 — frozen s9 dry-run evidence run log lists B4 as an open blocker
 **Raised:** iter 50 VERIFY (s9 critic).

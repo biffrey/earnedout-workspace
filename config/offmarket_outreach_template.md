@@ -130,9 +130,13 @@ https://smbsteward.com/
 ## Template OM-2 — SBIC GP Principal Approach
 
 For Class-2 targets — a licensed SBIC management firm acquired for the
-license and platform itself. The recipient is a **GP principal**. The message
-opens a confidential conversation and states the SBA-prior-approval fact
-plainly so the recipient knows the sender understands the regulatory path.
+license and platform itself. The recipient is the firm's best available
+direct contact — ideally a GP managing principal, though enrichment may only
+surface a non-principal contact (e.g. an investor-relations contact). The
+body is therefore written to address any direct contact **without asserting
+their role**, so it never mis-tones if the contact is not principal-level.
+The message opens a confidential conversation and states the SBA-prior-approval
+fact plainly so the recipient knows the sender understands the regulatory path.
 
 ### Subject Line (A/B rotate — subject only)
 
@@ -155,10 +159,10 @@ I'm Biffrey Braxton — I acquire and operate lower-middle-market businesses,
 and I have a specific, long-term interest in SBIC management companies.
 
 I'll be direct: I know [BUSINESS_NAME] isn't on the market. I'm reaching out
-to you as a principal because I'd like to understand whether the management
+to you directly because I'd like to understand whether the management
 company itself — the team, the license, and the go-forward platform — is
-something you would ever consider transitioning, whether through a sale, a
-succession plan, or a partnership.
+something the firm's leadership would ever consider transitioning, whether
+through a sale, a succession plan, or a partnership.
 
 [SPECIFIC_DETAIL]
 
@@ -177,8 +181,11 @@ https://smbsteward.com/
 
 ### Placeholders
 
-- `[PRINCIPAL_NAME]` — the GP principal's name from enrichment. If unknown,
-  use the neutral greeting `Hello,` — never invent a name.
+- `[PRINCIPAL_NAME]` — the name of the firm's direct contact from enrichment
+  (a GP managing principal where one is known; otherwise whatever direct
+  contact enrichment surfaced). The body does not assert the recipient is a
+  principal, so a non-principal contact is not a mis-tone. If unknown, use the
+  neutral greeting `Hello,` — never invent a name.
 - `[BUSINESS_NAME]` — the canonical management-firm name.
 - `[SPECIFIC_DETAIL]` — **one** sentence stating a single concrete, real fact
   drawn from the lead packet's enrichment data only: the SBIC license status
@@ -224,6 +231,12 @@ guides any future edits:
    credibility. When in doubt, omit it.
 6. **Class 2 states the regulatory reality up front.** A GP principal will
    immediately think of SBA approval; saying it first signals competence.
+7. **Do not assume the recipient's role.** The Class-2 contact gate accepts
+   any direct contact (a name *or* an email); enrichment may surface an
+   investor-relations or other non-principal contact rather than a GP
+   managing principal. The OM-2 body therefore addresses the recipient
+   directly without asserting they are a principal — so the draft never
+   mis-tones when the only available contact is not principal-level.
 
 ---
 
