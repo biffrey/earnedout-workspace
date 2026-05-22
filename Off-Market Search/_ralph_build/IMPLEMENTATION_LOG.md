@@ -645,3 +645,46 @@ Stage s2 → `drafted`. Next phase for s2: SELF-TEST (run the preflight procedur
 against the live schema — confirm all six fields, both off-market `Source`
 values, and the five `SBIC License Status` options are detected, and confirm
 the check fails loud against a simulated missing element).
+
+## iter 34 — 2026-05-22 — s7 (Airtable write & dashboard badge) — re-IMPLEMENT (B4 resolved)
+
+s7 was built at iter 20 and reached `verified` before the operator intervention
+reset it `verified`-era → `not_started` when B4 was resolved (so s8/s9, which
+followed, were verified on top of a verified s7). The loop re-runs s7 against
+the now-complete live schema. Like the iter-32 s2 re-IMPLEMENT, the deliverable
+already exists and required no code change — this is a confirmation pass.
+
+- **`references/airtable_write.md` confirmed intact.** The five §8.4 field IDs
+  in §3.3 were cross-checked against `evidence/s2-airtable-schema.md` (which
+  iter 32 re-confirmed live) — all five match byte-for-byte
+  (`Gov Entity ID` `fld7Ook8ZoLAjwFTe`, `SBIC License #` `fldogicjVNMCBuyJI`,
+  `SBIC License Status` `fldscFvXPUFYbSg3F`, `Gov Data Source`
+  `fldM7KoR2gtfvBVWN`, `Federal Award History $` `fldZXrqqoBkIdDWJN`). The
+  `Source` field ID `fldiGyXTk6Ybb6J1L` matches; the two off-market values it
+  writes both exist as live `Source` choices since B4 resolved. The §2
+  "never write blind" preconditions are forward-correct — the Step-1 preflight
+  now passes, so s7 writes against a confirmed schema. **No stale "B4 open /
+  blocked" prose is present** (s7 was written at iter 20 forward-correctly,
+  unlike s2's preflight prose which iter 32 had to clean up).
+- **Dashboard badge confirmed intact** — `templates/daily-dashboard.html`: the
+  `.chip.offmarket` style (lines 154–155), the data-contract comment
+  (lines 42–43), and the `lead.source.startswith('Off-Market')` render
+  condition in all three row sections (lines 242 / 288 / 330). Additive — on-
+  market rows unchanged, no `Source` column added.
+- **`evidence/s7-airtable-write.md`** written — the field-ID cross-check table
+  and the badge line references.
+
+No live Airtable write was performed this iteration (the live record write is a
+SELF-TEST concern, directed at a test context per the dry-run rule). s7's
+deliverable — the field-by-field write procedure plus the dashboard badge —
+is complete and consistent with the schema.
+
+Constraints honored: no parallel tracker / no new scorer; never fabricate
+(field IDs read from recorded live evidence, not assumed); fail loud (the
+preflight is Step 1's job, unchanged); never auto-send (drafting is s8).
+
+Stage s7 → `drafted`. Next phase for s7: SELF-TEST (drive the write procedure
+over the s6 SELF-TEST `ScoredLead`s into a test context — confirm a Class-1 and
+a Class-2 record map field-by-field per §3 with no fabricated field, an
+`existing` entity updates in place per §4, and the `.chip.offmarket` badge
+renders on an off-market row while an on-market row is unchanged).
