@@ -170,15 +170,6 @@ available) and not a Done-when breach, but worth tightening.
 principal-titled contact during s5 enrichment or soften the OM-2 body wording.
 **Status:** OPEN.
 
-### NIT-s8-1 — NIT — s8 — stray trailing tokens in s8 evidence files
-**Raised:** iter 24 VERIFY (s8 critic).
-**Where:** `evidence/s8-selftest.md:238-239` and
-`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`.
-**Problem:** stray trailing `</content>` / `</invoke>` artifact-formatting
-tokens leaked into the evidence files. Cosmetic; does not affect deliverables.
-**Fix:** strip the trailing tokens from the two evidence files.
-**Status:** OPEN.
-
 ### NIT-s9-1 — NIT — s9 — `dedup_verdict` enum omits the third hand-off state
 **Raised:** iter 27 VERIFY (s9 critic).
 **Where:** `references/orchestration.md:26` vs.
@@ -340,6 +331,22 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s8-1 — NIT — s8 — stray trailing tokens in s8 evidence files
+**Raised:** iter 24 VERIFY (s8 critic).
+**Where:** `evidence/s8-selftest.md:238-239` and
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`.
+**Problem:** stray trailing `</content>` / `</invoke>` artifact-formatting
+tokens leaked into the evidence files. Cosmetic; does not affect deliverables.
+**Resolution (iter 57, RESOLVE):** stripped the two trailing tokens from
+`evidence/s8-selftest.md` (the `</content>`/`</invoke>` pair after the final
+"Stage s8 → `self_checked`" line) and the trailing `</content>` from
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md` (after the final
+"_Skipped (no draft)_" line). A repo-wide grep of
+`_ralph_build/evidence/` for `</content>`, `</invoke>`, `</parameter>` and
+`</function_calls>` now returns no matches. Cosmetic only; no evidence content
+or deliverable changed.
+**Status:** RESOLVED.
 
 ### IMPROVE-s4-1 — IMPROVE — s4 — `dedup_verdict` enum omits `needs_operator_review`
 **Raised:** iter 10 VERIFY (s4 critic).

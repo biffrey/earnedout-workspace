@@ -235,5 +235,3 @@ fixed body text in the Class-2 draft; and the broker templates are untouched.
    a candidate IMPROVE finding.
 
 Stage s8 → `self_checked`. Next phase: VERIFY (fresh-context critic).
-</content>
-</invoke>

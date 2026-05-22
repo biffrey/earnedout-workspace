@@ -103,4 +103,3 @@ https://smbsteward.com/
 
 _Skipped (no draft): 1 lead — SYN-NC1 (constructed no-contact case):
 `outreach: skipped — no direct contact (needs follow-up: contact discovery)`._
-</content>
