@@ -1163,3 +1163,42 @@ tracker, no scorer touched, no data fabricated.
 
 IMPROVE-s5-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 19 → 18. 18 findings remain. RESOLVE phase continues.
+
+---
+
+## iter 65 — RESOLVE — NIT-s5-2
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **NIT-s5-2** (NIT, s5) — the iter-13 s5 critic flagged that the
+`LeadPacket.employee_count` field was typed `number | string`, inconsistent
+with every other unknown-able field, which uses a `… | null` type plus an
+`enrichment_gaps` `"needs follow-up"` entry.
+
+Fix (spec-clarity change):
+- `.claude/skills/off-market-search/references/enrichment.md` — retyped
+  `employee_count` in the `LeadPacket` table from `number | string` to
+  `number | null` (note: "§3.3 — number, else `null` with an
+  `"employee count — needs follow-up"` gap"). Reworded the §3.3
+  `employee_count` bullet so an absent count yields `null` (not the string
+  `"needs follow-up"`) with the gap recorded in `enrichment_gaps` — the same
+  pattern `website` / `formation_date` already use.
+- `.claude/skills/off-market-search/references/scoring_integration.md:100` —
+  changed the Employee count row note `often "needs follow-up"` → `often null
+  (a gap → passed as missing)`, consistent with the adjacent
+  years-in-business row.
+- `Off-Market Search/_ralph_build/evidence/s5-selftest.md` C4 row — changed
+  the R1 `employee_count` value `"needs follow-up"` → `null`; the
+  `"employee count — needs follow-up"` gap was already enumerated in that
+  packet's `enrichment_gaps` (line 107).
+
+`airtable_write.md:89` already maps a non-real count to blank — consistent
+with `null`, no change needed.
+
+Constraints honored: spec-clarity only — an absent count was already a gap
+listed in `enrichment_gaps`; only its typed value/sentinel is now consistent.
+No enrichment, scoring, or Airtable-write behavior changed; no parallel
+tracker, no scorer touched, no data fabricated.
+
+NIT-s5-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+18 → 17. 17 findings remain. RESOLVE phase continues.

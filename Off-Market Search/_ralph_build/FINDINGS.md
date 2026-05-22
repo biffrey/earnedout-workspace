@@ -40,16 +40,6 @@ directory cross-check was not shown for them.
 entities; carry this forward to the s10 self-test.
 **Status:** OPEN.
 
-### NIT-s5-2 — NIT — s5 — `employee_count` type inconsistent with other unknown-able fields
-**Raised:** iter 13 VERIFY (s5 critic).
-**Where:** `.claude/skills/off-market-search/references/enrichment.md:53`.
-**Problem:** `employee_count` is typed `number | string`, while every other
-unknown-able field uses `... | null` plus the `"needs follow-up"` sentinel.
-Cosmetic schema inconsistency.
-**Fix:** align `employee_count` to the `number | null` + `"needs follow-up"`
-pattern.
-**Status:** OPEN.
-
 ### IMPROVE-s6-1 — IMPROVE — s6 — dangling `buy-box-and-scoring.md` reference
 **Raised:** iter 19 VERIFY (s6 critic).
 **Where:** `.claude/skills/off-market-search/references/scoring_integration.md:20`;
@@ -259,6 +249,30 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s5-2 — NIT — s5 — `employee_count` type inconsistent with other unknown-able fields
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md:53`.
+**Problem:** `employee_count` was typed `number | string`, while every other
+unknown-able field uses `... | null` plus an `enrichment_gaps` `"needs
+follow-up"` entry. Cosmetic schema inconsistency.
+**Fix:** align `employee_count` to the `number | null` + `"needs follow-up"`
+pattern.
+**Resolution (iter 65, RESOLVE):** retyped `employee_count` in the `LeadPacket`
+table (`enrichment.md`, was line 53, now line 56) from `number | string` to
+`number | null`, with the source note "§3.3 — number, else `null` with an
+`"employee count — needs follow-up"` gap". Reworded the §3.3 `employee_count`
+bullet so an absent count yields `null` (not the string `"needs follow-up"`)
+with `"employee count — needs follow-up"` recorded in `enrichment_gaps` — the
+same `… | null` + gap pattern `website` / `formation_date` already use.
+Aligned the two downstream references: `evidence/s5-selftest.md` C4 row
+(`employee_count` → `null`, with the gap already enumerated at line 107) and
+`scoring_integration.md:100` (`often "needs follow-up"` → `often null (a gap →
+passed as missing)`). `airtable_write.md:89` already maps a non-real count to
+blank, consistent with `null`. Spec-clarity only; no enrichment, scoring, or
+write behavior changed — an absent count was already a gap, only its typed
+value/sentinel is now consistent.
+**Status:** RESOLVED.
 
 ### IMPROVE-s5-1 — IMPROVE — s5 — screenshot path not filesystem-safe for `entity_id`
 **Raised:** iter 13 VERIFY (s5 critic).

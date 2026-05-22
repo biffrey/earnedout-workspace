@@ -97,7 +97,7 @@ gap** — `null` / `"needs follow-up"` is passed through, never back-filled.
 | Industry | `industry` | already names NAICS 541930 / SBIC |
 | Location | `location` | city + state |
 | Founding year / years in business | `years_in_business`, `formation_date` | usually a B1 gap → passed as missing → scorer marks "insufficient data" |
-| Employee count | `employee_count` | often `"needs follow-up"` |
+| Employee count | `employee_count` | often `null` (a gap → passed as missing) |
 | Revenue / EBITDA / financials | `revenue_signal`, `federal_award_total` | **signals only** — see §3.1 |
 | Asking price | `asking_price` | always `"not for sale — no asking price"` — see §3.2 |
 | Direct URL | `website` (+ `provenance_urls`) | `null` if `website_status: none_found` |

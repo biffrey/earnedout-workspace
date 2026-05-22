@@ -53,7 +53,7 @@ reason) in the s9 run log — they are not enriched, not scored, not written.
 | `formation_date` | string \| null | §3.2 SOS lookup |
 | `years_in_business` | number \| null | computed from `formation_date` |
 | `sos_status` | string \| null | SOS active / good-standing string |
-| `employee_count` | number \| string | §3.3 — number or `"needs follow-up"` |
+| `employee_count` | number \| null | §3.3 — number, else `null` with an `"employee count — needs follow-up"` gap |
 | `revenue_signal` | string | §3.3 — estimate **labelled as a signal**, or `"needs follow-up"` |
 | `federal_award_total` | number \| null | `award_total` from `CanonicalEntity` |
 | `asking_price` | string | off-market → `"not for sale — no asking price"` |
@@ -176,7 +176,9 @@ explicitly labelled as an estimate, never written as a hard financial:
   carried through to `Federal Award History $`. This is contract revenue
   *with the government only*, not total revenue — label it as such.
 - `employee_count` — from the website ("our team", staff page) or SAM.gov
-  entity data if present; else `"needs follow-up"`.
+  entity data if present; else `null`, with `"employee count — needs
+  follow-up"` recorded in `enrichment_gaps` (the same `… | null` + gap pattern
+  used by `website`, `formation_date` and the other unknown-able fields).
 - `revenue_signal` — a qualitative band derived from award history + employee
   count + website scale, written as e.g. `"signal: small (<$5M est.) — based
   on $X federal awards + ~N staff"`. Never written into a numeric revenue

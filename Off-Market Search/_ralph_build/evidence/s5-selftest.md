@@ -96,7 +96,7 @@ All 3 → `verdict: pass`. **PASS.**
 | `formation_date` | `null` | VA not on a B1 priority-state list (B1 OPEN) → SOS skipped |
 | `years_in_business` | `null` | depends on formation_date |
 | `sos_status` | `null` | B1 |
-| `employee_count` | `"needs follow-up"` | none on S2 entity data |
+| `employee_count` | `null` | none on S2 entity data; gap recorded in `enrichment_gaps` |
 | `revenue_signal` | `"signal: small (<$5M est., gov-contract revenue) — based on $480K federal awards; total revenue undisclosed"` | labelled as a signal, not a hard figure |
 | `federal_award_total` | `480000` | from s4 `award_total` |
 | `asking_price` | `"not for sale — no asking price"` | off-market literal |
