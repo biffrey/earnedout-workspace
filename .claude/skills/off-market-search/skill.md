@@ -84,12 +84,21 @@ writing blind. _(Resolver + dedup: s4 — see `references/entity_resolution.md`.
 ## Step 4 — Enrich
 *Built by s5.*
 
-Turn each thin gov record into a scorable lead packet: website discovery +
-Playwright validation + screenshot (reuse `overnight-search` Step 3 logic); SOS
-formation-date lookup; financial-signal enrichment; the §7.4 pre-filters
-(Class 1 — keyword filter must indicate a sign-language/deaf-services line;
-Class 2 — current licensee, good-standing cross-check). **Missing fields are
-marked "needs follow-up" — never fabricated.** _(Enrichment + pre-filters: s5.)_
+Run the procedure in `references/enrichment.md` over each `new` canonical
+entity from Step 3. It first applies the cheap **§7.4 pre-filters** (Class 1 —
+the keyword hits must indicate a sign-language/deaf-services line and the
+entity must be a U.S. operating company; Class 2 — a current SBIC licensee not
+already disproven on standing) and **drops obvious non-fits before any
+expensive enrichment**. Each pre-filter-passing candidate is then enriched —
+website discovery + Playwright validation + screenshot (reusing
+`overnight-search` Step 3 logic); SOS formation-date lookup (Phase-1 scope
+gated by B1); financial-signal enrichment; ownership/contact discovery; and,
+for Class 2, the SBIC **good-standing cross-check** (the directory publishes no
+standing flag — standing is cross-referenced against enforcement/court/IAPD
+signals). The output is one `LeadPacket` per passing candidate. **Missing
+fields are marked "needs follow-up" — never fabricated**; every gap is listed
+in `enrichment_gaps`. _(Enrichment + pre-filters: s5 — see
+`references/enrichment.md`.)_
 
 ## Step 5 — Qualify & score
 *Built by s6.*

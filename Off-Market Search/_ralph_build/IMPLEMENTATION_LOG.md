@@ -152,3 +152,61 @@ reviewed, not invented); fail loud on a tracker read failure; the §8 ⚠ VERIFY
 is treated as resolved (dedicated `Gov Entity ID` field, operator-approved).
 
 Stage s4 → `drafted`. Next phase for s4: SELF-TEST.
+
+## iter 11 — 2026-05-22 — s5 (Enrichment & qualification pre-filters) — IMPLEMENT
+
+Built the stage-s5 deliverable: the procedure that turns each thin `new`
+canonical entity from s4 into a scorable `LeadPacket`, dropping obvious
+non-fits cheaply before any expensive enrichment.
+
+- **`.claude/skills/off-market-search/references/enrichment.md`** — the s5
+  reference. Contents:
+  - **Stage I/O** — input is the s4 output filtered to `dedup_verdict: new`
+    entities (`existing` → straight to s7 update; `needs_operator_review` →
+    run log). Output is one **`LeadPacket`** per candidate that passes the
+    §7.4 pre-filter; failed candidates are dropped with a logged reason.
+  - **`LeadPacket`** schema (24 fields: identifiers, name/industry/location,
+    website + `website_status` + `screenshot_path`, `formation_date` /
+    `years_in_business` / `sos_status`, `employee_count`, `revenue_signal`,
+    `federal_award_total`, `asking_price` fixed to "not for sale", `contact`,
+    Class-2 `sbic_license_no` / `sbic_license_status` / `sbic_gp_economics`,
+    `gov_data_source`, provenance, `prefilter_verdict`, `enrichment_gaps`).
+    **Unknown → "needs follow-up"/`null`, never fabricated**; every gap is
+    enumerated in `enrichment_gaps` for the audit trail.
+  - **§7.4 cheap pre-filters run FIRST** (cost control — before any Playwright
+    / SOS work). Class 1: keyword hits must indicate a sign-language/
+    deaf-services line per `config/offmarket_sources.md` §5.2 (exclusion-only
+    hits → drop; ASL-carrying spoken-language firm → kept as `adjacent`,
+    line-10 bonus 5 not 10) **and** the entity must be a U.S. operating
+    company. Class 2: current SBIC licensee, not already disproven on standing
+    (unconfirmed standing is **not** a drop — it passes and the scorer gate
+    handles it CONDITIONAL).
+  - **Enrichment steps** for pre-filter passes: §3.1 website discovery +
+    Playwright validation + screenshot to `output/screenshots/{entity-id}.png`
+    (reuses `overnight-search` Step 3 verbatim); §3.2 SOS formation-date lookup
+    (Phase-1 scope gated by B1 — a non-priority state is a logged gap, not a
+    fabrication); §3.3 financial-**signal** enrichment (federal award total
+    labelled as gov-contract-only, employee count, qualitative revenue band —
+    never written as a disclosed numeric); §3.4 owner / SBIC GP-principal
+    contact discovery (RID = point-of-need only, no bulk copy); §3.5 Class-2 GP
+    economics (informational).
+  - **SBIC good-standing cross-check (§4)** — the SBIC directory publishes no
+    standing flag, so standing is cross-referenced (directory presence +
+    SBA OIG/press enforcement + S11 court records + S10 IAPD adverse events)
+    and resolved to a `SBIC License Status` value; `Unknown` is an honest
+    output (→ scorer CONDITIONAL), never `Good Standing`-by-default.
+  - **`LeadPacket` assembly (§5)** and **failure/edge handling (§6)** — a
+    Playwright failure degrades one candidate, not the run; a sparse-enrichment
+    pre-filter pass is still scored; B1-blocked SOS leaves a gap.
+- **`skill.md` Step 4 updated** to point at `references/enrichment.md` and
+  describe the pre-filter-then-enrich order, the B1-gated SOS lookup, the SBIC
+  good-standing cross-check, and the `LeadPacket` output.
+
+Constraints honored: never fabricate (every unknown is a logged gap, financial
+signals are explicitly labelled estimates); API/source reuse over scraping
+(`overnight-search` Step 3 reused, RID no-bulk-copy enforced); no parallel
+tracker / no new scorer (s5 only builds the packet the existing scorer eats);
+SBA-prior-approval fact carried on every Class-2 packet; B1 handled as a
+graceful gap, not a hard stop.
+
+Stage s5 → `drafted`. Next phase for s5: SELF-TEST.
