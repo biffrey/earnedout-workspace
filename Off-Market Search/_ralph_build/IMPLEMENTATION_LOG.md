@@ -982,3 +982,36 @@ pipeline logic, parallel tracker, or scorer touched.
 
 IMPROVE-s4-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 25 → 24. 24 findings remain. RESOLVE phase continues.
+
+---
+
+## Iteration 59 — RESOLVE — NIT-s4-1
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **NIT-s4-1** (NIT, s4) — the iter-10 s4 critic flagged the example
+`entity_id` `SBIC:09/79-0292` in `entity_resolution.md` §5 as embedding a slash:
+harmless in the plain-text `Gov Entity ID` field, but mildly fragile as an
+identifier key, with no spec text addressing how slashes are handled.
+
+Fix (spec-clarity change): added a "Slashes in `SBIC:<license_no>`" note to
+`.claude/skills/off-market-search/references/entity_resolution.md` §5, after the
+`entity_id` construction bullets. It states SBA SBIC license numbers carry an
+embedded slash (e.g. `09/79-0292` → `SBIC:09/79-0292`), that the license number
+is retained **verbatim** in the `SBIC:` key — not stripped, escaped, or
+normalized — and why that is safe: `entity_id` / `Gov Entity ID` is a plain
+identifier string, compared literally by dedup key A and stored as text in
+Airtable, so an embedded slash is harmless there. It also notes any
+filesystem-path use must sanitize at the consuming step, while the canonical
+key stays verbatim so the same firm yields the same id across runs.
+
+The stale `SBIC:09/79-0292` literal the critic cited had already been removed
+by a prior edit (§5 now carries the `SBIC:<license_no>` placeholder); this
+RESOLVE adds the missing slash-handling note the finding's fix called for.
+
+Constraints honored: cosmetic/spec-clarity only — no resolution, dedup, or
+`entity_id` construction behavior changed; no pipeline logic, parallel tracker,
+or scorer touched.
+
+NIT-s4-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+24 → 23. 23 findings remain. RESOLVE phase continues.

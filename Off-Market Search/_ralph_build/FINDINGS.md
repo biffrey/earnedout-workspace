@@ -27,15 +27,6 @@ source is never tested against the ≥95% target.
 closed, so the target is tested against real S1 data.
 **Status:** OPEN.
 
-### NIT-s4-1 — NIT — s4 — slash in example `entity_id`
-**Raised:** iter 10 VERIFY (s4 critic).
-**Where:** `.claude/skills/off-market-search/references/entity_resolution.md:206`.
-**Problem:** the example `entity_id` `SBIC:09/79-0292` embeds a slash; harmless
-in a plain-text `Gov Entity ID` field but mildly fragile as an identifier key.
-**Fix:** optionally note that slashes in source license numbers are retained
-verbatim, or normalize them in the `SBIC:` key.
-**Status:** OPEN.
-
 ### IMPROVE-s5-1 — IMPROVE — s5 — screenshot path not filesystem-safe for `entity_id`
 **Raised:** iter 13 VERIFY (s5 critic).
 **Where:** `.claude/skills/off-market-search/references/enrichment.md:135`.
@@ -320,6 +311,28 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s4-1 — NIT — s4 — slash in example `entity_id`
+**Raised:** iter 10 VERIFY (s4 critic).
+**Where:** `.claude/skills/off-market-search/references/entity_resolution.md` §5
+(`entity_id` / `Gov Entity ID` construction).
+**Problem:** the example `entity_id` `SBIC:09/79-0292` embeds a slash; harmless
+in a plain-text `Gov Entity ID` field but mildly fragile as an identifier key.
+**Fix:** optionally note that slashes in source license numbers are retained
+verbatim, or normalize them in the `SBIC:` key.
+**Resolution (iter 59, RESOLVE):** added a "Slashes in `SBIC:<license_no>`"
+note to `entity_resolution.md` §5 after the `entity_id` construction bullets.
+It states SBA SBIC license numbers carry an embedded slash (e.g. `09/79-0292`),
+that the license number is retained **verbatim** in the `SBIC:` key — not
+stripped, escaped, or normalized — and explains why this is safe: `entity_id` /
+`Gov Entity ID` is a plain identifier string compared literally by dedup key A
+and stored as text in Airtable, so an embedded slash is harmless there. It also
+notes that any filesystem-path use must sanitize at the consuming step, while
+the canonical key stays verbatim so the same firm yields the same id across
+runs. Spec-clarity only; no resolution or `entity_id` behavior changed (the
+stale `SBIC:09/79-0292` literal flagged at iter 10 had already been removed by
+a prior edit — §5 now carries `SBIC:<license_no>` plus this note).
+**Status:** RESOLVED.
 
 ### IMPROVE-s4-2 — IMPROVE — s4 — DUNS ladder exception not stated explicitly
 **Raised:** iter 10 VERIFY (s4 critic).

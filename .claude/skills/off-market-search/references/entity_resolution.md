@@ -216,6 +216,16 @@ Every `CanonicalEntity` gets a stable `entity_id`, also written to the Airtable
 The prefix records which key type identified the entity; `Gov Entity ID` is what
 dedup key A matches on next run.
 
+**Slashes in `SBIC:<license_no>`** — SBA SBIC license numbers carry an embedded
+slash (e.g. license `09/79-0292` → `entity_id` `SBIC:09/79-0292`). The license
+number is retained **verbatim** — it is not stripped, escaped, or normalized.
+`entity_id` / `Gov Entity ID` is a plain identifier string: it is compared
+literally by dedup key A and stored as text in the Airtable `Gov Entity ID`
+field, so an embedded slash is harmless there. If an `entity_id` is ever used
+to derive a filesystem path, the consuming step (not this construction rule)
+must sanitize it; the canonical key stays verbatim so the same firm yields the
+same id across runs.
+
 ---
 
 ## 6. Resolution-accuracy spot-check (toward the §2.2 ≥95% target)
