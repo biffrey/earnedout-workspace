@@ -336,3 +336,53 @@ addresses ("reaching out to you as a principal") — the s5 `enrichment_gaps`
 already flags this; the critic should weigh whether s8 should prefer a
 principal-titled contact for Class 2 or soften the body. Stage s8 →
 `self_checked`. Next phase for s8: VERIFY (fresh-context critic).
+
+## iter 26 — 2026-05-22 — s9 (Orchestration & cadence) — SELF-TEST
+
+Exercised the s9 deliverables — `references/orchestration.md`,
+`config/offmarket_schedule.md`, `run-offmarket-search.sh`, the launchd plist,
+and the wired `skill.md` — in **dry-run / fixture mode** against the
+`OFFMARKET_BUILD_PLAN.md` s9 `Done-when` criteria. s9 added no new pipeline
+logic, so the test verifies the *wiring*. Full evidence — the type-chain trace,
+the assembled run log — in `evidence/s9-selftest.md` and
+`evidence/s9-offmarket_run_log_dryrun.md`. Five checks:
+
+- **C1 — the 1→9 stage hand-off contract is complete & type-consistent.** PASS.
+  All 8 reference files cited in `orchestration.md` §1 exist on disk; each
+  step's produced type (`RawRecord[]` → `CanonicalEntity[]` → `LeadPacket[]` →
+  `ScoredLead[]` → rows → drafts → dashboard → run log) is the literal input the
+  next stage's reference names; the `new`/`existing`/`needs_operator_review`
+  branch is honoured (`new`→s5, `existing`→s7 update, review→run-log only).
+- **C2 — halt-vs-degrade behaviour is correct.** PASS. Hard halts traced —
+  Step 1 preflight (with B4 open a live run halts `halted-preflight` before
+  Step 2) and a failed Step 3 tracker read. Graceful degrades traced — blocked
+  adapters B1/B3 (s3 SELF-TEST C4/C5), per-candidate enrichment/scoring/write
+  failures (`enrichment.md` §6, `scoring_integration.md` §6, `airtable_write.md`
+  §6). Step 9 always runs, even on a halt.
+- **C3 — manual single-entity path traced for one supplied entity.** PASS.
+  `orchestration.md` §4 traced for "1st Source Capital Corporation, IN —
+  Class 2": preflight → skip Step 2 bulk discovery, seed resolution directly →
+  Steps 3–9 unchanged (`existing`→update, `new`→full pipeline) → run log
+  `Run type: manual single-entity` (dated append if today's log exists) →
+  operator report. Same no-send / no-fabricate constraints.
+- **C4 — run-log output assembled from real prior-stage counts.** PASS. The
+  `orchestration.md` §3 template was driven with the real s3–s8 SELF-TEST counts
+  (8 raw → 4 new + 3 needs-review; 4 pre-filter passes; R1 30/110, R2 30/100;
+  0 writes — dry-run; 2 drafts + 1 no-contact skip) and saved to
+  `evidence/s9-offmarket_run_log_dryrun.md`. A `0` is reported as `0`; every gap
+  and blocker (B1/B3/B4) is named; nothing estimated.
+- **C5 — schedule artifacts validate.** PASS. `bash -n run-offmarket-search.sh`
+  clean; `plutil -lint` the plist OK; the script is executable (`-rwxr-xr-x`);
+  the plist fires `Weekday=1, Hour=6` (Monday 06:00); `config/offmarket_schedule.md`
+  defines the `/schedule` cron, trigger prompt, and registration command.
+
+**Result: all 5 checks PASS. No BLOCKING defect.** Stage s9 → `self_checked`.
+Two carry-notes to the VERIFY critic (not Done-when failures): (1) the **live**
+cron registration is deliberately gated on B4 — registering it now would make
+the weekly run fail-loud at the Step 1 preflight every Monday; the cadence is
+fully defined and version-controlled (config + script + plist) and the
+registration command is documented as the post-B4 install step. The critic
+should weigh whether "defined + gated" satisfies the s9 `Done-when` "the weekly
+cron is registered" or whether it must be re-confirmed at COMPLETE. (2) The
+end-to-end run was a dry-run over fixtures; the genuine live end-to-end run is
+s10's job, gated on B3/B4. Next phase for s9: VERIFY (fresh-context critic).
