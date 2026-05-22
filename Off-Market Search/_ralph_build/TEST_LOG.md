@@ -63,3 +63,42 @@ carried to the VERIFY critic (not Done-when failures): **NIT-s3-1** — S4 prose
 cites column `"Managed by"` but the live CSV header is `Manager`;
 **IMPROVE-s3-1** — S1 needs a recipient-detail follow-up call to populate `uei`
 (not returned by `spending_by_award`). Next phase for s3: VERIFY.
+
+## iter 9 — 2026-05-22 — s4 (Entity resolution & de-duplication) — SELF-TEST
+
+Hand-executed the §6.1 resolver and §6.2 tracker dedup procedures from
+`references/entity_resolution.md` over the combined s3 fixture record set (8
+`RawRecord`s from `evidence/s3-fixtures/`) and a live 167-record read of
+`tblSmNrHROMLm7vOS`. Full evidence — clusters, verdicts, indexes, seeded-row
+scenarios, accuracy spot-check — in `evidence/s4-selftest.md`. Seven checks
+against the `OFFMARKET_BUILD_PLAN.md` s4 `Done-when` criteria:
+
+- **C1 — multi-source records collapse to one entity.** PASS. The S2 and S3
+  fixtures both carry `uei ZZTEST00FIX1`; §6.1 key 1 (UEI) merges them into a
+  single `CanonicalEntity`, `resolution_confidence: exact` — 2 records → 1.
+- **C2 — distinct firms stay distinct.** PASS. The 3 S4 SBIC records have
+  distinct `norm_name` + `norm_addr`; §6.1 key 4 produces 3 separate
+  `probable` entities — no false merge on name.
+- **C3 — thin-record handling, no fabrication.** PASS. The 3 S1 records carry
+  no identifier and no address; §4 routes them to `needs_operator_review` —
+  not invented into rows, not silently dropped. (Live-run consequence of the
+  already-filed IMPROVE-s3-1; s4 handles the thin input correctly.)
+- **C4 — dedup against the live tracker.** PASS. 167-record live read; 0 rows
+  have `Gov Entity ID` or `SBIC License #`, and no name+address collision
+  (incl. the on-market ASL row `recFbcG0NPtQ3toQY`) → all 4 entities resolve
+  `new`. No false `existing`.
+- **C5 — `existing` is detected, update not duplicate.** PASS. Three in-memory
+  seeded synthetic tracker rows trigger key A (gov id), key B (name+address),
+  and key C (SBIC license) respectively → `dedup_verdict: existing` with the
+  correct `dedup_key` + `tracker_record_id`, routed to s7 as an update.
+- **C6 — `entity_id` construction (§5).** PASS. `UEI:` / `NAME:<norm_name>|
+  <citystate>` / `SBIC:` prefixes are deterministic and stable across runs.
+- **C7 — accuracy spot-check vs. §2.2.** PASS (small-sample). 4/4 cluster
+  decisions correct = 100% (≥95% target); 0% sampled duplicate rate (<5%
+  target). Caveat recorded: sample is small and S2/S3 are structural fixtures
+  — s10 must repeat on a larger live sample once B3 clears.
+
+**Result: all seven checks PASS.** Stage s4 → `self_checked`. No new findings;
+one carry-note to the VERIFY critic — the live-run interaction with the open
+IMPROVE-s3-1 (S1 records route to `needs_operator_review` until the s3
+adapter populates `uei`). Next phase for s4: VERIFY.
