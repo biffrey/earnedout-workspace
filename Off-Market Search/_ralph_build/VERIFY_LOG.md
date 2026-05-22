@@ -296,3 +296,52 @@ Findings (non-blocking, filed in `FINDINGS.md`):
   two s8 evidence files.
 
 Stage s8 → `verified`. `unresolved_findings` 19 → 21.
+
+## iter 27 — 2026-05-22 — s9 (Orchestration & cadence) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s9 artifacts on
+disk — `.claude/skills/off-market-search/skill.md`,
+`references/orchestration.md`, the seven other stage reference files,
+`run-offmarket-search.sh`, `config/offmarket_schedule.md`,
+`config/launchd/ai.earnedout.offmarket-search.plist`, and
+`evidence/s9-offmarket_run_log_dryrun.md` — ran `bash -n` and `plutil -lint`
+itself, and independently checked live cron state (`CronList`, `launchctl`,
+`~/Library/LaunchAgents`). Not given the loop's logs or reasoning. Tasked to
+disprove that s9 is done.
+
+**Verdict: PASS (0 BLOCKING).**
+
+All three Done-when criteria met:
+- DW1 — full pipeline wired end-to-end. `skill.md` Steps 1–9 in fixed order;
+  the `orchestration.md` §1 hand-off table chains type-consistently at every
+  boundary, confirmed against the actual `source_adapters.md` /
+  `entity_resolution.md` / `enrichment.md` / `scoring_integration.md` /
+  `airtable_write.md` types, not the table's own claims. PASS.
+- DW2 — manual single-entity path specified end-to-end (`orchestration.md` §4,
+  `skill.md:193-205`): input forms, Step-2 skip with direct resolution seeding,
+  Steps 3–9 unchanged, dated-section run-log append, operator report. Mirrors
+  `submit-url`. PASS.
+- DW3 — weekly cadence defined and version-controlled: `config/
+  offmarket_schedule.md`, `run-offmarket-search.sh` (`bash -n` clean,
+  executable), plist (`plutil -lint` OK, `Weekday=1 Hour=6` = Monday 06:00).
+  Live `/schedule` registration honestly gated on B4 and documented as the
+  post-B4 install step — correct per the build-loop rule (a blocked precondition
+  does not block a stage whose own deliverable is complete). PASS.
+
+Hard constraints honored: no parallel tracker / no new scorer (only
+`appOsvuyy5eK43QTx`/`tblSmNrHROMLm7vOS` and `prospect-evaluation`); fail-loud
+halts (Step 1 preflight, Step 3 tracker read); no fabrication, no auto-send
+(grep for `send/smtp/gmail/mailto` finds only prohibitions); degraded run still
+completes + logs; s9 adds no new pipeline logic — glue only, all seven s2–s8
+references present on disk.
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- NIT-s9-1 — `orchestration.md:26` §1 table tags Step 3 output
+  `new / existing / needs_operator_review`, but `entity_resolution.md:61` types
+  `dedup_verdict` as only `new | existing`; cosmetic, does not break the
+  hand-off.
+- NIT-s9-2 — `evidence/s9-offmarket_run_log_dryrun.md` "Sources queried" table
+  omits the enrichment-only sources S5/S6/S7; a live run should list every
+  source attempted.
+
+Stage s9 → `verified`. `unresolved_findings` 21 → 23.

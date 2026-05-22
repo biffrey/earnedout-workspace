@@ -228,6 +228,30 @@ tokens leaked into the evidence files. Cosmetic; does not affect deliverables.
 **Fix:** strip the trailing tokens from the two evidence files.
 **Status:** OPEN.
 
+### NIT-s9-1 — NIT — s9 — `dedup_verdict` enum omits the third hand-off state
+**Raised:** iter 27 VERIFY (s9 critic).
+**Where:** `references/orchestration.md:26` vs.
+`references/entity_resolution.md:61`.
+**Problem:** the §1 hand-off table lists Step 3 output tags as
+`new / existing / needs_operator_review`, but `entity_resolution.md:61` types
+the `dedup_verdict` field as only `new | existing`. `needs_operator_review` is
+real (`entity_resolution.md:188`) but is a run-log/exclusion status, not a
+`dedup_verdict` enum value. Cosmetic; does not break the hand-off (needs-review
+entities are excluded from the write, not passed downstream).
+**Fix:** tighten the `dedup_verdict` type union or add a footnote distinguishing
+the enum from the exclusion status.
+**Status:** OPEN.
+
+### NIT-s9-2 — NIT — s9 — dry-run run log omits enrichment-only sources
+**Raised:** iter 27 VERIFY (s9 critic).
+**Where:** `evidence/s9-offmarket_run_log_dryrun.md` "Sources queried" table.
+**Problem:** S5/S6/S7 source rows from `config/offmarket_sources.md` are omitted
+from the dry-run log's "Sources queried" table. Acceptable for a fixture
+exercise, but a live run should list every source attempted.
+**Fix:** in a live run, list every source queried (including enrichment-only
+sources) in the run-log table.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
