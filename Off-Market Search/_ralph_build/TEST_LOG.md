@@ -615,3 +615,76 @@ against the `OFFMARKET_BUILD_PLAN.md` s7 `Done-when` criteria:
 `Done-when` is met — a scored off-market prospect now appears as a normal
 `Active` row in `tblSmNrHROMLm7vOS`. Stage s7 → `self_checked`. No new
 findings. Next phase for s7: VERIFY (fresh-context critic).
+
+## iter 40 — 2026-05-22 — s10 (Assembly, end-to-end self-test & final audit) — SELF-TEST (re-run)
+
+Re-ran the s10 SELF-TEST after the iter-31 re-IMPLEMENT that resolved
+**BLOCKING-s10-1** (re-scored R2 strictly from `lead-packet.json`, rewrote both
+the R2 `.md` and `.html`, closed IMPROVE-s10-1/-2). Per the iter-31 re-IMPLEMENT
+directive, this SELF-TEST reads the **report bodies field-by-field against
+`lead-packet.json`** — the gap the iter-29 SELF-TEST C3 missed — not just the
+packet. Both scored artifacts were inspected directly on disk. Six checks
+against the `OFFMARKET_BUILD_PLAN.md` s10 `Done-when` dry-run criterion (*"the
+dry run produces at least one scored record per class into a test context with
+no fabricated fields"*); the final-audit / all-stages-`verified` halves are the
+FINAL AUDIT phase, not this SELF-TEST.
+
+- **C1 — Class-1 scored record exists; report traces field-by-field to its
+  packet.** PASS. R1 (`UEI:ZZTEST00FIX1`) — `output/reports/uei-zztest00fix1/`
+  holds the `.md` (21,860 B), `.html` (32,783 B) and `lead-packet.json`. Every
+  report value checked against the packet: `business_name`, `location`
+  (Anytown VA — scorecard #9 explicitly "city + state only"), `formation_date`/
+  `sos_status` null → Buy Box line 3 ⚠️ + rubric 0/10, `employee_count`
+  `"needs follow-up"` → scorecard #6 undisclosed, `revenue_signal`/
+  `federal_award_total: 480000` treated strictly as a signal (not a P&L row),
+  `asking_price` not-for-sale → valuation line 0, `contact` Pat Sample/Owner/
+  null email+phone, `keyword_tier: core` → +10 bonus, all 5 `enrichment_gaps`
+  reflected. Header **30/110** = scorecard #26 = breakdown total (20 industry +
+  8×0 + 10 bonus). No report value is absent from the packet.
+- **C2 — Class-2 scored record exists; report traces field-by-field to its
+  packet (BLOCKING-s10-1 focus).** PASS. R2 (`NAME:1st source capital|south
+  bend in`) — `output/reports/name-1st-source-capital-south-bend-in/` holds the
+  `.md` (24,951 B), `.html` (37,387 B) and `lead-packet.json`. The
+  BLOCKING-s10-1 root cause is verified fixed in **both** `.md` and `.html`:
+  `formation_date`/`years_in_business` are `null` in the packet → Buy Box line
+  3 and the years-in-business rubric line score **0 "insufficient data — not
+  awarded"** (not the old erroneous ✅ PASS / 10/10); the SBIC fund vintage 1983
+  is carried only as informational fund-level data, never mapped to
+  years-in-business. No formation date, street address, SEC CIK, or CB Insights
+  value appears (those were stripped). `sbic_license_status: Good Standing` →
+  SBIC License Gate ✅ PASS; `sbic_gp_economics` informational; `contact` Ryan
+  Fenstermaker/Investor Relations (flagged as non-principal). Header **20/100** =
+  scorecard #26 = breakdown total (20 industry + 8×0); HTML grep confirms
+  `20 / 100` and no `30 / 100`. Math check line present and correct.
+- **C3 — no fabricated fields in either report body.** PASS. Read both report
+  bodies (not just the packets) line by line: every undisclosed field reads
+  "not disclosed" / "needs follow-up" / "insufficient data — not awarded"; no
+  invented financials, dates, headcount, contacts, codes, or URLs. R2 Appendix
+  A/D cite only the SBA SBIC directory and the `LeadPacket`; Appendix B/C state
+  "None — no estimates". R1 carries its synthetic-fixture warning. The iter-30
+  defect (a report value absent from its packet) does not recur.
+- **C4 — written to a test context, not the live tracker.** PASS. The run log
+  records **0 created / 0 updated / 0 write failures**; the dry run directed
+  writes at a test context. (Note: a separate live write — R2 row
+  `recklDY7vHFmKauQD` — was performed by the iter-38 s7 SELF-TEST, not by this
+  s10 dry run; the two are distinct artifacts.)
+- **C5 — run log assembled from real prior-stage counts.** PASS.
+  `s10-offmarket_run_log_e2e_dryrun.md` uses the `orchestration.md` §3 template
+  with the real Step 2–8 counts (8 raw → 7 canonical [4 `new` + 3 thin] → 4
+  pre-filter passes → 2 scored: R1 30/110, R2 20/100; 0 Airtable writes; 2
+  drafts + 1 no-contact skip). A `0` is reported as `0`; nothing estimated.
+- **C6 — nothing auto-sent.** PASS. 2 outreach drafts (R1 OM-1 / R2 OM-2), both
+  carrying the `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---` markers; the s10
+  assembly invokes only the s8 reference, which has no send path.
+
+**Result: all 6 checks PASS. No BLOCKING defect.** The BLOCKING-s10-1 fix is
+confirmed clean by the field-by-field read of both report bodies. Stage s10 →
+`self_checked`. One new finding logged — **IMPROVE-s10-3**: the s10 dry-run
+artifacts (`s10-e2e-dryrun.md`, `s10-offmarket_run_log_e2e_dryrun.md`) still
+attribute the fixture usage and a Step-1 preflight halt to **open** blockers
+B1/B3/B4, but all four blockers were resolved 2026-05-22; the artifacts should
+re-attribute the fixture usage to the still-open `IMPROVE-s3-2`/`-s3-3`/`-s5-5`
+adapter-rebuild findings and drop the "a live run halts at preflight (B4)"
+claim. This is a stale-attribution defect, not a fabrication or a Done-when
+breach (`unresolved_findings` 27 → 28). Next phase for s10: VERIFY
+(fresh-context critic).

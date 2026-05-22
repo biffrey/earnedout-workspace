@@ -314,6 +314,31 @@ entity registration completes for the ~1,000/day tier). Keep the common adapter
 interface unchanged so s4–s6 are unaffected.
 **Status:** OPEN.
 
+### IMPROVE-s10-3 — IMPROVE — s10 — dry-run artifacts cite resolved blockers as open
+**Raised:** iter 40 SELF-TEST (s10 re-run).
+**Where:** `Off-Market Search/_ralph_build/evidence/s10-e2e-dryrun.md`
+(Step 1, "Known limitations" 1–3) and
+`evidence/s10-offmarket_run_log_e2e_dryrun.md` (lines 13–14, 20–23, 46, 66–68).
+**Problem:** the s10 dry-run artifacts were produced at iter 28 / re-IMPLEMENT
+iter 31, before the operator resolved B1–B4 on 2026-05-22. They still state
+"Open blockers affecting this run: B1, B3, B4", attribute S2/S3 fixture usage to
+"blocked (B3)" and S8 to "blocked (B1)", and assert "a live run would HALT here
+(fail-loud, B4)" at the Step 1 preflight. All four blockers are now RESOLVED
+(`BLOCKERS.md`); `open_blockers: 0`. The fixture usage itself is still correct —
+the SAM and state adapters remain fixture-shells — but that is now governed by
+the still-open `IMPROVE-s3-2` / `IMPROVE-s3-3` / `IMPROVE-s5-5` adapter-rebuild
+findings, not by the closed blockers. Not a fabrication and not an s10
+`Done-when` breach (the dry run still produces ≥1 scored record per class with
+no fabricated fields), but the stale attribution would mislead the FINAL AUDIT.
+**Fix:** refresh `s10-e2e-dryrun.md` and `s10-offmarket_run_log_e2e_dryrun.md`
+to re-attribute the SAM/state fixture usage to `IMPROVE-s3-2`/`-s3-3`/`-s5-5`,
+remove the "live run halts at preflight (B4)" claim (B4 is resolved; the live
+preflight now passes — confirmed by the iter-38 s7 live write
+`recklDY7vHFmKauQD`), and update "Known limitations" 1–3. Best done as part of
+the s10 re-IMPLEMENT that the adapter-rebuild findings will require, or in the
+RESOLVE phase.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s7-1 — BLOCKING — s7 — `Lead Source` mapping invalid against the live field type
