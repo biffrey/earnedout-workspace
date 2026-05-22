@@ -832,3 +832,71 @@ and B4 as resolved, while keeping the still-true "pending
 `OFFMARKET_BUILD_VERIFIED`" status. No new `FINDINGS.md` entry — a SELF-TEST
 failure routes back to IMPLEMENT per the phase ladder; `unresolved_findings`
 unchanged at 29.
+
+## iter 49 — 2026-05-22 — s9 (Orchestration & cadence) — SELF-TEST (re-run)
+
+Re-ran the s9 SELF-TEST after the iter-48 re-IMPLEMENT that corrected the three
+stale B4-gating / cron-not-yet-registered passages flagged by the iter-47 T5
+FAIL. Done-when criteria from `OFFMARKET_BUILD_PLAN.md` s9: *the skill runs the
+full pipeline; the manual path works for one supplied company/SBIC; the weekly
+cron is registered.* Five checks; T5 (the iter-47 failure) is the focus.
+
+- **T1 — full pipeline wired (Steps 1–9).** PASS. `skill.md` carries Steps 1–9,
+  each annotated with its building stage and pointing at its stage reference;
+  all eight stage references exist on disk (`airtable_schema_preflight.md`,
+  `source_adapters.md`, `entity_resolution.md`, `enrichment.md`,
+  `scoring_integration.md`, `airtable_write.md`, `outreach_drafting.md`,
+  `orchestration.md`). `orchestration.md` §1 holds the typed stage hand-off
+  contract and §2 the failure-containment rule. Unchanged since iter 47 PASS
+  (iter 48 touched only §6 + the two `skill.md` self-doc passages).
+- **T2 — manual single-entity path.** PASS. `skill.md` "Manual single-entity
+  path" section + `orchestration.md` §4 (lines 115–146) specify it: one
+  operator-supplied name/identifier/URL + target class, same Step 1 preflight,
+  resolution seeded directly (Step 2 bulk discovery skipped), Steps 3–9
+  unchanged, run log `Run type: manual single-entity`, operator report of
+  score / record URL / dedup verdict / gaps. Mirrors `submit-url`; same
+  never-auto-send / never-fabricate constraints. Unchanged since iter 47.
+- **T3 — weekly cron registered (live state).** PASS. `launchctl list` shows
+  `ai.earnedout.offmarket-search` loaded; `launchctl print
+  gui/$(id -u)/ai.earnedout.offmarket-search` shows the calendar descriptor
+  `Minute=0, Hour=6, Weekday=1` (Monday 06:00 local) and `state = not running`
+  (correct — `RunAtLoad=false`; fires only on the calendar trigger). The plist
+  is installed at `~/Library/LaunchAgents/ai.earnedout.offmarket-search.plist`
+  and runs `/bin/bash` against `run-offmarket-search.sh` (`bash -n` clean,
+  executable `-rwxr-xr-x`).
+- **T4 — run-log output specified.** PASS. `orchestration.md` §3 (lines 66–113)
+  holds the `search_reports/offmarket_run_log_YYYY-MM-DD.md` template — sources
+  queried, resolution/dedup, enrichment/scoring, Airtable writes, outreach
+  drafts, dashboard, operator follow-ups — counts required real. `skill.md`
+  Step 9 references it. Unchanged since iter 47.
+- **T5 — skill self-documentation matches the registered state.** PASS. The
+  three iter-47 offenders re-read on disk and confirmed corrected:
+  1. `skill.md` BUILD STATUS header (lines 8–16) — now states "Blocker B4 is
+     **resolved** … so the Step 1 schema preflight passes" and keeps only the
+     still-true "not yet cleared for an unattended live run … pending
+     `OFFMARKET_BUILD_VERIFIED`". The stale "preflight will fail loud until B4"
+     claim is gone.
+  2. `skill.md` Cadence section (lines 207–219) — now states "The weekly cron
+     is **registered and live** — the local `launchd` agent
+     `ai.earnedout.offmarket-search` (Monday 06:00 local), installed once
+     blocker B4 was resolved (build loop iter 46)". The stale "Live cron
+     registration is gated on blocker B4" sentence is gone.
+  3. `references/orchestration.md` §6 (lines 158–173) — now states "the **live
+     registration is done** — once blocker B4 cleared (build loop iter 46), the
+     cron was installed as the local `launchd` agent". The stale "it is gated
+     on the B4 schema work" clause is gone.
+  All three now agree with `config/offmarket_schedule.md` (Registration section,
+  "REGISTERED — 2026-05-22 (build loop iter 46)") and with the live `launchctl`
+  state confirmed in T3. An operator reading `skill.md` would now correctly
+  conclude the weekly cron is live and B4 is resolved.
+
+**Result: all 5 checks PASS.** Stage s9 → `self_checked`. One new finding —
+**NIT-s9-3**: `references/orchestration.md` §5 (Dry-run / fixture mode, line
+150) still says dry-run mode applies "For SELF-TEST (s9, s10) and any run while
+B3/B4 are open" — B3 and B4 are both RESOLVED, so the "while B3/B4 are open"
+clause is a stale reference to closed blockers. It does not misstate the
+registered cron state (the T5 subject) and does not break anything — dry-run
+mode is still legitimately used for SELF-TEST and the live-run boundary is
+correctly governed by `OFFMARKET_BUILD_VERIFIED` elsewhere — so it is a NIT, not
+a T5 failure. Logged for the RESOLVE phase; `unresolved_findings` 29 → 30. Next
+phase for s9: VERIFY (fresh-context critic).

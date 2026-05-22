@@ -351,6 +351,24 @@ stale-provenance class as NIT-s10-1 / IMPROVE-s10-3.
 evidence. Best done with the IMPROVE-s10-3 artifact refresh.
 **Status:** OPEN.
 
+### NIT-s9-3 — NIT — s9 — dry-run mode passage cites resolved blockers B3/B4 as open
+**Raised:** iter 49 SELF-TEST (s9 re-run).
+**Where:** `.claude/skills/off-market-search/references/orchestration.md` §5
+(Dry-run / fixture mode), line 150.
+**Problem:** §5 says dry-run mode applies "For SELF-TEST (s9, s10) and any run
+while B3/B4 are open". B3 and B4 are both RESOLVED (`BLOCKERS.md`;
+`open_blockers: 0`), so the "while B3/B4 are open" clause is a stale reference
+to closed blockers. Same stale-attribution class as IMPROVE-s10-3 /
+IMPROVE-s10-4. It does not misstate the registered cron state and does not
+break anything — dry-run mode is still legitimately used for SELF-TEST, and the
+live-run boundary is correctly governed by `OFFMARKET_BUILD_VERIFIED` — so it
+is a NIT.
+**Fix:** drop the "and any run while B3/B4 are open" clause (or re-attribute it
+to the still-open `IMPROVE-s3-2`/`-s3-3`/`-s5-5` adapter-rebuild findings, which
+are the real remaining reason a run uses fixtures). Best done in the RESOLVE
+phase alongside IMPROVE-s10-3.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s9-1 — BLOCKING — s9 — weekly cron is not registered though B4 is resolved
