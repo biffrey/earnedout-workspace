@@ -102,15 +102,6 @@ end-to-end score is deferred to s10, gated on the S1 USAspending `uei` gap.
 ASL/CART company; gate that on IMPROVE-s3-1 / IMPROVE-s4-4 closing.
 **Status:** OPEN.
 
-### NIT-s6-1 — NIT — s6 — self-test cites a stale score line number
-**Raised:** iter 19 VERIFY (s6 critic).
-**Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md:18`.
-**Problem:** the self-test cites the R1 score lines as `report.md:29,64,70`, but
-the breakdown total is at line 85, not 70. The score itself (30/110) is correct
-and internally consistent; only the line citation is off.
-**Fix:** change `70` → `85` in the C1 evidence citation.
-**Status:** OPEN.
-
 ### NIT-s6-2 — NIT — s6 — `prospect-evaluation/skill.md` has owner-only file mode
 **Raised:** iter 19 VERIFY (s6 critic).
 **Where:** `.claude/skills/prospect-evaluation/skill.md`.
@@ -293,6 +284,25 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s6-1 — NIT — s6 — self-test cites a stale score line number
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md:18`.
+**Problem:** the self-test cites the R1 score lines as `report.md:29,64,70`, but
+the breakdown total is at line 85, not 70. The score itself (30/110) is correct
+and internally consistent; only the line citation is off.
+**Fix:** change `70` → `85` in the C1 evidence citation.
+**Resolution (iter 62, RESOLVE):** changed the C1 evidence citation in
+`evidence/s6-selftest.md` line 18 from
+`example-interpreting-fixture-llc-report.md:29,64,70` to `…:29,64,85`. Verified
+against the report on disk: line 29 is the `**Lead Score:** **30 / 110**`
+header line, line 64 is scorecard field 26 (`| 26 | **Lead Score** | **30 / 110**
+| computed |`), and the per-line breakdown **total** row
+(`| **Total** | **30** | **110** | |`) is at line 85 — line 70 is only the
+`## Lead Score Breakdown` heading. The self-test text describes the third
+citation as "the per-line breakdown total", so 85 is the correct line. Evidence
+citation only; the 30/110 score and the C1 PASS verdict are unchanged.
+**Status:** RESOLVED.
 
 ### NIT-s5-1 — NIT — s5 — s4 self-test provenance note cites the wrong record
 **Raised:** iter 13 VERIFY (s5 critic).

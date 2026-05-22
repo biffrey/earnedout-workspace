@@ -15,7 +15,7 @@
 
 R1 driven through s6 §2 (Class 1 → `eval_mode: rollup_addon`, platform = Applied Development, NAICS 541930, **no size floor**, **/110 scale**, `keyword_tier: core` → full **+10** line-10 bonus). `prospect-evaluation` invoked **as-is** in single mode.
 
-- **Score: 30 / 110** — header line, scorecard field 26, and the per-line breakdown total are all internally consistent (`output/reports/uei-zztest00fix1/example-interpreting-fixture-llc-report.md:29,64,70`).
+- **Score: 30 / 110** — header line, scorecard field 26, and the per-line breakdown total are all internally consistent (`output/reports/uei-zztest00fix1/example-interpreting-fixture-llc-report.md:29,64,85`).
 - Breakdown: Industry match 20/20 + line-10 roll-up bonus 10/10 = 30; the other 8 base rubric lines scored 0 / "insufficient data — not awarded" against the packet's 5 open enrichment gaps. Low score is the **honest** outcome for an unenriched off-market fixture — nothing fabricated to lift it.
 - Both reports on disk: `example-interpreting-fixture-llc-report.md` (21.9 KB) + `.html` (32.8 KB), plus `lead-packet.json`. Both reports banner-marked at top + footer as a **build-loop s6 SELF-TEST fixture artifact**.
 

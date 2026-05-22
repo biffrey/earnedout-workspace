@@ -1078,3 +1078,28 @@ pipeline logic, parallel tracker, or scorer touched.
 
 NIT-s5-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 22 → 21. 21 findings remain. RESOLVE phase continues.
+
+## Iteration 62 — RESOLVE — NIT-s6-1
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **NIT-s6-1** (NIT, s6) — the iter-19 s6 critic flagged that the C1
+evidence line in `evidence/s6-selftest.md` (line 18) cites the R1 score lines
+as `example-interpreting-fixture-llc-report.md:29,64,70`, but the per-line
+breakdown total is at line 85, not 70. Cosmetic stale line citation.
+
+Fix (evidence-only change): changed the C1 citation from `:29,64,70` to
+`:29,64,85`. Verified against `output/reports/uei-zztest00fix1/example-
+interpreting-fixture-llc-report.md` on disk — line 29 is the
+`**Lead Score:** **30 / 110**` header, line 64 is scorecard field 26, and the
+breakdown **total** row (`| **Total** | **30** | **110** | |`) is at line 85;
+line 70 is only the `## Lead Score Breakdown` heading. The self-test text
+describes the third citation as "the per-line breakdown total", so 85 is the
+intended target.
+
+Constraints honored: evidence-only change — the 30/110 R1 score, the C1 PASS
+verdict, and the report on disk are all unchanged; no skill code, spec,
+parallel tracker, or scorer touched.
+
+NIT-s6-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+21 → 20. 20 findings remain. RESOLVE phase continues.
