@@ -22,3 +22,25 @@ sentence ("No `⚠ VERIFY:` placeholders remain"); a future automated placeholde
 scan could false-positive on it.
 **Fix:** reword to avoid the literal token (e.g. describe it without quoting it).
 **Status:** OPEN.
+
+### NIT-s3-1 — NIT — s3 — SBIC CSV column label mismatch
+**Raised:** iter 7 VERIFY (s3 critic).
+**Where:** `.claude/skills/off-market-search/references/source_adapters.md:174`
+(S4 adapter prose).
+**Problem:** the S4 adapter prose says map the `"Managed by"` column, but the
+live SBIC directory CSV header is actually named `Manager`. Mapping intent is
+correct; the cited column label is wrong.
+**Fix:** change `"Managed by"` to `Manager` in the S4 section.
+**Status:** OPEN.
+
+### IMPROVE-s3-1 — IMPROVE — s3 — S1 UEI not populated
+**Raised:** iter 7 VERIFY (s3 critic).
+**Where:** `.claude/skills/off-market-search/references/source_adapters.md`
+(S1 USAspending adapter, Query block ~line 121).
+**Problem:** `uei` — the primary s4 entity-resolution key — is not returned by
+the USAspending `spending_by_award` endpoint, so S1 records currently resolve
+only on name+address, weakening s4.
+**Fix:** add a recipient-detail follow-up call
+(`/api/v2/recipient/{recipient_id}/`) or request UEI in the `fields` list, so
+S1 `RawRecord`s carry `uei`.
+**Status:** OPEN.

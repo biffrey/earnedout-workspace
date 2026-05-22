@@ -37,3 +37,40 @@ Findings (non-blocking, filed in `FINDINGS.md`):
   sentence could trip a future automated placeholder scan.
 
 Stage s1 → `verified`. `unresolved_findings` → 2.
+
+## iter 7 — 2026-05-22 — s3 (Source adapters) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s3 artifacts
+on disk — `.claude/skills/off-market-search/references/source_adapters.md`,
+`skill.md` Step 2, `config/offmarket_sources.md`, and the four
+`evidence/s3-fixtures/*.json` recordings — against the s3 `Done-when` criteria
+and the build-plan constraints. Not given the loop's logs or reasoning.
+
+**Verdict: PASS (0 BLOCKING).**
+
+All three Done-when criteria met:
+- Common interface — `source_adapters.md` §1 defines a single
+  `adapter.query(target_class, params)` contract returning
+  `{records:[RawRecord], meta:AdapterMeta}`; `RawRecord` (23 fields) and
+  `AdapterMeta` (6 fields) are concretely specified. PASS.
+- All named sources covered behind that interface — 11 adapters S1–S11; the §3
+  registry table makes swap a one-line change. PASS.
+- Each adapter returns normalized records from a live or recorded-fixture
+  query — S1/S4 live recordings, S2/S3 structural fixtures (honestly labeled,
+  placeholder UEIs, write-guard documented), all map cleanly to `RawRecord`.
+  PASS.
+- Rate limits / ToS documented per source S1–S11. PASS.
+
+Hard constraints honored: no `fpds.gov` (SAM Contract Awards API used instead);
+RID no-bulk-copy enforced in code (`status: n/a` without a name); SBA
+prior-approval government fact on every Class-2 record (confirmed in the S4
+fixture mapping); blocked adapters S2/S3 (B3) and S8 (B1) degrade gracefully —
+not faked PASSes; unknown fields → `null`, never fabricated.
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- NIT-s3-1 — `source_adapters.md:174` cites CSV column `"Managed by"`; the live
+  SBIC CSV header is `Manager`.
+- IMPROVE-s3-1 — S1 `uei` (primary s4 resolution key) is not returned by
+  `spending_by_award`; the adapter needs a recipient-detail follow-up call.
+
+Stage s3 → `verified`. `unresolved_findings` → 4.
