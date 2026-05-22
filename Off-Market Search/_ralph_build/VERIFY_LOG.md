@@ -74,3 +74,49 @@ Findings (non-blocking, filed in `FINDINGS.md`):
   `spending_by_award`; the adapter needs a recipient-detail follow-up call.
 
 Stage s3 → `verified`. `unresolved_findings` → 4.
+
+## iter 10 — 2026-05-22 — s4 (Entity resolution & de-duplication) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s4 artifacts on
+disk — `.claude/skills/off-market-search/references/entity_resolution.md`,
+`skill.md` Step 3/4, `references/source_adapters.md`, `evidence/s4-selftest.md`,
+the `evidence/s3-fixtures/*.json` recordings — and independently sanity-checked
+the live `tblSmNrHROMLm7vOS` schema via the Airtable MCP (read-only). Not given
+the loop's logs or reasoning.
+
+**Verdict: PASS (0 BLOCKING).**
+
+All three Done-when criteria met:
+- C1 — distinct gov records collapse to one candidate. The §6.1 UEI→CAGE→DUNS→
+  name+address ladder is fully specified; S2/S3 fixtures genuinely both carry
+  `uei ZZTEST00FIX1` and merge to one `CanonicalEntity` (2→1, real not faked).
+  PASS.
+- C2 — an `existing` candidate is updated, not duplicated. §3 defines all three
+  dedup keys (A gov-id / B name+address / C SBIC license), the `existing`
+  verdict, `tracker_record_id`, and the fill-blanks update path; the self-test
+  exercises each key. PASS.
+- C3 — resolution accuracy spot-checked toward ≥95%. §6 mandates the check;
+  self-test records 4/4 correct (100%), 0% duplicate rate, and honestly defers a
+  larger live sample to s10. PASS.
+
+Honesty/constraints honored: seeded `existing` rows SR-A/B/C are explicitly
+in-memory only — no production write occurred (critic confirmed 0/167 live rows
+carry `Gov Entity ID`/`SBIC License #`); S1 thin records route to
+`needs_operator_review`, not fabricated; fail-loud on tracker-read failure;
+DUNS as legacy bridge only; same base/table — no parallel tracker; `RawRecord`
+field names match `source_adapters.md` exactly.
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- IMPROVE-s4-1 — `entity_resolution.md:36` `dedup_verdict` enum omits the
+  `needs_operator_review` state used in §4.
+- IMPROVE-s4-2 — `entity_resolution.md:89/101` DUNS step is a non-obvious
+  exception to "first match wins"; state it explicitly.
+- IMPROVE-s4-3 — `evidence/s4-selftest.md:28-29` asserts R1's merged
+  `naics`/`psc`/`award_total` without showing the per-field union trace.
+- IMPROVE-s4-4 — `evidence/s4-selftest.md:42-43` until IMPROVE-s3-1 closes,
+  every S1 record routes to `needs_operator_review`, so the accuracy spot-check
+  never exercises real S1 data; gate s10's larger sample on IMPROVE-s3-1.
+- NIT-s4-1 — `entity_resolution.md:206` example `entity_id` `SBIC:09/79-0292`
+  embeds a slash; harmless in a text field but mildly fragile.
+
+Stage s4 → `verified`. `unresolved_findings` → 9.

@@ -1,0 +1,21 @@
+Iteration 9 complete.
+
+**Step executed:** s4 (Entity resolution & de-duplication) — **SELF-TEST** phase.
+
+s4 was the lowest-numbered non-verified, non-blocked stage (s2 is `blocked` on B4; s3 `verified`). Advanced it `drafted → self_checked`.
+
+**What I did:** Hand-executed the §6.1 resolver and §6.2 tracker dedup procedures from `references/entity_resolution.md` against the 8 s3 fixture records plus a live 167-record read of the Master Deal Pipeline tracker. All 7 Done-when checks passed:
+
+- Multi-source collapse — S2+S3 fixtures (shared UEI `ZZTEST00FIX1`) → one `CanonicalEntity`
+- Distinct firms stay distinct — 3 SBIC records → 3 entities, no false name merge
+- Thin S1 records (no id, no address) → `needs_operator_review`, not fabricated
+- Live-tracker dedup — all 4 entities resolve `new` (no Gov Entity ID / SBIC License # rows exist; no name collision)
+- Seeded synthetic rows trigger `existing` on keys A/B/C
+- `entity_id` construction deterministic
+- Accuracy spot-check: 100% resolution / 0% duplicate on sample (meets ≥95% / <5%)
+
+**Recorded:** evidence → `evidence/s4-selftest.md`; `TEST_LOG.md` iter 9; `STATE.md` (iteration 8→9, s4 `self_checked`). `open_blockers: 4` and `unresolved_findings: 4` unchanged — no new findings. Committed locally as `61b2377`.
+
+One carry-note to the VERIFY critic: on a live run, S1 USAspending records route to `needs_operator_review` until the already-filed IMPROVE-s3-1 is resolved — s4 handles the thin input correctly, the fix belongs to s3.
+
+**Signal:** `CONTINUE` — one step done; s4 VERIFY and stages s5–s10 remain non-blocked.
