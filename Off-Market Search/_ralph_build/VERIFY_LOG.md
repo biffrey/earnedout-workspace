@@ -345,3 +345,53 @@ Findings (non-blocking, filed in `FINDINGS.md`):
   source attempted.
 
 Stage s9 → `verified`. `unresolved_findings` 21 → 23.
+
+## iter 30 — 2026-05-22 — s10 (Assembly, end-to-end dry run) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s10 artifacts
+on disk — `evidence/s10-e2e-dryrun.md`, `evidence/s10-offmarket_run_log_e2e_dryrun.md`,
+and both scored report sets under `output/reports/uei-zztest00fix1/` and
+`output/reports/name-1st-source-capital-south-bend-in/` (`.md`, `.html`,
+`lead-packet.json`) — and read a live `get_table_schema` of `tblSmNrHROMLm7vOS`.
+Not given the loop's logs or reasoning. Scope: the s10 dry-run Done-when only
+("the dry run produces ≥1 scored record per class into a test context with no
+fabricated fields") — the final-audit / all-stages-`verified` halves are the
+separate FINAL AUDIT phase, gated on s2/s7 (B4).
+
+**Verdict: FAIL (1 BLOCKING).**
+
+The critic read the report **bodies** field-by-field — which the s10 SELF-TEST
+C3 check did not — and found the Class-2 report fabricates a scoring-
+determinative field relative to its own declared input packet:
+
+- **BLOCKING-s10-1** — `1st-source-capital-corporation-report.md` (lines 28, 62,
+  97, 127, 131, and `.html`) returns Buy Box line 3 `✅ PASS` and awards
+  **10/10** for "Years in business ≥10" — 10 of R2's 30 points — citing an
+  incorporated-1983 formation date, street address, SEC CIK, and CB Insights
+  data that are **absent** from `lead-packet.json` (which sets `formation_date`
+  / `years_in_business` to `null` and lists "formation date" in
+  `enrichment_gaps`). Per `scoring_integration.md:91-92,99` a gap must be passed
+  through as missing and scored "insufficient data — not awarded" (as the R1
+  report correctly does). The report back-filled it instead — fabrication
+  relative to the packet, inflating the verifiable score; packet and report now
+  contradict each other on disk. Honest R2 score is 20/100, not 30.
+
+Checks that PASSED: Class-1 fixture R1 is acceptable — synthetic nature loudly
+disclosed (`_fixture_note`, report banner, `s10-e2e-dryrun.md:140` limitation 4),
+build plan permits a fixture sample, and the R1 report fabricates nothing; both
+`lead-packet.json` files are clean (every unknown `null`/"needs follow-up",
+enumerated in `enrichment_gaps`); writes 0 created / 0 updated, live schema
+confirms B4 still open and honestly disclosed; 2 drafts both carry NOT-SENT
+markers, nothing auto-sent; run-log count trace internally consistent; B1/B3/B4
+and R1's fixture nature all disclosed. No parallel tracker, no new scorer.
+
+Non-blocking findings filed in `FINDINGS.md`: IMPROVE-s10-1 (run log cites a
+production path for a dry-run-only file), IMPROVE-s10-2 (Class-2 scored count
+omits carried-but-unscored R3/R4), NIT-s10-1 (reused fixture artifacts carry
+stale stage-provenance labels). The critic's stray-`</content>` flag is the
+already-tracked NIT-s8-1 — not double-counted.
+
+Per the phase ladder, a BLOCKING finding returns the stage to `not_started`.
+Stage s10 → `not_started`. `unresolved_findings` 23 → 27 (BLOCKING-s10-1 +
+3 non-blocking). Next phase for s10: IMPLEMENT — re-score R2 strictly from its
+packet and reconcile the report with `lead-packet.json` per BLOCKING-s10-1.

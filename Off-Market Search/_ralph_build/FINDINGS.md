@@ -252,6 +252,68 @@ exercise, but a live run should list every source attempted.
 sources) in the run-log table.
 **Status:** OPEN.
 
+### BLOCKING-s10-1 — BLOCKING — s10 — Class-2 report awards points from a field its own packet lists as a gap
+**Raised:** iter 30 VERIFY (s10 critic).
+**Where:** `output/reports/name-1st-source-capital-south-bend-in/1st-source-capital-corporation-report.md`
+lines 28, 62, 97, 127, 131 (and the matching `.html`); contradicts
+`output/reports/name-1st-source-capital-south-bend-in/lead-packet.json:11-12,34`.
+**Problem:** the R2 lead packet sets `formation_date: null`,
+`years_in_business: null`, and enumerates `"formation date — needs follow-up
+(B1)"` in `enrichment_gaps` (IN is not a B1 priority state). The report declares
+that packet its sole input (Appendix D) yet Buy Box line 3 returns `✅ PASS`
+("incorporated in Indiana on 1983-11-16") and the Lead Score Breakdown awards
+**10/10** for "Years in business ≥10" — 10 of R2's 30 total points — from a
+formation date, street address, SEC CIK, and CB Insights data absent from the
+packet. This back-fills a gap the scorer must pass through as missing
+(`scoring_integration.md:91-92,99`), violates "no fabricated fields" / "a gap
+stays a gap", and leaves `lead-packet.json` and the report contradicting each
+other on disk. The s10 SELF-TEST C3 check missed it because it inspected only
+the two `lead-packet.json` files, never the report bodies.
+**Fix:** re-score R2 strictly from `lead-packet.json` — Buy Box line 3 must be
+⚠️ "insufficient data — not awarded" (0/10), making R2's honest score 20/100,
+not 30 — and strip every non-packet datum from the `.md` and `.html` reports
+(or, if external Class-2 enrichment is genuinely intended, resolve those values
+into `lead-packet.json` and remove "formation date" from `enrichment_gaps` so
+packet and report agree). Then re-run the s10 dry run / SELF-TEST.
+**Status:** OPEN — s10 returned to `not_started`; fix in the next s10 IMPLEMENT.
+
+### IMPROVE-s10-1 — IMPROVE — s10 — run log cites a production path for a dry-run file
+**Raised:** iter 30 VERIFY (s10 critic).
+**Where:** `evidence/s10-offmarket_run_log_e2e_dryrun.md:53`.
+**Problem:** the run log cites the outreach drafts at the production path
+`search_reports/offmarket_outreach_drafts_2026-05-22.md`, but the file exists
+only at `_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md`. A
+run log pointing at a non-existent file is misleading.
+**Fix:** label the line as the dry-run/evidence path or add an explicit
+"(dry-run path)" note.
+**Status:** OPEN.
+
+### IMPROVE-s10-2 — IMPROVE — s10 — Class-2 scored count omits carried-but-unscored R3/R4
+**Raised:** iter 30 VERIFY (s10 critic).
+**Where:** `evidence/s10-offmarket_run_log_e2e_dryrun.md` "Enrichment & scoring";
+`evidence/s10-e2e-dryrun.md:78`.
+**Problem:** R3/R4 passed the pre-filter as Class-2 candidates but were never
+scored (only R2 was). Disclosed in the dry-run note, but the run log's "Scored
+— Class 2: R2 = 30/100" line does not state R3/R4 were carried but not scored.
+**Fix:** in the run log, state that R3/R4 were carried as Class-2 candidates
+but not scored in the dry run, keeping the scored-count trace explicit.
+**Status:** OPEN.
+
+### NIT-s10-1 — NIT — s10 — reused fixture artifacts carry stale stage-provenance labels
+**Raised:** iter 30 VERIFY (s10 critic).
+**Where:** `output/reports/uei-zztest00fix1/lead-packet.json` `_fixture_note`
+and the R1 report headers.
+**Problem:** the R1 fixture artifacts label their provenance "stage s6
+SELF-TEST"; they are now reused as the s10 dry-run inputs, so the provenance
+labels lag the current stage. Harmless.
+**Fix:** when fixture artifacts are reused across stages, note the reuse (or
+add an s10-reuse line) so provenance labels do not mislead.
+**Status:** OPEN.
+
+_(The critic also flagged a stray `</content>` tag at
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
+tracked as NIT-s8-1 — not double-counted here.)_
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
