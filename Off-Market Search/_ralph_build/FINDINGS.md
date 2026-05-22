@@ -6,17 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### IMPROVE-s5-3 — IMPROVE — s5 — good-standing cross-check demonstrated for only one Class-2 entity
-**Raised:** iter 13 VERIFY (s5 critic).
-**Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` C6 (lines
-133-155).
-**Problem:** the §4 good-standing cross-check (WebSearch for adverse actions)
-was demonstrably run only for R2; R3/R4 passed the pre-filter but the beyond-the-
-directory cross-check was not shown for them.
-**Fix:** s10's end-to-end run must repeat the §4 cross-check across all Class-2
-entities; carry this forward to the s10 self-test.
-**Status:** OPEN.
-
 ### IMPROVE-s6-2 — IMPROVE — s6 — both scored candidates are build-loop test inputs
 **Raised:** iter 19 VERIFY (s6 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md`;
@@ -34,6 +23,42 @@ _(The critic also flagged a stray `</content>` tag at
 tracked as NIT-s8-1 — not double-counted here.)_
 
 ## Resolved
+
+### IMPROVE-s5-3 — IMPROVE — s5 — good-standing cross-check demonstrated for only one Class-2 entity
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` C6 (lines
+133-155).
+**Problem:** the §4 good-standing cross-check (WebSearch for adverse actions)
+was demonstrably run only for R2; R3/R4 passed the pre-filter but the beyond-the-
+directory cross-check was not shown for them.
+**Fix:** s10's end-to-end run must repeat the §4 cross-check across all Class-2
+entities; carry this forward to the s10 self-test.
+**Resolution (iter 81, RESOLVE):** made the §4 cross-check's per-entity scope
+explicit and recorded the multi-entity coverage as a documented gate on the
+live run — the same gate pattern as the IMPROVE-s4-4 "S1 coverage gate"
+resolution. Two edits to
+`.claude/skills/off-market-search/references/enrichment.md` §4:
+(1) added a paragraph after the §4 lead-in stating the cross-check is a
+**per-entity enrichment step** — it runs once for **every** pre-filter-passing
+Class-2 entity (§2.2), never once per run for a single representative, and a
+run with N Class-2 candidates performs N independent §4 cross-checks producing
+N `sbic_license_status` values; (2) added a **"Class-2 coverage gate
+(IMPROVE-s5-3)"** paragraph after the `sbic_license_status` value list — it
+records that the s5 SELF-TEST demonstrated §4 end-to-end for only R2 (R3/R4
+passed the §2.2 pre-filter but their beyond-the-directory cross-check was not
+separately shown) and **requires s10's larger-sample live run to run and record
+the §4 cross-check for every Class-2 entity it enriches** (one
+`sbic_license_status` per entity, with the adverse-action search query and
+verdict logged in `TEST_LOG.md`). Also refreshed `evidence/s5-selftest.md` C6:
+added a "Per-entity scope" note recording that C6 drove the cross-check for R2
+as the representative demonstration, that §4 is now explicitly per-entity, and
+that the live-run multi-entity coverage is enforced by the new
+`enrichment.md` §4 gate — the C6 PASS verdict (it verifies the procedure) is
+unchanged. Spec-clarity / evidence change only; no enrichment, cross-check, or
+scoring behavior changed — §4 was always an enrichment step applied to each
+Class-2 candidate; the per-entity scope and the live-run coverage requirement
+are now stated rather than implied. s5 stays `verified`.
+**Status:** ~~OPEN~~ → RESOLVED 2026-05-22 (iter 81).
 
 ### NIT-s9-2 — NIT — s9 — dry-run run log omits enrichment-only sources
 **Raised:** iter 27 VERIFY (s9 critic).

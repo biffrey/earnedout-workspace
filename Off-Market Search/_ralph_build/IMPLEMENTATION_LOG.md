@@ -1491,3 +1491,35 @@ scorer touched, no outreach sent.
 NIT-s10-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 4 → 3. 3 findings remain (IMPROVE-s5-3, IMPROVE-s6-2, NIT-s9-2). RESOLVE phase
 continues.
+
+---
+
+## Iter 81 — RESOLVE — IMPROVE-s5-3 (s5 §4 Class-2 cross-check coverage)
+
+RESOLVE phase. `final_audit_passed: true`; cleared one of the two open
+`IMPROVE` findings. IMPROVE-s5-3 — the s5 critic flagged that the §4 SBIC
+good-standing cross-check was demonstrated end-to-end for only one Class-2
+entity (R2); R3/R4 passed the §2.2 pre-filter but their beyond-the-directory
+cross-check was not separately shown.
+
+Resolution (spec-clarity + documented coverage gate, the IMPROVE-s4-4 pattern):
+
+- `.claude/skills/off-market-search/references/enrichment.md` §4 — added a
+  paragraph making the cross-check's **per-entity** scope explicit (runs once
+  for every pre-filter-passing Class-2 entity, never once per run for a single
+  representative), and a **"Class-2 coverage gate (IMPROVE-s5-3)"** paragraph
+  requiring s10's larger-sample live run to run and record the §4 cross-check
+  for every Class-2 entity it enriches, with query + verdict logged in
+  `TEST_LOG.md`.
+- `evidence/s5-selftest.md` C6 — added a "Per-entity scope" note recording R2
+  was the representative demonstration and that live-run multi-entity coverage
+  is now enforced by the `enrichment.md` §4 gate. C6 PASS verdict unchanged.
+
+Spec-clarity / evidence only; no enrichment, cross-check, or scoring behavior
+changed — §4 was always a per-candidate enrichment step; the scope and the
+live-run coverage requirement are now stated rather than implied. s5 stays
+`verified`. Constraints honored: no data fabricated, no parallel tracker, no
+scorer touched, no outreach sent.
+
+IMPROVE-s5-3 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+2 → 1. 1 finding remains (IMPROVE-s6-2). RESOLVE phase continues.

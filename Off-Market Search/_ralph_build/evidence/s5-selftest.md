@@ -161,6 +161,16 @@ read off a page:
 (none exists).** The procedure also demonstrably yields `Surrendered`/`Revoked`
 when a Federal Register action names the firm. **PASS.**
 
+> **Per-entity scope (IMPROVE-s5-3, resolved iter 81).** This self-test drove
+> the §4 cross-check end-to-end for one Class-2 entity (R2) as the
+> representative demonstration; R3/R4 passed the §2.2 pre-filter but their
+> cross-check was not separately shown here. §4 is a **per-entity** enrichment
+> step — `enrichment.md` §4 now states this explicitly and carries a Class-2
+> coverage gate requiring s10's larger-sample live run to run and record the §4
+> cross-check (query + verdict) for **every** Class-2 entity it enriches, in
+> `TEST_LOG.md`. The C6 PASS verdict is unchanged — it correctly verifies the
+> cross-check procedure; the gate ensures multi-entity coverage at the live run.
+
 ## C7 — `gov_data_source` maps to live `Gov Data Source` choices only; fail-loud on unmapped (§5.1)
 
 The iter-14 re-IMPLEMENT added `enrichment.md` §5.1 — the `source_id → Gov Data

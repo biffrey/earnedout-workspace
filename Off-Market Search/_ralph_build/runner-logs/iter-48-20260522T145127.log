@@ -1,0 +1,14 @@
+Iter 79 complete. RESOLVE phase — cleared one non-blocking finding.
+
+**Step taken:** Resolved **NIT-s10-1** — the R1 fixture artifacts in `output/reports/uei-zztest00fix1/` were labeled "stage s6 SELF-TEST" provenance but are reused unchanged as the R1 Class-1 inputs of the s10 end-to-end dry run.
+
+**Fix:** Added an explicit stage-reuse note to all three artifacts (kept the s6 label, which correctly records first production):
+- `lead-packet.json` — new `_stage_reuse_note` field (JSON re-validated)
+- `*-report.md` — "Stage reuse (NIT-s10-1)" paragraph in the header callout
+- `*-report.html` — reuse sentence in the banner div + footer, `<title>` updated
+
+No fixture data, scorecard, 30/110 score, or report body changed. s10 stays `verified`.
+
+**State:** iteration 78→79; `unresolved_findings` 4→3 (IMPROVE-s5-3, IMPROVE-s6-2, NIT-s9-2 remain); `open_blockers: 0`; `final_audit_passed: true`. Committed locally as `42514c4`.
+
+**Signal:** `CONTINUE` — RESOLVE phase has 3 findings left to clear before COMPLETE.

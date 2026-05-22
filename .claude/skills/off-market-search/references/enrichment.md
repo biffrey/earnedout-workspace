@@ -241,6 +241,11 @@ The SBA SBIC directory lists current licensees but **does not publish a
 good-standing flag** (§13). Good standing is therefore cross-referenced, not
 read off one page. Drive adapter **S5** to check, in order:
 
+This cross-check is a **per-entity enrichment step**: it runs once for **every**
+pre-filter-passing Class-2 entity (§2.2) in this run, never once per run for a
+single representative. A run with N Class-2 candidates performs N independent §4
+cross-checks and records N `sbic_license_status` values.
+
 1. **Current directory presence** — the entity is on the latest SBIC directory
    export (already confirmed by the §2.2 pre-filter).
 2. **Adverse-action / enforcement signals** — SBA OIG reports, SBA press
@@ -259,6 +264,16 @@ Resolve to one `sbic_license_status` value matching the Airtable
 - `Unknown` — standing **cannot be confirmed**. This is an honest value, not a
   failure: it flows to the scorer, whose SBIC gate returns **CONDITIONAL**
   (§7.3). Never write `Good Standing` to mean "couldn't find anything bad."
+
+**Class-2 coverage gate (IMPROVE-s5-3).** The s5 SELF-TEST demonstrated the §4
+cross-check end-to-end for only one Class-2 entity (R2 — `evidence/s5-selftest.md`
+C6); R3/R4 passed the §2.2 pre-filter but their beyond-the-directory cross-check
+was not separately shown. Because §4 is a per-entity step (above), s10's
+larger-sample live run **must run and record the §4 cross-check for every
+Class-2 entity it enriches** — one `sbic_license_status` value per entity, with
+the adverse-action search query and verdict logged in `TEST_LOG.md` — so the
+cross-check coverage is measured against real multi-entity data and not inferred
+from the single R2 demonstration.
 
 ---
 
