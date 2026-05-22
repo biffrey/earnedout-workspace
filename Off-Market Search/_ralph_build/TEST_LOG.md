@@ -102,3 +102,46 @@ against the `OFFMARKET_BUILD_PLAN.md` s4 `Done-when` criteria:
 one carry-note to the VERIFY critic — the live-run interaction with the open
 IMPROVE-s3-1 (S1 records route to `needs_operator_review` until the s3
 adapter populates `uei`). Next phase for s4: VERIFY.
+
+## iter 12 — 2026-05-22 — s5 (Enrichment & qualification pre-filters) — SELF-TEST
+
+Hand-executed the §7.4 pre-filters, the §3 enrichment steps, the §4 SBIC
+good-standing cross-check, and the §5 `LeadPacket` assembly from
+`references/enrichment.md` over the s4 output (4 `CanonicalEntity`, all
+`dedup_verdict: new`). Full evidence — pre-filter verdicts, both assembled
+`LeadPacket`s, the live good-standing cross-check — in `evidence/s5-selftest.md`.
+Six checks against the `OFFMARKET_BUILD_PLAN.md` s5 `Done-when` criteria:
+
+- **C1 — Class-1 pre-filter passes a genuine fit.** PASS. R1 (EXAMPLE
+  INTERPRETING FIXTURE LLC) carries core keyword hit `interpreting` (§5.2 core
+  list) and is a U.S. operating company (SAM `Active`) → §2.1 both conditions
+  hold → `pass`, tier `core`.
+- **C2 — an obvious non-fit is dropped BEFORE enrichment.** PASS. Synthetic
+  in-memory SYN-NF1 (document-translation firm, exclusion-only keyword hits,
+  no ASL/CART line) → `drop` at the §2.1 pre-filter — no website discovery,
+  no SOS, no Playwright, no scoring ran. SYN-ADJ1 (carries `VRI`) correctly
+  kept as `adjacent`, not dropped.
+- **C3 — Class-2 pre-filter passes current licensees.** PASS. R2/R3/R4 all
+  appear on the current SBIC-directory CSV live-recording and have no
+  disproven standing → all 3 `pass`.
+- **C4 — Class-1 `LeadPacket` complete, no fabrication.** PASS. R1 packet has
+  every §1 field populated or explicitly gapped; 5 `enrichment_gaps` logged
+  (website, formation date, employee count, contact email/phone); zero
+  invented values — the `.invalid` entityURL correctly yields
+  `website_status: none_found`, not a substituted URL.
+- **C5 — Class-2 `LeadPacket` complete.** PASS. R2 (1st Source Capital
+  Corporation) packet complete; `sbic_license_no` left `null` (directory
+  publishes none — a gap, not fabricated); directory POC correctly flagged as
+  investor-relations not the GP principal; SBA-prior-approval fact carried.
+- **C6 — SBIC good-standing cross-check resolves a status beyond the
+  directory.** PASS. Live `WebSearch` for 1st Source Capital enforcement /
+  revocation / surrender → no adverse action; the same search surfaced a real
+  Federal Register surrender notice for a different firm (High Street Capital
+  IV SBIC) proving the §4 adverse-signal source is real and queryable.
+  Resolved R2 → `Good Standing` with **no** directory standing flag used.
+
+**Result: all six checks PASS.** Stage s5 → `self_checked`. No new findings;
+one carry-note to the VERIFY critic — B1 (priority-state list) being OPEN makes
+`formation_date` / `years_in_business` / `sos_status` a universal gap on every
+off-market `LeadPacket` until B1 clears (the §3.2 B1-gated skip is exercised
+and behaves as designed). Next phase for s5: VERIFY.
