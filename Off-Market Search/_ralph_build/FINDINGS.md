@@ -267,6 +267,53 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
+### IMPROVE-s3-2 — IMPROVE — s3 — state-source adapter (S8) is a fixture-shell; B1 now resolved
+**Raised:** 2026-05-22, operator intervention (B1 resolved).
+**Where:** s3 source-adapter deliverable — the S8 (state portals / SOS) adapter;
+`config/offmarket_sources.md` state-source entries.
+**Problem:** s3 was verified while B1 was open, so S8 was built as a
+fixture-shell rather than a working adapter (IMPLEMENTATION_LOG iter 5: "S8
+state portals (`blocked` B1, shell ...)"). B1 is now resolved with the Phase-1
+priority jurisdictions **DC, VA, MD, PA, WV**.
+**Fix:** build the S8 adapter for real against each of the five jurisdictions'
+eProcurement portal and Secretary-of-State / business registry; confirm and
+document each portal's ToS and rate limits before automating (per BLOCKERS.md
+B1); record a live or recorded-fixture query per jurisdiction. Keep the common
+adapter interface unchanged so s4–s6 are unaffected.
+**Status:** OPEN.
+
+### IMPROVE-s5-5 — IMPROVE — s5 — SOS formation-date lookup not wired; B1 now resolved
+**Raised:** 2026-05-22, operator intervention (B1 resolved).
+**Where:** s5 enrichment deliverable — the B1-gated Secretary-of-State
+formation-date lookup.
+**Problem:** s5 was verified while B1 was open, so the SOS formation-date /
+years-in-business lookup was left as a logged gap rather than a working lookup
+("B1-blocked SOS leaves a gap" in the s5 implementation notes). B1 is now
+resolved (DC, VA, MD, PA, WV).
+**Fix:** wire the SOS formation-date lookup for the five priority jurisdictions
+so a candidate registered in one of them gets a real formation date /
+years-in-business instead of a "needs follow-up" gap. Candidates in other
+states remain a logged gap, as designed.
+**Status:** OPEN.
+
+### IMPROVE-s3-3 — IMPROVE — s3 — SAM.gov adapters (S2/S3) are fixture-shells; B3 now resolved
+**Raised:** 2026-05-22, operator intervention (B3 resolved — key stored).
+**Where:** s3 source-adapter deliverable — the S2 (SAM.gov Entity Management
+API) and S3 (SAM.gov Contract Awards API) adapters.
+**Problem:** s3 was verified while B3 was open, so S2/S3 were built as
+fixture-shells rather than working adapters (IMPLEMENTATION_LOG iter 5:
+"B1/B3 adapters built but marked `blocked`, not faked"). B3 is now resolved —
+the SAM.gov Public API Key is stored in the macOS login keychain.
+**Fix:** wire S2/S3 to read the key at runtime via
+`security find-generic-password -s samgov-api-key -a off-market-search -w`
+(never commit it to a file), send it as the `x-api-key` header, and build the
+adapters for real against `api.sam.gov`; record a live or recorded-fixture
+query for each. Handle the one-time keychain "Always Allow" prompt, and respect
+the per-account daily request limit (~10/day on the public tier until SAM.gov
+entity registration completes for the ~1,000/day tier). Keep the common adapter
+interface unchanged so s4–s6 are unaffected.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing

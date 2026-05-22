@@ -600,3 +600,48 @@ nothing sent; no live Airtable write.
 resolved). Stage s10 → `drafted`. Next phase for s10: SELF-TEST — which **must**
 read the report bodies field-by-field against `lead-packet.json` (not just the
 two packet files — the gap the iter-29 SELF-TEST C3 check missed).
+
+## iter 32 — 2026-05-22 — s2 (Airtable schema) — re-IMPLEMENT (B4 resolved)
+
+s2 was reset `verified`-era → `not_started` by the operator intervention when
+B4 was resolved, so the loop re-runs it against the now-complete live schema.
+This re-IMPLEMENT confirms the deliverable and clears the stale "blocked /
+operator-required" prose left over from when B4 was open.
+
+- **Live schema re-confirmed.** A `get_table_schema` read of base
+  `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS` confirms every s2 element:
+  - `Source` (`fldiGyXTk6Ybb6J1L`, singleSelect) — four choices:
+    `Overnight Search`, `Manual Submission`, `Off-Market — ASL Bolt-on`
+    (`selezt48WJR6jPv2m`), `Off-Market — SBIC` (`seltqCid0e9t6aijI`). The two
+    off-market values verified byte-for-byte against `OFFMARKET_BUILD_PLAN.md`
+    §8.3 — em dash U+2014, exact spacing/casing.
+  - The five §8.4 fields — `Gov Entity ID` (singleLineText),
+    `SBIC License #` (singleLineText), `SBIC License Status` (singleSelect, the
+    five standing choices), `Gov Data Source` (multipleSelects, all eight
+    choices), `Federal Award History $` (currency, `$`, precision 0) — all
+    present with the correct types and field IDs.
+- **`references/airtable_schema_preflight.md`** — the "Why `Source` options
+  need an operator" section (which said the values *must* be added by the
+  operator and cited B4 as open) was rewritten to "Schema status & why the
+  preflight stays fail-loud": records the schema as complete, B4 as RESOLVED,
+  and states the preflight still runs every invocation as a guard against later
+  schema drift / a different base, never auto-creating. The Procedure section
+  was already correct and is unchanged.
+- **`evidence/s2-airtable-schema.md`** — rewritten from the iter-4 capture (which
+  marked the `Source` values "NOT DONE" and s2 "blocked") to the iter-32 live
+  re-confirmation: all six elements DONE, B4 resolved, with the live choice IDs
+  recorded.
+
+No schema write was performed this iteration — the fields and `Source` values
+already exist (created via `create_field` in iter 4 and added by the operator
+in the Airtable UI respectively). s2's deliverable — the schema changes plus the
+fail-loud preflight — is complete.
+
+Constraints honored: fail loud, never silent (the preflight is unchanged in
+behaviour and still halts on any miss, never auto-creates); no parallel tracker
+(same base/table); never fabricate (the schema was read live, not assumed).
+
+Stage s2 → `drafted`. Next phase for s2: SELF-TEST (run the preflight procedure
+against the live schema — confirm all six fields, both off-market `Source`
+values, and the five `SBIC License Status` options are detected, and confirm
+the check fails loud against a simulated missing element).

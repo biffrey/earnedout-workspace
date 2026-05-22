@@ -28,7 +28,7 @@ BUILD_DIR="$REPO/Off-Market Search/_ralph_build"
 ITER_PROMPT="$BUILD_DIR/ITERATION_PROMPT.md"
 SIGNAL_FILE="$BUILD_DIR/.loop_signal"
 LOG_DIR="$BUILD_DIR/runner-logs"
-MAX_RUNS=100          # backstop only; STATE.md `max_iterations` (80) is authoritative
+MAX_RUNS=120          # backstop only; STATE.md `max_iterations` (120) is authoritative
 SLEEP_BETWEEN=5       # seconds to pause between iterations
 
 command -v claude >/dev/null 2>&1 || { echo "ERROR: 'claude' CLI not found on PATH."; exit 1; }

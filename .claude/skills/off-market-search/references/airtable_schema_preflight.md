@@ -57,10 +57,17 @@ Re-run the skill once the schema matches. The skill will NOT create these
 itself — fail-loud is intentional (PRD §8.3, OFFMARKET_BUILD_PLAN constraints).
 ```
 
-## Why `Source` options need an operator
+## Schema status & why the preflight stays fail-loud
 
-The Airtable MCP `create_field` creates new fields (used to create the five
-§8.4 fields on 2026-05-22), but `update_field` cannot add `choices` to an
-**existing** single-select. The two `Source` values must therefore be added by
-the operator in the Airtable UI. Tracked as blocker **B4** in
-`Off-Market Search/_ralph_build/BLOCKERS.md`.
+As of 2026-05-22 the live schema is **complete** — a `get_table_schema` read of
+`tblSmNrHROMLm7vOS` confirms all five §8.4 fields plus the two off-market
+`Source` values (`Off-Market — ASL Bolt-on`, `Off-Market — SBIC`). The five
+§8.4 fields were created via the Airtable MCP `create_field`; the two `Source`
+single-select values were added by the operator in the Airtable UI, because
+`update_field` cannot add `choices` to an **existing** single-select (this was
+blocker **B4**, now RESOLVED — see `Off-Market Search/_ralph_build/BLOCKERS.md`).
+
+The preflight nonetheless runs on **every** invocation and stays fail-loud: it
+guards against a later schema edit, a renamed/deleted choice, or a run against a
+different base, and it never auto-creates a field or option. A clean schema
+today is not a substitute for the check.
