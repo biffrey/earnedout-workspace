@@ -434,3 +434,51 @@ scope and was already confirmed by the iter-27 s9 VERIFY ("fail-loud halts
 (Step 1 preflight ...)"). Not filed as a new finding.
 
 Stage s2 → `verified`. `unresolved_findings` unchanged at 27.
+
+## iter 39 — 2026-05-22 — s7 (Airtable write & dashboard badge) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s7 artifacts —
+`.claude/skills/off-market-search/references/airtable_write.md`,
+`.claude/skills/off-market-search/references/airtable_schema_preflight.md`,
+`templates/daily-dashboard.html`, and the **live** Airtable row in base
+`appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS` (via the Airtable MCP
+`get_table_schema` + `list_records_for_table`). Not given the loop's logs or
+reasoning. Tasked to disprove that s7 is done.
+
+**Verdict: PASS (0 BLOCKING).**
+
+All three Done-when criteria met:
+- DW1 — a scored off-market prospect is a live, normal `Active` row.
+  Record `recklDY7vHFmKauQD` confirmed live (`createdTime
+  2026-05-22T17:01:52Z`): `Source = "Off-Market — SBIC"` (`seltqCid0e9t6aijI`,
+  correct em dash/spacing), `Disposition = "Active"` (`selKN12meneKypCem`),
+  `Lead Score = 20`, `Industry Match = "SBIC"`, `Gov Entity ID`,
+  `SBIC License Status = "Good Standing"`, `Gov Data Source = ["SBA SBIC"]`.
+  `Lead Source` blank (no gov string into the 14-option broker singleSelect →
+  no 422). The five §8.4 fields exist live with correct types. No fabricated
+  value — unknowns (`SBIC License #`, `Federal Award History $`, gov-record
+  URL) left blank / recorded "needs follow-up" in `Notes`. PASS.
+- DW2 — the off-market badge renders on off-market rows only. `.chip.offmarket`
+  style block at `daily-dashboard.html:154-158`; render condition
+  `{% if lead.source.startswith('Off-Market') %}` in all three row sections
+  (New Finds 242, Running Queue 288, Revisit Bucket 330); additive — on-market
+  rows and existing chips untouched; no `Source` column added. PASS.
+- DW3 — field-by-field mapping per PRD §8. `airtable_write.md` §3 maps every
+  field with IDs matching the live schema; §3.1 leaves `Lead Source` blank with
+  rationale; §6 forbids auto-creating any select option and names the iter-36
+  HTTP 422 failure mode; §2 / `airtable_schema_preflight.md` specify the
+  fail-loud preflight. PASS.
+
+Hard constraints honored: no parallel tracker, fail-loud preflight, no
+fabrication, no auto-created select option, `Lead Source` blank.
+
+Findings: none BLOCKING. The critic raised two NIT-level items it explicitly
+assessed as "no action needed" / "not a defect" (the `Lead Source` option list
+is consistent; the `Notes` score-line wording is a reasonable template
+expansion) — not filed. One IMPROVE-level note — the R2 row's gov-record URL
+is genuinely unresolved — is already honestly marked "needs follow-up" in
+`Notes`; it is an operator data follow-up on the test record, not a build
+defect, and there is nothing in the codebase to fix, so it is not filed as an
+open finding.
+
+Stage s7 → `verified`. `unresolved_findings` unchanged at 27; `open_blockers` 0.
