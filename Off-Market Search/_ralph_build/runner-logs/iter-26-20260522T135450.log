@@ -1,0 +1,13 @@
+Iteration 57 complete.
+
+**Step executed:** RESOLVE phase — cleared finding **NIT-s8-1**.
+
+- Stripped the stray `</content>`/`</invoke>` pair from `evidence/s8-selftest.md` and the trailing `</content>` from `evidence/s8-offmarket_outreach_drafts_2026-05-22.md`.
+- Grep of `_ralph_build/evidence/` confirms no artifact-formatting tokens remain anywhere.
+- Moved NIT-s8-1 to the Resolved section of `FINDINGS.md`.
+- `STATE.md`: `iteration` 56→57, `unresolved_findings` 26→25.
+- Committed locally as `8555aa0`.
+
+**Status:** all 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0`, `unresolved_findings: 25`, iteration 57/120. Non-blocked RESOLVE work remains (25 findings, including the substantive adapter-rebuild findings IMPROVE-s3-2/-s3-3/-s5-5).
+
+Signal: **CONTINUE**

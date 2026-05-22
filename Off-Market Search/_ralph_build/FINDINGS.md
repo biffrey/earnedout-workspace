@@ -6,17 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### IMPROVE-s4-2 — IMPROVE — s4 — DUNS ladder exception not stated explicitly
-**Raised:** iter 10 VERIFY (s4 critic).
-**Where:** `.claude/skills/off-market-search/references/entity_resolution.md`
-§2.1 (lines 89, 101).
-**Problem:** the §6.1 ladder header says "first key that produces a match," but
-the DUNS step adds an override ("never resolve solely on DUNS when a UEI is
-available"). Correct behavior, but a non-obvious exception to first-match-wins.
-**Fix:** state in §2.1 that DUNS is checked only after confirming neither record
-carries a UEI, so the ladder semantics stay unambiguous.
-**Status:** OPEN.
-
 ### IMPROVE-s4-3 — IMPROVE — s4 — self-test merge trace not shown
 **Raised:** iter 10 VERIFY (s4 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md` lines 28-29.
@@ -331,6 +320,25 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s4-2 — IMPROVE — s4 — DUNS ladder exception not stated explicitly
+**Raised:** iter 10 VERIFY (s4 critic).
+**Where:** `.claude/skills/off-market-search/references/entity_resolution.md`
+§2.1 (the Legacy DUNS ladder step).
+**Problem:** the §6.1 ladder header says "first key that produces a match," but
+the DUNS step adds an override ("never resolve solely on DUNS when a UEI is
+available"). Correct behavior, but a non-obvious exception to first-match-wins.
+**Fix:** state in §2.1 that DUNS is checked only after confirming neither record
+carries a UEI, so the ladder semantics stay unambiguous.
+**Resolution (iter 58, RESOLVE):** rewrote the §2.1 Legacy DUNS ladder step
+(item 3) to state explicitly that it is a documented exception to
+first-match-wins — the DUNS key is evaluated only after confirming that neither
+record under comparison carries a `norm_uei`; if either record has a UEI, the
+DUNS step is skipped entirely, the UEI cluster is preferred, and the DUNS is
+attached to it. The ladder now reads unambiguously: DUNS is never the deciding
+key whenever a UEI is present on either side. Spec-clarity only; no resolution
+behavior changed (the prior text already mandated the same outcome).
+**Status:** RESOLVED.
 
 ### NIT-s8-1 — NIT — s8 — stray trailing tokens in s8 evidence files
 **Raised:** iter 24 VERIFY (s8 critic).

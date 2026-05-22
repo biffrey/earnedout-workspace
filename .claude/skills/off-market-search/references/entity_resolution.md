@@ -97,8 +97,11 @@ key that produces a match, in this order:
    present in SAM.gov and many award records.
 3. **Legacy DUNS** — exact `norm_duns` match ⇒ same entity (`exact`), used
    **only as a fallback bridge** for pre-2022 award rows that predate UEI
-   (§13 item 12). Never resolve solely on DUNS when a UEI is available on either
-   record — prefer the UEI cluster and attach the DUNS to it.
+   (§13 item 12). This step is a documented exception to first-match-wins: the
+   DUNS key is evaluated **only after confirming that neither record under
+   comparison carries a `norm_uei`** — if either record has a UEI, skip the DUNS
+   step entirely, prefer the UEI cluster, and attach the DUNS to it. DUNS is
+   thus never the deciding key whenever a UEI is present on either side.
 4. **Normalized name + address** — when no shared identifier exists (e.g. an
    SBS-only firm vs. a USAspending recipient): match when `norm_name` is equal
    **and** `norm_addr` agrees at ZIP (or city+state) grain. This is a

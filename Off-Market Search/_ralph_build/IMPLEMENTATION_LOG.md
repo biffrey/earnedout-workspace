@@ -955,3 +955,30 @@ write behavior changed; no pipeline logic, parallel tracker, or scorer touched.
 
 IMPROVE-s4-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 27 → 26. 26 findings remain. RESOLVE phase continues.
+
+---
+
+## Iteration 58 — RESOLVE — IMPROVE-s4-2
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s4-2** (IMPROVE, s4) — the §2.1 resolution key ladder in
+`.claude/skills/off-market-search/references/entity_resolution.md` is headed
+"first key that produces a match," but the Legacy DUNS step (item 3) carried a
+non-obvious override ("never resolve solely on DUNS when a UEI is available"),
+leaving the ladder semantics ambiguous about when the DUNS step actually runs.
+
+Fix (spec-clarity change): rewrote item 3 to state explicitly that the DUNS
+step is a documented exception to first-match-wins — the DUNS key is evaluated
+only after confirming that neither record under comparison carries a
+`norm_uei`; if either record has a UEI, the DUNS step is skipped entirely, the
+UEI cluster is preferred, and the DUNS is attached to it. The step now reads
+unambiguously: DUNS is never the deciding key whenever a UEI is present on
+either side.
+
+Constraints honored: cosmetic/spec-clarity only — no resolution, dedup, or
+write behavior changed (the prior text already mandated the same outcome); no
+pipeline logic, parallel tracker, or scorer touched.
+
+IMPROVE-s4-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+25 → 24. 24 findings remain. RESOLVE phase continues.
