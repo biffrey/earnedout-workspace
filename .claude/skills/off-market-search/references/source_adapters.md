@@ -169,7 +169,7 @@ it implements.
   previous run's CSV snapshot stored in
   `search_reports/sbic_directory/<YYYY-MM-DD>.csv` to flag new / changed / removed
   licensees.
-- **Map:** "Managed by" (management company / GP) → `legal_name` — **the GP /
+- **Map:** `Manager` (management company / GP) → `legal_name` — **the GP /
   management entity is the target, never the fund or portfolio companies**;
   fund name + vintage + fund size + strategy + style + "making new investments?"
   → `source_payload`; city/state→`address`; investor-relations contact→`poc`.

@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 53
+iteration: 54
 max_iterations: 120
-last_iteration_at: 2026-05-23T01:00:00Z
+last_iteration_at: 2026-05-22T00:00:00Z
 promise_token: OFFMARKET_BUILD_VERIFIED
 final_audit_passed: true
-unresolved_findings: 29
+unresolved_findings: 28
 open_blockers: 0
 stages:
   s1_foundations:       { status: verified }

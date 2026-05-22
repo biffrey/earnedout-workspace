@@ -6,16 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### NIT-s3-1 — NIT — s3 — SBIC CSV column label mismatch
-**Raised:** iter 7 VERIFY (s3 critic).
-**Where:** `.claude/skills/off-market-search/references/source_adapters.md:174`
-(S4 adapter prose).
-**Problem:** the S4 adapter prose says map the `"Managed by"` column, but the
-live SBIC directory CSV header is actually named `Manager`. Mapping intent is
-correct; the cited column label is wrong.
-**Fix:** change `"Managed by"` to `Manager` in the S4 section.
-**Status:** OPEN.
-
 ### IMPROVE-s3-1 — IMPROVE — s3 — S1 UEI not populated
 **Raised:** iter 7 VERIFY (s3 critic).
 **Where:** `.claude/skills/off-market-search/references/source_adapters.md`
@@ -372,6 +362,19 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s3-1 — NIT — s3 — SBIC CSV column label mismatch
+**Raised:** iter 7 VERIFY (s3 critic).
+**Where:** `.claude/skills/off-market-search/references/source_adapters.md`
+(S4 adapter prose, the `Map:` bullet).
+**Problem:** the S4 adapter prose said map the `"Managed by"` column, but the
+live SBIC directory CSV header is actually named `Manager`. Mapping intent was
+correct; the cited column label was wrong.
+**Resolution (iter 54, RESOLVE):** changed `"Managed by"` to `Manager` in the
+S4 adapter `Map:` bullet so the cited column label matches the live SBIC
+directory CSV header. Confirmed no remaining `Managed by` literal in the skill
+directory. Cosmetic; the GP-as-target mapping intent is unchanged.
+**Status:** RESOLVED.
 
 ### F2 — NIT — s1 — literal placeholder string trips automated scans
 **Raised:** iter 3 VERIFY (s1 critic).
