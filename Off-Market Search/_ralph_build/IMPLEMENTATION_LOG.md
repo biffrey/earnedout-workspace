@@ -1303,3 +1303,37 @@ data fabricated, no parallel tracker, no scorer touched, no outreach sent.
 
 IMPROVE-s5-5 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 12 → 11. 11 findings remain. RESOLVE phase continues.
+
+---
+
+## iter 72 — RESOLVE — IMPROVE-s4-4 (S1 not exercised by the accuracy spot-check)
+
+RESOLVE phase. All 10 stages `verified`, `final_audit_passed: true`,
+`open_blockers: 0`; cleared one IMPROVE finding.
+
+IMPROVE-s4-4 — the s4 resolution-accuracy spot-check only ever exercised the
+S2/S3/S4 structural fixtures: every S1 (USAspending) record routed to
+`needs_operator_review` because the S1 adapter did not populate `uei`/address
+(IMPROVE-s3-1), so the ≥95% target was never measured against the primary
+Class-1 discovery source. The fix asked to gate s10's larger-sample spot-check
+on IMPROVE-s3-1 closing.
+
+IMPROVE-s3-1 is now resolved (iter 55 — S1 adapter populates a real `uei` via
+the `recipient/{recipient_id}` follow-up), so the gate's precondition has
+cleared. Fix:
+- added an **"S1 coverage gate"** paragraph to §6 of
+  `.claude/skills/off-market-search/references/entity_resolution.md` —
+  it records why the s4 SELF-TEST sample never exercised S1, notes IMPROVE-s3-1
+  is resolved, and **requires s10's larger-sample accuracy spot-check to
+  include real S1-sourced resolution clusters** once a live S1 query has run,
+  recorded in `TEST_LOG.md`;
+- refreshed the stale "Caveat" bullet in `evidence/s4-selftest.md` — it cited
+  "once B3 (SAM.gov key) clears" (B3 was never the real gate); it now
+  attributes the gap to IMPROVE-s3-1 and points at the §6 S1-coverage gate.
+
+Spec-clarity / evidence change only; no resolution, dedup, or merge behavior
+changed. Constraints honored: no data fabricated, no parallel tracker, no
+scorer touched, no outreach sent.
+
+IMPROVE-s4-4 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+11 → 10. 10 findings remain. RESOLVE phase continues.

@@ -240,6 +240,21 @@ s4 SELF-TEST and s10 must spot-check resolution accuracy, not assume it:
   resolution-accuracy and **<5%** duplicate-rate targets. A miss sends s4 back
   to IMPLEMENT.
 
+**S1 coverage gate (s10's larger-sample spot-check).** The s4 SELF-TEST sample
+exercised only the S2/S3 structural fixtures and the S4 SBIC directory rows —
+every S1 (USAspending) record routed to `needs_operator_review` because the S1
+adapter did not yet populate `uei`/address, so the ≥95% target was never
+measured against the **primary Class-1 discovery source**. That gap was
+IMPROVE-s3-1; it is now **resolved** — the S1 adapter populates a real `uei`
+via the `recipient/{recipient_id}` follow-up step (`source_adapters.md`, S1
+Query block), so S1 records now resolve through the §2.1 ladder rather than all
+falling to §4. Therefore **s10's larger-sample accuracy spot-check must include
+real S1-sourced resolution clusters** — not only the S2/S3 fixture clusters —
+so the ≥95% resolution / <5% duplicate targets are exercised against live
+USAspending data. Run s10's spot-check on a sample drawn from the live S1
+results once a live S1 query has executed; record it in `TEST_LOG.md` the same
+way s4 SELF-TEST did.
+
 ---
 
 *Built by build-loop stage s4 (IMPLEMENT). Next phase: SELF-TEST — run the

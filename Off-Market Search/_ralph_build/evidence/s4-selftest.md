@@ -134,8 +134,13 @@ Sample = the 4 cluster decisions + 4 dedup verdicts produced above.
 - **Duplicate rate.** 4 entities resolved `new`, 0 written as a duplicate of an
   existing tracker row; 3 seeded-row scenarios all caught as `existing`; 0
   false `existing`. → **0% sampled duplicate rate.** Meets <5%.
-- **Caveat.** The sample is small and S2/S3 are structural fixtures; s10 must
-  repeat the spot-check on a larger live sample once B3 (SAM.gov key) clears.
+- **Caveat.** The sample is small and S2/S3 are structural fixtures, and every
+  S1 record routed to `needs_operator_review` (IMPROVE-s3-1, since resolved),
+  so this spot-check never exercised the primary Class-1 source. Per
+  `entity_resolution.md` §6, s10's larger-sample accuracy spot-check **must
+  include real S1-sourced clusters** once a live S1 (USAspending) query has run,
+  so the ≥95% / <5% targets are measured against live data — see IMPROVE-s4-4
+  (RESOLVED) in `FINDINGS.md`.
 
 ## Result
 

@@ -6,18 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### IMPROVE-s4-4 — IMPROVE — s4 — S1 contributes zero resolvable entities until IMPROVE-s3-1 closes
-**Raised:** iter 10 VERIFY (s4 critic).
-**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md` lines 42-43.
-**Problem:** because the USAspending adapter does not yet populate `uei`/address
-(IMPROVE-s3-1), every S1 record routes to `needs_operator_review`. s4 handles
-the thin input correctly, but the resolution-accuracy spot-check is effectively
-only exercising the S2/S3 structural fixtures — the primary Class-1 discovery
-source is never tested against the ≥95% target.
-**Fix:** gate s10's larger-sample accuracy spot-check on IMPROVE-s3-1 being
-closed, so the target is tested against real S1 data.
-**Status:** OPEN.
-
 ### IMPROVE-s5-3 — IMPROVE — s5 — good-standing cross-check demonstrated for only one Class-2 entity
 **Raised:** iter 13 VERIFY (s5 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` C6 (lines
@@ -168,6 +156,35 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s4-4 — IMPROVE — s4 — S1 contributes zero resolvable entities until IMPROVE-s3-1 closes
+**Raised:** iter 10 VERIFY (s4 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md` lines 42-43.
+**Problem:** because the USAspending adapter does not yet populate `uei`/address
+(IMPROVE-s3-1), every S1 record routes to `needs_operator_review`. s4 handles
+the thin input correctly, but the resolution-accuracy spot-check is effectively
+only exercising the S2/S3 structural fixtures — the primary Class-1 discovery
+source is never tested against the ≥95% target.
+**Fix:** gate s10's larger-sample accuracy spot-check on IMPROVE-s3-1 being
+closed, so the target is tested against real S1 data.
+**Resolution (iter 72, RESOLVE):** IMPROVE-s3-1 is now resolved (iter 55 — the
+S1 USAspending adapter populates a real `uei` via the
+`recipient/{recipient_id}` follow-up step), so the gate's precondition has
+cleared and the gate can be made explicit. Added an **"S1 coverage gate"**
+paragraph to §6 ("Resolution-accuracy spot-check") of
+`.claude/skills/off-market-search/references/entity_resolution.md`: it records
+that the s4 SELF-TEST sample exercised only the S2/S3/S4 fixtures (every S1
+record fell to `needs_operator_review` while IMPROVE-s3-1 was open), notes that
+finding is resolved, and **requires s10's larger-sample accuracy spot-check to
+include real S1-sourced resolution clusters** once a live S1 query has run, so
+the ≥95% resolution / <5% duplicate targets are measured against live
+USAspending data and recorded in `TEST_LOG.md`. Also refreshed the stale
+"Caveat" bullet in `evidence/s4-selftest.md` — it cited "once B3 (SAM.gov key)
+clears" (B3 is resolved and was never the real gate); it now correctly
+attributes the gap to IMPROVE-s3-1 and points at the §6 S1-coverage gate.
+Spec-clarity / evidence change only; no resolution, dedup, or merge behavior
+changed — the gate is documentation of what s10's live spot-check must cover.
+**Status:** RESOLVED.
 
 ### IMPROVE-s5-5 — IMPROVE — s5 — SOS formation-date lookup not wired; B1 now resolved
 **Raised:** 2026-05-22, operator intervention (B1 resolved).
