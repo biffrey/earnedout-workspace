@@ -19,6 +19,15 @@
 > s7 live write `recklDY7vHFmKauQD`). Same stale-blocker refresh class as
 > `IMPROVE-s10-3` / `NIT-s9-3`. The s9 `Done-when` criteria are all met and
 > s9 stays `verified`.
+>
+> **Iter-80 note (NIT-s9-2).** The "Sources queried" table below lists only the
+> discovery adapters exercised by the s3–s8 SELF-TEST fixtures (S1–S4, S8); the
+> enrichment-only sources (S5 SBIC good-standing, S9 RID, S10 IAPD, S11 U.S.
+> Courts) are not listed because this fixture exercise did not run them. That
+> omission is acceptable for a frozen SELF-TEST artifact, but a **live** run
+> must list every source attempted — `orchestration.md` §3 was amended at
+> iter 80 (NIT-s9-2 resolution) to require this explicitly in the run-log
+> template.
 
 - **Run type:** dry-run (fixture mode — `orchestration.md` §5)
 - **Started / finished (UTC):** 2026-05-22T10:31:40Z / 2026-05-22T10:33:00Z

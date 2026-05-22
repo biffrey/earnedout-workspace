@@ -29,6 +29,12 @@ end-to-end score is deferred to s10, gated on the S1 USAspending `uei` gap.
 ASL/CART company; gate that on IMPROVE-s3-1 / IMPROVE-s4-4 closing.
 **Status:** OPEN.
 
+_(The critic also flagged a stray `</content>` tag at
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
+tracked as NIT-s8-1 — not double-counted here.)_
+
+## Resolved
+
 ### NIT-s9-2 — NIT — s9 — dry-run run log omits enrichment-only sources
 **Raised:** iter 27 VERIFY (s9 critic).
 **Where:** `evidence/s9-offmarket_run_log_dryrun.md` "Sources queried" table.
@@ -37,13 +43,29 @@ from the dry-run log's "Sources queried" table. Acceptable for a fixture
 exercise, but a live run should list every source attempted.
 **Fix:** in a live run, list every source queried (including enrichment-only
 sources) in the run-log table.
-**Status:** OPEN.
-
-_(The critic also flagged a stray `</content>` tag at
-`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
-tracked as NIT-s8-1 — not double-counted here.)_
-
-## Resolved
+**Resolution (iter 80, RESOLVE):** the omission is correct for a frozen
+SELF-TEST fixture exercise (the s3–s8 fixtures only exercised the discovery
+adapters), so the fix belongs in the spec that governs the **live** run-log,
+not the frozen artifact. Two edits:
+(1) `.claude/skills/off-market-search/references/orchestration.md` §3 — the
+run-log template's "Sources queried" block now carries an HTML-comment
+directive to list every source attempted, an added paragraph after the
+template stating the table **must** list every source attempted this run — the
+discovery adapters (S1–S4, S8) **and** the enrichment-only sources used in
+Steps 4–5 (S5 SBIC good-standing, S9 RID, S10 IAPD, S11 U.S. Courts),
+including any that returned `0` records or were skipped — and two example rows
+(S5, S9) added to the template table to model an enrichment-only row. The
+stale `S3 … blocked (B3)` example row was genericised to a non-blocker
+`degraded` example (`HTTP 429 — daily quota reached`), since B3 is resolved.
+(2) `evidence/s9-offmarket_run_log_dryrun.md` — added an "Iter-80 note
+(NIT-s9-2)" to the SELF-TEST callout box recording that the table lists only
+the discovery adapters the fixtures exercised, that the enrichment-only-source
+omission is acceptable for a frozen artifact, and that the live-run
+requirement is now enforced by the amended `orchestration.md` §3 template.
+Spec-text / evidence-note only; no orchestration, adapter, enrichment, or
+run-log-writing behavior changed — the live run already queried these sources,
+the template now requires them to be logged. s9 stays `verified`.
+**Status:** RESOLVED.
 
 ### NIT-s10-1 — NIT — s10 — reused fixture artifacts carry stale stage-provenance labels
 **Raised:** iter 30 VERIFY (s10 critic).

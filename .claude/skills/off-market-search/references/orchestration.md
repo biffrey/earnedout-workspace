@@ -87,10 +87,15 @@ what was skipped and why. Template:
 - **Open blockers affecting this run:** B1 (state portals), B3 (SAM.gov tier) …
 
 ## Sources queried
+<!-- List EVERY source attempted this run — the discovery adapters (S1–S4, S8)
+     AND the enrichment-only sources (S5 SBIC good-standing, S9 RID, S10 IAPD,
+     S11 U.S. Courts) — including any that returned 0 records or were skipped. -->
 | Source | Class | Status | Records | Note |
 |--------|-------|--------|---------|------|
 | S1 USAspending.gov | 1+2 | ok | 42 | live |
-| S3 SAM.gov Contract Awards | 1 | blocked (B3) | 0 | fixture used / skipped |
+| S3 SAM.gov Contract Awards | 1 | degraded | 6 | HTTP 429 — daily quota reached, paging stopped |
+| S5 SBIC good-standing cross-check | 2 | ok | 9 | enrichment-only — licensees cross-checked |
+| S9 RID registry | 1 | ok | 3 | enrichment-only — point-of-need contact lookup |
 | … | | | | |
 
 ## Resolution & dedup
@@ -120,6 +125,13 @@ what was skipped and why. Template:
 
 Counts must be **real** — taken from each step's actual output, never estimated
 or rounded to look complete. A `0` is reported as `0`.
+
+The **Sources queried** table must list **every** source attempted this run —
+not only the discovery adapters (S1–S4, S8) but also the enrichment-only
+sources used in Steps 4–5 (S5 SBIC good-standing, S9 RID, S10 IAPD, S11 U.S.
+Courts) — including any that returned `0` records or were skipped. A source
+that was attempted but omitted from the table reads as not-attempted, which
+understates the audit trail.
 
 ## 4. Manual single-entity path
 
