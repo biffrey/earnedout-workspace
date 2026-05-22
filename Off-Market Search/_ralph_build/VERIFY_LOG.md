@@ -395,3 +395,42 @@ Per the phase ladder, a BLOCKING finding returns the stage to `not_started`.
 Stage s10 → `not_started`. `unresolved_findings` 23 → 27 (BLOCKING-s10-1 +
 3 non-blocking). Next phase for s10: IMPLEMENT — re-score R2 strictly from its
 packet and reconcile the report with `lead-packet.json` per BLOCKING-s10-1.
+
+## iter 34 — 2026-05-22 — s2 (Airtable schema) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s2 artifacts —
+the **live** Airtable schema of base `appOsvuyy5eK43QTx` / table
+`tblSmNrHROMLm7vOS` (via the Airtable MCP `list_tables_for_base` +
+`get_table_schema`) and the preflight reference file
+`.claude/skills/off-market-search/references/airtable_schema_preflight.md`.
+Not given the loop's logs or reasoning. Tasked to disprove that s2 is done.
+
+**Verdict: PASS (0 BLOCKING).**
+
+Both Done-when criteria met:
+- DW1 — all six required fields exist live with the exact name + type:
+  `Gov Entity ID` (`fld7Ook8ZoLAjwFTe`, singleLineText), `SBIC License #`
+  (`fldogicjVNMCBuyJI`, singleLineText), `SBIC License Status`
+  (`fldscFvXPUFYbSg3F`, singleSelect), `Gov Data Source` (`fldM7KoR2gtfvBVWN`,
+  multipleSelects), `Federal Award History $` (`fldZXrqqoBkIdDWJN`, currency),
+  `Source` (`fldiGyXTk6Ybb6J1L`, singleSelect). All six field IDs cited in the
+  preflight match the live schema. The `Source` single-select carries both
+  off-market values — `Off-Market — ASL Bolt-on` (`selezt48WJR6jPv2m`) and
+  `Off-Market — SBIC` (`seltqCid0e9t6aijI`) — confirmed byte-for-byte (em dash
+  U+2014 = `e2 80 94`, single ASCII spaces) by hexdump against the plan and the
+  preflight file. `SBIC License Status` carries all five options
+  (Good Standing / Under Review / Surrendered / Revoked / Unknown). PASS.
+- DW2 — the preflight check is genuinely fail-loud: it checks all six fields by
+  name+type, both `Source` options (explicit U+2014 requirement), all five
+  `SBIC License Status` options, and on any miss HALTS with a named-missing
+  operator message and explicitly never auto-creates. PASS.
+
+Hard constraints honored: no parallel tracker (preflight targets the correct
+base/table); fail loud, never silent (no auto-create path).
+
+Findings: none BLOCKING, none IMPROVE. One NIT raised by the critic — whether
+the skill body invokes the preflight as "Step 1" — is explicitly outside s2
+scope and was already confirmed by the iter-27 s9 VERIFY ("fail-loud halts
+(Step 1 preflight ...)"). Not filed as a new finding.
+
+Stage s2 → `verified`. `unresolved_findings` unchanged at 27.
