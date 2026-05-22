@@ -40,21 +40,6 @@ directory cross-check was not shown for them.
 entities; carry this forward to the s10 self-test.
 **Status:** OPEN.
 
-### IMPROVE-s6-1 — IMPROVE — s6 — dangling `buy-box-and-scoring.md` reference
-**Raised:** iter 19 VERIFY (s6 critic).
-**Where:** `.claude/skills/off-market-search/references/scoring_integration.md:20`;
-also `OFFMARKET_BUILD_PLAN.md:229` and `.claude/skills/off-market-search/skill.md:43`.
-**Problem:** the s6 spec (and the build plan) cite
-`.claude/skills/prospect-evaluation/references/buy-box-and-scoring.md` as a file
-used verbatim by the scorer. That file does not exist on disk and never existed
-in any commit — `prospect-evaluation/` contains only `skill.md`, with the buy-box
-rubric embedded inside it. Not an s6 functional defect (the scorer ran fine),
-but the off-market docs cite a non-existent companion file.
-**Fix:** point the reference at `.claude/skills/prospect-evaluation/skill.md`
-(or drop the `references/` path) in `scoring_integration.md`, `skill.md`, and the
-build plan's constraints section.
-**Status:** OPEN.
-
 ### IMPROVE-s6-2 — IMPROVE — s6 — both scored candidates are build-loop test inputs
 **Raised:** iter 19 VERIFY (s6 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s6-selftest.md`;
@@ -241,6 +226,40 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s6-1 — IMPROVE — s6 — dangling `buy-box-and-scoring.md` reference
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `.claude/skills/off-market-search/references/scoring_integration.md`;
+also `OFFMARKET_BUILD_PLAN.md` (lines 38 and 229).
+**Problem:** the s6 spec (and the build plan) cited
+`.claude/skills/prospect-evaluation/references/buy-box-and-scoring.md` as a file
+used verbatim by the scorer. That file does not exist on disk and never existed
+in any commit — `prospect-evaluation/` contains only `skill.md`, with the buy-box
+rubric embedded inside it. Not an s6 functional defect (the scorer ran fine),
+but the off-market docs cited a non-existent companion file.
+**Fix:** point the reference at `.claude/skills/prospect-evaluation/skill.md`
+(or drop the `references/` path) in `scoring_integration.md`, `skill.md`, and the
+build plan's constraints section.
+**Resolution (iter 67, RESOLVE):** the off-market `skill.md` no longer cited the
+dangling file at all (a prior edit had already removed it — confirmed by grep:
+`skill.md` references only `.claude/skills/prospect-evaluation/skill.md`), so the
+iter-19 `skill.md:43` citation was already stale. Two live references remained
+and were corrected: (1) `scoring_integration.md` — the "s6 never edits …"
+sentence now reads "s6 never edits the `prospect-evaluation` skill (`skill.md`)
+or its embedded rubric" (the rubric lives inside `skill.md`, not a separate
+file); (2) `OFFMARKET_BUILD_PLAN.md` — the §"Reference materials" line 38 and the
+§"Constraints" line 229 now name `.claude/skills/prospect-evaluation/skill.md`
+"which embeds the buy-box rubric" instead of the non-existent
+`references/buy-box-and-scoring.md`. A repo-wide grep of
+`.claude/skills/off-market-search/` and `OFFMARKET_BUILD_PLAN.md` for
+`buy-box-and-scoring` now returns no matches. Citation-correctness only; no
+scoring, mode-selection, or rubric behavior changed — the scorer was always
+`prospect-evaluation/skill.md` and is invoked as-is. (Other repo files —
+`PRD_OFF_MARKET_SEARCH.md`, the on-market PRD-loop docs, and
+`prospect-evaluation/skill.md`'s own internal `references/` citations — still
+carry the path; those are outside the s6 deliverable scope of this finding and
+the build loop does not modify the PRD or the on-market skill.)
+**Status:** RESOLVED.
 
 ### NIT-s6-2 — NIT — s6 — `prospect-evaluation/skill.md` has owner-only file mode
 **Raised:** iter 19 VERIFY (s6 critic).

@@ -35,8 +35,9 @@
    and operator-approved).
 3. **On-market system, for parity:** `REVAMP_PLAN.md` (canonical on-market
    plan), the `overnight-search` and `submit-url` skills, the
-   `prospect-evaluation` skill + `references/buy-box-and-scoring.md`,
-   `templates/daily-dashboard.html`. The off-market skill mirrors `overnight-
+   `prospect-evaluation` skill (`.claude/skills/prospect-evaluation/skill.md`,
+   which embeds the buy-box rubric), `templates/daily-dashboard.html`. The
+   off-market skill mirrors `overnight-
    search`'s structure and reuses every downstream stage.
 4. **`_ralph/evidence/onmarket-system-summary.md`** — the on-market facts on disk.
 
@@ -225,8 +226,9 @@ subagent confirms them.
 
 - **No parallel tracker.** Same base `appOsvuyy5eK43QTx`, same table
   `tblSmNrHROMLm7vOS`. Off-market and on-market rows are interchangeable.
-- **No new scorer.** Qualification reuses `prospect-evaluation` and
-  `references/buy-box-and-scoring.md` verbatim.
+- **No new scorer.** Qualification reuses the `prospect-evaluation` skill
+  (`.claude/skills/prospect-evaluation/skill.md`, which embeds the buy-box
+  rubric) verbatim.
 - **Fail loud, never silent.** Missing `Source` options or fields → stop with a
   clear operator message; do not silently create or skip.
 - **Never fabricate.** Unknown fields are "needs follow-up". No invented

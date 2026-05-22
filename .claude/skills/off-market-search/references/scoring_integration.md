@@ -79,8 +79,8 @@ scorer's own rubric.
   fact: **any change of control of a licensed SBIC requires SBA prior
   approval** — already present on every Class-2 `LeadPacket`; pass it through.
 
-s6 never edits `prospect-evaluation`, `references/buy-box-and-scoring.md`, or
-the rubric. If the scorer's auto-detection and the `eval_mode` above ever
+s6 never edits the `prospect-evaluation` skill (`skill.md`) or its embedded
+rubric. If the scorer's auto-detection and the `eval_mode` above ever
 disagree, that is a **BLOCKING** defect to log — not something s6 patches over.
 
 ---
