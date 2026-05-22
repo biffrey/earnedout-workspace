@@ -595,3 +595,52 @@ Zero BLOCKING → stage s10 → `verified`. **All 10 stages are now `verified`.*
 `unresolved_findings` unchanged at 29; `open_blockers` 0. Next phase: FINAL
 AUDIT — a fresh independent auditor subagent audits the whole build end-to-end
 against `OFFMARKET_BUILD_PLAN.md` and the PRD.
+
+## iter 45 — 2026-05-22 — FINAL AUDIT — NO-SHIP
+
+Fresh-context independent auditor subagent audited the whole build end-to-end
+against `OFFMARKET_BUILD_PLAN.md` and the PRD. It independently inspected real
+files, live Airtable state (`get_table_schema` of `tblSmNrHROMLm7vOS`), git
+history, and live cron state (`CronList`, `launchctl`). Not given the loop's
+logs or reasoning as truth.
+
+**Verdict: NO-SHIP (1 BLOCKING).**
+
+Confirmed PASS — seven deliverables and the honesty/constraint checks:
+- The skill (`skill.md` + 8 reference files), the §9.1 nine-step workflow, and
+  the manual single-entity path (`orchestration.md` §4, mirrors `submit-url`).
+- `config/offmarket_sources.md` — 11 sources, NAICS 541930 / PSC R608, no
+  `⚠ VERIFY:` placeholders.
+- **Live Airtable schema** — `Source` carries both off-market values (exact
+  U+2014 + spacing); the five §8.4 fields + `Gov Entity ID` exist with correct
+  types; test row `recklDY7vHFmKauQD` is well-formed with no fabricated value.
+- Dashboard off-market badge (`daily-dashboard.html:242,288,330`), on-market
+  rows unchanged.
+- Off-market outreach template distinct from the broker templates (git: broker
+  file untouched by the off-market loop).
+- **Honesty (highest-priority check):** both s10 lead packets read
+  field-by-field against their `.md`/`.html` reports and outreach drafts — no
+  fabricated field; BLOCKING-s10-1 and BLOCKING-s10-2 fixes both hold (SBIC
+  fund vintage 1983 never rendered as company formation date / track record).
+- Constraints: no parallel tracker; `prospect-evaluation/` has zero
+  build-era commits (used verbatim); no auto-send path; fail-loud preflight;
+  SBA prior-approval change-of-control fact on the Class-2 record/report/template.
+- The auditor independently judged the fixture-shell adapter findings
+  (`IMPROVE-s3-2/-s3-3/-s5-5`) **correctly classified IMPROVE, not BLOCKING** —
+  the primary discovery sources (S1 USAspending, S4 SBA SBIC directory) are
+  built for real and the shells degrade gracefully without fabricating.
+
+**BLOCKING finding — BLOCKING-s9-1.** Build-plan deliverable #7 and the s9
+`Done-when` both require the weekly `/schedule` cron to be **registered**.
+`CronList` returns "No scheduled jobs" and `launchctl list | grep offmarket`
+returns nothing — the cron is not live. The script, plist, and
+`config/offmarket_schedule.md` all exist and are correct, but live
+registration was gated on blocker B4; B4 is now RESOLVED, so the gate has
+cleared and the registration step should have run. A scheduled pipeline that
+is not scheduled is not done. Logged as **BLOCKING-s9-1** in `FINDINGS.md`.
+
+Per the FINAL AUDIT contract, NO-SHIP → set the named stage back to
+`not_started`. Stage **s9 → `not_started`**; `final_audit_passed` stays
+`false`. `unresolved_findings` 29 → 30 (BLOCKING-s9-1 added). `open_blockers`
+0. Next phase for s9: IMPLEMENT — register the weekly cron now that B4 is
+resolved, then re-run SELF-TEST / VERIFY.

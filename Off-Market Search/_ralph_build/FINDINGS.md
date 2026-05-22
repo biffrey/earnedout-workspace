@@ -351,6 +351,29 @@ stale-provenance class as NIT-s10-1 / IMPROVE-s10-3.
 evidence. Best done with the IMPROVE-s10-3 artifact refresh.
 **Status:** OPEN.
 
+### BLOCKING-s9-1 — BLOCKING — s9 — weekly `/schedule` cron is not registered though B4 is resolved
+**Raised:** iter 45 FINAL AUDIT (independent auditor).
+**Where:** s9 cadence deliverable — build-plan Deliverable #7 and the s9
+`Done-when` ("the weekly cron is registered"); `run-offmarket-search.sh`,
+`config/offmarket_schedule.md`,
+`config/launchd/ai.earnedout.offmarket-search.plist`,
+`.claude/skills/off-market-search/references/orchestration.md` §6.
+**Problem:** `CronList` returns "No scheduled jobs" and
+`launchctl list | grep offmarket` returns nothing — the weekly cron is not
+live. The script, the launchd plist, and `offmarket_schedule.md` all exist and
+are correct, but live registration was honestly gated on blocker B4 (the iter
+27 s9 VERIFY documented it as the post-B4 install step). B4 is now RESOLVED
+(`BLOCKERS.md`; the two `Source` values are live), so the gate has cleared and
+the registration step should have run. Build-plan Deliverable #7 requires the
+cron "registered" and s10's Definition of done requires all stages truly
+`verified`; an unscheduled weekly pipeline never fires.
+**Fix:** register the weekly cron now that B4 is resolved — via the `/schedule`
+skill or the `CronCreate` tool (weekly, Monday 06:00, runs `off-market-search`
+/ `run-offmarket-search.sh`, label `ai.earnedout.offmarket-search`), matching
+`config/offmarket_schedule.md`. Then confirm it is live with `CronList` /
+`launchctl list` and record the registration in the s9 SELF-TEST.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s10-2 — BLOCKING — s10 — R2 OM-2 outreach draft asserts an operating history the packet flags as a null gap
