@@ -81,18 +81,6 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
-### IMPROVE-s10-4 — IMPROVE — s10 — outreach-drafts file header still labels itself an s8-only artifact
-**Raised:** iter 41 VERIFY (s10 critic).
-**Where:** `Off-Market Search/_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md`
-line 3 (file header).
-**Problem:** the drafts file header calls itself a "BUILD-LOOP s8 SELF-TEST
-ARTIFACT", but the file is also the outreach-draft deliverable the s10 end-to-end
-dry run depends on (Step 7). The label lags the artifact's reuse — the same
-stale-provenance class as NIT-s10-1 / IMPROVE-s10-3.
-**Fix:** add an s10-reuse note to the header, or relabel it as shared s8/s10
-evidence. Best done with the IMPROVE-s10-3 artifact refresh.
-**Status:** OPEN.
-
 ### NIT-s9-3 — NIT — s9 — dry-run mode passage cites resolved blockers B3/B4 as open
 **Raised:** iter 49 SELF-TEST (s9 re-run).
 **Where:** `.claude/skills/off-market-search/references/orchestration.md` §5
@@ -131,6 +119,28 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s10-4 — IMPROVE — s10 — outreach-drafts file header still labels itself an s8-only artifact
+**Raised:** iter 41 VERIFY (s10 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md`
+line 3 (file header).
+**Problem:** the drafts file header calls itself a "BUILD-LOOP s8 SELF-TEST
+ARTIFACT", but the file is also the outreach-draft deliverable the s10 end-to-end
+dry run depends on (Step 7). The label lags the artifact's reuse — the same
+stale-provenance class as NIT-s10-1 / IMPROVE-s10-3.
+**Resolution (iter 74, RESOLVE):** rewrote the file header callout box of
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md`. The opening line now reads
+"BUILD-LOOP SHARED s8 / s10 EVIDENCE ARTIFACT" instead of "BUILD-LOOP s8
+SELF-TEST ARTIFACT", and the box body states the file was first produced by the
+s8 SELF-TEST and is reused as the outreach-draft deliverable of the s10
+end-to-end dry run (Step 7), cross-referencing `evidence/s10-e2e-dryrun.md`.
+Added an explicit iter-74 s10-reuse note recording that the OM-2 draft body was
+corrected at iter 42 (BLOCKING-s10-2) so it asserts no operating history the R2
+packet lists as a null gap — so the header no longer lags the artifact's
+cross-stage reuse. Evidence-header relabel only; no draft content, no skill
+code, spec, or write behavior changed — the drafts themselves are unchanged and
+remain DRAFT ONLY. s10 stays `verified`.
+**Status:** RESOLVED.
 
 ### IMPROVE-s10-3 — IMPROVE — s10 — dry-run artifacts cite resolved blockers as open
 **Raised:** iter 40 SELF-TEST (s10 re-run).

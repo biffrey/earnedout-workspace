@@ -1,11 +1,19 @@
 # Off-Market Outreach Drafts — 2026-05-22
 
-> **BUILD-LOOP s8 SELF-TEST ARTIFACT — NOT a production run.** This is the
-> evidence copy of the daily drafts file the `off-market-search` skill writes to
-> `search_reports/offmarket_outreach_drafts_YYYY-MM-DD.md`. It is kept under
-> `_ralph_build/evidence/` so the SELF-TEST does not pollute the live
-> `search_reports/` folder. Drafts below were generated from the s5/s6 SELF-TEST
-> leads (one fixture, one real SBIC). **All drafts are DRAFT ONLY — never sent.**
+> **BUILD-LOOP SHARED s8 / s10 EVIDENCE ARTIFACT — NOT a production run.** This
+> is the evidence copy of the daily drafts file the `off-market-search` skill
+> writes to `search_reports/offmarket_outreach_drafts_YYYY-MM-DD.md`. It is kept
+> under `_ralph_build/evidence/` so the build loop does not pollute the live
+> `search_reports/` folder. It was first produced by the s8 SELF-TEST and is
+> **reused as the outreach-draft deliverable of the s10 end-to-end dry run**
+> (Step 7) — see `evidence/s10-e2e-dryrun.md`. Drafts below were generated from
+> the s5/s6 SELF-TEST leads (one fixture, one real SBIC). **All drafts are
+> DRAFT ONLY — never sent.**
+>
+> _s10-reuse note (iter 74, RESOLVE — IMPROVE-s10-4):_ the OM-2 draft body was
+> corrected at iter 42 (BLOCKING-s10-2) so it asserts no operating history the
+> R2 packet lists as a null gap; this file is the current, post-correction
+> drafts artifact the s10 dry run depends on.
 
 ---
 

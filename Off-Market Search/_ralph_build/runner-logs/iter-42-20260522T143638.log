@@ -1,0 +1,13 @@
+Iteration 73 complete.
+
+**Step executed:** RESOLVE phase — cleared finding **IMPROVE-s10-3** (s10 dry-run artifacts cited resolved blockers B1/B3/B4 as open).
+
+**What changed:**
+- `s10-e2e-dryrun.md` — added an iter-73 refresh note; dropped the "live run would HALT at Step 1 (B4)" claim (B4 resolved, preflight now passes per the iter-38 s7 live write `recklDY7vHFmKauQD`); re-attributed S2/S3/S8 fixture usage from "blocked B3/B1" to the now-resolved adapter-rebuild findings IMPROVE-s3-2/-s3-3/-s5-5; rewrote "Known limitations" 1–3 as current non-blocker reasons for fixture use.
+- `s10-offmarket_run_log_e2e_dryrun.md` — updated Outcome, "Open blockers affecting this run" (now none), the Sources-queried status column, the Airtable-writes B4 line, and the operator follow-ups.
+- `FINDINGS.md` — moved IMPROVE-s10-3 to Resolved with resolution notes.
+- `STATE.md` — `iteration` 72→73, `unresolved_findings` 10→9.
+
+Evidence-refresh only — no skill code, spec, or behavior changed; s10 remains `verified`. Committed locally as iter 73.
+
+**Signal:** `CONTINUE` — 9 findings remain (`IMPROVE-s5-3`, `IMPROVE-s6-2`, `IMPROVE-s8-1`, `NIT-s9-1`, `NIT-s9-2`, `NIT-s10-1`, `IMPROVE-s10-4`, `NIT-s9-3`, `NIT-s9-4`), all non-blocking RESOLVE-phase polish.
