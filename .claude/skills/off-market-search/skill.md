@@ -103,14 +103,21 @@ in `enrichment_gaps`. _(Enrichment + pre-filters: s5 — see
 ## Step 5 — Qualify & score
 *Built by s6.*
 
-Invoke the **existing** `prospect-evaluation` skill — no new scoring:
-- **Class 1:** roll-up add-on mode (Applied Development, no size floor, /110
-  scale). Off-market "no asking price" → "insufficient data — not awarded", not
-  a failure.
-- **Class 2:** SBIC mode (license-good-standing gate; financials + 0–100 score
-  informational).
-Capture the score and the `.md` + `.html` reports to
-`output/reports/{entity-id}/`. _(Scoring integration: s6.)_
+Run the procedure in `references/scoring_integration.md` over each `LeadPacket`
+from Step 4. It invokes the **existing, unmodified** `prospect-evaluation` skill
+— no new scoring logic, no new rubric:
+- **Class 1:** `rollup_addon` mode (Applied Development platform, no size floor,
+  /110 scale; an `adjacent` keyword tier awards the line-10 bonus at 5 not 10).
+  Off-market "no asking price" → the valuation line scores "insufficient data —
+  not awarded", **not a failure and not an abort**.
+- **Class 2:** `sbic` mode — the SBIC license-good-standing gate (fed from
+  `sbic_license_status`) is the sole hard criterion; financials and the 0–100
+  score are informational. Every Class-2 report carries the SBA
+  prior-approval-of-change-of-control fact.
+Each candidate emerges as a `ScoredLead`; the score and the `.md` + `.html`
+reports are captured to `output/reports/{report_slug}/` (a filesystem-safe form
+of the `Gov Entity ID`). _(Scoring integration: s6 — see
+`references/scoring_integration.md`.)_
 
 ## Step 6 — Create / update the Airtable record
 *Built by s7.*

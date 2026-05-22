@@ -245,3 +245,66 @@ value consistency with the s7 Airtable write preserved.
 Stage s5 → `drafted`. Next phase for s5: SELF-TEST (re-run the pre-filters +
 enrichment + `LeadPacket` assembly, confirming §5.1 yields only live
 `Gov Data Source` choices).
+
+## iter 17 — 2026-05-22 — s6 (Scoring integration) — IMPLEMENT
+
+Built the stage-s6 deliverable: the integration layer that scores each s5
+`LeadPacket` by invoking the **existing, unmodified** `prospect-evaluation`
+skill — no new scoring logic, no new rubric, no parallel scorer.
+
+- **`.claude/skills/off-market-search/references/scoring_integration.md`** — the
+  s6 reference. Contents:
+  - **Stage I/O** — input is the s5 `LeadPacket` list (`prefilter_verdict:
+    pass`); output is one **`ScoredLead`** per packet (the `LeadPacket` carried
+    through unchanged + `eval_mode`, `lead_score`, `score_denominator`,
+    `score_is_informational`, `buybox_gate`, `report_md_path` /
+    `report_html_path` / `report_slug`, `scoring_notes`). `ScoredLead` adds no
+    scoring math — only what the unmodified scorer returned + s7 bookkeeping.
+  - **§2 mode selection** — Class 1 → `rollup_addon` (Applied Development named
+    explicitly, NAICS 541930, no size floor, +10 line-10 bonus, /110 scale; an
+    `adjacent` keyword tier awards the line-10 bonus at **5 not 10** per §13).
+    Class 2 → `sbic` (license-good-standing gate is the sole hard criterion;
+    0–100 score informational). s6 makes the intended mode explicit but never
+    edits `prospect-evaluation` or its rubric; a detection/`eval_mode`
+    disagreement is a BLOCKING defect to log, not patch over.
+  - **§3 field mapping** — `LeadPacket` → the same lead-data inputs
+    `overnight-search` Step 6 passes the scorer; a gap stays a gap (`null` /
+    "needs follow-up" passed through, never back-filled). §3.1: `revenue_signal`
+    / `federal_award_total` / `sbic_gp_economics` are **signals**, passed
+    labelled as such so the scorer's own "never fabricate financials" rule
+    leaves undisclosed EBITDA blank.
+  - **§3.2 "no asking price"** — off-market literal `"not for sale — no asking
+    price"` → Buy Box asking-price check ⚠️ "insufficient data"; valuation-
+    multiple rubric line scores **0 — "insufficient data — not awarded"**, not a
+    ❌, no abort, candidate not dropped. A scorer that crashes/refuses purely
+    for absent asking price is flagged BLOCKING (the Done-when criterion).
+  - **§4 SBIC good-standing gate** (Class 2) — `sbic_license_status` →
+    `buybox_gate`: `Good Standing`→`pass`, `Under Review`/`Unknown`→
+    `conditional`, `Surrendered`/`Revoked`→`fail`. A `fail`/`conditional` gate
+    does **not** drop the candidate (still scored, still written by s7, gate
+    surfaced); score stays informational; SBA prior-approval fact carried.
+  - **§5 capture** — mirrors `overnight-search` Step 6: `output/reports/
+    {report_slug}/` with `lead-packet.json`, the screenshot, and both
+    `{company-slug}-report.md` + `.html`; `lead_score` + `score_denominator`
+    extracted from the report header. **§5.1** defines `report_slug` — a
+    deterministic filesystem-safe form of `entity_id` (which carries `:` / `|`),
+    stable across runs so a re-score overwrites its own dir, no duplicate.
+  - **§6 failure handling** — a per-candidate scorer failure sets
+    `lead_score: null` and continues (one failed score ≠ a failed run); sparse
+    enrichment is still scored; a fail-the-gate target still gets a full report
+    (scorer rule 10); never fabricate to lift a score.
+- **`skill.md` Step 5 updated** to point at `references/scoring_integration.md`
+  and describe the per-class mode, the adjacent-tier bonus, the graceful "no
+  asking price" handling, the SBIC gate, and the `ScoredLead` / `report_slug`
+  output.
+
+Constraints honored: no new scorer / no parallel tracker (s6 only invokes
+`prospect-evaluation` unchanged and feeds s7); never fabricate (gaps passed
+through as gaps; financial signals labelled as signals); off-market "no asking
+price" handled as insufficient-data, not a failure; SBA-prior-approval fact
+carried on every Class-2 `ScoredLead`.
+
+Stage s6 → `drafted`. Next phase for s6: SELF-TEST (drive the procedure over the
+s5 SELF-TEST `LeadPacket`s — R1 Class 1 `rollup_addon` /110, R2 Class 2 `sbic`
+informational with a `buybox_gate` from `sbic_license_status`; confirm the
+"no asking price" handling and the filesystem-safe `report_slug`).
