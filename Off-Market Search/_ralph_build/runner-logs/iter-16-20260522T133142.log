@@ -1,0 +1,12 @@
+Iteration 47 complete — one step: **s9 (Orchestration & cadence) — SELF-TEST**.
+
+**Result: 4 PASS, 1 FAIL.**
+- T1 full pipeline wired (Steps 1–9) — PASS
+- T2 manual single-entity path — PASS
+- T3 weekly cron registered — PASS (`launchctl print` confirms Monday 06:00 / Weekday=1, Hour=6, plist installed)
+- T4 run-log format — PASS
+- **T5 skill self-documentation matches registered state — FAIL.** The iter-46 re-IMPLEMENT registered the launchd agent and updated `config/offmarket_schedule.md`, but left three passages still documenting the cron as gated on blocker B4 (now resolved) and not yet registered: `skill.md` Cadence section, `skill.md` BUILD STATUS header, and `orchestration.md` §6. An operator reading `skill.md` would wrongly conclude the cron isn't live.
+
+s9 → `not_started` (returns to IMPLEMENT to correct the stale B4-gating text). STATE bumped to iteration 47; `unresolved_findings` unchanged at 29 (a SELF-TEST failure routes back to IMPLEMENT, no new FINDINGS entry); `open_blockers` 0. Committed locally.
+
+Signal: **CONTINUE** — non-blocked work remains (s9 IMPLEMENT next).

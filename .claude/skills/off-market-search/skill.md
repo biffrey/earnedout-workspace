@@ -9,11 +9,11 @@ description: Runs the EarnedOut off-market target search pipeline. Mines U.S. go
 > are fully wired end-to-end by the off-market build loop
 > (`OFFMARKET_BUILD_LOOP_PROMPT.md`): each step points at its stage reference
 > and the run order, hand-off, and failure handling are specified in
-> `references/orchestration.md`. The skill is **not yet cleared for an
-> unattended live run** — the build loop has not reached
-> `OFFMARKET_BUILD_VERIFIED`, and the Step 1 schema preflight will fail loud
-> until blocker B4 (the two off-market `Source` values) is resolved. Run only
-> in **dry-run / fixture mode** (`references/orchestration.md` §5) until then.
+> `references/orchestration.md`. Blocker B4 is **resolved** — the two off-market
+> `Source` values are live, so the Step 1 schema preflight passes. The skill is
+> still **not yet cleared for an unattended live run** — the build loop has not
+> reached `OFFMARKET_BUILD_VERIFIED`. Until it does, run in **dry-run / fixture
+> mode** (`references/orchestration.md` §5).
 
 You are running the EarnedOut **off-market** target search pipeline. Unlike the
 `overnight-search` skill (which searches broker listing sites for businesses
@@ -213,8 +213,10 @@ command, the local `launchd` fallback, and the prerequisites are in
 **`config/offmarket_schedule.md`**; the headless entrypoint is
 `run-offmarket-search.sh` at the repo root. The off-market run needs **no `op` /
 1Password** credential (no login-walled source); it does need the Airtable and
-Playwright MCP servers. Live cron registration is gated on blocker B4 so the
-weekly run does not fail loud before the `Source` values exist.
+Playwright MCP servers. The weekly cron is **registered and live** — the local
+`launchd` agent `ai.earnedout.offmarket-search` (Monday 06:00 local), installed
+once blocker B4 was resolved (build loop iter 46). See
+`config/offmarket_schedule.md` "Registration".
 
 ## Constraints (invariant)
 

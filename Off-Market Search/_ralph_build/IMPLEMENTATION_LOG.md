@@ -828,3 +828,37 @@ Stage s9 → `drafted`. Next phase for s9: SELF-TEST — exercise the assembled
 skill / manual path and confirm the weekly agent is live and correctly
 scheduled (`launchctl print` calendar interval), recording each check in
 `TEST_LOG.md`.
+
+## iter 48 — 2026-05-22 — s9 (Orchestration & cadence) — IMPLEMENT (re-run)
+
+Re-IMPLEMENT after the iter-47 SELF-TEST T5 FAIL: three skill files still
+documented the weekly cron as *not yet registered* and B4 as *open*, though
+iter 46 registered the launchd agent live and B4 is resolved. No pipeline logic
+changed — this iteration corrects only the three stale self-documentation
+passages so the skill matches the registered reality.
+
+- **`skill.md` BUILD STATUS header.** Dropped the stale claim that "the Step 1
+  schema preflight will fail loud until blocker B4 ... is resolved". Now states
+  B4 is resolved and the preflight passes. Kept the still-true status — the
+  skill is not yet cleared for an unattended live run because the build loop
+  has not reached `OFFMARKET_BUILD_VERIFIED`; run in dry-run / fixture mode
+  until it does.
+- **`skill.md` Cadence section.** Replaced "Live cron registration is gated on
+  blocker B4 ..." with the registered reality: the weekly cron is registered
+  and live as the local `launchd` agent `ai.earnedout.offmarket-search`
+  (Monday 06:00 local), installed once B4 cleared (iter 46); pointer to
+  `config/offmarket_schedule.md` "Registration".
+- **`references/orchestration.md` §6.** Replaced "the **live registration** is
+  the install step ... (it is gated on the B4 schema work ...)" with "the live
+  registration is done — once B4 cleared (iter 46), the cron was installed as
+  the local `launchd` agent `ai.earnedout.offmarket-search` (Monday 06:00
+  local)".
+
+Constraints honored: no pipeline logic touched; no parallel tracker / no new
+scorer; nothing fabricated; the launchd state itself is unchanged (verified
+live in the iter-47 SELF-TEST T3 — `ai.earnedout.offmarket-search` loaded,
+`Minute=0, Hour=6, Weekday=1`). All three files now agree with
+`config/offmarket_schedule.md`, which iter 46 already corrected.
+
+Stage s9 → `drafted`. Next phase for s9: SELF-TEST — re-run the five checks,
+which T5 (skill self-documentation matches the registered state) must now pass.

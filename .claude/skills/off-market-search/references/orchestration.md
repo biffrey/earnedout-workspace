@@ -162,9 +162,10 @@ classes, via a `/schedule` cron.** The cadence definition, the trigger prompt,
 the registration command, and the prerequisites live in
 `config/offmarket_schedule.md`; the headless entrypoint is
 `run-offmarket-search.sh` at the repo root. s9 produces those artifacts; the
-**live registration** is the install step in `config/offmarket_schedule.md`
-(it is gated on the B4 schema work so the cron does not fail-loud weekly before
-the `Source` values exist — see that file's "Registration" section).
+**live registration is done** — once blocker B4 cleared (build loop iter 46),
+the cron was installed as the local `launchd` agent
+`ai.earnedout.offmarket-search` (Monday 06:00 local). See that file's
+"Registration" section.
 
 The off-market run is **independent of the nightly on-market run** — different
 skill, different schedule label, different log files. It does **not** need the
