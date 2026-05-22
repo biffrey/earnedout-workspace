@@ -498,3 +498,65 @@ preflight (`references/airtable_schema_preflight.md`) — against the
 
 **Result: all 6 checks PASS. No BLOCKING defect.** Stage s2 → `self_checked`.
 No new findings. Next phase for s2: VERIFY (fresh-context critic).
+
+## iter 36 — 2026-05-22 — s7 (Airtable write & dashboard badge) — SELF-TEST
+
+Re-ran the s7 SELF-TEST after the iter-34 re-IMPLEMENT and B4's resolution. The
+iter-21 SELF-TEST left C5 (the central s7 `Done-when` — a scored off-market
+prospect appearing as a live row in `tblSmNrHROMLm7vOS`) BLOCKED by B4; with B4
+resolved this iteration drove the `airtable_write.md` write procedure for real
+against the live base, attempting an actual create of the Class-2 SBIC lead R2
+(1st Source Capital Corporation, `NAME:1st source capital|south bend in`,
+score 20/100). R1 is a synthetic fixture and was deliberately **not** written to
+the live tracker (writing `EXAMPLE INTERPRETING FIXTURE LLC` into the production
+pipeline would be inserting fabricated data — the real Class-1 row stays gated
+on the IMPROVE-s3-1 chain). Five checks against the `OFFMARKET_BUILD_PLAN.md` s7
+`Done-when` criteria:
+
+- **Preflight — live schema confirmed.** PASS. `get_table_schema` of the six
+  required fields: all present with the correct types (`Gov Entity ID` /
+  `SBIC License #` singleLineText, `SBIC License Status` singleSelect [5
+  options], `Gov Data Source` multipleSelects [8 choices], `Federal Award
+  History $` currency, `Source` singleSelect with `Off-Market — SBIC`
+  `seltqCid0e9t6aijI`). `Industry Match` has `SBIC` (`selwe1CYRoCvC5R8V`);
+  `Disposition` has `Active` (`selKN12meneKypCem`). The preflight passes.
+- **Dedup — R2 is `new`.** PASS. `search_records` for "1st Source Capital" over
+  `tblSmNrHROMLm7vOS` returns zero rows → `dedup_verdict: new` → create path.
+- **C1 — badge style block present & well-formed.** PASS (inspection,
+  unchanged since iter 21 / re-confirmed iter 34). `.chip.offmarket` in
+  `daily-dashboard.html`, green `--pass` palette, base `.chip` rule unchanged.
+- **C2 — badge renders on off-market rows only.** PASS (inspection, unchanged).
+  `{% if lead.source.startswith('Off-Market') %}` in the three row sections;
+  additive — on-market rows render as before.
+- **C3 — every s7 field ID maps to a live field of the correct type.** PASS for
+  the §3.3 new fields and the §3.2/`Source` IDs (confirmed live this iteration).
+- **C4 — create/update split & no-fabrication mapping.** PASS by inspection for
+  the create/update branch and the no-fabrication rule (every R2 unknown left
+  blank: `SBIC License #`, `Federal Award History $`, website, EBITDA, revenue,
+  years-in-business, NAICS, screenshot, `Listing ID`, `Direct Listing URL`).
+- **C5 — a scored off-market prospect writes as a live row in
+  `tblSmNrHROMLm7vOS` with `Disposition = Active`.** **FAIL.** The live
+  `create_records_for_table` call — built field-by-field per `airtable_write.md`
+  §3 — was **rejected atomically** with `HTTP 422: Insufficient permissions to
+  create new select option ""SBA SBIC directory""`. Root cause: §3.1 maps
+  `Lead Source` (`fldI1h3qmNI6vc5rr`) to a free-text "human-readable" gov-source
+  string, but a live `get_table_schema` read shows `Lead Source` is a
+  **singleSelect** restricted to 14 broker-platform options (`Direct Outreach`,
+  `Broker`, `Referral`, `Conference`, `BizBuySell`, `BizQuest`, `Axial`,
+  `Grata`, `DealStream`, `Trade-A-Plane`, `LinkedIn`, `Other Platform`,
+  `General Web`, `BusinessBroker.net`) — it cannot hold an arbitrary gov-source
+  string, and auto-creating an option is forbidden by the build constraints. A
+  post-attempt `search_records` confirms **zero rows written** (the 422 is
+  atomic). No record was created; the badge half is fine but the central s7
+  `Done-when` is not met by the procedure as written.
+
+**Result: preflight + dedup + C1–C4 PASS; C5 FAILS.** This is a real defect in
+the s7 deliverable, not an external blocker — `airtable_write.md` §3.1's
+`Lead Source` mapping is invalid against the live field type. Per the SELF-TEST
+contract a failed check returns the stage to IMPLEMENT: stage s7 →
+`not_started`. New finding **BLOCKING-s7-1** logged in `FINDINGS.md`
+(`unresolved_findings` 27 → 28). Next phase for s7: IMPLEMENT — fix the §3.1
+`Lead Source` mapping (leave it blank for off-market rows — gov provenance is
+already carried by the dedicated `Gov Data Source` multi-select and `Links` —
+or map to an existing option), then re-run this SELF-TEST including the live
+write of R2.

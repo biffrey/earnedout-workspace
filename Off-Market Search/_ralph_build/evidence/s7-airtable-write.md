@@ -46,7 +46,27 @@ auto-creates. No stale "B4 open / blocked" prose is present in the file.
 ## Summary
 
 Both s7 deliverables exist and are consistent with the complete live schema.
-No code change was required this iteration — the re-IMPLEMENT is a confirmation
-pass (mirrors the iter-32 s2 re-IMPLEMENT). Next phase: SELF-TEST — drive the
-write procedure over the s6 SELF-TEST `ScoredLead`s into a test context and
-confirm the badge render condition.
+No code change was required at iter 34 — the re-IMPLEMENT was a confirmation
+pass (mirrors the iter-32 s2 re-IMPLEMENT).
+
+## iter 36 SELF-TEST — live write attempt — C5 FAIL (BLOCKING-s7-1)
+
+With B4 resolved, the iter-36 SELF-TEST drove the §3 write procedure for real
+against base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS`, attempting a live
+`create_records_for_table` for the Class-2 SBIC lead R2 (1st Source Capital
+Corporation). Preflight, dedup, and the badge checks passed; the live write was
+**rejected atomically**:
+
+```
+HTTP 422: Insufficient permissions to create new select option ""SBA SBIC directory""
+```
+
+Root cause: `airtable_write.md` §3.1 maps `Lead Source` (`fldI1h3qmNI6vc5rr`)
+to a free-text gov-source string, but the field is a **singleSelect** of 14
+broker-platform options (live `get_table_schema`: `Direct Outreach`, `Broker`,
+`Referral`, `Conference`, `BizBuySell`, `BizQuest`, `Axial`, `Grata`,
+`DealStream`, `Trade-A-Plane`, `LinkedIn`, `Other Platform`, `General Web`,
+`BusinessBroker.net`). A post-attempt `search_records` confirmed **zero rows
+written**. Logged as **BLOCKING-s7-1**; s7 → `not_started` for an IMPLEMENT
+fix of the §3.1 `Lead Source` mapping. See `TEST_LOG.md` iter 36 and
+`FINDINGS.md` BLOCKING-s7-1.

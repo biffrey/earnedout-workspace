@@ -314,6 +314,30 @@ entity registration completes for the ~1,000/day tier). Keep the common adapter
 interface unchanged so s4–s6 are unaffected.
 **Status:** OPEN.
 
+### BLOCKING-s7-1 — BLOCKING — s7 — `Lead Source` mapping invalid against the live field type
+**Raised:** iter 36 SELF-TEST (s7).
+**Where:** `.claude/skills/off-market-search/references/airtable_write.md` §3.1,
+the `Lead Source (fldI1h3qmNI6vc5rr)` row.
+**Problem:** §3.1 maps `Lead Source` to "the gov source system(s) the target
+came from (human-readable, e.g. `"USAspending.gov; SAM.gov"`)" — a free-text
+string. But a live `get_table_schema` read shows `Lead Source`
+(`fldI1h3qmNI6vc5rr`) is a **singleSelect** restricted to 14 broker-platform
+options (`Direct Outreach`, `Broker`, `Referral`, `Conference`, `BizBuySell`,
+`BizQuest`, `Axial`, `Grata`, `DealStream`, `Trade-A-Plane`, `LinkedIn`,
+`Other Platform`, `General Web`, `BusinessBroker.net`). A live
+`create_records_for_table` per §3 was rejected atomically with `HTTP 422:
+Insufficient permissions to create new select option` — so no off-market row
+can be written by the procedure as written, and auto-creating an option is
+forbidden by the build constraints (fail loud, never silently create). The
+central s7 `Done-when` (a live row in `tblSmNrHROMLm7vOS`) cannot be met until
+this is fixed.
+**Fix:** change the §3.1 `Lead Source` mapping for off-market rows — leave the
+field **blank** (the gov provenance is already carried by the dedicated
+`Gov Data Source` multi-select and the `Links` field), or map it to an existing
+singleSelect option (e.g. `Direct Outreach`). Do not auto-create a select
+option. Then re-run the s7 SELF-TEST including the live write of R2.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
