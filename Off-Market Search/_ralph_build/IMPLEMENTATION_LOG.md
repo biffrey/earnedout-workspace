@@ -688,3 +688,46 @@ over the s6 SELF-TEST `ScoredLead`s into a test context — confirm a Class-1 an
 a Class-2 record map field-by-field per §3 with no fabricated field, an
 `existing` entity updates in place per §4, and the `.chip.offmarket` badge
 renders on an off-market row while an on-market row is unchanged).
+
+## iter 37 — 2026-05-22 — s7 (Airtable write & dashboard badge) — IMPLEMENT (re-IMPLEMENT, BLOCKING-s7-1)
+
+The iter-36 SELF-TEST failed C5 — the live `create_records_for_table` for R2
+was rejected atomically with `HTTP 422: Insufficient permissions to create new
+select option` — and logged BLOCKING-s7-1: `airtable_write.md` §3.1 mapped
+`Lead Source` (`fldI1h3qmNI6vc5rr`) to a free-text human-readable gov-source
+string, but the live field is a **singleSelect** restricted to 14
+broker-platform options. Writing a gov-source string into it forces Airtable to
+create a new select option, which the build constraints forbid (fail loud,
+never silently create). This iteration fixes that defect.
+
+- **§3.1 `Lead Source` row rewritten.** The off-market value is now **blank**.
+  The row documents why: `Lead Source` is a singleSelect restricted to the 14
+  broker-platform options (`Direct Outreach` … `BusinessBroker.net`), it cannot
+  hold a gov-source string, and a gov source is not a broker platform. Gov
+  provenance is already carried by the dedicated `Gov Data Source` multi-select
+  (§3.3) and the source URL(s) in `Links` (§3.1) — no information is lost by
+  leaving `Lead Source` blank. The row explicitly forbids auto-creating a select
+  option to hold a gov value.
+- **§6 hardened.** Added a bullet — "Never auto-create a select option on any
+  field" — naming the exact failure mode: writing a value outside a
+  singleSelect/multipleSelects option set makes Airtable reject the whole
+  `create_records_for_table` call atomically with the 422 seen in iter 36. The
+  rule: map only to existing options, or leave the field blank. This generalizes
+  the pre-existing "never auto-create a `Source` value" rule to every select
+  field.
+
+No other §3/§4 mapping changed — every other field was already either an
+existing option, a free-text/number/currency/date field, or a confirmed-live
+select value (`Source`, `SBIC License Status`, `Gov Data Source`,
+`Disposition`, `Industry Match`). No live Airtable write was performed this
+iteration (the live R2 write is the SELF-TEST's job, next phase).
+
+Constraints honored: no parallel tracker / no new scorer; never fabricate;
+fail loud (the fix removes a silent-create path, it does not add one); never
+auto-send. BLOCKING-s7-1 is resolved — moved to the FINDINGS.md "Resolved"
+section; `unresolved_findings` 28 → 27.
+
+Stage s7 → `drafted`. Next phase for s7: SELF-TEST — re-run the write procedure
+including the live `create_records_for_table` of R2, now with `Lead Source`
+left blank; confirm the row lands in `tblSmNrHROMLm7vOS` with `Disposition =
+Active` (C5), and re-confirm C1–C4 and the badge.

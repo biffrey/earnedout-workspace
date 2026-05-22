@@ -79,7 +79,7 @@ from `evidence/s2-airtable-schema.md`. Map from the `ScoredLead`
 | Business Address (`fldkVBunWYKdXkgpB`) | `lead_packet.location` / resolved address (SAM.gov / SOS) |
 | Website (`fldTRaz0PzBYS9ICl`) | `lead_packet.website` — blank if `website_status: none_found` |
 | Links (`fldwo7ui7aIGoMxAG`) | `lead_packet.provenance_urls` — the source government-record URL(s) |
-| Lead Source (`fldI1h3qmNI6vc5rr`) | The gov source system(s) the target came from (human-readable, e.g. `"USAspending.gov; SAM.gov"`) |
+| Lead Source (`fldI1h3qmNI6vc5rr`) | **Blank** off-market. `Lead Source` is a **singleSelect** restricted to 14 broker-platform options (`Direct Outreach`, `Broker`, `Referral`, `Conference`, `BizBuySell`, `BizQuest`, `Axial`, `Grata`, `DealStream`, `Trade-A-Plane`, `LinkedIn`, `Other Platform`, `General Web`, `BusinessBroker.net`) — it cannot hold a gov-source string and a gov source is not a broker platform. Gov provenance is carried by the dedicated `Gov Data Source` multi-select (§3.3) and the source URL(s) in `Links` (§3.1). **Never auto-create a select option** to hold a gov-source value |
 | Broker Name (`fldXdZC8Tbrbk8ysk`) | **Blank** off-market — no broker |
 | Owner Name (`fldfa10GqZ1FfinQW`) | `lead_packet.contact.name` if a direct contact (owner / SBIC GP principal) was found |
 | Contact Email / Phone (`fldlOcCvi9SSCoIu2` / `fldlsBbVahZqAiMHd`) | From `lead_packet.contact` if found; else blank |
@@ -196,6 +196,13 @@ new dict field is needed for the badge.
 - **Never auto-create a `Source` value or field.** That is a Step-1
   preflight/operator concern (§2); s7 only writes against a schema already
   confirmed present.
+- **Never auto-create a select option on any field.** `Lead Source` is a
+  singleSelect with a fixed broker-platform option set (§3.1) — off-market rows
+  leave it blank rather than writing an unmatched value. Writing a value not in
+  a singleSelect/multipleSelects field's option set causes Airtable to reject
+  the whole `create_records_for_table` call atomically (`HTTP 422: Insufficient
+  permissions to create new select option`). Map only to existing options, or
+  leave the field blank.
 
 ---
 

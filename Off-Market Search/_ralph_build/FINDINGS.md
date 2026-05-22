@@ -314,6 +314,8 @@ entity registration completes for the ~1,000/day tier). Keep the common adapter
 interface unchanged so s4–s6 are unaffected.
 **Status:** OPEN.
 
+## Resolved
+
 ### BLOCKING-s7-1 — BLOCKING — s7 — `Lead Source` mapping invalid against the live field type
 **Raised:** iter 36 SELF-TEST (s7).
 **Where:** `.claude/skills/off-market-search/references/airtable_write.md` §3.1,
@@ -336,9 +338,16 @@ field **blank** (the gov provenance is already carried by the dedicated
 `Gov Data Source` multi-select and the `Links` field), or map it to an existing
 singleSelect option (e.g. `Direct Outreach`). Do not auto-create a select
 option. Then re-run the s7 SELF-TEST including the live write of R2.
-**Status:** OPEN.
-
-## Resolved
+**Resolution (iter 37, s7 re-IMPLEMENT):** rewrote the §3.1 `Lead Source` row —
+the off-market value is **blank**, with the row stating `Lead Source` is a
+singleSelect restricted to the 14 broker-platform options and that gov
+provenance is carried by the `Gov Data Source` multi-select (§3.3) and the
+source URL(s) in `Links` (§3.1). Leaving it blank loses no information. Also
+hardened §6 with a new bullet — "Never auto-create a select option on any
+field" — naming the exact 422 failure mode and the rule (map to existing
+options or leave blank). **Status:** RESOLVED — s7 returns to the phase ladder
+(re-SELF-TEST next; the SELF-TEST must re-attempt the live `create_records_for_table`
+of R2 with `Lead Source` blank and confirm the row lands).
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
 **Raised:** iter 13 VERIFY (s5 critic).
