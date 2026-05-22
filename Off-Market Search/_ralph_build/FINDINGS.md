@@ -63,18 +63,6 @@ Cosmetic schema inconsistency.
 pattern.
 **Status:** OPEN.
 
-### IMPROVE-s5-4 — IMPROVE — s5 — self-test C7 cites stale line numbers
-**Raised:** iter 16 VERIFY (s5 critic, re-run).
-**Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` lines 174 and
-177 (C7).
-**Problem:** C7 claims the R1 packet "Matches line 97 of this file" and the R2
-packet "Matches line 125". After the iter-15 self-test rewrite, the actual
-`gov_data_source` rows are at lines 104 and 132; lines 97/125 are unrelated rows
-(`years_in_business`, `formation_date`). Stale iter-14 cross-references.
-**Fix:** change "line 97" → "line 104" and "line 125" → "line 132", or drop the
-line citations.
-**Status:** OPEN.
-
 ### IMPROVE-s6-1 — IMPROVE — s6 — dangling `buy-box-and-scoring.md` reference
 **Raised:** iter 19 VERIFY (s6 critic).
 **Where:** `.claude/skills/off-market-search/references/scoring_integration.md:20`;
@@ -284,6 +272,28 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s5-4 — IMPROVE — s5 — self-test C7 cites stale line numbers
+**Raised:** iter 16 VERIFY (s5 critic, re-run).
+**Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` lines 174 and
+177 (C7).
+**Problem:** C7 claims the R1 packet "Matches line 97 of this file" and the R2
+packet "Matches line 125". After the iter-15 self-test rewrite, the actual
+`gov_data_source` rows are at lines 104 and 132; lines 97/125 are unrelated rows
+(`years_in_business`, `formation_date`). Stale iter-14 cross-references.
+**Fix:** change "line 97" → "line 104" and "line 125" → "line 132", or drop the
+line citations.
+**Resolution (iter 63, RESOLVE):** changed both stale C7 citations in
+`evidence/s5-selftest.md` — item 1 "Matches line 97 of this file" → "line 104"
+and item 2 "Matches line 125" → "line 132". Verified against the file on disk:
+the R1 `gov_data_source` row (`["SAM.gov", "SAM.gov Contract Awards"]`) is at
+line 104 and the R2 `gov_data_source` row (`["SBA SBIC"]`) is at line 132 — old
+lines 97/125 are the unrelated `years_in_business` / `formation_date` rows. The
+iter-15 re-run header (line 5) carried the same stale `97 / 125` pair describing
+the iter-14 choice-string fix; updated it to `104 / 132` so the whole file is
+internally consistent. Evidence-only change; the C7 PASS verdict, the §5.1
+mapping behavior, and every `gov_data_source` value are unchanged.
+**Status:** RESOLVED.
 
 ### NIT-s6-1 — NIT — s6 — self-test cites a stale score line number
 **Raised:** iter 19 VERIFY (s6 critic).

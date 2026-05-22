@@ -1103,3 +1103,30 @@ parallel tracker, or scorer touched.
 
 NIT-s6-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 21 → 20. 20 findings remain. RESOLVE phase continues.
+
+## Iteration 63 — RESOLVE — IMPROVE-s5-4
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s5-4** (IMPROVE, s5) — the iter-16 s5 critic flagged that
+C7 of `evidence/s5-selftest.md` cites stale "Matches line 97" / "Matches line
+125" cross-references. After the iter-15 self-test rewrite the actual
+`gov_data_source` rows moved; lines 97/125 are now unrelated rows
+(`years_in_business`, `formation_date`).
+
+Fix (evidence-only change): changed C7 item 1 "Matches line 97 of this file"
+→ "line 104" and C7 item 2 "Matches line 125" → "line 132". Verified against
+the file on disk — the R1 `gov_data_source` row
+(`["SAM.gov", "SAM.gov Contract Awards"]`) is at line 104 and the R2
+`gov_data_source` row (`["SBA SBIC"]`) is at line 132; old lines 97/125 are the
+unrelated `years_in_business` / `formation_date` rows. The iter-15 re-run
+header (line 5) carried the identical stale `97 / 125` pair describing the
+iter-14 choice-string fix — updated it to `104 / 132` so the whole file is
+internally consistent.
+
+Constraints honored: evidence-only change — the C7 PASS verdict, the §5.1
+`source_id → Gov Data Source` mapping behavior, and every `gov_data_source`
+value are unchanged; no skill code, spec, parallel tracker, or scorer touched.
+
+IMPROVE-s5-4 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+20 → 19. 19 findings remain. RESOLVE phase continues.

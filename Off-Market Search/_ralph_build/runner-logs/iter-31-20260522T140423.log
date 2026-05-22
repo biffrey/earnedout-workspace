@@ -1,0 +1,5 @@
+Iteration 62 complete — RESOLVE phase.
+
+**Step taken:** Resolved **NIT-s6-1**, a cosmetic stale-line-citation finding. The C1 evidence line in `evidence/s6-selftest.md` cited the R1 report's breakdown total at line 70, but line 70 is only the `## Lead Score Breakdown` heading — the actual `Total` row is at line 85. Verified against the report on disk (line 29 = score header, line 64 = scorecard field 26, line 85 = `| Total | 30 | 110 |`) and corrected the citation to `:29,64,85`. Evidence-only change; the 30/110 R1 score and C1 PASS verdict are untouched.
+
+**State:** `iteration` 61 → 62, `unresolved_findings` 21 → 20, `open_blockers` 0, all 10 stages still `verified`, `final_audit_passed: true`. Committed locally; signal written `CONTINUE` (20 findings remain to clear in RESOLVE before COMPLETE).

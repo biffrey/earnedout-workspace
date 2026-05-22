@@ -2,7 +2,7 @@
 
 **Re-run iter 15, 2026-05-22** — re-executed after the iter-14 re-IMPLEMENT that
 resolved BLOCKING-s5-1 (added `enrichment.md` §5.1, the `source_id → Gov Data
-Source` mapping table, and corrected the choice strings on lines 97 / 125 of
+Source` mapping table, and corrected the choice strings on lines 104 / 132 of
 this file). C1–C6 below were first run in iter 12 and re-confirmed unchanged
 (§2–§4 / §3 enrichment logic was not touched by the re-IMPLEMENT); **C7 is new**
 — it verifies the §5.1 fix directly.
@@ -172,10 +172,10 @@ Source` mapping table — to resolve BLOCKING-s5-1. Re-driven here against the
 1. **R1 (Class 1).** s4 discovery `source_ids: [S2, S3]`. §5.1: `S2→SAM.gov`,
    `S3→SAM.gov Contract Awards` → `gov_data_source: ["SAM.gov", "SAM.gov
    Contract Awards"]`. Both strings are members of the eight-choice live set.
-   Matches line 97 of this file. ✓
+   Matches line 104 of this file. ✓
 2. **R2 (Class 2).** s4 discovery `source_id: [S4]`. §5.1: `S4→SBA SBIC` →
    `gov_data_source: ["SBA SBIC"]`. `SBA SBIC` is a live choice. Matches line
-   125. ✓ The `S5` good-standing cross-check also maps to `SBA SBIC` — a
+   132. ✓ The `S5` good-standing cross-check also maps to `SBA SBIC` — a
    re-mapped duplicate, deduplicated to one value (§5/§5.1 "deduplicated set").
 3. **No spurious choice.** Neither packet emits the iter-13 offender
    `"SAM.gov Entity Management"`, nor any free-text/mistyped string — every
