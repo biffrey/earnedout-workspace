@@ -18,19 +18,6 @@ source is never tested against the ≥95% target.
 closed, so the target is tested against real S1 data.
 **Status:** OPEN.
 
-### IMPROVE-s5-1 — IMPROVE — s5 — screenshot path not filesystem-safe for `entity_id`
-**Raised:** iter 13 VERIFY (s5 critic).
-**Where:** `.claude/skills/off-market-search/references/enrichment.md:135`.
-**Problem:** screenshot path is `output/screenshots/{entity-id}.png`, claimed to
-match the `overnight-search` convention. But `overnight-search` uses a plain
-alphanumeric `listing-id`, whereas the off-market `entity_id` is e.g.
-`UEI:ZZTEST00FIX1` or `NAME:abacus finance group|new york ny` — containing `:`,
-`|`, and spaces, which are illegal/fragile in filenames. Never exercised in the
-self-test (R1 `screenshot_path` was `null`).
-**Fix:** specify a slugified/sanitized form of `entity_id` for the filename
-(replace `:`, `|`, spaces), or note the existing convention does not transfer.
-**Status:** OPEN.
-
 ### IMPROVE-s5-2 — IMPROVE — s5 — Class-2 pre-filter §2.2 condition 2 is a no-op on first run
 **Raised:** iter 13 VERIFY (s5 critic).
 **Where:** `.claude/skills/off-market-search/references/enrichment.md:106-109`.
@@ -272,6 +259,34 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s5-1 — IMPROVE — s5 — screenshot path not filesystem-safe for `entity_id`
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `.claude/skills/off-market-search/references/enrichment.md` §3.1
+(was line 135; the screenshot-path line).
+**Problem:** screenshot path was `output/screenshots/{entity-id}.png`, claimed to
+match the `overnight-search` convention. But `overnight-search` uses a plain
+alphanumeric `listing-id`, whereas the off-market `entity_id` is e.g.
+`UEI:ZZTEST00FIX1` or `NAME:abacus finance group|new york ny` — containing `:`,
+`|`, and spaces (and `/` for SBIC license numbers), which are illegal/fragile in
+filenames. Never exercised in the self-test (R1 `screenshot_path` was `null`).
+**Fix:** specify a slugified/sanitized form of `entity_id` for the filename
+(replace `:`, `|`, spaces), or note the existing convention does not transfer.
+**Resolution (iter 64, RESOLVE):** changed the §3.1 screenshot path from
+`{entity-id}` to `{entity-id-slug}` in `enrichment.md` and added an explicit
+slug rule: lowercase the `entity_id`, replace every run of any character
+outside `[a-z0-9]` (covering `:`, `|`, `/`, whitespace) with a single `-`,
+collapse consecutive `-`, trim leading/trailing `-`. Worked examples:
+`UEI:ZZTEST00FIX1` → `uei-zztest00fix1`, `NAME:abacus finance group|new york ny`
+→ `name-abacus-finance-group-new-york-ny`, `SBIC:09/79-0292` →
+`sbic-09-79-0292`. The rule states the canonical `entity_id` is unchanged (stays
+verbatim in `Gov Entity ID` per `entity_resolution.md` §5) — only the screenshot
+filename is slugified — and that `screenshot_path` records the actual on-disk
+path. The slug form matches the existing `output/reports/` directory naming
+(`uei-zztest00fix1/`, `name-1st-source-capital-south-bend-in/`). Spec-clarity
+only; no enrichment behavior changed (R1 `screenshot_path` was `null`, never
+exercised).
+**Status:** RESOLVED.
 
 ### IMPROVE-s5-4 — IMPROVE — s5 — self-test C7 cites stale line numbers
 **Raised:** iter 16 VERIFY (s5 critic, re-run).

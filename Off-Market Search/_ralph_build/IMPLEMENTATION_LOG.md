@@ -1130,3 +1130,36 @@ value are unchanged; no skill code, spec, parallel tracker, or scorer touched.
 
 IMPROVE-s5-4 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 20 → 19. 19 findings remain. RESOLVE phase continues.
+
+## Iteration 64 — RESOLVE — IMPROVE-s5-1
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s5-1** (IMPROVE, s5) — the iter-13 s5 critic flagged that
+the §3.1 screenshot path `output/screenshots/{entity-id}.png` claimed to match
+the `overnight-search` convention, but `overnight-search` uses a plain
+alphanumeric `listing-id` whereas the off-market `entity_id` embeds `:`, `|`,
+spaces, and `/` (SBIC license numbers) — characters that are illegal or fragile
+in filenames.
+
+Fix (spec-clarity change to `.claude/skills/off-market-search/references/enrichment.md`
+§3.1): changed `{entity-id}` to `{entity-id-slug}` and added an explicit slug
+rule — lowercase the `entity_id`, replace every run of any character outside
+`[a-z0-9]` (covering `:`, `|`, `/`, whitespace) with a single `-`, collapse
+consecutive `-`, trim leading/trailing `-`. Worked examples added:
+`UEI:ZZTEST00FIX1` → `uei-zztest00fix1`,
+`NAME:abacus finance group|new york ny` → `name-abacus-finance-group-new-york-ny`,
+`SBIC:09/79-0292` → `sbic-09-79-0292`. The rule states the canonical
+`entity_id` is unchanged (stays verbatim in `Gov Entity ID` per
+`entity_resolution.md` §5) and that only the screenshot filename is slugified;
+`screenshot_path` records the actual on-disk path. The slug form matches the
+existing `output/reports/` directory naming (`uei-zztest00fix1/`,
+`name-1st-source-capital-south-bend-in/`), so the skill is now internally
+consistent.
+
+Constraints honored: spec-clarity only — no enrichment behavior changed (R1's
+`screenshot_path` was `null`, so the path was never exercised); no parallel
+tracker, no scorer touched, no data fabricated.
+
+IMPROVE-s5-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+19 → 18. 18 findings remain. RESOLVE phase continues.

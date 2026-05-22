@@ -128,8 +128,26 @@ screenshot path convention:
    signals — parked domain, "site not found", a generic directory page, a
    login wall — mean **not validated**.
 3. **If valid:** capture a full-page screenshot →
-   `output/screenshots/{entity-id}.png`; set `website`, `website_status: live`,
-   `screenshot_path`.
+   `output/screenshots/{entity-id-slug}.png`; set `website`,
+   `website_status: live`, `screenshot_path`.
+   - **`{entity-id-slug}` — sanitize `entity_id` for filesystem use.** The
+     off-market `entity_id` is not a plain alphanumeric id like the
+     `overnight-search` `listing-id`; it embeds characters that are
+     illegal or fragile in filenames — `:` (e.g. `UEI:`/`SBIC:` prefix),
+     `|` and spaces (e.g. `NAME:abacus finance group|new york ny`), and `/`
+     (SBIC license numbers, e.g. `SBIC:09/79-0292`). So the canonical
+     `entity_id` is **not** used verbatim as the filename. Build the slug:
+     lowercase the `entity_id`, replace every run of any character outside
+     `[a-z0-9]` (covering `:`, `|`, `/`, and whitespace) with a single `-`,
+     collapse consecutive `-`, and trim leading/trailing `-`. Examples:
+     `UEI:ZZTEST00FIX1` → `uei-zztest00fix1`;
+     `NAME:abacus finance group|new york ny` →
+     `name-abacus-finance-group-new-york-ny`;
+     `SBIC:09/79-0292` → `sbic-09-79-0292`. The canonical `entity_id` itself
+     is unchanged (it stays verbatim in `Gov Entity ID`, per
+     `entity_resolution.md` §5); only the screenshot filename is slugified.
+     `screenshot_path` records the actual on-disk path, e.g.
+     `output/screenshots/uei-zztest00fix1.png`.
 4. **If no first-party site is found / none validates:** `website: null`,
    `website_status: none_found` (or `dead`), `screenshot_path: null` — record
    `"website — needs follow-up"` in `enrichment_gaps`. **Do not** invent a URL
