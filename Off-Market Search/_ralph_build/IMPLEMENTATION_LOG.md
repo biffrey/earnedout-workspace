@@ -547,3 +547,56 @@ Stage s10 → `drafted`. Next phase for s10: SELF-TEST (exercise this assembly
 against the s10 `Done-when` — confirm the dry run produces ≥1 scored record per
 class into a test context with no fabricated field; then VERIFY by critic, then
 the build-wide FINAL AUDIT once all 10 stages are `verified`).
+
+---
+
+## iter 31 — 2026-05-22 — s10 (Assembly, end-to-end dry run) — re-IMPLEMENT (BLOCKING-s10-1 fix)
+
+The iter-30 VERIFY returned s10 to `not_started` on **BLOCKING-s10-1**: the R2
+Class-2 report (`output/reports/name-1st-source-capital-south-bend-in/`) awarded
+**10/10** for "Years in business ≥10" and returned Buy Box line 3 `✅ PASS`,
+citing a formation date (1983-11-16), street address, SEC CIK, and CB Insights
+data **absent** from its own `lead-packet.json` — which sets `formation_date`
+and `years_in_business` to `null` and lists "formation date" in
+`enrichment_gaps`. The report back-filled a gap the scorer must pass through as
+missing (`scoring_integration.md` §3, lines 91-92/99), so packet and report
+contradicted each other on disk.
+
+This re-IMPLEMENT fixes it by reconciling the **report to the packet** (the
+packet was already clean — the iter-30 critic confirmed it — so it was not
+modified):
+
+- **Re-scored R2 strictly from `lead-packet.json`.** Buy Box line 3 and the
+  years-in-business rubric line are now ⚠️ "insufficient data — not awarded"
+  (0/10). R2's honest score is **20/100**, not 30. Math: 20 (industry) + eight
+  zero lines = 20.
+- **Rewrote `1st-source-capital-corporation-report.md` and `.html`** so every
+  value traces to the packet. Stripped the formation/incorporation date,
+  street address, parent-company identity (1st Source Bank / Corp / Nasdaq
+  SRCE) and parent financials, SEC EDGAR CIK, CB Insights portfolio data, and
+  Wikipedia data. Appendix A now lists only the SBA SBIC directory and the
+  `LeadPacket`; the report explicitly states no external sources were used.
+  The SBIC fund vintage (1983) is retained **only** as informational
+  fund-level data per `scoring_integration.md` §3.1 — not mapped to
+  years-in-business.
+- **Re-stamped the report banner** s6 SELF-TEST → s10 end-to-end dry-run
+  artifact (it is now the s10 artifact), and updated the build-loop notes /
+  footer to the 20/100 score.
+- **Updated the s10 evidence** — `s10-e2e-dryrun.md` and
+  `s10-offmarket_run_log_e2e_dryrun.md` now report R2 = 20/100, with an
+  iter-31 re-IMPLEMENT note describing the fix.
+
+Two non-blocking s10 findings were closed in the same files while reconciling
+them: **IMPROVE-s10-1** (run-log outreach-draft path relabelled as the
+dry-run/evidence path) and **IMPROVE-s10-2** (run log now states R3/R4 were
+carried as Class-2 candidates but not scored).
+
+Constraints honored: never fabricate (the report now contains no value outside
+`lead-packet.json`); a gap stays a gap (`scoring_integration.md` §3); no new
+scorer / no parallel tracker; the `prospect-evaluation` skill is unmodified;
+nothing sent; no live Airtable write.
+
+`unresolved_findings` 27 → 24 (BLOCKING-s10-1 + IMPROVE-s10-1 + IMPROVE-s10-2
+resolved). Stage s10 → `drafted`. Next phase for s10: SELF-TEST — which **must**
+read the report bodies field-by-field against `lead-packet.json` (not just the
+two packet files — the gap the iter-29 SELF-TEST C3 check missed).

@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 30
+iteration: 31
 max_iterations: 80
-last_iteration_at: 2026-05-22T11:18:00Z
+last_iteration_at: 2026-05-22T11:42:00Z
 promise_token: OFFMARKET_BUILD_VERIFIED
 final_audit_passed: false
-unresolved_findings: 27
+unresolved_findings: 24
 open_blockers: 4
 stages:
   s1_foundations:       { status: verified }
@@ -17,7 +17,7 @@ stages:
   s7_airtable_write:    { status: blocked }
   s8_outreach:          { status: verified }
   s9_orchestration:     { status: verified }
-  s10_assembly_audit:   { status: not_started }
+  s10_assembly_audit:   { status: drafted }
 ---
 
 # Off-Market Search — Build Loop State

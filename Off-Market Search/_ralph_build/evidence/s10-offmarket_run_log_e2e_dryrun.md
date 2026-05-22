@@ -37,8 +37,12 @@ lists each in this table when invoked (NIT-s9-2)._
   Class 2 — current SBIC licensees), dropped 1 (synthetic SYN-NF1,
   exclusion-only keywords, dropped before enrichment).
 - Scored — Class 1 (`rollup_addon`, /110): R1 = 30/110.
-- Scored — Class 2 (`sbic`, informational, /100): R2 = 30/100, SBIC license
-  gate ✅ PASS.
+- Scored — Class 2 (`sbic`, informational, /100): R2 = 20/100, SBIC license
+  gate ✅ PASS. R3/R4 were carried as Class-2 candidates but not scored in this
+  dry run (only R2 was scored as the representative Class-2 lead — IMPROVE-s10-2).
+  R2 scored strictly from `lead-packet.json`: formation date is a `null`
+  enrichment gap, so years-in-business is "insufficient data — not awarded"
+  (BLOCKING-s10-1 fix, iter 31).
 - Scorer failures: 0.
 
 ## Airtable writes
@@ -50,7 +54,9 @@ lists each in this table when invoked (NIT-s9-2)._
 ## Outreach drafts
 - Drafts generated: 2 (R1 Class 1 OM-1 / R2 Class 2 OM-2)
 - No-contact (no draft, follow-up logged): 1 (SYN-NC1)
-- File: search_reports/offmarket_outreach_drafts_2026-05-22.md — NOT SENT
+- File (dry-run / evidence path): `_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md` — NOT SENT.
+  A live run writes to `search_reports/offmarket_outreach_drafts_<date>.md`;
+  this dry run stored the drafts under the s8 evidence path (IMPROVE-s10-1).
 
 ## Dashboard
 - Dry-run preview — off-market `.chip.offmarket` badge on 2 rows; on-market

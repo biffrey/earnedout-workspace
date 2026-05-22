@@ -82,10 +82,15 @@ Both candidates scored by the **unmodified `prospect-evaluation` skill**:
 - **R1 — Class 1, `rollup_addon`, /110 → 30/110.** Reports on disk:
   `output/reports/uei-zztest00fix1/example-interpreting-fixture-llc-report.md`
   + `.html` + `lead-packet.json`.
-- **R2 — Class 2, `sbic`, informational, 30/100; SBIC license gate ✅ PASS.**
+- **R2 — Class 2, `sbic`, informational, 20/100; SBIC license gate ✅ PASS.**
   Reports on disk:
   `output/reports/name-1st-source-capital-south-bend-in/1st-source-capital-corporation-report.md`
-  + `.html` + `lead-packet.json`.
+  + `.html` + `lead-packet.json`. Scored **strictly from `lead-packet.json`**:
+  `formation_date`/`years_in_business` are `null` (B1-flagged enrichment gap),
+  so Buy Box line 3 and the years-in-business rubric line are ⚠️ "insufficient
+  data — not awarded" (0/10) — the SBIC fund vintage (1983) is informational
+  fund-level data per §3.1 and is **not** back-filled into years-in-business
+  (BLOCKING-s10-1 fix, iter 31 IMPLEMENT).
 - "No asking price" handled as "insufficient data — not awarded" in both — no
   crash, no drop. Scorer failures: 0.
 
@@ -101,9 +106,12 @@ Both candidates scored by the **unmodified `prospect-evaluation` skill**:
 - **2 drafts** generated: R1 → OM-1 (Owner Approach), R2 → OM-2 (SBIC GP
   Principal — carries the fixed SBA-prior-approval sentence).
 - **1 no-contact skip:** SYN-NC1 → no draft, contact-discovery follow-up logged.
-- Both drafts marked `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---`. Stored to
-  `search_reports/offmarket_outreach_drafts_2026-05-22.md`. The `Notes`-append
-  half of §4 storage is B4-degraded (no live row) — designed degradation.
+- Both drafts marked `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---`. Stored, in
+  this dry run, to the evidence path
+  `_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md` (a live run
+  writes `search_reports/offmarket_outreach_drafts_<date>.md` — IMPROVE-s10-1).
+  The `Notes`-append half of §4 storage is B4-degraded (no live row) — designed
+  degradation.
 
 ### Step 8 — dashboard badge (`airtable_write.md` §5)
 - Dry-run dashboard preview shows the `.chip.offmarket` badge on the 2
@@ -121,7 +129,7 @@ Both candidates scored by the **unmodified `prospect-evaluation` skill**:
 
 The pipeline runs end-to-end and produces **≥1 scored record per class**:
 - **Class 1:** R1 — 30/110 (`rollup_addon`) — report on disk.
-- **Class 2:** R2 — 30/100 informational, license gate PASS — report on disk.
+- **Class 2:** R2 — 20/100 informational, license gate PASS — report on disk.
 
 No field in either lead packet or report is fabricated — every unknown is a
 logged `enrichment_gaps` / "needs follow-up" entry. Nothing was sent. No row
@@ -147,4 +155,29 @@ was written to `tblSmNrHROMLm7vOS`.
 These are honest open items, not faked passes. s10 SELF-TEST exercises this
 assembly against the s10 `Done-when`; the FINAL AUDIT weighs items 1–4.
 
-*Built by s10 IMPLEMENT, iter 28. Next phase for s10: SELF-TEST.*
+## iter 31 re-IMPLEMENT — BLOCKING-s10-1 fix
+
+The iter-30 VERIFY returned s10 to `not_started` on **BLOCKING-s10-1**: the R2
+Class-2 report awarded 10/10 for "Years in business ≥10" and returned Buy Box
+line 3 `✅ PASS`, citing a formation date / street address / SEC CIK / CB
+Insights data **absent** from `lead-packet.json` (which sets `formation_date`
+and `years_in_business` to `null` and flags "formation date" in
+`enrichment_gaps`). This iter-31 re-IMPLEMENT:
+
+- Re-scored R2 **strictly from `lead-packet.json`** — Buy Box line 3 and the
+  years-in-business rubric line are now ⚠️ "insufficient data — not awarded"
+  (0/10). R2's honest score is **20/100**, not 30.
+- Rewrote both `1st-source-capital-corporation-report.md` and `.html` so every
+  value traces to the packet — stripped the formation date, street address,
+  parent-company identity/financials, SEC EDGAR, CB Insights, and Wikipedia
+  data. Appendix A now lists only the SBA SBIC directory and the `LeadPacket`.
+- `lead-packet.json` was **not** modified — it was already clean (the iter-30
+  critic confirmed it); the fix reconciled the report *to* the packet.
+- Also closed IMPROVE-s10-1 (run-log outreach-draft path relabelled as the
+  dry-run/evidence path) and IMPROVE-s10-2 (run log now states R3/R4 were
+  carried but not scored).
+
+*Built by s10 IMPLEMENT, iter 28; re-IMPLEMENT iter 31 (BLOCKING-s10-1 fix).
+Next phase for s10: SELF-TEST — which must read the report bodies field-by-field
+against `lead-packet.json`, not just the packet (the gap the iter-29 SELF-TEST
+C3 check missed).*
