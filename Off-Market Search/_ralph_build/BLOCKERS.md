@@ -39,7 +39,11 @@ text in any file.
 **Status:** OPEN.
 
 ## B4 — Airtable schema-write access (operator / MCP)
-**Blocks:** s2 (Airtable schema).
+**Blocks:** s2 (Airtable schema) **and s7 (Airtable write & dashboard badge)** —
+s7 cannot write an off-market row, and cannot reach `verified`, until the two
+`Source` values exist. Confirmed still open at iter 21: a live `get_table_schema`
+read of `Source` (`fldiGyXTk6Ybb6J1L`) returns choices `["Overnight Search",
+"Manual Submission"]` only.
 **Why:** s2 must add the §8.3 `Source` values (`Off-Market — ASL Bolt-on`,
 `Off-Market — SBIC`) and the §8.4 fields plus `Gov Entity ID` to base
 `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS`.
@@ -56,9 +60,10 @@ values itself.
 matching the em dash (—, U+2014) and spacing exactly:
   - `Off-Market — ASL Bolt-on`
   - `Off-Market — SBIC`
-Once added, the loop un-blocks s2, the schema preflight passes, and s2 can
-proceed to SELF-TEST/VERIFY.
-**Status:** OPEN (narrowed — only the two `Source` values remain).
+Once added, the loop un-blocks **both s2 and s7**, the schema preflight passes,
+and each can proceed to SELF-TEST/VERIFY.
+**Status:** OPEN (narrowed — only the two `Source` values remain; now blocks
+s2 and s7).
 
 ---
 

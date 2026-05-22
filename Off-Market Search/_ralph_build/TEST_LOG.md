@@ -231,3 +231,54 @@ plumbing artifact. (2) A pre-existing EBITDA-band wording inconsistency lives
 inside the **unmodified** `prospect-evaluation` skill (resources say "$1M–$4M",
 front-matter says "$1M or more"); it did not affect either run and is out of
 scope for this loop. Next phase for s6: VERIFY (fresh-context critic).
+
+## iter 21 — 2026-05-22 — s7 (Airtable write & dashboard badge) — SELF-TEST
+
+Exercised the s7 deliverables — `references/airtable_write.md` (field-by-field
+mapping) and the `templates/daily-dashboard.html` off-market badge — against the
+`OFFMARKET_BUILD_PLAN.md` s7 `Done-when` criteria, over the s6 SELF-TEST
+`ScoredLead`s (Class-1 fixture R1 `UEI:ZZTEST00FIX1`; Class-2 real SBIC R2
+`NAME:1st source capital|south bend in`). Five checks:
+
+- **C1 — badge style block present & well-formed.** PASS. `daily-dashboard.html`
+  carries a `.chip.offmarket` rule (lines 154–158), green `--pass` palette,
+  sibling to the existing `.chip.price-drop` / `.chip.manual` chips. The base
+  `.chip` rule is unchanged; on-market chips are untouched.
+- **C2 — badge renders on off-market rows only.** PASS. The render condition
+  `{% if lead.source.startswith('Off-Market') %}` appears in three row sections
+  (lines 242, 288, 330 — New Finds, Running Queue, Revisit Bucket). A live Jinja2
+  render of that exact condition: `Off-Market — ASL Bolt-on` → badge,
+  `Off-Market — SBIC` → badge, `Overnight Search` → no badge,
+  `Manual Submission` → no badge (its own `.chip.manual` still fires). The
+  condition is additive — on-market rows render exactly as before.
+- **C3 — every s7 field ID maps to a live field of the correct type.** PASS. All
+  ~30 field IDs in `airtable_write.md` §3.1/§3.2 were cross-checked against
+  `config/search_config.md`; the five §8.4 IDs (`fld7Ook8ZoLAjwFTe`,
+  `fldogicjVNMCBuyJI`, `fldscFvXPUFYbSg3F`, `fldM7KoR2gtfvBVWN`,
+  `fldZXrqqoBkIdDWJN`) were confirmed live via `get_table_schema` —
+  `Gov Entity ID`/`SBIC License #` singleLineText, `SBIC License Status`
+  singleSelect (5 options match), `Gov Data Source` multipleSelects (8 choices
+  match `enrichment.md` §5.1), `Federal Award History $` currency. No invalid ID.
+- **C4 — create/update split & no-fabrication review.** PASS (by inspection).
+  §3 maps `new` → create, §4 maps `existing` → update-in-place (fill only blank
+  gov fields, never flip `Source`/`Disposition`); §3.2 leaves `Listing ID`
+  blank; §3.1/§3.2 write `Asking Price`/EBITDA/Revenue/Cash-Flow only for real
+  disclosed figures; §6 leaves every unknown blank. `Disposition` = `Active`.
+- **C5 — a scored off-market prospect writes as a live row in
+  `tblSmNrHROMLm7vOS` with `Disposition = Active`.** **BLOCKED by B4 — NOT a
+  fail.** A live `get_table_schema` read of the `Source` field
+  (`fldiGyXTk6Ybb6J1L`) shows choices `["Overnight Search", "Manual
+  Submission"]` only — the two off-market values are still absent. The Step-1
+  schema preflight (`airtable_schema_preflight.md`) fails-loud and halts before
+  s7 runs; `airtable_write.md` §2/§6 forbid auto-creating the `Source` value.
+  Writing an off-market row is therefore impossible until B4 clears. No live
+  write was attempted (attempting it would fail or fabricate the `Source`
+  value — both forbidden).
+
+**Result: C1–C4 PASS; C5 BLOCKED by B4.** The s7 build artifacts (mapping
+reference + dashboard badge) are correct and exercised, but the central s7
+`Done-when` — a scored off-market prospect appearing as a live row — cannot be
+satisfied while B4 is open. Per the loop blocker rule, stage s7 → `blocked`
+(B4); B4 updated to record that it now blocks **both** s2 and s7. The loop
+continues with the next non-blocked stage (s8). s7 retries SELF-TEST → VERIFY
+automatically once the two `Source` values are added.
