@@ -5,15 +5,22 @@ description: Runs the EarnedOut off-market target search pipeline. Mines U.S. go
 
 # Off-Market Search Skill
 
-> **⚠ BUILD STATUS — WIRED, PENDING FINAL VERIFICATION.** The nine steps below
-> are fully wired end-to-end by the off-market build loop
-> (`OFFMARKET_BUILD_LOOP_PROMPT.md`): each step points at its stage reference
-> and the run order, hand-off, and failure handling are specified in
-> `references/orchestration.md`. Blocker B4 is **resolved** — the two off-market
-> `Source` values are live, so the Step 1 schema preflight passes. The skill is
-> still **not yet cleared for an unattended live run** — the build loop has not
-> reached `OFFMARKET_BUILD_VERIFIED`. Until it does, run in **dry-run / fixture
-> mode** (`references/orchestration.md` §5).
+> **BUILD STATUS — VERIFIED, CLEARED FOR LIVE RUNS.** The off-market build loop
+> reached `OFFMARKET_BUILD_VERIFIED` (iteration 83, 2026-05-22): all ten stages
+> verified, final audit returned SHIP, zero open findings, zero open blockers
+> (B1–B4 all resolved). The nine steps below are wired end-to-end — run order,
+> hand-off, and failure handling are in `references/orchestration.md`. The skill
+> is **cleared to run live** against the real government / open-data sources and
+> the live Airtable table.
+>
+> **First-live-run note.** Three coverage gates (`IMPROVE-s4-4`, `-s5-3`,
+> `-s6-2`) ask that the first larger-sample live run actually score real data
+> for each target class and record it in `_ralph_build/TEST_LOG.md`. Run that
+> first live run **supervised**, not unattended. The weekly `launchd` cron
+> should stay **paused** until the supervised first run is complete — see
+> `config/offmarket_schedule.md` "Pausing the cron". Dry-run / fixture mode
+> (`references/orchestration.md` §5) is still available for testing and for
+> quota- or ToS-constrained sources.
 
 You are running the EarnedOut **off-market** target search pipeline. Unlike the
 `overnight-search` skill (which searches broker listing sites for businesses

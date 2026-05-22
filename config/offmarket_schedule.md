@@ -75,6 +75,33 @@ The agent's `StartCalendarInterval` fires **weekly, Monday 06:00 local**
 calendar trigger. See the **Local launchd fallback** section below for the
 manual-test and reload commands.
 
+## Pausing the cron (before the first supervised run)
+
+The build is verified (`OFFMARKET_BUILD_VERIFIED`, 2026-05-22), but the **first
+live run must be supervised** — so the one-time SAM.gov keychain "Always Allow"
+prompt and the three coverage gates (`IMPROVE-s4-4`, `-s5-3`, `-s6-2`) are
+handled with the operator present. Keep the weekly agent **paused** until that
+supervised run is done; otherwise an unattended Monday 06:00 trigger could hang
+on the keychain prompt or run before the gates are satisfied.
+
+Run on the Mac that owns the agent:
+
+```bash
+# 1. confirm whether the agent is currently loaded
+launchctl list | grep ai.earnedout.offmarket-search
+
+# 2. unload it
+launchctl bootout gui/$(id -u)/ai.earnedout.offmarket-search
+
+# 3. stop it reloading at next login — move the plist aside
+mv ~/Library/LaunchAgents/ai.earnedout.offmarket-search.plist \
+   ~/Library/LaunchAgents/ai.earnedout.offmarket-search.plist.disabled
+```
+
+To re-enable after the supervised first run succeeds: move the plist back to
+`~/Library/LaunchAgents/` and re-run the `launchctl bootstrap` command in the
+**Registration** section above.
+
 ## Local launchd fallback
 
 If the `/schedule` environment cannot run the Airtable / Playwright MCP servers,
