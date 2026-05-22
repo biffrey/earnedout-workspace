@@ -60,5 +60,6 @@ still runs every invocation as a guard against later schema drift.
 ## Summary
 
 All s2 deliverables exist in the live schema with the correct types and
-choices, and the fail-loud preflight is in place. s2 is complete pending
-SELF-TEST and VERIFY.
+choices, and the fail-loud preflight is in place. SELF-TEST (iter 33) drove the
+preflight Procedure live against the base — 6/6 checks PASS (see `TEST_LOG.md`).
+s2 is complete pending VERIFY.

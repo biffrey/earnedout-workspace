@@ -1,0 +1,14 @@
+Iteration 32 complete.
+
+**Step executed:** s2 (Airtable schema) — re-IMPLEMENT (`not_started → drafted`)
+
+s2 was reset to `not_started` by the operator when B4 resolved, so this iteration re-ran it against the now-complete live schema:
+
+- **Live `get_table_schema` read** of `appOsvuyy5eK43QTx` / `tblSmNrHROMLm7vOS` confirmed all six s2 elements:
+  - `Source` singleSelect now carries all four choices, including `Off-Market — ASL Bolt-on` and `Off-Market — SBIC` (em dash U+2014, exact spacing — verified byte-for-byte against the build plan §8.3).
+  - The five §8.4 fields (`Gov Entity ID`, `SBIC License #`, `SBIC License Status`, `Gov Data Source`, `Federal Award History $`) all present with correct types.
+- Cleared stale "blocked / operator-required" prose: rewrote the preflight reference's closing section (B4 RESOLVED; preflight still runs every invocation as a drift guard) and the s2 evidence file (all six elements DONE).
+
+No schema write was needed — the fields and values already exist. `STATE.md` bumped to iteration 32, s2 → `drafted`. `open_blockers: 0`, `unresolved_findings: 27` unchanged. Committed locally (`25862d1`).
+
+**Signal:** `CONTINUE` — non-blocked work remains (s2 SELF-TEST, s7, s10).

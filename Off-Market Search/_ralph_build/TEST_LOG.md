@@ -447,3 +447,54 @@ USAspending adapter does not yet populate `uei`); the genuine real-company
 Class-1 end-to-end score remains deferred. The critic should weigh whether a
 fixture-based Class-1 score satisfies the s10 `Done-when`. Next phase for s10:
 VERIFY (fresh-context critic).
+
+## iter 33 — 2026-05-22 — s2 (Airtable schema) — SELF-TEST
+
+Exercised the s2 deliverable — the live schema changes plus the fail-loud
+preflight (`references/airtable_schema_preflight.md`) — against the
+`OFFMARKET_BUILD_PLAN.md` s2 `Done-when` criteria. The preflight Procedure
+(steps 1–4) was driven for real against the live base via the Airtable MCP:
+`list_tables_for_base(appOsvuyy5eK43QTx)` then
+`get_table_schema` for the six field IDs. Six checks:
+
+- **C1 — all six required fields exist with the correct name + type.** PASS.
+  Live `list_tables_for_base` read of table `tblSmNrHROMLm7vOS`
+  ("Master Deal Pipeline") returns: `Source` (`fldiGyXTk6Ybb6J1L`,
+  singleSelect), `Gov Entity ID` (`fld7Ook8ZoLAjwFTe`, singleLineText),
+  `SBIC License #` (`fldogicjVNMCBuyJI`, singleLineText), `SBIC License Status`
+  (`fldscFvXPUFYbSg3F`, singleSelect), `Gov Data Source` (`fldM7KoR2gtfvBVWN`,
+  multipleSelects), `Federal Award History $` (`fldZXrqqoBkIdDWJN`, currency).
+  Every name, type, and field ID matches the preflight table exactly — no
+  field present under a wrong type.
+- **C2 — both off-market `Source` values present, byte-for-byte.** PASS. A live
+  `get_table_schema` read of `fldiGyXTk6Ybb6J1L` returns four choices:
+  `Overnight Search`, `Manual Submission`, `Off-Market — ASL Bolt-on`
+  (`selezt48WJR6jPv2m`), `Off-Market — SBIC` (`seltqCid0e9t6aijI`). The two
+  off-market names verified character-by-character against
+  `OFFMARKET_BUILD_PLAN.md` §8.3 — em dash `—` (U+2014), single spaces around
+  it, exact casing. The on-market values are untouched.
+- **C3 — `SBIC License Status` carries all five standing options.** PASS. Live
+  `get_table_schema` of `fldscFvXPUFYbSg3F` returns `Good Standing`,
+  `Under Review`, `Surrendered`, `Revoked`, `Unknown` — the exact set the
+  preflight Procedure step 4 requires.
+- **C4 — `Gov Data Source` multi-select choices present.** PASS. Live read of
+  `fldM7KoR2gtfvBVWN` returns the eight choices `USAspending`, `SAM.gov`,
+  `SAM.gov Contract Awards`, `SBA SBIC`, `SBS`, `GSA eLibrary`, `State`, `RID`
+  — matching `enrichment.md` §5.1 (FPDS-NG/DSBS correctly absent per §13).
+  `currency` config on `Federal Award History $` confirmed `$`, precision 0.
+- **C5 — the preflight passes end-to-end against the live schema.** PASS. All
+  four Procedure steps (locate table → six fields by name+type → both `Source`
+  options → five `SBIC License Status` options) resolve green against the live
+  base read this iteration; the preflight returns clean and would not halt a
+  write.
+- **C6 — the preflight fails loud on a missing element.** PASS. The "On failure"
+  branch was confirmed by inspection and against the recorded live evidence: in
+  iter 21 (B4 still open) the iter-21 s7 SELF-TEST C5 ran this same preflight
+  against the then-incomplete `Source` field and observed it halt with the
+  `OFF-MARKET SCHEMA PREFLIGHT FAILED` message naming the two absent off-market
+  values — a real, observed fail-loud, not a simulated one. The Procedure's
+  name+type match (step 2) and exact-string option checks (steps 3–4) flag any
+  miss, and the failure message never auto-creates a field or option.
+
+**Result: all 6 checks PASS. No BLOCKING defect.** Stage s2 → `self_checked`.
+No new findings. Next phase for s2: VERIFY (fresh-context critic).
