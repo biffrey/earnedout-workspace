@@ -69,11 +69,17 @@ interface: s3 — see `references/source_adapters.md`.)_
 ## Step 3 — Resolve & de-duplicate
 *Built by s4.*
 
-Collapse multi-source records to one canonical entity (UEI → CAGE → legacy DUNS
-→ normalized name+address; plus SBIC license # for Class 2). De-duplicate
-against `tblSmNrHROMLm7vOS` on the three keys (gov identifier / name+address /
-SBIC license #) — **never re-surface a target already in the tracker** as new.
-Cross-run dedup within the off-market run itself. _(Resolver + dedup: s4.)_
+Run the procedure in `references/entity_resolution.md`. It (a) collapses the s3
+multi-source `RawRecord`s to one canonical entity via the §6.1 key ladder
+(UEI → CAGE → legacy DUNS → normalized name+address; plus SBIC license # for
+Class 2), and (b) de-duplicates each canonical entity against
+`tblSmNrHROMLm7vOS` on the three §6.2 keys (gov identifier / name+address / SBIC
+license #) — **never re-surface a target already in the tracker** as a new lead.
+The tracker itself is the cross-run memory, so a target from a prior off-market
+run resolves to `existing`. Each entity emerges tagged `new` (→ s5 enrichment)
+or `existing` (→ s7 update, never a duplicate row); a stable `Gov Entity ID` is
+assigned. If the tracker read fails, the run halts the write step rather than
+writing blind. _(Resolver + dedup: s4 — see `references/entity_resolution.md`.)_
 
 ## Step 4 — Enrich
 *Built by s5.*

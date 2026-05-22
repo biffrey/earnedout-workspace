@@ -100,3 +100,55 @@ fund/portfolio — is the target; SBA-prior-approval fact carried on every S4
 record; B1/B3 adapters built but marked `blocked`, not faked.
 
 Stage s3 → `drafted`. Next phase for s3: SELF-TEST.
+
+## iter 8 — 2026-05-22 — s4 (Entity resolution & de-duplication) — IMPLEMENT
+
+Built the stage-s4 deliverable: the resolver + tracker dedup that turns the s3
+multi-source `RawRecord` set into one canonical entity per company and prevents
+re-surfacing a target already in the tracker.
+
+- **`.claude/skills/off-market-search/references/entity_resolution.md`** — the
+  s4 reference. Contents:
+  - **Stage I/O** — input is the combined s3 record set; output is a list of
+    **`CanonicalEntity`** objects, each tagged `dedup_verdict: new | existing`.
+    Only `new` flows to s5; `existing` carries the matched `tracker_record_id`
+    so s7 updates instead of creating.
+  - **`CanonicalEntity`** schema (24 fields: resolved identifiers, `all_names`,
+    union NAICS/PSC/flags/keywords, provenance `source_ids`/`source_urls`/
+    `constituent_records`, `resolution_key`/`resolution_confidence`,
+    `dedup_verdict`/`dedup_key`/`tracker_record_id`). Unknown → `null`.
+  - **§6.1 resolver** — normalization helpers (`norm_name` strips entity
+    suffixes; `norm_addr` USPS-style at ZIP / city+state grain; `norm_uei/cage/
+    duns`) and the priority key ladder **UEI → CAGE → legacy DUNS → normalized
+    name+address**. DUNS is a fallback bridge only (§13 item 12 — retired
+    2022-04-01); name+address is a `probable` match, never exact. Class-2 also
+    clusters on `sbic_license_no`. Cluster-merge rules; an exact-id conflict is
+    never auto-merged.
+  - **§6.2 tracker dedup** — three match keys (A gov identifier vs.
+    `Gov Entity ID`; B normalized name+address; C `SBIC License #`, Class 2),
+    evaluated A→C against `tblSmNrHROMLm7vOS`. On a match: update, never
+    duplicate — refresh `Link Last Checked`/`Date Updated`, fill blank gov
+    fields without overwriting, append a dated `Notes` line for an on-market
+    row, never flip an existing row to a new lead.
+  - **Cross-run dedup** — the tracker is the cross-run memory (every off-market
+    entity is written there), so a prior-run target resolves to `existing`; no
+    separate state file.
+  - **Failure handling** — identifier-less + address-less entities go to
+    `needs_operator_review` (not fabricated into a row, not silently dropped);
+    a failed tracker read **halts the write step** rather than writing blind
+    (fail loud); `probable` matches are flagged for spot-check.
+  - **`Gov Entity ID` construction** — deterministic, prefixed (`UEI:` / `CAGE:`
+    / `SBIC:` / `NAME:<norm_name>|<zip>`), stable across runs.
+  - **Accuracy spot-check** — s4 SELF-TEST and s10 sample clusters/verdicts and
+    record sampled accuracy against the §2.2 ≥95% resolution / <5% duplicate
+    targets.
+- **`skill.md` Step 3 updated** to point at `references/entity_resolution.md`
+  and describe the `new`/`existing` tagging, the tracker-as-cross-run-memory
+  fact, and the fail-loud halt on a tracker read failure.
+
+Constraints honored: no parallel tracker / no new scorer (dedup reads/writes
+only `tblSmNrHROMLm7vOS`); never fabricate (identifier-less entities are
+reviewed, not invented); fail loud on a tracker read failure; the §8 ⚠ VERIFY
+is treated as resolved (dedicated `Gov Entity ID` field, operator-approved).
+
+Stage s4 → `drafted`. Next phase for s4: SELF-TEST.
