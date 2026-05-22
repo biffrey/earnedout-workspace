@@ -147,8 +147,11 @@ to fill the single record — identical constraints to the weekly run.
 
 ## 5. Dry-run / fixture mode
 
-For SELF-TEST (s9, s10) and any run while B3/B4 are open, the skill supports a
-**dry run**: adapters read recorded payloads from
+For SELF-TEST (s9, s10) — and for any run that must avoid spending a
+quota-limited source's live request budget (e.g. the SAM.gov public ~10/day
+tier) or that would query a state portal whose per-jurisdiction ToS is not yet
+confirmed — the skill supports a **dry run**: adapters read recorded payloads
+from
 `_ralph_build/evidence/s3-fixtures/` (`source_adapters.md` fixture mode), and
 the Airtable write is directed at a test context — **not** `tblSmNrHROMLm7vOS` —
 or stubbed, with every intended field value logged. A dry run is labelled

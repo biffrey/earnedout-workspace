@@ -81,24 +81,6 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
-### NIT-s9-3 — NIT — s9 — dry-run mode passage cites resolved blockers B3/B4 as open
-**Raised:** iter 49 SELF-TEST (s9 re-run).
-**Where:** `.claude/skills/off-market-search/references/orchestration.md` §5
-(Dry-run / fixture mode), line 150.
-**Problem:** §5 says dry-run mode applies "For SELF-TEST (s9, s10) and any run
-while B3/B4 are open". B3 and B4 are both RESOLVED (`BLOCKERS.md`;
-`open_blockers: 0`), so the "while B3/B4 are open" clause is a stale reference
-to closed blockers. Same stale-attribution class as IMPROVE-s10-3 /
-IMPROVE-s10-4. It does not misstate the registered cron state and does not
-break anything — dry-run mode is still legitimately used for SELF-TEST, and the
-live-run boundary is correctly governed by `OFFMARKET_BUILD_VERIFIED` — so it
-is a NIT.
-**Fix:** drop the "and any run while B3/B4 are open" clause (or re-attribute it
-to the still-open `IMPROVE-s3-2`/`-s3-3`/`-s5-5` adapter-rebuild findings, which
-are the real remaining reason a run uses fixtures). Best done in the RESOLVE
-phase alongside IMPROVE-s10-3.
-**Status:** OPEN.
-
 ### NIT-s9-4 — NIT — s9 — frozen s9 dry-run evidence run log lists B4 as an open blocker
 **Raised:** iter 50 VERIFY (s9 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s9-offmarket_run_log_dryrun.md`
@@ -119,6 +101,32 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s9-3 — NIT — s9 — dry-run mode passage cites resolved blockers B3/B4 as open
+**Raised:** iter 49 SELF-TEST (s9 re-run).
+**Where:** `.claude/skills/off-market-search/references/orchestration.md` §5
+(Dry-run / fixture mode), line 150.
+**Problem:** §5 said dry-run mode applies "For SELF-TEST (s9, s10) and any run
+while B3/B4 are open". B3 and B4 are both RESOLVED (`BLOCKERS.md`;
+`open_blockers: 0`), so the "while B3/B4 are open" clause was a stale reference
+to closed blockers. Same stale-attribution class as IMPROVE-s10-3 /
+IMPROVE-s10-4. It did not misstate the registered cron state and did not break
+anything — dry-run mode is still legitimately used for SELF-TEST, and the
+live-run boundary is correctly governed by `OFFMARKET_BUILD_VERIFIED` — so it
+was a NIT.
+**Resolution (iter 75, RESOLVE):** rewrote the §5 opening sentence of
+`orchestration.md`. The stale "and any run while B3/B4 are open" clause is
+dropped; the sentence now reads dry-run mode applies "For SELF-TEST (s9, s10) —
+and for any run that must avoid spending a quota-limited source's live request
+budget (e.g. the SAM.gov public ~10/day tier) or that would query a state
+portal whose per-jurisdiction ToS is not yet confirmed". This re-attributes
+fixture/dry-run usage to its real current reasons — the same non-blocker
+reasons the iter-73 IMPROVE-s10-3 resolution gave for the s10 dry-run fixture
+use (the now-resolved `IMPROVE-s3-2`/`-s3-3`/`-s5-5` adapter-rebuild findings
+having documented those reasons before they closed). Spec-text clarity only; no
+orchestration, adapter, or write behavior changed — dry-run mode is still used
+for SELF-TEST and the live-run boundary is unchanged. s9 stays `verified`.
+**Status:** RESOLVED.
 
 ### IMPROVE-s10-4 — IMPROVE — s10 — outreach-drafts file header still labels itself an s8-only artifact
 **Raised:** iter 41 VERIFY (s10 critic).
