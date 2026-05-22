@@ -371,3 +371,61 @@ s6 SELF-TEST `ScoredLead`s — confirm a Class-1 and a Class-2 record map
 field-by-field per §3 with no fabricated field, an `existing` entity updates in
 place per §4, and the `.chip.offmarket` badge renders on an off-market row while
 an on-market row is unchanged).
+
+## iter 22 — 2026-05-22 — s8 (Outreach drafting) — IMPLEMENT
+
+Built the stage-s8 deliverable: the dedicated **proprietary-approach** off-market
+outreach template and the draft-generation procedure — drafts only, never sent.
+
+- **`config/offmarket_outreach_template.md`** — a **new sibling file**, not an
+  edit to `config/outreach_templates.md`. The broker Templates A / C / D and
+  their file are left exactly as they were (s8 Done-when: "the broker templates
+  are untouched"). Contents:
+  - A side-by-side of why off-market outreach differs (recipient = owner / SBIC
+    GP principal directly, not a broker; premise = not for sale; ask = an
+    exploratory conversation, no NDA/CIM). Cites §13 Q7 (operator-approved) and
+    PRD §12 risk **R11** (broker-template mis-tone) as the rationale.
+  - **Template OM-1 — Owner Approach** (Class 1, `Off-Market — ASL Bolt-on`):
+    a peer-to-peer note from Applied Development to an ASL/CART/deaf-services
+    company owner; two A/B subject variants; placeholders `[OWNER_NAME]`,
+    `[BUSINESS_NAME]`, `[LOCATION]`, `[SPECIFIC_DETAIL]` with explicit
+    never-fabricate fallbacks (unknown name → neutral greeting; no verified
+    detail → omit the paragraph).
+  - **Template OM-2 — SBIC GP Principal Approach** (Class 2, `Off-Market —
+    SBIC`): a confidential note to a GP principal; the
+    **SBA-prior-approval-of-change-of-control sentence is fixed body text**, not
+    a placeholder, so every Class-2 draft carries the government
+    change-of-control fact; two subject variants; same never-fabricate
+    placeholder rules.
+  - Subject-line-only A/B rotation (mirrors the broker file); Tone Guidance
+    (6 points); Storage & Handling (draft only, `Notes` + dated
+    `search_reports/offmarket_outreach_drafts_YYYY-MM-DD.md`, no-contact → no
+    draft, variant tracking).
+- **`.claude/skills/off-market-search/references/outreach_drafting.md`** — the
+  s8 reference / Step-7 procedure. Stage I/O (consumes s7's written leads);
+  the contact gate (no direct contact → no draft, logged contact-discovery
+  follow-up) and disposition gate (`Revisit for Roll-up` → deferred); template +
+  subject-variant selection; placeholder fill from real data only; the
+  `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---` draft-block format with the
+  mandatory no-send markers; two-place storage mirroring on-market (`Notes` +
+  the distinctly-named off-market daily drafts file); edge/failure handling
+  (partial contact, no detail, per-lead error degradation, `Notes`-append
+  failure still writes the file); constraints honored.
+- **`skill.md` Step 7 updated** to point at `references/outreach_drafting.md`
+  and `config/offmarket_outreach_template.md`, the OM-1/OM-2 per-class
+  selection, the never-fabricate placeholder posture, the no-contact → no-draft
+  rule, the two storage locations, and the no-send rule.
+
+Constraints honored: never auto-send (drafts only, two storage locations both
+marked NOT SENT); never fabricate (unknown contact/detail → "needs follow-up"
+or omitted, no invented names/emails/facts); no parallel tracker (drafts append
+to the existing row's existing `Notes` field; the daily file is a report
+artifact); broker templates untouched (off-market uses its own sibling file —
+`config/outreach_templates.md` not read or modified); SBA-prior-approval fact
+carried on every Class-2 draft as fixed body text.
+
+Stage s8 → `drafted`. Next phase for s8: SELF-TEST (generate a Class-1 OM-1
+draft and a Class-2 OM-2 draft from the s6/s7 SELF-TEST leads — confirm no raw
+`[...]` placeholder survives, the no-contact case yields no draft, the
+SBA-prior-approval sentence appears in the OM-2 draft, and both storage
+locations carry the NOT SENT markers).

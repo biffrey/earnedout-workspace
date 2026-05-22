@@ -136,11 +136,20 @@ see `references/airtable_write.md`.)_
 ## Step 7 — Draft outreach
 *Built by s8.*
 
-Where a direct contact exists (business owner / SBIC GP principal), draft
-**proprietary-approach** outreach using the dedicated off-market template — the
-business is not for sale, so the broker templates do not apply. Store drafts in
-`Notes` + `search_reports/`. **Never send email.** _(Off-market template +
-drafting: s8.)_
+Run the procedure in `references/outreach_drafting.md` over each off-market
+lead s7 wrote this run. Where a direct contact exists (business owner / SBIC GP
+principal), draft **proprietary-approach** outreach using the dedicated
+off-market templates in `config/offmarket_outreach_template.md` — Template OM-1
+for Class 1, Template OM-2 for Class 2. The business is **not for sale**, so the
+broker templates in `config/outreach_templates.md` do not apply and are not
+read or modified here. Placeholders are filled from real enrichment data only —
+an unknown owner name → neutral greeting, an unverified detail → the detail
+paragraph is omitted, never fabricated. A lead with **no direct contact** gets
+**no draft** (logged as a contact-discovery follow-up). Each draft is stored in
+two places: appended to the lead's Airtable `Notes` field, and appended to
+`search_reports/offmarket_outreach_drafts_YYYY-MM-DD.md`. **Never send email —
+drafts only.** _(Off-market templates + drafting: s8 — see
+`references/outreach_drafting.md`.)_
 
 ## Step 8 — Generate the daily dashboard
 *Built by s7 (badge) + s9 (wiring).*
