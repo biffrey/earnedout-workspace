@@ -339,6 +339,46 @@ the s10 re-IMPLEMENT that the adapter-rebuild findings will require, or in the
 RESOLVE phase.
 **Status:** OPEN.
 
+### BLOCKING-s10-2 — BLOCKING — s10 — R2 OM-2 outreach draft asserts an operating history the packet flags as a null gap
+**Raised:** iter 41 VERIFY (s10 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md`
+lines 85-86 (the OM-2 draft for 1st Source Capital Corporation).
+**Problem:** the OM-2 draft body asserts "1st Source Capital Corporation has
+operated as a licensed SBIC pursuing a direct-lending strategy **since 1983** —
+a long, durable track record in the program." But the R2 lead packet
+(`output/reports/name-1st-source-capital-south-bend-in/lead-packet.json`) sets
+`formation_date: null` and `years_in_business: null`, and lists `"formation date
+— needs follow-up (B1)"` as an enrichment gap. The `1983` value is
+`sbic_gp_economics.vintage` — the SBIC **fund's** vintage year — not a verified
+company operating-start / formation date. The R2 report bodies were explicitly
+corrected in iter 31 (BLOCKING-s10-1) never to assert this; the outreach draft —
+a deliverable of the same s10 end-to-end dry run (Step 7) — still does. This is
+the same fabrication defect class as BLOCKING-s10-1 recurring in the outreach
+artifact, violating the invariant "never fabricate; unknown fields are 'needs
+follow-up'" constraint, so the s10 dry run does not yet produce its records
+"with no fabricated fields".
+**Fix:** rewrite the OM-2 draft to remove the "since 1983" operating-history
+claim — reference the SBIC's program participation / direct-lending strategy
+without a fabricated start year, since the formation date is an open enrichment
+gap. Also harden the draft-generation logic / OM-2 template
+(`config/offmarket_outreach_template.md` and
+`.claude/skills/off-market-search/references/outreach_drafting.md`) so an
+`sbic_gp_economics.vintage` value cannot be rendered as a company operating
+history. Then re-run the s10 SELF-TEST.
+**Status:** OPEN.
+
+### IMPROVE-s10-4 — IMPROVE — s10 — outreach-drafts file header still labels itself an s8-only artifact
+**Raised:** iter 41 VERIFY (s10 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md`
+line 3 (file header).
+**Problem:** the drafts file header calls itself a "BUILD-LOOP s8 SELF-TEST
+ARTIFACT", but the file is also the outreach-draft deliverable the s10 end-to-end
+dry run depends on (Step 7). The label lags the artifact's reuse — the same
+stale-provenance class as NIT-s10-1 / IMPROVE-s10-3.
+**Fix:** add an s10-reuse note to the header, or relabel it as shared s8/s10
+evidence. Best done with the IMPROVE-s10-3 artifact refresh.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s7-1 — BLOCKING — s7 — `Lead Source` mapping invalid against the live field type

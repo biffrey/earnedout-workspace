@@ -482,3 +482,59 @@ defect, and there is nothing in the codebase to fix, so it is not filed as an
 open finding.
 
 Stage s7 → `verified`. `unresolved_findings` unchanged at 27; `open_blockers` 0.
+
+## iter 41 — 2026-05-22 — s10 (Assembly, end-to-end self-test) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s10 dry-run
+artifacts — `evidence/s10-e2e-dryrun.md`,
+`evidence/s10-offmarket_run_log_e2e_dryrun.md`, the Class-1 scored record
+`output/reports/uei-zztest00fix1/` and the Class-2 scored record
+`output/reports/name-1st-source-capital-south-bend-in/` (each `lead-packet.json`
++ `.md` + `.html`) — plus the s10 outreach deliverable
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md`. Not given the loop's logs
+or reasoning. Tasked to disprove the s10 dry-run `Done-when` ("the dry run
+produces at least one scored record per class into a test context with no
+fabricated fields"). The final-audit / all-stages-`verified` halves are the
+FINAL AUDIT phase and were explicitly out of scope.
+
+**Verdict: FAIL (1 BLOCKING).**
+
+Five of the six concrete criteria PASS:
+- Dry run exists and is documented (both write-ups present and detailed).
+- ≥1 scored record per class: Class-1 R1 30/110, Class-2 R2 20/100 — each with
+  `.md`, `.html`, `lead-packet.json` on disk.
+- R1 report traces field-by-field to its packet; R2 report bodies also trace
+  clean — **BLOCKING-s10-1 is genuinely fixed** in both R2 `.md` and `.html`
+  (Buy Box line 3 + years-in-business line both 0/10 "insufficient data — not
+  awarded"; 1983 labeled informational fund-level data only; header 20/100 =
+  breakdown total).
+- Test context, not the live tracker: run log shows 0 created / 0 updated / 0
+  failures by the dry run.
+- Nothing auto-sent: both drafts carry the NOT-SENT markers; the no-contact
+  candidate was correctly skipped.
+- Run log assembled from real prior-stage counts (8 raw → 7 canonical → 4
+  pre-filter passes → 2 scored → 2 drafts + 1 skip), matching the step trace.
+
+**BLOCKING finding — BLOCKING-s10-2.** The R2 OM-2 outreach draft
+(`evidence/s8-offmarket_outreach_drafts_2026-05-22.md` lines 85-86) asserts
+"1st Source Capital Corporation has operated as a licensed SBIC ... **since
+1983** — a long, durable track record in the program." The R2 lead packet has
+`formation_date: null`, `years_in_business: null`, and an enrichment gap
+`"formation date — needs follow-up (B1)"`; the `1983` is
+`sbic_gp_economics.vintage` (the SBIC **fund's** vintage), not a company
+operating-start date. This is the BLOCKING-s10-1 fabrication defect class
+recurring in the s10 dry run's outreach deliverable — the dry run therefore does
+not yet produce its records "with no fabricated fields". Verified directly
+against the file and the packet before recording. Logged as **BLOCKING-s10-2**
+in `FINDINGS.md`.
+
+The critic also raised one IMPROVE (the drafts file header still labels itself
+an s8-only artifact though the s10 dry run depends on it) — logged as
+**IMPROVE-s10-4** — and one NIT (a stray `</content>` token at line 106), which
+is already tracked as **NIT-s8-1** and is not double-counted.
+
+Per the phase contract a BLOCKING finding returns the stage to `not_started`.
+Stage s10 → `not_started`. `unresolved_findings` 28 → 30 (BLOCKING-s10-2 +
+IMPROVE-s10-4). `open_blockers` 0. Next phase for s10: IMPLEMENT — rewrite the
+OM-2 draft to drop the "since 1983" claim and harden the draft-generation logic
+so a fund `vintage` cannot be rendered as a company operating history.
