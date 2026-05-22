@@ -386,3 +386,64 @@ should weigh whether "defined + gated" satisfies the s9 `Done-when` "the weekly
 cron is registered" or whether it must be re-confirmed at COMPLETE. (2) The
 end-to-end run was a dry-run over fixtures; the genuine live end-to-end run is
 s10's job, gated on B3/B4. Next phase for s9: VERIFY (fresh-context critic).
+
+## iter 29 — 2026-05-22 — s10 (Assembly, end-to-end self-test & final audit) — SELF-TEST
+
+Exercised the s10 IMPLEMENT artifacts — `evidence/s10-e2e-dryrun.md` and
+`evidence/s10-offmarket_run_log_e2e_dryrun.md` — against the
+`OFFMARKET_BUILD_PLAN.md` s10 `Done-when` dry-run criterion (*"the dry run
+produces at least one scored record per class into a test context with no
+fabricated fields"*). The final-audit / all-stages-`verified` halves of the s10
+`Done-when` are the FINAL AUDIT phase, not this SELF-TEST. Each scored artifact
+was confirmed by direct on-disk inspection — not from the IMPLEMENT log. Six
+checks:
+
+- **C1 — Class-1 scored record exists in a test context.** PASS. R1
+  (`UEI:ZZTEST00FIX1`, EXAMPLE INTERPRETING FIXTURE LLC) — `output/reports/
+  uei-zztest00fix1/` holds `example-interpreting-fixture-llc-report.md`
+  (21,860 B), `.html` (32,783 B), and `lead-packet.json`. Report header reads
+  **Lead Score 30 / 110**, `rollup_addon` mode, internally consistent with
+  scorecard field 26 and the breakdown total.
+- **C2 — Class-2 scored record exists in a test context.** PASS. R2
+  (`NAME:1st source capital|south bend in`, 1st Source Capital Corporation) —
+  `output/reports/name-1st-source-capital-south-bend-in/` holds
+  `1st-source-capital-corporation-report.md` (25,021 B), `.html` (36,391 B),
+  and `lead-packet.json`. Header reads **Lead Score 30 / 100 (informational
+  only — SBIC mode)**; **SBIC License Gate ✅ PASS**; the SBA-prior-approval
+  change-of-control section is present.
+- **C3 — no fabricated fields.** PASS. Both `lead-packet.json` files inspected
+  field-by-field: every unknown is `null` or `"needs follow-up"` and is
+  enumerated in `enrichment_gaps` (R1: 5 gaps; R2: 4 gaps). `revenue_signal` is
+  explicitly labelled a signal; `federal_award_total` carries only the real
+  $480K award figure; `asking_price` is the literal `"not for sale — no asking
+  price"`; `sbic_gp_economics` is labelled fund-level informational data. R1
+  carries an explicit `_fixture_note` marking it synthetic. No invented
+  financials, contacts, codes, or URLs. Both reports score every undisclosed
+  line "insufficient data — not awarded", never a fabricated tier.
+- **C4 — written to a test context, not the live tracker.** PASS. The run log
+  records **0 created / 0 updated / 0 write failures**; §6 of the assembly
+  confirms writes were directed at a test context, never `tblSmNrHROMLm7vOS`.
+  A live `get_table_schema` read of `Source` (`fldiGyXTk6Ybb6J1L`) this
+  iteration returns only `Overnight Search` / `Manual Submission` — a live run
+  would additionally halt at the Step 1 preflight (B4).
+- **C5 — run log assembled from real prior-stage counts.** PASS.
+  `s10-offmarket_run_log_e2e_dryrun.md` uses the `orchestration.md` §3 template
+  with the real Step 2–8 counts (8 raw → 7 canonical [4 `new` + 3 thin] → 4
+  pre-filter passes → 2 scored; 0 Airtable writes; 2 drafts + 1 no-contact
+  skip). A `0` is reported as `0`; B1/B3/B4 and the 3 needs-operator-review
+  entities are all named; nothing estimated.
+- **C6 — nothing auto-sent.** PASS. 2 outreach drafts (R1 OM-1 / R2 OM-2), both
+  carrying the `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---` markers; the s10
+  assembly invokes only the s8 reference, which has no send path.
+
+**Result: all 6 checks PASS. No BLOCKING defect.** Stage s10 → `self_checked`.
+Two carry-notes to the VERIFY critic (not Done-when failures): (1) the s8
+outreach-drafts artifact lives at `evidence/s8-offmarket_outreach_drafts_2026-05-22.md`,
+but the run log line 53 cites the production path `search_reports/offmarket_outreach_drafts_2026-05-22.md`
+— a dry-run stores under `evidence/`; a live run writes the production path.
+A path-label NIT, not a Done-when failure. (2) R1 is a synthetic Class-1
+fixture, not a real S1-discovered company (the open IMPROVE-s3-1 chain — the
+USAspending adapter does not yet populate `uei`); the genuine real-company
+Class-1 end-to-end score remains deferred. The critic should weigh whether a
+fixture-based Class-1 score satisfies the s10 `Done-when`. Next phase for s10:
+VERIFY (fresh-context critic).
