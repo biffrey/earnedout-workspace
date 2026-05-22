@@ -6,18 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### IMPROVE-s3-1 — IMPROVE — s3 — S1 UEI not populated
-**Raised:** iter 7 VERIFY (s3 critic).
-**Where:** `.claude/skills/off-market-search/references/source_adapters.md`
-(S1 USAspending adapter, Query block ~line 121).
-**Problem:** `uei` — the primary s4 entity-resolution key — is not returned by
-the USAspending `spending_by_award` endpoint, so S1 records currently resolve
-only on name+address, weakening s4.
-**Fix:** add a recipient-detail follow-up call
-(`/api/v2/recipient/{recipient_id}/`) or request UEI in the `fields` list, so
-S1 `RawRecord`s carry `uei`.
-**Status:** OPEN.
-
 ### IMPROVE-s4-1 — IMPROVE — s4 — `dedup_verdict` enum omits `needs_operator_review`
 **Raised:** iter 10 VERIFY (s4 critic).
 **Where:** `.claude/skills/off-market-search/references/entity_resolution.md:36`.
@@ -362,6 +350,26 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s3-1 — IMPROVE — s3 — S1 UEI not populated
+**Raised:** iter 7 VERIFY (s3 critic).
+**Where:** `.claude/skills/off-market-search/references/source_adapters.md`
+(S1 USAspending adapter, Query block).
+**Problem:** `uei` — the primary s4 entity-resolution key — is not returned by
+the USAspending `spending_by_award` endpoint, so S1 records currently resolve
+only on name+address, weakening s4.
+**Resolution (iter 55, RESOLVE):** rewrote the S1 adapter Query block to add a
+required recipient-detail follow-up step — for each distinct `recipient_id`
+returned by `spending_by_award`, `GET /api/v2/recipient/{recipient_id}/` and
+read `uei` (with `duns`/location) from that response, cached per
+`recipient_id`, paced ~1 req/sec; the bulk-download CSV path instead reads the
+`recipient_uei` column directly and skips the follow-up. The Map bullet now
+states `uei` comes from the follow-up (or the bulk CSV column), never from
+`spending_by_award` directly, and that a failed/empty detail call sets
+`uei: null` so s4 falls back to the name+address ladder — never fabricate a
+UEI. Grouping is now by `recipient_id` then resolved UEI. So S1 `RawRecord`s
+now carry a real `uei` where the recipient publishes one.
+**Status:** RESOLVED.
 
 ### NIT-s3-1 — NIT — s3 — SBIC CSV column label mismatch
 **Raised:** iter 7 VERIFY (s3 critic).

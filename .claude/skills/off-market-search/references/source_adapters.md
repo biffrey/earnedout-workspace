@@ -110,17 +110,31 @@ it implements.
      `naics_codes: ["541930"]`, `psc_codes: ["R608"]` (run both; union the
      results), `time_period` from `params` (default trailing 5 FYs),
      `award_type_codes` for contracts + grants, optional `place_of_performance`
-     from `params`. Page with `page` / `limit` (cap 100/page).
-  2. For large pulls prefer `POST /api/v2/bulk_download/awards/`, then poll the
-     returned file URL and parse the CSV.
-  3. Validate `541930` / `R608` once per run via the NAICS/PSC autocomplete
+     from `params`. Page with `page` / `limit` (cap 100/page). The
+     `spending_by_award` response does **not** carry a recipient UEI — its
+     `fields` list exposes `Recipient Name` and the internal `recipient_id`
+     (a hashed `<hash>-<level>` token) but no UEI — so request `recipient_id`
+     in `fields` and resolve the UEI in step 2.
+  2. **Recipient-detail follow-up (required for `uei`):** for each distinct
+     `recipient_id` returned in step 1, `GET /api/v2/recipient/{recipient_id}/`
+     and read `uei` (and legacy `duns`, location) from that response. Cache by
+     `recipient_id` so each recipient is fetched once per run; pace the
+     follow-up calls at ~1 req/sec with the rest of the adapter. If the detail
+     call fails or returns no `uei`, set `uei: null` and let s4 fall back to
+     the name+address ladder for that record — never fabricate a UEI.
+  3. For large pulls prefer `POST /api/v2/bulk_download/awards/`, then poll the
+     returned file URL and parse the CSV; the bulk-download CSV **does** include
+     a `recipient_uei` column, so a bulk pull can skip the step-2 follow-up.
+  4. Validate `541930` / `R608` once per run via the NAICS/PSC autocomplete
      endpoints; abort the adapter (not the run) with `status: error` if either
      code no longer resolves.
-- **Map:** recipient name→`legal_name`, recipient UEI→`uei`, legacy DUNS→`duns`,
-  recipient location→`address`, award NAICS/PSC→`naics`/`psc`, summed
-  obligations→`award_total`, count→`award_count`, business-type flags→
-  `socioeconomic_flags`. Group award rows by UEI so one recipient = one
-  `RawRecord`.
+- **Map:** recipient name→`legal_name`, recipient UEI→`uei` (from the step-2
+  `/api/v2/recipient/{recipient_id}/` follow-up, or the `recipient_uei` column
+  of a bulk download — **not** from `spending_by_award` directly), legacy
+  DUNS→`duns`, recipient location→`address`, award NAICS/PSC→`naics`/`psc`,
+  summed obligations→`award_total`, count→`award_count`, business-type flags→
+  `socioeconomic_flags`. Group award rows by `recipient_id` (then by resolved
+  UEI) so one recipient = one `RawRecord`.
 - **Keyword tier:** scan recipient name + award description for the Class-1 core
   / exclusion terms; set `keyword_hits` / `keyword_tier`.
 - **Rate / ToS:** no hard per-IP cap documented — pace ~1 req/sec, prefer bulk

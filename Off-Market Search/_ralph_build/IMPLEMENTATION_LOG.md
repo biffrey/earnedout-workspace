@@ -894,3 +894,36 @@ anywhere. Cosmetic only — no source-config fact changed.
 
 F2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings` 30 → 29.
 29 findings remain. RESOLVE phase continues.
+
+## iter 55 — 2026-05-22 — RESOLVE — IMPROVE-s3-1 (S1 USAspending UEI not populated)
+
+All 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0` —
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s3-1** (IMPROVE, s3) — the S1 USAspending adapter in
+`.claude/skills/off-market-search/references/source_adapters.md` claimed to map
+`recipient UEI→uei`, but the `spending_by_award` endpoint does not return a
+recipient UEI (only `Recipient Name` and the internal hashed `recipient_id`),
+so S1 records resolved only on name+address — weakening s4 entity resolution,
+whose primary key is `uei`.
+
+Fix (doc/spec change to the adapter contract): rewrote the S1 Query block —
+- step 1 now requests `recipient_id` in `fields` and states explicitly that
+  `spending_by_award` carries no UEI;
+- new step 2 adds the required recipient-detail follow-up:
+  `GET /api/v2/recipient/{recipient_id}/` per distinct `recipient_id`, reading
+  `uei` (plus `duns`/location), cached per `recipient_id`, paced ~1 req/sec; a
+  failed/empty detail call sets `uei: null` (s4 falls back to the name+address
+  ladder) — never fabricate a UEI;
+- the bulk-download path (step 3) reads the `recipient_uei` CSV column directly
+  and skips the follow-up;
+- the Map bullet now states `uei` comes from the follow-up or the bulk CSV
+  column, never from `spending_by_award`, and groups by `recipient_id` then
+  resolved UEI.
+
+Constraints honored: no fabrication (missing UEI → `null`, not invented);
+common adapter interface unchanged so s4–s6 are unaffected; no pipeline logic,
+no parallel tracker, no new scorer touched.
+
+IMPROVE-s3-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+28 → 27. 27 findings remain. RESOLVE phase continues.
