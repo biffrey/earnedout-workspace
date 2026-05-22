@@ -1,0 +1,10 @@
+Iteration 42 complete — **s10 IMPLEMENT (re-IMPLEMENT)**, resolving `BLOCKING-s10-2`.
+
+**What I did:**
+- **Rewrote the OM-2 draft** in `evidence/s8-offmarket_outreach_drafts_2026-05-22.md` — replaced the fabricated "has operated as a licensed SBIC ... since 1983 — a long, durable track record" claim with "is a licensed SBIC in good standing, pursuing a direct-lending investment strategy." Both facts trace to verified packet fields (`sbic_license_status`, `sbic_gp_economics.strategy`); the `1983` (the SBIC *fund's* vintage, not a company formation date) is gone.
+- **Hardened `config/offmarket_outreach_template.md`** — OM-2's `[SPECIFIC_DETAIL]` placeholder no longer lists "license vintage"; added an explicit rule that `sbic_gp_economics.vintage` is the fund's vintage and must never be rendered as company operating history.
+- **Hardened `references/outreach_drafting.md`** — §2 step 5 and a new §5 edge bullet carry the same fund-vintage-vs-company-history prohibition.
+
+**State:** iteration 42; s10 `not_started → drafted`; `unresolved_findings` 30 → 29 (BLOCKING-s10-2 moved to Resolved); `open_blockers` 0. Logged to `IMPLEMENTATION_LOG.md` and `FINDINGS.md`, committed locally.
+
+**Signal:** `CONTINUE` — s10 has SELF-TEST → VERIFY remaining, then FINAL AUDIT and RESOLVE (29 findings) before COMPLETE.

@@ -688,3 +688,82 @@ adapter-rebuild findings and drop the "a live run halts at preflight (B4)"
 claim. This is a stale-attribution defect, not a fabrication or a Done-when
 breach (`unresolved_findings` 27 → 28). Next phase for s10: VERIFY
 (fresh-context critic).
+
+## iter 43 — 2026-05-22 — s10 (Assembly, end-to-end self-test & final audit) — SELF-TEST (re-run)
+
+Re-ran the s10 SELF-TEST after the iter-42 re-IMPLEMENT that resolved
+**BLOCKING-s10-2** (rewrote the R2 OM-2 outreach draft so its `[SPECIFIC_DETAIL]`
+sentence no longer asserts the fabricated "since 1983" operating history;
+hardened `config/offmarket_outreach_template.md` and
+`.claude/skills/off-market-search/references/outreach_drafting.md` so the SBIC
+fund vintage can never render as a company operating history). Per the iter-42
+re-IMPLEMENT directive, this SELF-TEST reads the **outreach drafts
+field-by-field against each `lead-packet.json`** — the gap the iter-29/40
+SELF-TESTs did not cover (they read the report bodies, not the Step-7 outreach
+artifact). All artifacts inspected directly on disk. Seven checks against the
+`OFFMARKET_BUILD_PLAN.md` s10 `Done-when` dry-run criterion (*"the dry run
+produces at least one scored record per class into a test context with no
+fabricated fields"*); the final-audit / all-stages-`verified` halves remain the
+FINAL AUDIT phase, not this SELF-TEST.
+
+- **C1 — Class-1 scored record exists; report unchanged since the iter-40
+  verified-clean read.** PASS. R1 (`UEI:ZZTEST00FIX1`) —
+  `output/reports/uei-zztest00fix1/` holds the `.md` (21,860 B), `.html`
+  (32,783 B) and `lead-packet.json`; file sizes and mtimes (May 22 09:54–09:58)
+  are unchanged from iter 40 — the iter-42 re-IMPLEMENT touched only the OM-2
+  outreach draft + template + `outreach_drafting.md`, never the report bodies,
+  so the iter-40 field-by-field verdict (header 30/110 = scorecard #26 =
+  breakdown total) stands.
+- **C2 — Class-2 scored record exists; report unchanged since iter 40.** PASS.
+  R2 (`NAME:1st source capital|south bend in`) —
+  `output/reports/name-1st-source-capital-south-bend-in/` holds the `.md`
+  (24,951 B), `.html` (37,387 B) and `lead-packet.json`; sizes/mtimes unchanged
+  from iter 40. The iter-40 verdict stands: header 20/100, formation-date gap
+  scores 0 "insufficient data — not awarded", fund vintage 1983 carried only as
+  informational fund-level data.
+- **C3 — no fabricated fields in either report body.** PASS. Report bodies not
+  modified this re-IMPLEMENT (C1/C2); the iter-40 line-by-line read holds.
+- **C4 — written to a test context, not the live tracker.** PASS. The dry-run
+  run log records 0 created / 0 updated; writes directed at a test context.
+- **C5 — run log assembled from real prior-stage counts.** PASS. Unchanged from
+  iter 40 — `s10-offmarket_run_log_e2e_dryrun.md` carries the real Step 2–8
+  counts (8 raw → 7 canonical → 4 pre-filter passes → 2 scored: R1 30/110,
+  R2 20/100; 0 writes; 2 drafts + 1 no-contact skip); nothing estimated.
+- **C6 — nothing auto-sent.** PASS. Both drafts in
+  `evidence/s8-offmarket_outreach_drafts_2026-05-22.md` carry the
+  `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---` /
+  `--- END DRAFT (review and send manually) ---` markers; neither the s8
+  reference nor the template has any send path.
+- **C7 (BLOCKING-s10-2 focus) — outreach drafts trace field-by-field to each
+  packet; no fabricated operating history.** PASS. Read both Step-7 drafts
+  against their `lead-packet.json`:
+  - **OM-1 (R1, EXAMPLE INTERPRETING FIXTURE LLC):** `Business` =
+    `business_name`; `Recipient` Pat Sample / Owner / "needs follow-up: no
+    contact email" = `contact.name`/`title`/`email:null`; "in Anytown, VA" =
+    `location`; "roughly $480K in awards to date" = `federal_award_total:
+    480000`. No bracket token survives; no formation date or years-in-business
+    asserted (both `null` in the packet). Clean.
+  - **OM-2 (R2, 1st Source Capital Corporation):** `Business` =
+    `business_name`; `Recipient` Ryan Fenstermaker / Investor Relations /
+    fenstermakerr@1stsource.com = `contact.name`/`title`/`email`. The
+    `[SPECIFIC_DETAIL]` sentence — "a licensed SBIC in good standing, pursuing
+    a direct-lending investment strategy" — traces to `sbic_license_status:
+    "Good Standing"` and `sbic_gp_economics.strategy: "Direct Lending"`. A
+    `grep` for `1983` over the drafts file returns **zero hits** — the
+    fabricated "since 1983" start year and the track-record claim derived from
+    it are gone. The SBA-prior-approval sentence is present as fixed body text.
+  - Template + reference hardening confirmed on disk: OM-2's `[SPECIFIC_DETAIL]`
+    placeholder (`offmarket_outreach_template.md:189-197`) carries the explicit
+    "Never render the SBIC fund vintage as a company operating history" rule
+    and no longer lists "license vintage"; `outreach_drafting.md` §2 step 5
+    (lines 71-77) and the new §5 edge bullet (lines 143-148) carry the same
+    prohibition.
+
+**Result: all 7 checks PASS. No BLOCKING defect.** The BLOCKING-s10-2 fix is
+confirmed clean by the field-by-field read of both Step-7 outreach drafts
+against their packets. Stage s10 → `self_checked`. No new findings (the stray
+`</content>` token at drafts-file line 106 is already tracked as NIT-s8-1; the
+stale-provenance items are tracked as IMPROVE-s10-3 / IMPROVE-s10-4). Next
+phase for s10: VERIFY (fresh-context critic — the VERIFY must read the outreach
+drafts field-by-field against each packet, the same gap that produced
+BLOCKING-s10-2).
