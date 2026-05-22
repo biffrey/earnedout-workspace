@@ -81,31 +81,6 @@ _(The critic also flagged a stray `</content>` tag at
 `evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`; this is already
 tracked as NIT-s8-1 — not double-counted here.)_
 
-### IMPROVE-s10-3 — IMPROVE — s10 — dry-run artifacts cite resolved blockers as open
-**Raised:** iter 40 SELF-TEST (s10 re-run).
-**Where:** `Off-Market Search/_ralph_build/evidence/s10-e2e-dryrun.md`
-(Step 1, "Known limitations" 1–3) and
-`evidence/s10-offmarket_run_log_e2e_dryrun.md` (lines 13–14, 20–23, 46, 66–68).
-**Problem:** the s10 dry-run artifacts were produced at iter 28 / re-IMPLEMENT
-iter 31, before the operator resolved B1–B4 on 2026-05-22. They still state
-"Open blockers affecting this run: B1, B3, B4", attribute S2/S3 fixture usage to
-"blocked (B3)" and S8 to "blocked (B1)", and assert "a live run would HALT here
-(fail-loud, B4)" at the Step 1 preflight. All four blockers are now RESOLVED
-(`BLOCKERS.md`); `open_blockers: 0`. The fixture usage itself is still correct —
-the SAM and state adapters remain fixture-shells — but that is now governed by
-the still-open `IMPROVE-s3-2` / `IMPROVE-s3-3` / `IMPROVE-s5-5` adapter-rebuild
-findings, not by the closed blockers. Not a fabrication and not an s10
-`Done-when` breach (the dry run still produces ≥1 scored record per class with
-no fabricated fields), but the stale attribution would mislead the FINAL AUDIT.
-**Fix:** refresh `s10-e2e-dryrun.md` and `s10-offmarket_run_log_e2e_dryrun.md`
-to re-attribute the SAM/state fixture usage to `IMPROVE-s3-2`/`-s3-3`/`-s5-5`,
-remove the "live run halts at preflight (B4)" claim (B4 is resolved; the live
-preflight now passes — confirmed by the iter-38 s7 live write
-`recklDY7vHFmKauQD`), and update "Known limitations" 1–3. Best done as part of
-the s10 re-IMPLEMENT that the adapter-rebuild findings will require, or in the
-RESOLVE phase.
-**Status:** OPEN.
-
 ### IMPROVE-s10-4 — IMPROVE — s10 — outreach-drafts file header still labels itself an s8-only artifact
 **Raised:** iter 41 VERIFY (s10 critic).
 **Where:** `Off-Market Search/_ralph_build/evidence/s8-offmarket_outreach_drafts_2026-05-22.md`
@@ -156,6 +131,46 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s10-3 — IMPROVE — s10 — dry-run artifacts cite resolved blockers as open
+**Raised:** iter 40 SELF-TEST (s10 re-run).
+**Where:** `Off-Market Search/_ralph_build/evidence/s10-e2e-dryrun.md`
+(Step 1, "Known limitations" 1–3) and
+`evidence/s10-offmarket_run_log_e2e_dryrun.md` (lines 13–14, 20–23, 46, 66–68).
+**Problem:** the s10 dry-run artifacts were produced at iter 28 / re-IMPLEMENT
+iter 31, before the operator resolved B1–B4 on 2026-05-22. They still state
+"Open blockers affecting this run: B1, B3, B4", attribute S2/S3 fixture usage to
+"blocked (B3)" and S8 to "blocked (B1)", and assert "a live run would HALT here
+(fail-loud, B4)" at the Step 1 preflight. All four blockers are now RESOLVED
+(`BLOCKERS.md`); `open_blockers: 0`. The fixture usage itself is still correct —
+the SAM and state adapters used recorded fixtures — but that is now governed by
+the `IMPROVE-s3-2` / `IMPROVE-s3-3` / `IMPROVE-s5-5` adapter-rebuild findings,
+not by the closed blockers. Not a fabrication and not an s10 `Done-when` breach
+(the dry run still produces ≥1 scored record per class with no fabricated
+fields), but the stale attribution would mislead the FINAL AUDIT.
+**Resolution (iter 73, RESOLVE):** refreshed both s10 dry-run evidence artifacts.
+In `s10-e2e-dryrun.md`: added an iter-73 refresh note to the dry-run callout box
+recording that B1–B4 are resolved and the adapter-rebuild findings
+IMPROVE-s3-2/-s3-3/-s5-5 (since RESOLVED iters 68–71) now govern the fixture
+usage; rewrote Step 1 to drop the "a live run would HALT here (B4)" claim and
+state the `Source` single-select now holds all four choices so the preflight
+passes (confirmed by the iter-38 s7 live write `recklDY7vHFmKauQD`); re-attributed
+Step 2's S2/S3 "blocked B3" / S8 "blocked B1" lines to the now-resolved
+adapter-rebuild findings with the real reason for fixture use (conserve the
+quota-limited SAM.gov tier; S8 live query gated on per-jurisdiction ToS
+confirmation); updated the Step 3 dedup B4 reference, the Step 6 "B4 preflight
+halt" wording, and the Step 7 "B4-degraded" wording; and rewrote "Known
+limitations" 1–3 from open-blocker items to current non-blocker reasons for
+fixture use, with item 4 updated for IMPROVE-s3-1/-s4-4 now being RESOLVED. In
+`s10-offmarket_run_log_e2e_dryrun.md`: changed "Outcome" and "Open blockers
+affecting this run" (now "none", with a refresh note), the "Sources queried"
+S2/S3/S8 status column (`blocked (B3)`/`(B1)` → `fixture` with re-attributed
+notes), the "Airtable writes" B4-halt line, and the "Follow-ups for the
+operator" B1/B3/B4 bullets (removed — all resolved). Evidence-refresh only; no
+skill code, spec, scoring, or write behavior changed — the dry run still
+produces ≥1 scored record per class with no fabricated field, and s10 remains
+`verified`.
+**Status:** RESOLVED.
 
 ### IMPROVE-s4-4 — IMPROVE — s4 — S1 contributes zero resolvable entities until IMPROVE-s3-1 closes
 **Raised:** iter 10 VERIFY (s4 critic).

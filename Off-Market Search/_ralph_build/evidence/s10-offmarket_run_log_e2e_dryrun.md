@@ -8,19 +8,26 @@
 
 - **Run type:** end-to-end dry-run (fixture mode — `orchestration.md` §5)
 - **Started / finished (UTC):** 2026-05-22T10:45:00Z / 2026-05-22T10:46:30Z
-- **Outcome:** completed-degraded (dry-run; blocked adapters used fixtures; a
-  live run would be `halted-preflight` at Step 1 — B4)
-- **Open blockers affecting this run:** B1 (state portals), B3 (SAM.gov tier),
-  B4 (off-market `Source` values)
+- **Outcome:** completed-degraded (dry-run; S2/S3/S8 adapters used recorded
+  fixtures)
+- **Open blockers affecting this run:** none. _(Refresh note, iter 73 —
+  IMPROVE-s10-3: this log was produced at iter 28, before the operator
+  resolved B1–B4 on 2026-05-22; it originally listed B1/B3/B4 here and claimed
+  a live run would be `halted-preflight` at Step 1. All four blockers, and the
+  adapter-rebuild findings IMPROVE-s3-2/-s3-3/-s5-5 they spawned, are now
+  RESOLVED — `open_blockers: 0` — and the iter-38 s7 live write
+  `recklDY7vHFmKauQD` confirms the Step 1 preflight now passes. The S2/S3/S8
+  fixture usage is re-attributed below to the now-resolved adapter-rebuild
+  findings.)_
 
 ## Sources queried
 | Source | Class | Status | Records | Note |
 |--------|-------|--------|---------|------|
 | S1 USAspending.gov | 1+2 | ok | 3 | live, key-free |
-| S2 SAM.gov Entity Management | 1 | blocked (B3) | 1 | fixture `s3-fixtures/S2.json` |
-| S3 SAM.gov Contract Awards | 1 | blocked (B3) | 1 | fixture `s3-fixtures/S3.json` |
+| S2 SAM.gov Entity Management | 1 | fixture | 1 | `s3-fixtures/S2.json` — adapter live-capable (IMPROVE-s3-3 RESOLVED); fixture conserves SAM.gov quota |
+| S3 SAM.gov Contract Awards | 1 | fixture | 1 | `s3-fixtures/S3.json` — adapter live-capable (IMPROVE-s3-3 RESOLVED); fixture conserves SAM.gov quota |
 | S4 SBA SBIC directory | 2 | ok | 3 | live CSV export |
-| S8 priority-state portals | 1+2 | blocked (B1) | 0 | shell only — no priority states named |
+| S8 priority-state portals | 1+2 | fixture | 0 | `s3-fixtures/S8.json` — adapter spec-complete for DC/VA/MD/PA/WV (IMPROVE-s3-2 RESOLVED); live query gated on ToS confirmation |
 
 _Enrichment-only sources (S5 good-standing cross-check, S6 SBS, S7 GSA
 eLibrary, S9 RID, S10 IAPD, S11 U.S. Courts) are point-of-need; a live run
@@ -47,8 +54,9 @@ lists each in this table when invoked (NIT-s9-2)._
 
 ## Airtable writes
 - Created: 0 rows   Updated: 0 rows   Write failures: 0
-- **Dry-run — writes directed at a test context, not `tblSmNrHROMLm7vOS`.** A
-  live run is additionally B4-blocked (Step 1 preflight halt).
+- **Dry-run — writes directed at a test context, not `tblSmNrHROMLm7vOS`.** B4
+  is resolved; a live run passes the Step 1 preflight and performs the create
+  (confirmed by the iter-38 s7 live write `recklDY7vHFmKauQD`).
 - Record URLs: n/a (dry-run)
 
 ## Outreach drafts
@@ -63,10 +71,11 @@ lists each in this table when invoked (NIT-s9-2)._
   rows unchanged. Not regenerated against the live tracker (dry-run).
 
 ## Follow-ups for the operator
-- B4 — add the two off-market `Source` values so a live run passes preflight.
-- B3 — assign a SAM.gov role + Public API Key to lift S2/S3 off fixture mode.
-- B1 — name the Phase-1 priority states to activate the S8 state adapter.
-- 3 needs-operator-review entities (S1 records missing UEI/address —
-  IMPROVE-s3-1).
-- A real-company Class-1 ASL/CART end-to-end score is pending IMPROVE-s3-1
-  (USAspending `uei` population) — see `s10-e2e-dryrun.md` limitation 4.
+- _B4 / B3 / B1 follow-ups removed — all RESOLVED 2026-05-22: the two
+  off-market `Source` values are live, the SAM.gov Public API Key is in the
+  login keychain, and the Phase-1 priority states (DC/VA/MD/PA/WV) are named._
+- 3 needs-operator-review entities (S1 records missing UEI/address) — at iter
+  28 the S1 adapter did not yet return `uei` (IMPROVE-s3-1, since RESOLVED iter
+  55); a re-run resolves S1 records on a real UEI.
+- A real-company Class-1 ASL/CART end-to-end score remains pending the s10
+  larger-sample run (IMPROVE-s6-2) — see `s10-e2e-dryrun.md` limitation 4.
