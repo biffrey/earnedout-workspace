@@ -644,3 +644,47 @@ Per the FINAL AUDIT contract, NO-SHIP → set the named stage back to
 `false`. `unresolved_findings` 29 → 30 (BLOCKING-s9-1 added). `open_blockers`
 0. Next phase for s9: IMPLEMENT — register the weekly cron now that B4 is
 resolved, then re-run SELF-TEST / VERIFY.
+
+## iter 50 — 2026-05-22 — s9 (Orchestration & cadence) — VERIFY
+
+Fresh-context critic subagent independently inspected the actual s9 artifacts
+on disk and the live system state — `.claude/skills/off-market-search/skill.md`,
+`references/orchestration.md`, `config/offmarket_schedule.md`,
+`config/launchd/ai.earnedout.offmarket-search.plist` — and ran live
+`launchctl list | grep offmarket` and `launchctl print` to confirm the weekly
+agent. Not given the loop's logs or reasoning.
+
+**Verdict: PASS (0 BLOCKING).**
+
+All three Done-when criteria met:
+- C1 — the skill runs the full pipeline. `skill.md` wires PRD §9.1 Steps 1–9
+  end-to-end; `orchestration.md` §1–§2 specify run order, hand-off, and failure
+  containment; the §1 hand-off table chains type-consistently. PASS.
+- C2 — the manual single-entity path works. Documented `skill.md:193-205` and
+  fully specified `orchestration.md` §4; mirrors `submit-url` (same Step 1
+  preflight, seeds resolution directly, runs Steps 3–9 unchanged). PASS.
+- C3 — the weekly cron is registered. Verified LIVE: `launchctl list` shows
+  `ai.earnedout.offmarket-search`; `launchctl print gui/501/...` confirms
+  `StartCalendarInterval` `Weekday => 1`, `Hour => 6`, `Minute => 0` (Monday
+  06:00 local). The repo plist is byte-identical to the loaded
+  `~/Library/LaunchAgents/` copy (`diff` clean), passes `plutil -lint`, and
+  points at `run-offmarket-search.sh` (passes `bash -n`). Run-log format
+  specified `orchestration.md` §3; Step 9 writes
+  `search_reports/offmarket_run_log_YYYY-MM-DD.md`. PASS.
+
+Constraint checks all PASS: no parallel tracker; no new scorer
+(`prospect-evaluation` used verbatim); fail-loud Step 1 preflight; never
+fabricate / never auto-send; the `skill.md` BUILD STATUS header honestly says
+"WIRED, PENDING FINAL VERIFICATION" and does not claim the build is verified.
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- NIT — `orchestration.md:149` §5 dry-run mode cites B3/B4 as open (resolved).
+  Already tracked as **NIT-s9-3** — not double-counted.
+- NIT — `orchestration.md:26` §1 hand-off table lists a third `dedup_verdict`
+  tag the enum omits. Already tracked as **NIT-s9-1** — not double-counted.
+- NIT — `evidence/s9-offmarket_run_log_dryrun.md:11-12,53` — the frozen iter-26
+  s9 dry-run evidence run log lists B4 as an open blocker / operator follow-up;
+  B4 is RESOLVED. New finding: **NIT-s9-4**.
+
+Stage s9 → `verified`. All 10 stages are now `verified`; next phase is FINAL
+AUDIT. `unresolved_findings` 30 → 31 (NIT-s9-4 added). `open_blockers` 0.

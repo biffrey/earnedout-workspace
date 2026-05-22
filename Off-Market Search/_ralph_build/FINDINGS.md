@@ -369,6 +369,25 @@ are the real remaining reason a run uses fixtures). Best done in the RESOLVE
 phase alongside IMPROVE-s10-3.
 **Status:** OPEN.
 
+### NIT-s9-4 — NIT — s9 — frozen s9 dry-run evidence run log lists B4 as an open blocker
+**Raised:** iter 50 VERIFY (s9 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s9-offmarket_run_log_dryrun.md`
+lines 11-12 ("Open blockers" / "a live run would halt at Step 1 preflight") and
+line 53 (the "B4 — add the two off-market `Source` values" operator follow-up).
+**Problem:** this frozen iter-26 s9 SELF-TEST dry-run evidence run log still
+lists B4 as an open blocker and carries a B4 operator follow-up. B4 is RESOLVED
+(`BLOCKERS.md`; `open_blockers: 0`) — the two off-market `Source` values are
+live and the Step 1 preflight now passes (confirmed by the iter-38 s7 live
+write `recklDY7vHFmKauQD`). Same stale-blocker class as IMPROVE-s10-3 /
+IMPROVE-s10-4 / NIT-s9-3. Not BLOCKING: this is a frozen SELF-TEST artifact
+documenting the state at the time it was produced, not a skill/spec deliverable
+or a live run log — and the s9 Done-when criteria are all met.
+**Fix:** add a note that the artifact is frozen at iter-26 state, or refresh
+the "Open blockers" / operator-follow-up lines to re-attribute the fixture
+usage to the still-open `IMPROVE-s3-2`/`-s3-3`/`-s5-5` adapter-rebuild findings.
+Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s9-1 — BLOCKING — s9 — weekly cron is not registered though B4 is resolved
