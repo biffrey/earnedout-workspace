@@ -1050,3 +1050,31 @@ scorer touched.
 
 IMPROVE-s4-3 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 23 → 22. 22 findings remain. RESOLVE phase continues.
+
+---
+
+## Iteration 61 — RESOLVE — NIT-s5-1
+
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **NIT-s5-1** (NIT, s5) — the iter-13 s5 critic flagged that the §6.1
+R1 cluster bullet in the s4 SELF-TEST evidence describes R1's merged
+`psc [R608]` as coming "from rec 3-shape", but record 3 is a different entity
+(an S1 record), not a contributor to the R1 (rec 4 + rec 5) UEI merge. Cosmetic
+provenance mis-citation in the s4 evidence.
+
+Fix (evidence-only change): changed the §6.1 R1 cluster bullet in
+`evidence/s4-selftest.md` from `psc [R608]` "(from rec 3-shape)" to
+`psc [R608]` "(from rec 5/S3 only)". The correct sole contributor is rec 5
+(S3 `pscCode`) — rec 4 (S2) carries no `psc` — as the iter-60 "R1 per-field
+merge trace" table already establishes. Also refreshed the merge-trace
+footnote, which had named the inline label as a still-open NIT-s5-1
+mis-citation; it now records that the citation was corrected in this iteration
+and matches the trace.
+
+Constraints honored: evidence-only change — no resolution, dedup, or merge
+behavior changed; the merged R1 `psc` value itself is unchanged ([R608]); no
+pipeline logic, parallel tracker, or scorer touched.
+
+NIT-s5-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+22 → 21. 21 findings remain. RESOLVE phase continues.

@@ -53,15 +53,6 @@ directory cross-check was not shown for them.
 entities; carry this forward to the s10 self-test.
 **Status:** OPEN.
 
-### NIT-s5-1 — NIT — s5 — s4 self-test provenance note cites the wrong record
-**Raised:** iter 13 VERIFY (s5 critic).
-**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md:29`.
-**Problem:** R1's `psc [R608]` is described as coming "from rec 3-shape", but
-record 3 is a different entity (an S1 record). Cosmetic provenance error in the
-s4 evidence, carried implicitly into the s5 input description.
-**Fix:** correct the provenance note to cite the actual contributing record.
-**Status:** OPEN.
-
 ### NIT-s5-2 — NIT — s5 — `employee_count` type inconsistent with other unknown-able fields
 **Raised:** iter 13 VERIFY (s5 critic).
 **Where:** `.claude/skills/off-market-search/references/enrichment.md:53`.
@@ -302,6 +293,23 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s5-1 — NIT — s5 — s4 self-test provenance note cites the wrong record
+**Raised:** iter 13 VERIFY (s5 critic).
+**Where:** `Off-Market Search/_ralph_build/evidence/s4-selftest.md:29`.
+**Problem:** R1's `psc [R608]` is described as coming "from rec 3-shape", but
+record 3 is a different entity (an S1 record). Cosmetic provenance error in the
+s4 evidence, carried implicitly into the s5 input description.
+**Fix:** correct the provenance note to cite the actual contributing record.
+**Resolution (iter 61, RESOLVE):** changed the §6.1 R1 cluster bullet in
+`evidence/s4-selftest.md` from `psc [R608]` "(from rec 3-shape)" to
+`psc [R608]` "(from rec 5/S3 only)" — the correct sole contributor, as the
+iter-60 R1 per-field merge trace established (rec 5 / S3 `pscCode`; rec 4 / S2
+carries no `psc`). Also refreshed the merge-trace footnote that had named the
+mis-citation as still-open NIT-s5-1, so it now records the citation as
+corrected. Evidence-only change; no resolution, dedup, or merge behavior
+changed.
+**Status:** RESOLVED.
 
 ### IMPROVE-s4-3 — IMPROVE — s4 — self-test merge trace not shown
 **Raised:** iter 10 VERIFY (s4 critic).

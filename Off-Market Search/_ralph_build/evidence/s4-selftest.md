@@ -25,7 +25,7 @@ adapter mappings.
   **merge into ONE `CanonicalEntity`**. `resolution_key = uei`,
   `resolution_confidence = exact`. Merged: `legal_name` "EXAMPLE INTERPRETING
   FIXTURE LLC", `uei ZZTEST00FIX1`, `cage_code 0ZZ11` (from rec 4 only),
-  `naics [541930]`, `psc [R608]` (from rec 3-shape), `award_total 480000`,
+  `naics [541930]`, `psc [R608]` (from rec 5/S3 only), `award_total 480000`,
   `source_ids [S2,S3]`, `source_urls` both. **2 records → 1 entity.** ✓
 - **Clusters R2 / R3 / R4 (name+address key).** Records 6, 7, 8 carry no
   shared identifier and no `sbic_license_no`; each has a distinct `norm_name`
@@ -65,9 +65,10 @@ so every merged R1 value is reproducible from the two contributing records:
 Each multi-valued field (`naics`, `psc`, `source_ids`, `source_urls`) is a
 deduped **set union** of the two records; each scalar (`legal_name`, `uei`,
 `cage_code`, `award_total`) takes the single non-null / identical value. No
-field is invented. (The cluster bullet's inline `psc … (from rec 3-shape)`
-provenance label is a separate cosmetic mis-citation tracked as **NIT-s5-1** —
-the correct contributor is rec 5 (S3), as this trace shows.)
+field is invented. (The cluster bullet's inline `psc` provenance label —
+formerly the cosmetic mis-citation "from rec 3-shape" tracked as **NIT-s5-1** —
+was corrected in iter 61, RESOLVE to "from rec 5/S3 only", matching this trace:
+the sole `psc` contributor is rec 5 (S3).)
 
 ## §6.2 — dedup against the live tracker
 
