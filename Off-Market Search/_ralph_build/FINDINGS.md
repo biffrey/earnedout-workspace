@@ -67,14 +67,6 @@ end-to-end score is deferred to s10, gated on the S1 USAspending `uei` gap.
 ASL/CART company; gate that on IMPROVE-s3-1 / IMPROVE-s4-4 closing.
 **Status:** OPEN.
 
-### NIT-s6-2 — NIT — s6 — `prospect-evaluation/skill.md` has owner-only file mode
-**Raised:** iter 19 VERIFY (s6 critic).
-**Where:** `.claude/skills/prospect-evaluation/skill.md`.
-**Problem:** the file mode is `-rw-------` (owner-only), inconsistent with the
-other skill files. Harmless and pre-existing (not caused by the s6 build).
-**Fix:** optionally `chmod 644` for consistency; no functional impact.
-**Status:** OPEN.
-
 ### IMPROVE-s8-1 — IMPROVE — s8 — OM-2 drafted to a non-principal contact
 **Raised:** iter 24 VERIFY (s8 critic).
 **Where:** `config/offmarket_outreach_template.md` (OM-2 body) and
@@ -249,6 +241,21 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### NIT-s6-2 — NIT — s6 — `prospect-evaluation/skill.md` has owner-only file mode
+**Raised:** iter 19 VERIFY (s6 critic).
+**Where:** `.claude/skills/prospect-evaluation/skill.md`.
+**Problem:** the file mode is `-rw-------` (owner-only), inconsistent with the
+other skill files. Harmless and pre-existing (not caused by the s6 build).
+**Fix:** optionally `chmod 644` for consistency; no functional impact.
+**Resolution (iter 66, RESOLVE):** ran `chmod 644
+.claude/skills/prospect-evaluation/skill.md` — the file mode is now
+`-rw-r--r--`, matching `.claude/skills/off-market-search/skill.md`
+(`-rw-r--r--`) and the other skill files. Confirmed via `ls -la`. No file
+content changed; this only restores group/other read consistency across the
+skill directory. Pre-existing and harmless (not caused by the s6 build), so
+purely cosmetic — no functional, scoring, or read-access behavior is affected.
+**Status:** RESOLVED.
 
 ### NIT-s5-2 — NIT — s5 — `employee_count` type inconsistent with other unknown-able fields
 **Raised:** iter 13 VERIFY (s5 critic).
