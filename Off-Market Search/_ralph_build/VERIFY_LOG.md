@@ -165,3 +165,46 @@ the `... | null` unknown-able fields).
 
 Stage s5 → `not_started` (BLOCKING → return to IMPLEMENT). `unresolved_findings`
 → 15.
+
+## iter 16 — 2026-05-22 — s5 (Enrichment & qualification pre-filters) — VERIFY (re-run)
+
+Fresh-context critic subagent independently re-inspected the actual s5 artifacts
+on disk after the iter-14 re-IMPLEMENT and iter-15 re-SELF-TEST —
+`.claude/skills/off-market-search/references/enrichment.md`, `skill.md`,
+`references/airtable_schema_preflight.md`, `references/source_adapters.md`,
+`references/entity_resolution.md`, `evidence/s5-selftest.md`,
+`evidence/s2-airtable-schema.md`, `config/offmarket_sources.md` — cross-checked
+the §3/§7/§11 PRD + §13 resolution doc, and independently queried the **live
+Airtable `Gov Data Source` field** (`fldM7KoR2gtfvBVWN`) to confirm its eight
+choices. Not given the loop's logs or reasoning. Tasked specifically with
+disproving that BLOCKING-s5-1 is resolved.
+
+**Verdict: PASS (0 BLOCKING).**
+
+BLOCKING-s5-1 confirmed genuinely fixed:
+- `enrichment.md` §5.1 (lines 240-264) is a real `source_id → Gov Data Source`
+  mapping table; every right-hand value is a member of the live eight-choice set
+  (critic queried the live field: USAspending / SAM.gov / SAM.gov Contract
+  Awards / SBA SBIC / SBS / GSA eLibrary / State / RID). S10/S11 correctly
+  excluded as enrichment-only.
+- The fail-loud rule (`enrichment.md:266-273`) concretely halts the skill on an
+  unmapped `source_id` with a schema-preflight-style operator message; the
+  multi-select is never auto-grown. Exercised by self-test C7 step 5 (`S99`).
+- The iter-13 offender `"SAM.gov Entity Management"` now appears only as an
+  adapter-name *description* (mapping S2 → choice `SAM.gov`) and in an explicit
+  negative in the self-test — never as an emitted `gov_data_source` value.
+
+All three Done-when criteria met: complete lead packet (C4/C5, zero
+fabrication); pre-filters run first and drop non-fits before any enrichment
+(C2); SBIC standing cross-referenced beyond the directory via SBA OIG / press
+releases / federal court records / IAPD, no directory flag (C6). Hard
+constraints honored: never fabricate, fail loud, no new scorer, no parallel
+tracker, SBA prior-approval change-of-control fact on every Class-2 packet.
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- IMPROVE-s5-4 (new) — `s5-selftest.md:174`/`:177` C7 cites stale line numbers
+  (97/125) for the `gov_data_source` rows; after the iter-15 rewrite they are at
+  lines 104/132.
+- IMPROVE-s5-1, IMPROVE-s5-2, NIT-s5-2 — carried open from iter 13 (still valid).
+
+Stage s5 → `verified`. `unresolved_findings` → 15.

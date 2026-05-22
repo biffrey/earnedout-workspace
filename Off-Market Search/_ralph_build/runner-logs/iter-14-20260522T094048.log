@@ -1,0 +1,12 @@
+Iteration 15 complete — one (stage, phase) step done.
+
+**Step executed:** s5 (Enrichment & qualification pre-filters) — **SELF-TEST** (`drafted → self_checked`)
+
+- s2 is `blocked` (B4), so the lowest non-verified, non-blocked stage was s5, which iter 14 re-IMPLEMENTed after the iter-13 VERIFY failure on BLOCKING-s5-1.
+- Re-ran the s5 self-test over the s4 fixture output. **All 7 checks PASS:**
+  - C1–C6 re-confirmed unchanged (re-IMPLEMENT touched only §5.1 + the `gov_data_source` rows).
+  - **C7 (new)** verifies the iter-14 fix: `gov_data_source` maps via the §5.1 table to live `Gov Data Source` choices only (`["SAM.gov","SAM.gov Contract Awards"]`, `["SBA SBIC"]` — all in the eight-choice live set), the iter-13 offender `"SAM.gov Entity Management"` no longer appears, and an unmapped `source_id` halts the skill loud instead of auto-growing the multi-select.
+- Updated `evidence/s5-selftest.md` (re-run header + C7), appended `TEST_LOG.md` iter-15 entry, updated `STATE.md` (iteration 15, s5 → `self_checked`; `open_blockers: 4`, `unresolved_findings: 14` unchanged).
+- Committed locally as `9945922`.
+
+**Signal:** `CONTINUE` — non-blocked work remains (s5 VERIFY next, then s6–s10; s2 still blocked on B4).

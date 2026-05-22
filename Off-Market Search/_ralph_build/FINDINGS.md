@@ -150,6 +150,18 @@ Cosmetic schema inconsistency.
 pattern.
 **Status:** OPEN.
 
+### IMPROVE-s5-4 — IMPROVE — s5 — self-test C7 cites stale line numbers
+**Raised:** iter 16 VERIFY (s5 critic, re-run).
+**Where:** `Off-Market Search/_ralph_build/evidence/s5-selftest.md` lines 174 and
+177 (C7).
+**Problem:** C7 claims the R1 packet "Matches line 97 of this file" and the R2
+packet "Matches line 125". After the iter-15 self-test rewrite, the actual
+`gov_data_source` rows are at lines 104 and 132; lines 97/125 are unrelated rows
+(`years_in_business`, `formation_date`). Stale iter-14 cross-references.
+**Fix:** change "line 97" → "line 104" and "line 125" → "line 132", or drop the
+line citations.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
