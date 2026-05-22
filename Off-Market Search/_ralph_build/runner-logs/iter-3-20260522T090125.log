@@ -1,0 +1,11 @@
+Iteration 4 complete — one step executed: **s2 (Airtable schema) — IMPLEMENT**.
+
+**What I did:**
+- Created the five §8.4 fields live in base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS` via the Airtable MCP: `Gov Entity ID`, `SBIC License #`, `SBIC License Status`, `Gov Data Source`, `Federal Award History $` — all confirmed by tool responses (field IDs in `evidence/s2-airtable-schema.md`).
+- Wrote the fail-loud schema-preflight reference (`references/airtable_schema_preflight.md`) and wired `skill.md` Step 1 to it.
+
+**Blocker hit:** The two §8.3 `Source` single-select values (`Off-Market — ASL Bolt-on`, `Off-Market — SBIC`) could **not** be added — the Airtable MCP `update_field` tool cannot add `choices` to an existing single-select. Per the anti-deception rules I did not auto-create them (typecast). B4 narrowed to this one remaining operator action; stage **s2 → `blocked`**.
+
+**State:** iteration 4/80, s1 `verified`, s2 `blocked`, s3–s10 `not_started`, open_blockers 4, unresolved_findings 2. Committed `3613abc`.
+
+**Signal: `CONTINUE`** — one step done, non-blocked work remains (s3 next).

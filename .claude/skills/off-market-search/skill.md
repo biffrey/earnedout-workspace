@@ -53,11 +53,18 @@ Class 2 — licensed SBIC management firms acquired for the license itself.
 *Built by s3 (source adapters).*
 
 For each target class, query the sources in `config/offmarket_sources.md` via
-the s3 adapters (USAspending primary; SAM.gov Entity + Contract Awards APIs; SBA
-SBIC directory CSV; SBA SBS; GSA eLibrary; priority-state portals; RID
-point-of-need; IAPD). Each adapter filters by NAICS `541930` / PSC `R608` + the
-keyword strategy and returns normalized raw-record objects. Respect each
-source's rate limits and ToS. _(Adapters + interface: s3.)_
+the s3 adapters. The adapters and their **common interface** are specified in
+`references/source_adapters.md` — every adapter is invoked
+`adapter.query(target_class, params)` and returns normalized `RawRecord`
+objects plus an `AdapterMeta` status, so a source can be swapped without
+touching downstream stages. Discovery adapters (USAspending primary; SAM.gov
+Entity + Contract Awards APIs; SBA SBIC directory CSV; SBA SBS; GSA eLibrary;
+priority-state portals) emit new records; enrichment adapters (SBIC
+good-standing, RID point-of-need, IAPD, U.S. Courts) amend them. Each adapter
+applies its own NAICS `541930` / PSC `R608` / keyword filter and respects its
+source's rate limits and ToS. A `blocked`/`error` adapter (B1, B3) degrades the
+run gracefully — its `meta` is logged, the run continues. _(Adapters +
+interface: s3 — see `references/source_adapters.md`.)_
 
 ## Step 3 — Resolve & de-duplicate
 *Built by s4.*

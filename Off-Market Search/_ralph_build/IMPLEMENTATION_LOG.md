@@ -58,3 +58,45 @@ narrowed to this remaining item; stage s2 set to `blocked`.
 
 Stage s2 → `blocked` (B4). The loop continues with the next non-blocked stage
 (s3).
+
+## iter 5 — 2026-05-22 — s3 (Source adapters) — IMPLEMENT
+
+Built the stage-s3 deliverable: **one query module ("adapter") per source
+behind a single common interface** so a source can be swapped without touching
+downstream stages (the FPDS-decommission lesson).
+
+- **`.claude/skills/off-market-search/references/source_adapters.md`** — the
+  s3 reference. Contents:
+  - **Common interface** — every adapter invoked `adapter.query(target_class,
+    params)`; returns `{records: [RawRecord], meta: AdapterMeta}`. Downstream
+    stages only ever see `RawRecord`s and never know which source produced one.
+  - **`RawRecord`** normalized schema (23 fields: identifiers UEI/CAGE/DUNS/SBIC
+    license #, address, NAICS/PSC, award totals, socioeconomic flags, POC,
+    keyword hits/tier, provenance). **Unknown → `null`** — never invented; s5
+    converts `null` to "needs follow-up".
+  - **`AdapterMeta`** per-call status (`ok`/`blocked`/`degraded`/`n/a`/`error`,
+    `blocker_id`, query filters, rate-limit note). A blocked/error adapter
+    degrades the run gracefully — it does not halt; only the s2 schema preflight
+    is fail-loud.
+  - **Fixture mode** — adapters can map a recorded payload from
+    `_ralph_build/evidence/s3-fixtures/<id>.json` through identical
+    normalization, so SELF-TEST + downstream stages run without a blocked
+    credential.
+  - **11 per-source adapters** (S1–S11) — each with transport, query procedure,
+    NAICS/PSC/keyword filter, field mapping, rate-limit/ToS handling, and live
+    status. S1 USAspending (primary, key-free), S2/S3 SAM.gov APIs (built,
+    `blocked` B3, fixture fallback), S4 SBIC directory CSV-diff, S5 good-standing
+    cross-check, S6 SBS, S7 GSA eLibrary, S8 state portals (`blocked` B1, shell
+    only), S9 RID (point-of-need, no-bulk-copy enforced in code), S10 IAPD,
+    S11 U.S. Courts.
+  - **Adapter registry** — orchestrator (s9) iterates it; add/remove a source is
+    a one-line registry change. Discovery vs. enrichment roles tabulated.
+- **`skill.md` Step 2 updated** to point at `references/source_adapters.md` and
+  describe the common-interface invocation + graceful degradation.
+
+Constraints honored: API/bulk-download over scraping per source; RID
+no-bulk-copy enforced (`status: n/a` if called without a name); SBIC GP — not
+fund/portfolio — is the target; SBA-prior-approval fact carried on every S4
+record; B1/B3 adapters built but marked `blocked`, not faked.
+
+Stage s3 → `drafted`. Next phase for s3: SELF-TEST.
