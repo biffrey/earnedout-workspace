@@ -505,3 +505,45 @@ Stage s9 → `drafted`. Next phase for s9: SELF-TEST (exercise the end-to-end
 wiring in dry-run/fixture mode — confirm the 1→9 hand-off, the halt-vs-degrade
 behaviour, a manual single-entity run, and the run-log output; validate the
 schedule artifacts: `bash -n` the script, `plutil -lint` the plist).
+
+## iter 28 — 2026-05-22 — s10 (Assembly, end-to-end self-test & final audit) — IMPLEMENT
+
+Built the stage-s10 IMPLEMENT deliverable: **the assembled end-to-end dry run on
+a small fixture sample for both target classes** (`OFFMARKET_BUILD_PLAN.md` s10
+"Builds": *"an end-to-end dry run on a small live (or fixture) sample for both
+classes"*). s10 adds **no new pipeline logic** — it assembles. Where s9's
+SELF-TEST verified the 1→9 *wiring*, this artifact runs the whole pipeline
+through to scored records and a written-out run log for both classes.
+
+- **`evidence/s10-e2e-dryrun.md`** — the end-to-end assembly. A small sample
+  (R1 Class-1 fixture, R2 real Class-2 SBIC, plus SYN-NF1 / SYN-NC1 to exercise
+  the pre-filter-drop and no-contact paths, plus the 3 live S1 + S3 fixture
+  records for resolution volume); a step-by-step trace of Steps 1–9 against the
+  stage references; the result — **≥1 scored record per class** (R1 30/110
+  `rollup_addon`; R2 30/100 `sbic` informational, license gate PASS), both
+  reports already on disk under `output/reports/`; and four honestly-carried
+  limitations (B1/B3/B4 still open; R1 is a synthetic fixture, not a real
+  S1-discovered company — IMPROVE-s3-1/s4-4/s6-2).
+- **`evidence/s10-offmarket_run_log_e2e_dryrun.md`** — the Step-9 consolidated
+  run log for the assembly, built from the `orchestration.md` §3 template using
+  the **real** Step 2–8 counts (8 raw records → 7 canonical → 4 scored-eligible
+  → 2 scored; 0 Airtable writes — dry-run; 2 drafts NOT SENT). A `0` is reported
+  as `0`; every blocker and gap is named.
+
+**Dry-run, not live (honest call).** Adapters read recorded `s3-fixtures/`
+payloads + live key-free sources; the Airtable write is directed at a test
+context, never `tblSmNrHROMLm7vOS`. A live weekly run halts at Step 1 (B4 — the
+two off-market `Source` values do not exist; confirmed again this iteration by a
+live `get_table_schema` read of `fldiGyXTk6Ybb6J1L` → only `Overnight Search` /
+`Manual Submission`). No row written; nothing sent.
+
+Constraints honored: no new pipeline logic / no parallel tracker / no new
+scorer (s10 only assembles s1–s9); never fabricate (every unknown is a logged
+gap; the two scored reports are the unmodified `prospect-evaluation` outputs);
+never auto-send (2 drafts, NOT SENT); dry-run mode prevents a build-time live
+write; the four open limitations are recorded, not papered over.
+
+Stage s10 → `drafted`. Next phase for s10: SELF-TEST (exercise this assembly
+against the s10 `Done-when` — confirm the dry run produces ≥1 scored record per
+class into a test context with no fabricated field; then VERIFY by critic, then
+the build-wide FINAL AUDIT once all 10 stages are `verified`).
