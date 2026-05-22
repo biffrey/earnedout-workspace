@@ -253,3 +253,46 @@ Findings (non-blocking, filed in `FINDINGS.md`):
   pre-existing).
 
 Stage s6 → `verified`. `unresolved_findings` → 19.
+
+## iter 24 — 2026-05-22 — s8 (Outreach drafting) — VERIFY
+
+Fresh-context critic subagent independently inspected the s8 deliverables on
+disk — `config/offmarket_outreach_template.md`, `references/outreach_drafting.md`,
+the broker `config/outreach_templates.md`, and the two s8 evidence files — plus
+git history. Not given the loop's logs or reasoning. Tasked to disprove that s8
+is done.
+
+**Verdict: PASS (0 BLOCKING).**
+
+Done-when criteria, all MET:
+- DW1 — a draft is generated for a candidate with a direct contact. PASS. Two
+  drafts in `s8-offmarket_outreach_drafts_2026-05-22.md`: a Class-1 OM-1 draft
+  (EXAMPLE INTERPRETING FIXTURE LLC, partial contact — name, no email) and a
+  Class-2 OM-2 draft (1st Source Capital Corporation, full contact). No raw
+  `[...]` placeholder survives in either block. The no-contact case (SYN-NC1)
+  correctly yields no draft and fabricates no contact.
+- DW2 — nothing is auto-sent. PASS. Independent grep across both s8 deliverables
+  for `send|gmail|smtp|mailto|transport|sendmail` — every hit is a prohibition
+  or the literal NOT-SENT marker. No send code path. Both stored drafts carry
+  the `--- OFF-MARKET OUTREACH DRAFT (NOT SENT) ---` / `--- END DRAFT (review
+  and send manually) ---` markers.
+- DW3 — broker templates untouched. PASS. `git log --all -- config/
+  outreach_templates.md` shows last touch at `323a782` (on-market revamp loop) —
+  no `offmarket-build` commit modifies it; working tree clean. s8 added a new
+  sibling file, `config/offmarket_outreach_template.md`.
+
+Invariants honored: no fabrication (no-contact → skip, partial contact → missing
+email surfaced as `needs follow-up`); SBA prior-approval change-of-control
+sentence is fixed body text in OM-2 and appears verbatim in the Class-2 draft;
+the off-market template is dedicated and distinct from the broker templates
+(addresses owner / SBIC GP principal, business not for sale, no NDA/CIM
+language).
+
+Findings (non-blocking, filed in `FINDINGS.md`):
+- IMPROVE-s8-1 — OM-2 body addresses the recipient "as a principal" but the
+  contact gate accepts any direct contact; R2's only enriched contact was titled
+  "Investor Relations". Prefer a principal-titled contact or soften the body.
+- NIT-s8-1 — stray trailing `</content>` / `</invoke>` tokens leaked into the
+  two s8 evidence files.
+
+Stage s8 → `verified`. `unresolved_findings` 19 → 21.

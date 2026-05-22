@@ -1,11 +1,11 @@
 ---
 active: true
-iteration: 23
+iteration: 24
 max_iterations: 80
-last_iteration_at: 2026-05-22T21:05:00Z
+last_iteration_at: 2026-05-22T22:35:00Z
 promise_token: OFFMARKET_BUILD_VERIFIED
 final_audit_passed: false
-unresolved_findings: 19
+unresolved_findings: 21
 open_blockers: 4
 stages:
   s1_foundations:       { status: verified }
@@ -15,7 +15,7 @@ stages:
   s5_enrichment:        { status: verified }
   s6_scoring:           { status: verified }
   s7_airtable_write:    { status: blocked }
-  s8_outreach:          { status: self_checked }
+  s8_outreach:          { status: verified }
   s9_orchestration:     { status: not_started }
   s10_assembly_audit:   { status: not_started }
 ---

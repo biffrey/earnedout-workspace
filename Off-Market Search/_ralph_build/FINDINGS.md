@@ -206,6 +206,28 @@ other skill files. Harmless and pre-existing (not caused by the s6 build).
 **Fix:** optionally `chmod 644` for consistency; no functional impact.
 **Status:** OPEN.
 
+### IMPROVE-s8-1 — IMPROVE — s8 — OM-2 drafted to a non-principal contact
+**Raised:** iter 24 VERIFY (s8 critic).
+**Where:** `config/offmarket_outreach_template.md` (OM-2 body) and
+`.claude/skills/off-market-search/references/outreach_drafting.md`.
+**Problem:** the OM-2 fixed body addresses the recipient "as a principal", but
+the contact gate accepts any direct contact (name OR email). In the self-test,
+R2's only enriched contact was titled "Investor Relations", not a GP managing
+principal — a tone mismatch. Not fabrication (it uses the only real contact
+available) and not a Done-when breach, but worth tightening.
+**Fix:** when the Class-2 contact title is not principal-level, either prefer a
+principal-titled contact during s5 enrichment or soften the OM-2 body wording.
+**Status:** OPEN.
+
+### NIT-s8-1 — NIT — s8 — stray trailing tokens in s8 evidence files
+**Raised:** iter 24 VERIFY (s8 critic).
+**Where:** `evidence/s8-selftest.md:238-239` and
+`evidence/s8-offmarket_outreach_drafts_2026-05-22.md:106`.
+**Problem:** stray trailing `</content>` / `</invoke>` artifact-formatting
+tokens leaked into the evidence files. Cosmetic; does not affect deliverables.
+**Fix:** strip the trailing tokens from the two evidence files.
+**Status:** OPEN.
+
 ## Resolved
 
 ### BLOCKING-s5-1 — BLOCKING — s5 — `gov_data_source` mapping invalid / table missing
