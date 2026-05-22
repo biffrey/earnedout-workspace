@@ -927,3 +927,31 @@ no parallel tracker, no new scorer touched.
 
 IMPROVE-s3-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 28 → 27. 27 findings remain. RESOLVE phase continues.
+
+## iter 56 — 2026-05-22 — RESOLVE — IMPROVE-s4-1 (`dedup_verdict` enum omits `needs_operator_review`)
+
+All 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0` —
+RESOLVE phase, clearing `IMPROVE`/`NIT` findings one per iteration.
+
+Resolved **IMPROVE-s4-1** (IMPROVE, s4) — the `CanonicalEntity.dedup_verdict`
+field in `.claude/skills/off-market-search/references/entity_resolution.md` was
+typed `new | existing`, but §4 routes an entity missing all identifiers and
+address to a `needs_operator_review` state that the enum never represented.
+
+Fix (spec-clarity change): of the two fixes the critic offered — widen the enum,
+or note that such entities are excluded before a verdict — chose the note.
+`needs_operator_review` is genuinely a run-log exclusion status, not a verdict:
+§4 excludes such an entity from the write *before* §3 dedup runs, so it never
+reaches a verdict. Expanded the `dedup_verdict` row note (line 61) to state the
+verdict is assigned only to an entity that survives §2 resolution, that an
+identifier-and-address-less entity is excluded as `needs_operator_review` (§4)
+before any verdict is assigned, and that `needs_operator_review` is a run-log
+exclusion status, not a `dedup_verdict` value.
+
+Constraints honored: cosmetic/spec-clarity only — no resolution, dedup, or
+write behavior changed; no pipeline logic, parallel tracker, or scorer touched.
+(Note: NIT-s9-1 flags the same enum/status distinction at
+`orchestration.md:26` — left open for its own RESOLVE iteration.)
+
+IMPROVE-s4-1 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
+27 → 26. 26 findings remain. RESOLVE phase continues.

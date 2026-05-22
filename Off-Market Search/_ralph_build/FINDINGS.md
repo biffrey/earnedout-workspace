@@ -6,16 +6,6 @@ and the final-audit auditor, with their resolutions. `unresolved_findings` in
 
 ## Open
 
-### IMPROVE-s4-1 — IMPROVE — s4 — `dedup_verdict` enum omits `needs_operator_review`
-**Raised:** iter 10 VERIFY (s4 critic).
-**Where:** `.claude/skills/off-market-search/references/entity_resolution.md:36`.
-**Problem:** the `dedup_verdict` field enum is `new` | `existing`, but §4 routes
-identifier-less/address-less entities to a `needs_operator_review` state never
-represented in the enum.
-**Fix:** add `needs_operator_review` to the `dedup_verdict` enum, or note
-explicitly that such entities are excluded before a verdict is assigned.
-**Status:** OPEN.
-
 ### IMPROVE-s4-2 — IMPROVE — s4 — DUNS ladder exception not stated explicitly
 **Raised:** iter 10 VERIFY (s4 critic).
 **Where:** `.claude/skills/off-market-search/references/entity_resolution.md`
@@ -350,6 +340,24 @@ Best done in the RESOLVE phase alongside IMPROVE-s10-3 and NIT-s9-3.
 **Status:** OPEN.
 
 ## Resolved
+
+### IMPROVE-s4-1 — IMPROVE — s4 — `dedup_verdict` enum omits `needs_operator_review`
+**Raised:** iter 10 VERIFY (s4 critic).
+**Where:** `.claude/skills/off-market-search/references/entity_resolution.md:61`.
+**Problem:** the `dedup_verdict` field enum is `new` | `existing`, but §4 routes
+identifier-less/address-less entities to a `needs_operator_review` state never
+represented in the enum.
+**Resolution (iter 56, RESOLVE):** chose the "note explicitly" fix over widening
+the enum — `needs_operator_review` is genuinely a run-log exclusion status, not
+a verdict (an entity missing all identifiers and address is excluded from the
+write *before* §3 dedup runs, so it never reaches a verdict). Expanded the
+`dedup_verdict` row note in the `CanonicalEntity` table (`entity_resolution.md`
+line 61) to state the verdict is assigned only to an entity that survives §2
+resolution, that an entity missing all identifiers **and** address is excluded
+as `needs_operator_review` (§4) before any verdict is assigned, and that
+`needs_operator_review` is a run-log exclusion status, not a `dedup_verdict`
+value. Cosmetic/spec-clarity only; no resolution or dedup behavior changed.
+**Status:** RESOLVED.
 
 ### IMPROVE-s3-1 — IMPROVE — s3 — S1 UEI not populated
 **Raised:** iter 7 VERIFY (s3 critic).

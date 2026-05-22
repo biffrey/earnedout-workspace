@@ -1,0 +1,11 @@
+Iteration 55 complete — RESOLVE phase.
+
+**Step:** Resolved `IMPROVE-s3-1` (s3 — S1 USAspending UEI not populated).
+
+The S1 adapter spec claimed it mapped `recipient UEI → uei`, but the `spending_by_award` endpoint returns no recipient UEI — only `Recipient Name` and an internal hashed `recipient_id`. So S1 records resolved on name+address only, weakening s4 (whose primary key is `uei`).
+
+**Fix** (`source_adapters.md`, S1 adapter): rewrote the Query block to add a required recipient-detail follow-up — `GET /api/v2/recipient/{recipient_id}/` per distinct `recipient_id`, cached and rate-paced, reading `uei`/`duns`/location; bulk-download path reads the `recipient_uei` CSV column directly. A failed/empty detail call sets `uei: null` (s4 falls back to the name+address ladder) — no fabrication. Common adapter interface unchanged.
+
+**State:** `iteration: 55`, `unresolved_findings: 28 → 27`, all 10 stages still `verified`, `final_audit_passed: true`, `open_blockers: 0`. Committed `69d637b`.
+
+**Signal:** `CONTINUE` — 27 findings remain to clear in the RESOLVE phase before COMPLETE.

@@ -58,7 +58,7 @@ enrichment as fresh candidates; `existing` entities carry the matched Airtable
 | `constituent_records` | RawRecord[] | the raw records this entity was built from (audit) |
 | `resolution_key` | string | which §6.1 key matched — `uei` / `cage` / `duns` / `name_address` |
 | `resolution_confidence` | `exact` \| `probable` | `exact` for id keys; `probable` for name+address |
-| `dedup_verdict` | `new` \| `existing` | see §3 |
+| `dedup_verdict` | `new` \| `existing` | see §3. Assigned only to an entity that survives §2 resolution; an entity missing **all** identifiers **and** address is excluded as `needs_operator_review` (§4) **before** any verdict is assigned, so it never carries this field — `needs_operator_review` is a run-log exclusion status, not a `dedup_verdict` value |
 | `tracker_record_id` | string \| null | the matched `tblSmNrHROMLm7vOS` record id when `existing` |
 | `dedup_key` | string \| null | which §6.2 key matched — `A_gov_id` / `B_name_address` / `C_sbic_license` |
 
