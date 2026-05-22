@@ -1560,3 +1560,39 @@ IMPROVE-s6-2 moved to the FINDINGS.md "Resolved" section; `unresolved_findings`
 1 → 0. **No findings remain.** All 10 stages `verified`, `final_audit_passed:
 true`, `unresolved_findings: 0`, `open_blockers: 0` — COMPLETE conditions now
 hold; next iteration runs the COMPLETE step.
+
+---
+
+## Iter 83 — COMPLETE — off-market build loop finished
+
+COMPLETE step. Re-read `STATE.md` fresh to confirm the closing conditions, all
+of which hold:
+
+- All 10 stages `verified` — s1 foundations, s2 Airtable schema, s3 source
+  adapters, s4 entity resolution, s5 enrichment, s6 scoring, s7 Airtable write
+  & dashboard badge, s8 outreach, s9 orchestration, s10 assembly & audit.
+- `final_audit_passed: true` — the fresh-context auditor returned SHIP with 0
+  BLOCKING findings.
+- `unresolved_findings: 0` — every `IMPROVE`/`NIT` finding in `FINDINGS.md` is
+  resolved (the last, IMPROVE-s6-2, closed iter 82).
+- `open_blockers: 0` — B1 (priority states), B2 (SBIC scope), B3 (SAM.gov key),
+  B4 (Airtable `Source` values) all RESOLVED by the operator on 2026-05-22.
+
+Deliverables in place: the `off-market-search` skill
+(`.claude/skills/off-market-search/` — `skill.md` + `references/`), the manual
+path, `config/offmarket_sources.md`, `config/offmarket_outreach_template.md`,
+the §8.3/§8.4 Airtable schema changes on `appOsvuyy5eK43QTx` /
+`tblSmNrHROMLm7vOS` (four `Source` choices + five §8.4 fields), the dashboard
+off-market badge, and the OM-1/OM-2 outreach templates — all written into the
+same Master Deal Pipeline table and scored by the unmodified
+`prospect-evaluation` skill. No parallel tracker, no new scorer, no auto-sent
+outreach, no fabricated field.
+
+Three live-run coverage gates are documented for the first unattended live run
+(IMPROVE-s4-4 S1 resolution coverage, IMPROVE-s5-3 Class-2 §4 cross-check,
+IMPROVE-s6-2 Class-1 real-company score) — these are enforced spec gates on the
+live run, not open build findings.
+
+Set `active: false`, `iteration: 83`. The build loop is COMPLETE.
+
+<promise>OFFMARKET_BUILD_VERIFIED</promise>
