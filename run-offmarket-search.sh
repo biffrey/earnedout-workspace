@@ -31,5 +31,11 @@ PROMPT='Run the EarnedOut off-market target search now. Use the off-market-searc
   echo "=== off-market-search run started $(date -u +%FT%TZ) ==="
   claude -p "$PROMPT" --dangerously-skip-permissions
   rc=$?
+  # Deterministic report styling: regardless of how the pipeline run produced
+  # report HTML, re-render every report .html from its .md via a fixed script,
+  # so off-market report styling is always consistent. See scripts/build_report_html.py.
+  echo "--- rendering report HTML from markdown (scripts/build_report_html.py) ---"
+  python3 -m pip install --quiet markdown >/dev/null 2>&1 || true
+  python3 scripts/build_report_html.py output/reports
   echo "=== off-market-search run finished $(date -u +%FT%TZ) (exit $rc) ==="
 } >> "$LOG" 2>&1

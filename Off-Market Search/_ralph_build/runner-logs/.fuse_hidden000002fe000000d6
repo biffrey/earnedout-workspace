@@ -1,7 +1,0 @@
-Iteration 74 complete. **RESOLVE phase** — cleared one finding.
-
-**Resolved:** `IMPROVE-s10-4` — the outreach-drafts evidence file (`s8-offmarket_outreach_drafts_2026-05-22.md`) header still labeled itself a "BUILD-LOOP s8 SELF-TEST ARTIFACT" even though the s10 end-to-end dry run reuses it as its Step-7 deliverable. Relabeled the header callout box as a "SHARED s8 / s10 EVIDENCE ARTIFACT", documented the cross-stage reuse, and added an iter-74 reuse note. Evidence-header relabel only — no draft content, skill code, spec, or write behavior changed; s10 stays `verified`.
-
-**State:** iteration 73 → 74; `unresolved_findings` 9 → 8; `open_blockers: 0`; all 10 stages `verified`; `final_audit_passed: true`. Committed locally as iter 74.
-
-**Signal:** `CONTINUE` — 8 IMPROVE/NIT findings remain (IMPROVE-s5-3, s6-2, s8-1; NIT-s9-1, s9-2, s9-3, s9-4, s10-1), one to clear per iteration before COMPLETE.

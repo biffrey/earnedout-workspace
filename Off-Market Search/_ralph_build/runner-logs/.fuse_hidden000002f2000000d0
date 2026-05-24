@@ -1,7 +1,0 @@
-Iteration 53 complete — one RESOLVE step.
-
-**Done this iteration:** Resolved finding **F2** (NIT, s1). `config/offmarket_sources.md` line 7 carried the literal token `⚠ VERIFY:` inside a negation sentence; reworded it to "No verify-this-value placeholder markers remain" so a future automated placeholder scan can't false-positive on it. Confirmed the literal no longer appears anywhere in the file. Cosmetic only — no source-config fact changed.
-
-**State:** all 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0`, `unresolved_findings: 30 → 29`. Iteration 52 → 53 (of 120). RESOLVE phase continues — 29 IMPROVE/NIT findings remain before COMPLETE.
-
-Logged to `IMPLEMENTATION_LOG.md` and `FINDINGS.md`, committed locally (`272c595`). Signal: **CONTINUE**.

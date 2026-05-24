@@ -1,8 +1,0 @@
-Iteration 59 complete — RESOLVE phase, one finding cleared.
-
-**Step taken:** Resolved `NIT-s4-1` (NIT, s4 — slash in example `entity_id`).
-
-- Added a "Slashes in `SBIC:<license_no>`" note to `entity_resolution.md` §5 documenting that SBA SBIC license numbers carry an embedded slash and are retained verbatim in the `SBIC:` key — safe because `entity_id`/`Gov Entity ID` is a plain identifier string compared literally and stored as text in Airtable. Spec-clarity only; no `entity_id` construction behavior changed.
-- Moved `NIT-s4-1` to FINDINGS.md "Resolved"; logged to IMPLEMENTATION_LOG.md.
-- STATE.md: `iteration` 58→59, `unresolved_findings` 24→23.
-- Committed locally; signal set to **CONTINUE** (23 findings remain, no blockers, all 10 stages verified — RESOLVE phase continues).

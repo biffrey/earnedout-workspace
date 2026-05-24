@@ -1,9 +1,0 @@
-Iteration 56 complete.
-
-**Phase:** RESOLVE — all 10 stages `verified`, `final_audit_passed: true`, `open_blockers: 0`.
-
-**Step done this iteration:** Resolved **IMPROVE-s4-1** — the `CanonicalEntity.dedup_verdict` enum in `entity_resolution.md` was `new | existing` while §4 routes identifier-and-address-less entities to a `needs_operator_review` state. Chose the "note explicitly" fix over widening the enum, since `needs_operator_review` is genuinely a run-log exclusion status applied *before* a verdict is ever assigned. Expanded the line-61 row note to document that distinction. Spec-clarity only — no resolution/dedup/write behavior changed.
-
-**State updated:** `iteration` 55 → 56; `unresolved_findings` 27 → 26; finding moved to FINDINGS.md "Resolved"; logged to IMPLEMENTATION_LOG.md; committed locally (`5417670`).
-
-**Signal:** `CONTINUE` — 26 `IMPROVE`/`NIT` findings remain to clear (iteration 56 of 120 budget).

@@ -195,10 +195,15 @@ same report layout so s7 and the dashboard treat them identically.
    `references/buy-box-and-scoring.md` (the single source of truth, beside its
    `skill.md`); reproducing or approximating the rubric instead of running the
    skill is a **BLOCKING** defect.
-3. **Capture both outputs** — `prospect-evaluation` writes
-   `{company-slug}-report.md` and `{company-slug}-report.html` to the working
-   directory; ensure both land in `output/reports/{report_slug}/`. **Never skip
-   the `.html`** — the dashboard links it.
+3. **Capture the report.** Save the report markdown as
+   `{company-slug}-report.md` in `output/reports/{report_slug}/` — the **`.md`
+   is the report of record.** Do **not** hand-write or `<pre>`-dump the
+   `.html`: the styled `{company-slug}-report.html` is generated
+   **deterministically from the `.md`** by `scripts/build_report_html.py`,
+   which `run-offmarket-search.sh` runs after every pipeline run. That script
+   is the **single source of truth for report styling** (dark theme,
+   value-colored score badge, contents sidebar) — any `.html` a run writes by
+   hand is overwritten by it, so never invest effort formatting report HTML.
 4. **Extract `lead_score`** from the generated report header (the "Lead Score
    XX / 100" or "XX / 110" line). Record `score_denominator` from the same line
    (110 for a Class-1 add-on, 100 for Class 2). If the header and the

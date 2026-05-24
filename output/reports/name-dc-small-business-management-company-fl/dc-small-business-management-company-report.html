@@ -1,140 +1,333 @@
 <!doctype html>
-<html lang=en>
-<head><meta charset=utf-8><title>DC Small Business Management Company — SBIC Prospect Evaluation</title>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DC Small Business Management Company — SBIC Prospect Evaluation</title>
 <style>
-:root{color-scheme:dark}
-body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;max-width:920px;margin:0 auto;padding:2em 1.4em;background:#0f1419;color:#e7ecf3;line-height:1.55}
-h1{color:#e7ecf3;font-size:22px;border-bottom:1px solid #2a3342;padding-bottom:.45em;margin-bottom:.6em}
-h2,h3{color:#cdd6e3}
-table{border-collapse:collapse;width:100%;margin:1em 0}
-th,td{border:1px solid #2a3342;padding:8px;vertical-align:top;text-align:left}
-th{background:#1f2733;color:#8a97ab}
-pre{white-space:pre-wrap;font-family:inherit;color:#cdd6e3;font-size:14px;margin:0}
-a{color:#5aa7ff}
-.chip{display:inline-block;padding:2px 9px;border-radius:9px;font-size:12px;font-weight:700}
-.chip.offmarket{background:rgba(47,191,113,.16);color:#46d18a;border:1px solid rgba(47,191,113,.4)}
-.score-badge{display:inline-block;padding:2px 11px;border-radius:8px;font-size:14px;font-weight:800;border:1px solid #2a3342;margin-left:8px;vertical-align:middle}
-.score-badge.high{color:#2fbf71}
-.score-badge.mid{color:#5aa7ff}
-.score-badge.low{color:#e74c3c}
-</style></head>
+:root{color-scheme:dark;--bg:#0f1419;--panel:#171d26;--panel2:#1f2733;--text:#e7ecf3;
+  --muted:#8a97ab;--border:#2a3342;--accent:#5aa7ff;--pass:#2fbf71;--fail:#e74c3c;--warn:#f5a623}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);line-height:1.55;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px}
+.wrap{max-width:1080px;margin:0 auto;padding:22px}
+.banner{background:linear-gradient(180deg,#1a2332 0%,#0f1419 100%);
+  border:1px solid var(--border);border-radius:14px;padding:20px 24px}
+.bhead{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.btitle h1{margin:0 0 6px;font-size:21px;font-weight:700}
+.btitle .meta{margin:0;color:var(--muted);font-size:12.5px}
+.chip{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.05em;
+  padding:3px 7px;border-radius:5px;vertical-align:middle}
+.chip.offmarket{color:#46d18a;background:rgba(47,191,113,.16);border:1px solid rgba(47,191,113,.4)}
+.scorebox{flex:none;text-align:center;background:#0b1019;border:1px solid var(--border);
+  border-radius:12px;padding:10px 18px;min-width:124px}
+.scorebox .sv{font-size:34px;font-weight:800;line-height:1}
+.scorebox .sl{font-size:9.5px;color:var(--muted);letter-spacing:.09em;margin-top:5px}
+.scorebox.high .sv{color:var(--pass)}
+.scorebox.mid .sv{color:var(--accent)}
+.scorebox.low .sv{color:var(--fail)}
+.cols{display:flex;gap:20px;margin-top:18px;align-items:flex-start}
+.toc{flex:none;width:210px;position:sticky;top:18px;background:var(--panel);
+  border:1px solid var(--border);border-radius:12px;padding:14px 8px}
+.toc .toch{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:0 10px 8px}
+.toc nav{display:flex;flex-direction:column}
+.toc nav a{color:#b9c2d0;text-decoration:none;font-size:12.5px;padding:5px 10px;
+  border-radius:6px;border-left:2px solid transparent}
+.toc nav a:hover{background:var(--panel2);color:var(--text);border-left-color:var(--accent)}
+.toc .toc-empty{color:var(--muted);padding:0 10px;font-size:12px}
+.doc{flex:1;min-width:0;background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:6px 26px 22px}
+.doc h2{font-size:17px;margin:24px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border);color:var(--text)}
+.doc h3{font-size:14.5px;margin:18px 0 6px;color:#cdd6e3}
+.doc p{margin:9px 0}
+.doc a{color:var(--accent)}
+.doc code{background:#0b1019;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:12.5px}
+.doc hr{border:0;border-top:1px solid var(--border);margin:18px 0}
+.doc blockquote{margin:12px 0;padding:10px 14px;background:var(--panel2);
+  border-left:3px solid var(--accent);border-radius:0 8px 8px 0;color:#cdd6e3}
+.doc blockquote p{margin:5px 0}
+.doc table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13px}
+.doc th,.doc td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+.doc th{background:var(--panel2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.03em}
+.doc ul,.doc ol{padding-left:22px}
+.doc li{margin:4px 0}
+footer{margin:16px 4px;color:#5c6675;font-size:11px}
+@media(max-width:760px){.cols{flex-direction:column}.toc{width:100%;position:static}}
+</style>
+</head>
 <body>
-<h1>DC Small Business Management Company <span class="chip offmarket">OFF-MARKET</span> <span class="score-badge low">30 / 100</span></h1>
-<pre style="white-space:pre-wrap;font-family:inherit"># DC Small Business Management Company — SBIC Prospect Evaluation
-
-**Prepared for:** Biffrey Braxton / EarnedOut
-**Report date:** 2026-05-23
-**Prepared by:** Claude (Prospect Evaluation skill — off-market-search invocation, sbic mode)
-**Lead source:** Off-Market — SBIC (SBA SBIC Directory)
-
-&gt; **SBIC target** — screened on SBA license good standing; standard financial criteria and the 0–100 score are **informational only** (per prospect-evaluation rule 13 and `buy-box-and-scoring.md` § &quot;SBIC targets&quot;).
-&gt;
-&gt; **Closing condition (carried on every Class-2 record):** Any **change of control** of a licensed SBIC requires **SBA prior approval**. Treat as a closing condition, not a screening gate.
-
----
-
-## SBIC Gate (sole pass/fail)
-
-| Criterion | Status | Evidence |
-|---|:---:|---|
-| SBIC license active and in good standing | ⚠️ | License appears on the SBA SBIC directory (currently licensed). Good-standing cross-check (Federal Register / SBA enforcement / OIG) **NOT yet performed for this entity** — S5 enrichment is a per-entity follow-up. **`SBIC License Status: Unknown`** until cross-checked. |
-
-**Overall verdict:** **CONDITIONAL** — license confirmed currently listed on the SBA SBIC directory; good standing pending operator confirmation via S5 cross-check.
-
-**Informational Lead Score:** **30 / 100** (sbic mode — informational only, does not drive the pursue/pass decision; gate is the sole determinant).
-
----
-
-## Buy Box Screening (informational only — per SBIC mode)
-
-| # | Criterion | Status | Evidence |
-|---|-----------|:------:|----------|
-| 1 | ≥ 10 full-time employees (GP staff) | ⚠️ | GP staff count not in SBA SBIC directory |
-| 2 | EBITDA ≥ $1M / year | ⚠️ | GP mgmt-fee economics not publicly disclosed |
-| 3 | 10+ years in business | ⚠️ | earliest fund vintage 2024 (~2 yrs of SBIC history) |
-| 4 | 3+ yrs YoY revenue and profit growth | ⚠️ | Not publicly disclosed |
-| 5 | Asking price ≤ 4.0x EBITDA | ⚠️ | Off-market — no asking price |
-| 6 | DSCR &gt; 1.4 (informational) | ⚠️ | Not computable |
-
----
-
-## GP / Management Entity Profile (informational)
-
-| Field | Value | Source |
-|---|---|---|
-| Management entity | DC Small Business Management Company | SBA SBIC Directory (&quot;Managed by&quot;) |
-| Location (city, state) | Jacksonville Beach, FL | SBA SBIC Directory |
-| # licensed funds under this GP | 1 | SBA SBIC Directory |
-| Total committed capital (sum of fund sizes) | $214,797,000 | SBA SBIC Directory |
-| Earliest fund vintage | 2024 | SBA SBIC Directory |
-| Latest fund vintage | 2024 | SBA SBIC Directory |
-| Any fund making new investments? | Yes | SBA SBIC Directory |
-| Investment strategies | Buyout | SBA SBIC Directory |
-| Fund styles | Private Equity | SBA SBIC Directory |
-| Investor Relations contact (primary) | Brent Paris — paris@dynamiccorecapital.com — 203-629-2030 | SBA SBIC Directory |
-
-### Licensed funds (full directory data)
-- **DC Small Business Fund, LP** — vintage 2024, size $214,797,000, avg inv $0, strategy: Buyout, style: Private Equity, making new investments: Yes
-
----
-
-## Lead Score Breakdown (per-line math from buy-box-and-scoring.md — applied verbatim)
-
-| # | Item | Awarded | Note |
-|---|------|---------|------|
-| 1 | Industry match (SBIC as recognized acquisition target — rule 13) | **20** | Target type recognized under prospect-evaluation rule 13. |
-| 2 | EBITDA tier | **0** | GP mgmt-fee economics not publicly disclosed — insufficient data → not awarded. |
-| 3 | Years in business | **0** | earliest fund vintage 2024 (~2 yrs of SBIC history) |
-| 4 | 3-yr rev + profit growth | **0** | Insufficient data — not awarded. |
-| 5 | Recurring revenue | **10** | SBIC mgmt-fee revenue is contracted during fund life; carry is performance-based but recurring |
-| 6 | Customer concentration | **0** | LP concentration not disclosed — insufficient data. |
-| 7 | Employees (≥10 FTE) | **0** | GP staff count not in directory — insufficient data. |
-| 8 | Valuation multiple | **0** | Off-market — no asking price → insufficient data (per scoring_integration.md §3.2). |
-| 9 | Low owner dependence | **0** | Insufficient data — not awarded. |
-| 10 | Roll-up / add-on strategic fit | **0** | SBIC is not an Applied Development or Fambro Waste add-on — 0 (standalone SBIC acquisition). |
-| | **TOTAL (informational)** | **30 / 100** | |
-
----
-
-## Supporting Deal Memo
-
-### 1. Executive Summary
-DC Small Business Management Company is a licensed SBIC general partner / management entity headquartered in Jacksonville Beach, FL that manages **1 licensed SBIC fund(s)** with **$214,797,000** of total committed capital across vintages 2024–2024. The acquisition target here is the **management entity that holds the SBIC license**, not the portfolio companies. The strategic rationale is acquiring an SBIC license already in good standing — short-circuiting the multi-year de novo SBA SBIC licensing process. **The company is not for sale**; outreach must be proprietary-approach via Template OM-2.
-
-### 2. SBIC License Status (the gate)
-- **Currently licensed:** ✅ confirmed via the SBA SBIC Directory (entry present in the 2026-05-23 CSV).
-- **Good standing:** **⚠️ unconfirmed** — S5 enrichment (SBA enforcement actions, OIG reports, Federal Register license actions) not yet performed for this entity in this run. Operator follow-up needed before any LOI conversation.
-- **License #:** not published in the directory — to be obtained from SBA on follow-up.
-- **Outstanding SBA leverage:** not published — to be obtained from SBA on follow-up.
-
-### 3. GP Economics (informational only)
-Not publicly disclosed. Mgmt-fee revenue (typically 2.0–2.5% of committed capital during investment period, stepping down post-investment-period) and carried interest are the GP&#x27;s two revenue streams. With $214,797,000 of committed capital, a typical mgmt-fee yield is in the rough range of **$3,221,955–$5,369,925 / year** during active fund life — this is a **rough size signal**, not a disclosed figure.
-
-### 4. Investment Strategy &amp; Activity
-Strategies on file: Buyout. Fund styles: Private Equity. Active for new investments: **Yes** — an active GP suggests an ongoing economic engine.
-
-### 5. Closing condition — SBA prior approval of change of control
-Per SBA SBIC program rules, **any change of control of a licensed SBIC requires prior SBA approval**. This is a deterministic closing condition — not a screening gate — but it materially extends the timeline (typical SBA review: 90–180 days) and constrains acceptable buyers (the SBA evaluates the proposed new control party). Build this into the timeline from day one.
-
-### 6. Recommendation &amp; Next Steps
-1. **S5 good-standing cross-check** (operator follow-up) — search SBA enforcement actions, OIG reports, and Federal Register SBIC license actions for &quot;DC Small Business Management Company&quot; and any of its licensed fund names.
-2. **Establish a direct line** — IR contact on file: Brent Paris.
-3. **Proprietary outreach Template OM-2** — discreet, principal-to-principal approach focused on the management-entity / license-transfer opportunity. Email: paris@dynamiccorecapital.com.
-4. **Pre-LOI diligence** — pull SBA license number, outstanding SBA leverage, GP/LP partnership agreements (preferred-return waterfall, key-man provisions, mgmt-fee structure, carried-interest splits), fund expiration schedule.
-
-### 7. Risks
-- License-status risk: **Unknown** standing must be resolved before any binding commitment.
-- SBA-approval timeline risk: closing extends to 90–180 days post-LOI.
-- Key-man risk: GP economics often depend on a small set of senior principals.
-- LP-consent risk: many LPA&#x27;s require LP consent for a change of control of the GP.
-
-### 8. Sources fetched this run
-- SBA SBIC Directory CSV: `https://www.sba.gov/export/contacts/sbic` (downloaded 2026-05-23)
-- Local snapshot: `search_reports/sbic_directory/2026-05-23.csv`
-
-### 9. Scoring methodology notes
-- Rubric applied verbatim from `.claude/skills/prospect-evaluation/references/buy-box-and-scoring.md` §6 — including SBIC mode rule (financials and 0–100 score informational only; gate is sole determinant).
-- Off-market &quot;no asking price&quot; handled per `scoring_integration.md` §3.2 — valuation line scores 0 (&quot;insufficient data — not awarded&quot;), not a failure.
-- `SBIC License Status: Unknown` is the default per `scoring_integration.md` §4 — never assume Good Standing.
-</pre>
-</body></html>
+<div class="wrap">
+<header class="banner"><div class="bhead">
+<div class="btitle"><h1>DC Small Business Management Company — SBIC Prospect Evaluation <span class="chip offmarket">OFF-MARKET</span></h1><p class="meta">Biffrey Braxton / EarnedOut &nbsp;&middot;&nbsp; 2026-05-23 &nbsp;&middot;&nbsp; Off-Market — SBIC (SBA SBIC Directory)</p></div>
+<div class="scorebox low"><div class="sv">30</div><div class="sl">LEAD SCORE / 100</div></div>
+</div></header>
+<div class="cols">
+<aside class="toc"><div class="toch">Contents</div><nav><a href="#sbic-gate-sole-passfail">SBIC Gate (sole pass/fail)</a><a href="#buy-box-screening-informational-only-per-sbic-mode">Buy Box Screening (informational only — per SBIC mode)</a><a href="#gp-management-entity-profile-informational">GP / Management Entity Profile (informational)</a><a href="#lead-score-breakdown-per-line-math-from-buy-box-and-scoringmd-applied-verbatim">Lead Score Breakdown (per-line math from buy-box-and-scoring.md — applied verbatim)</a><a href="#supporting-deal-memo">Supporting Deal Memo</a></nav></aside>
+<main class="doc"><blockquote>
+<p><strong>SBIC target</strong> — screened on SBA license good standing; standard financial criteria and the 0–100 score are <strong>informational only</strong> (per prospect-evaluation rule 13 and <code>buy-box-and-scoring.md</code> § "SBIC targets").</p>
+<p><strong>Closing condition (carried on every Class-2 record):</strong> Any <strong>change of control</strong> of a licensed SBIC requires <strong>SBA prior approval</strong>. Treat as a closing condition, not a screening gate.</p>
+</blockquote>
+<hr />
+<h2 id="sbic-gate-sole-passfail">SBIC Gate (sole pass/fail)</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th style="text-align: center;">Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SBIC license active and in good standing</td>
+<td style="text-align: center;">⚠️</td>
+<td>License appears on the SBA SBIC directory (currently licensed). Good-standing cross-check (Federal Register / SBA enforcement / OIG) <strong>NOT yet performed for this entity</strong> — S5 enrichment is a per-entity follow-up. <strong><code>SBIC License Status: Unknown</code></strong> until cross-checked.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Overall verdict:</strong> <strong>CONDITIONAL</strong> — license confirmed currently listed on the SBA SBIC directory; good standing pending operator confirmation via S5 cross-check.</p>
+<p><strong>Informational Lead Score:</strong> <strong>30 / 100</strong> (sbic mode — informational only, does not drive the pursue/pass decision; gate is the sole determinant).</p>
+<hr />
+<h2 id="buy-box-screening-informational-only-per-sbic-mode">Buy Box Screening (informational only — per SBIC mode)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Criterion</th>
+<th style="text-align: center;">Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>≥ 10 full-time employees (GP staff)</td>
+<td style="text-align: center;">⚠️</td>
+<td>GP staff count not in SBA SBIC directory</td>
+</tr>
+<tr>
+<td>2</td>
+<td>EBITDA ≥ $1M / year</td>
+<td style="text-align: center;">⚠️</td>
+<td>GP mgmt-fee economics not publicly disclosed</td>
+</tr>
+<tr>
+<td>3</td>
+<td>10+ years in business</td>
+<td style="text-align: center;">⚠️</td>
+<td>earliest fund vintage 2024 (~2 yrs of SBIC history)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3+ yrs YoY revenue and profit growth</td>
+<td style="text-align: center;">⚠️</td>
+<td>Not publicly disclosed</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Asking price ≤ 4.0x EBITDA</td>
+<td style="text-align: center;">⚠️</td>
+<td>Off-market — no asking price</td>
+</tr>
+<tr>
+<td>6</td>
+<td>DSCR &gt; 1.4 (informational)</td>
+<td style="text-align: center;">⚠️</td>
+<td>Not computable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="gp-management-entity-profile-informational">GP / Management Entity Profile (informational)</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Management entity</td>
+<td>DC Small Business Management Company</td>
+<td>SBA SBIC Directory ("Managed by")</td>
+</tr>
+<tr>
+<td>Location (city, state)</td>
+<td>Jacksonville Beach, FL</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td># licensed funds under this GP</td>
+<td>1</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Total committed capital (sum of fund sizes)</td>
+<td>$214,797,000</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Earliest fund vintage</td>
+<td>2024</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Latest fund vintage</td>
+<td>2024</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Any fund making new investments?</td>
+<td>Yes</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Investment strategies</td>
+<td>Buyout</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Fund styles</td>
+<td>Private Equity</td>
+<td>SBA SBIC Directory</td>
+</tr>
+<tr>
+<td>Investor Relations contact (primary)</td>
+<td>Brent Paris — paris@dynamiccorecapital.com — 203-629-2030</td>
+<td>SBA SBIC Directory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="licensed-funds-full-directory-data">Licensed funds (full directory data)</h3>
+<ul>
+<li><strong>DC Small Business Fund, LP</strong> — vintage 2024, size $214,797,000, avg inv $0, strategy: Buyout, style: Private Equity, making new investments: Yes</li>
+</ul>
+<hr />
+<h2 id="lead-score-breakdown-per-line-math-from-buy-box-and-scoringmd-applied-verbatim">Lead Score Breakdown (per-line math from buy-box-and-scoring.md — applied verbatim)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>Awarded</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Industry match (SBIC as recognized acquisition target — rule 13)</td>
+<td><strong>20</strong></td>
+<td>Target type recognized under prospect-evaluation rule 13.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>EBITDA tier</td>
+<td><strong>0</strong></td>
+<td>GP mgmt-fee economics not publicly disclosed — insufficient data → not awarded.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Years in business</td>
+<td><strong>0</strong></td>
+<td>earliest fund vintage 2024 (~2 yrs of SBIC history)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3-yr rev + profit growth</td>
+<td><strong>0</strong></td>
+<td>Insufficient data — not awarded.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Recurring revenue</td>
+<td><strong>10</strong></td>
+<td>SBIC mgmt-fee revenue is contracted during fund life; carry is performance-based but recurring</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Customer concentration</td>
+<td><strong>0</strong></td>
+<td>LP concentration not disclosed — insufficient data.</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Employees (≥10 FTE)</td>
+<td><strong>0</strong></td>
+<td>GP staff count not in directory — insufficient data.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Valuation multiple</td>
+<td><strong>0</strong></td>
+<td>Off-market — no asking price → insufficient data (per scoring_integration.md §3.2).</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Low owner dependence</td>
+<td><strong>0</strong></td>
+<td>Insufficient data — not awarded.</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Roll-up / add-on strategic fit</td>
+<td><strong>0</strong></td>
+<td>SBIC is not an Applied Development or Fambro Waste add-on — 0 (standalone SBIC acquisition).</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>TOTAL (informational)</strong></td>
+<td><strong>30 / 100</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="supporting-deal-memo">Supporting Deal Memo</h2>
+<h3 id="1-executive-summary">1. Executive Summary</h3>
+<p>DC Small Business Management Company is a licensed SBIC general partner / management entity headquartered in Jacksonville Beach, FL that manages <strong>1 licensed SBIC fund(s)</strong> with <strong>$214,797,000</strong> of total committed capital across vintages 2024–2024. The acquisition target here is the <strong>management entity that holds the SBIC license</strong>, not the portfolio companies. The strategic rationale is acquiring an SBIC license already in good standing — short-circuiting the multi-year de novo SBA SBIC licensing process. <strong>The company is not for sale</strong>; outreach must be proprietary-approach via Template OM-2.</p>
+<h3 id="2-sbic-license-status-the-gate">2. SBIC License Status (the gate)</h3>
+<ul>
+<li><strong>Currently licensed:</strong> ✅ confirmed via the SBA SBIC Directory (entry present in the 2026-05-23 CSV).</li>
+<li><strong>Good standing:</strong> <strong>⚠️ unconfirmed</strong> — S5 enrichment (SBA enforcement actions, OIG reports, Federal Register license actions) not yet performed for this entity in this run. Operator follow-up needed before any LOI conversation.</li>
+<li><strong>License #:</strong> not published in the directory — to be obtained from SBA on follow-up.</li>
+<li><strong>Outstanding SBA leverage:</strong> not published — to be obtained from SBA on follow-up.</li>
+</ul>
+<h3 id="3-gp-economics-informational-only">3. GP Economics (informational only)</h3>
+<p>Not publicly disclosed. Mgmt-fee revenue (typically 2.0–2.5% of committed capital during investment period, stepping down post-investment-period) and carried interest are the GP's two revenue streams. With $214,797,000 of committed capital, a typical mgmt-fee yield is in the rough range of <strong>$3,221,955–$5,369,925 / year</strong> during active fund life — this is a <strong>rough size signal</strong>, not a disclosed figure.</p>
+<h3 id="4-investment-strategy-activity">4. Investment Strategy &amp; Activity</h3>
+<p>Strategies on file: Buyout. Fund styles: Private Equity. Active for new investments: <strong>Yes</strong> — an active GP suggests an ongoing economic engine.</p>
+<h3 id="5-closing-condition-sba-prior-approval-of-change-of-control">5. Closing condition — SBA prior approval of change of control</h3>
+<p>Per SBA SBIC program rules, <strong>any change of control of a licensed SBIC requires prior SBA approval</strong>. This is a deterministic closing condition — not a screening gate — but it materially extends the timeline (typical SBA review: 90–180 days) and constrains acceptable buyers (the SBA evaluates the proposed new control party). Build this into the timeline from day one.</p>
+<h3 id="6-recommendation-next-steps">6. Recommendation &amp; Next Steps</h3>
+<ol>
+<li><strong>S5 good-standing cross-check</strong> (operator follow-up) — search SBA enforcement actions, OIG reports, and Federal Register SBIC license actions for "DC Small Business Management Company" and any of its licensed fund names.</li>
+<li><strong>Establish a direct line</strong> — IR contact on file: Brent Paris.</li>
+<li><strong>Proprietary outreach Template OM-2</strong> — discreet, principal-to-principal approach focused on the management-entity / license-transfer opportunity. Email: paris@dynamiccorecapital.com.</li>
+<li><strong>Pre-LOI diligence</strong> — pull SBA license number, outstanding SBA leverage, GP/LP partnership agreements (preferred-return waterfall, key-man provisions, mgmt-fee structure, carried-interest splits), fund expiration schedule.</li>
+</ol>
+<h3 id="7-risks">7. Risks</h3>
+<ul>
+<li>License-status risk: <strong>Unknown</strong> standing must be resolved before any binding commitment.</li>
+<li>SBA-approval timeline risk: closing extends to 90–180 days post-LOI.</li>
+<li>Key-man risk: GP economics often depend on a small set of senior principals.</li>
+<li>LP-consent risk: many LPA's require LP consent for a change of control of the GP.</li>
+</ul>
+<h3 id="8-sources-fetched-this-run">8. Sources fetched this run</h3>
+<ul>
+<li>SBA SBIC Directory CSV: <code>https://www.sba.gov/export/contacts/sbic</code> (downloaded 2026-05-23)</li>
+<li>Local snapshot: <code>search_reports/sbic_directory/2026-05-23.csv</code></li>
+</ul>
+<h3 id="9-scoring-methodology-notes">9. Scoring methodology notes</h3>
+<ul>
+<li>Rubric applied verbatim from <code>.claude/skills/prospect-evaluation/references/buy-box-and-scoring.md</code> §6 — including SBIC mode rule (financials and 0–100 score informational only; gate is sole determinant).</li>
+<li>Off-market "no asking price" handled per <code>scoring_integration.md</code> §3.2 — valuation line scores 0 ("insufficient data — not awarded"), not a failure.</li>
+<li><code>SBIC License Status: Unknown</code> is the default per <code>scoring_integration.md</code> §4 — never assume Good Standing.</li>
+</ul></main>
+</div>
+<footer>EarnedOut &mdash; off-market prospect evaluation &middot; rendered by scripts/build_report_html.py</footer>
+</div>
+</body>
+</html>

@@ -1,1 +1,3 @@
 .playwright-mcp/
+.fuse_hidden*
+.DS_Store

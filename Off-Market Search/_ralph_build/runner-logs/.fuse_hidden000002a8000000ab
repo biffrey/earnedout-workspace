@@ -1,5 +1,0 @@
-Iteration 77 complete — RESOLVE phase.
-
-**Resolved NIT-s9-4** — the frozen iter-26 s9 SELF-TEST dry-run run log (`evidence/s9-offmarket_run_log_dryrun.md`) still cited B4 (and B1/B3) as open blockers, though all four are RESOLVED and `open_blockers: 0`. Refreshed it: added an iter-77 frozen-state note to the callout box, and corrected the Outcome, "Open blockers", "Sources queried" status column (S2/S3/S8 `blocked` → `fixture` with recorded-fixture notes), "Airtable writes" (dropped the B4 preflight-halt claim), and "Follow-ups" (removed B1/B3/B4 bullets) lines. Evidence-refresh only — no skill code, spec, or behavior changed; s9 stays `verified`.
-
-State updated: `iteration: 77`, `unresolved_findings: 6 → 5`. Five findings remain (IMPROVE-s5-3, IMPROVE-s6-2, IMPROVE-s8-1, NIT-s9-2, NIT-s10-1). Committed locally; signal set to **CONTINUE**.

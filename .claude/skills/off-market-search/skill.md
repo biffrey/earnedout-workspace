@@ -125,10 +125,15 @@ from Step 4. It invokes the **existing, unmodified** `prospect-evaluation` skill
   `sbic_license_status`) is the sole hard criterion; financials and the 0–100
   score are informational. Every Class-2 report carries the SBA
   prior-approval-of-change-of-control fact.
-Each candidate emerges as a `ScoredLead`; the score and the `.md` + `.html`
-reports are captured to `output/reports/{report_slug}/` (a filesystem-safe form
-of the `Gov Entity ID`). _(Scoring integration: s6 — see
-`references/scoring_integration.md`.)_
+Each candidate emerges as a `ScoredLead`; the score and the **`.md` report**
+are captured to `output/reports/{report_slug}/` (a filesystem-safe form of the
+`Gov Entity ID`). The `.md` is the report of record. The styled **`.html` is
+generated deterministically from the `.md` by `scripts/build_report_html.py`**,
+which `run-offmarket-search.sh` runs after every pipeline run — that script owns
+report styling (dark theme, value-colored score badge, contents sidebar). Do
+**not** hand-format report HTML and never dump markdown into a `<pre>`; just
+write a clean `.md` and let the script render it. _(Scoring integration: s6 —
+see `references/scoring_integration.md`.)_
 
 ## Step 6 — Create / update the Airtable record
 *Built by s7.*
