@@ -1,0 +1,63 @@
+{
+  "entity_id": "NAME:hidden river strategic capital|radnor pa",
+  "target_class": 2,
+  "business_name": "Hidden River Strategic Capital",
+  "industry": "SBIC GP \u2014 Direct lending / structured capital (LMM)",
+  "location": {
+    "city": "Radnor",
+    "state": "PA"
+  },
+  "website": "https://hiddenrivercap.com/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "needs follow-up",
+  "federal_award_total": null,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": "Steve Gord",
+    "title": "Founding Partner",
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": "Good Standing",
+  "sbic_gp_economics": {
+    "aum": 248000000,
+    "fund_count": 1,
+    "vintage": "2023",
+    "strategy": "Direct lending / structured capital"
+  },
+  "gov_data_source": [
+    "SBA SBIC"
+  ],
+  "provenance_urls": [
+    "https://www.sba.gov/funding-programs/investment-capital/sbic-directory"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": null,
+  "summary": "Radnor PA. Closed inaugural Fund I at $245M committed in June 2023. SBIC licensed fund. Invests $5\u201325M per deal into U.S. positive-cash-flow businesses (>$10M revenues). Flexible structured capital for management-owned businesses. Founding partners Steve Gord, Todd Morrissey, Kevin Condon (LMM PE veterans).",
+  "fit_note": "First-time fund manager, single SBIC vehicle \u2014 clean acquisition target",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up",
+    "revenue signal \u2014 needs follow-up"
+  ],
+  "deaf_specificity": null,
+  "sbic_funds": [
+    {
+      "fund_name": "Hidden River Strategic Capital I, LP",
+      "vintage": "2023",
+      "fund_size": "248000000",
+      "strategy": "Hybrid Debt/Equity",
+      "style": "Hybrid",
+      "making_new": "Yes",
+      "avg_inv": "14000000"
+    }
+  ]
+}

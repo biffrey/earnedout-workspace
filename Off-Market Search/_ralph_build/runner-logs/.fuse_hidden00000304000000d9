@@ -1,0 +1,9 @@
+Iteration 71 complete.
+
+**RESOLVE phase — cleared IMPROVE-s5-5** (the B1-gated SOS formation-date lookup).
+
+- Rewrote §3.2 of `enrichment.md` from a B1-gated "skip the lookup" placeholder into a wired SOS formation-date lookup for the five Phase-1 jurisdictions (DC, VA, MD, PA, WV), driving the matching s3 S8 SOS-registry surface under the per-jurisdiction ToS gate. This wires the deliverable that last iteration's IMPROVE-s3-2 (the working S8 adapter) made available.
+- Out-of-Phase-1 entities are skipped by design; in-scope no-match / ToS-skipped registries are distinct logged gaps — no fabrication path introduced.
+- Dropped stale "B1 unresolved" wording from the file intro and the §6 edge-handling bullet.
+- `STATE.md`: `iteration` 70→71, `unresolved_findings` 12→11; all 10 stages still `verified`, `open_blockers: 0`, `final_audit_passed: true`.
+- Committed locally; `.loop_signal` set to **CONTINUE** — 11 IMPROVE/NIT findings remain for the RESOLVE phase.

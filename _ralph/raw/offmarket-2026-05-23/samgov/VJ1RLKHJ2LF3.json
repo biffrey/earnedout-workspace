@@ -1,0 +1,259 @@
+{
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "samRegistered": "Yes",
+        "ueiSAM": "VJ1RLKHJ2LF3",
+        "entityEFTIndicator": null,
+        "cageCode": "6JPP0",
+        "dodaac": null,
+        "legalBusinessName": "FRIENDS INTERPRETING SERVICES LLC",
+        "dbaName": null,
+        "purposeOfRegistrationCode": "Z2",
+        "purposeOfRegistrationDesc": "All Awards",
+        "registrationStatus": "Active",
+        "evsSource": "E&Y",
+        "registrationDate": "2011-09-22",
+        "lastUpdateDate": "2025-10-08",
+        "registrationExpirationDate": "2026-10-08",
+        "activationDate": "2025-10-08",
+        "ueiStatus": "Active",
+        "ueiExpirationDate": null,
+        "ueiCreationDate": "2020-05-01",
+        "publicDisplayFlag": "Y",
+        "exclusionStatusFlag": "N",
+        "exclusionURL": null,
+        "dnbOpenData": null
+      },
+      "coreData": {
+        "entityInformation": {
+          "entityURL": "http://www.friendsinterpretingservices.com",
+          "entityDivisionName": null,
+          "entityDivisionNumber": null,
+          "entityStartDate": "2011-06-23",
+          "fiscalYearEndCloseDate": "12/31",
+          "submissionDate": "2025-10-08"
+        },
+        "physicalAddress": {
+          "addressLine1": "204 VOLNEY HILL ROAD",
+          "addressLine2": null,
+          "city": "SHENANDOAH JUNCTION",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25442",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "mailingAddress": {
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": "0905",
+          "countryCode": "USA"
+        },
+        "congressionalDistrict": "02",
+        "generalInformation": {
+          "entityStructureCode": "2L",
+          "entityStructureDesc": "Corporate Entity (Not Tax Exempt)",
+          "entityTypeCode": "F",
+          "entityTypeDesc": "Business or Organization",
+          "profitStructureCode": "2X",
+          "profitStructureDesc": "For Profit Organization",
+          "organizationStructureCode": "LJ",
+          "organizationStructureDesc": "Limited Liability Company",
+          "stateOfIncorporationCode": "WV",
+          "stateOfIncorporationDesc": "WEST VIRGINIA",
+          "countryOfIncorporationCode": "USA",
+          "countryOfIncorporationDesc": "UNITED STATES"
+        },
+        "businessTypes": {
+          "businessTypeList": [
+            {
+              "businessTypeCode": "23",
+              "businessTypeDesc": "Minority-Owned Business"
+            },
+            {
+              "businessTypeCode": "27",
+              "businessTypeDesc": "Self Certified Small Disadvantaged Business"
+            },
+            {
+              "businessTypeCode": "2X",
+              "businessTypeDesc": "For Profit Organization"
+            },
+            {
+              "businessTypeCode": "8C",
+              "businessTypeDesc": "Women-Owned Small Business (WOSB) Joint Venture eligible under the WOSB Program"
+            },
+            {
+              "businessTypeCode": "8W",
+              "businessTypeDesc": "Women-Owned Small Business"
+            },
+            {
+              "businessTypeCode": "A2",
+              "businessTypeDesc": "Women-Owned Business"
+            },
+            {
+              "businessTypeCode": "F",
+              "businessTypeDesc": "Business or Organization"
+            },
+            {
+              "businessTypeCode": "G9",
+              "businessTypeDesc": "Individual or concern, other than one of the preceding"
+            },
+            {
+              "businessTypeCode": "HQ",
+              "businessTypeDesc": "DOT Certified DBE"
+            },
+            {
+              "businessTypeCode": "JS",
+              "businessTypeDesc": "Small Business Joint Venture"
+            },
+            {
+              "businessTypeCode": "LJ",
+              "businessTypeDesc": "Limited Liability Company"
+            }
+          ],
+          "sbaBusinessTypeList": [
+            {
+              "sbaBusinessTypeCode": "A0",
+              "sbaBusinessTypeDesc": "SBA-Certified Economically Disadvantaged Women-Owned Small Business",
+              "certificationEntryDate": "2020-12-18",
+              "certificationExitDate": null
+            },
+            {
+              "sbaBusinessTypeCode": "A9",
+              "sbaBusinessTypeDesc": "SBA-Certified Women-Owned Small Business",
+              "certificationEntryDate": "2020-12-18",
+              "certificationExitDate": null
+            }
+          ]
+        },
+        "financialInformation": {
+          "creditCardUsage": "Y",
+          "debtSubjectToOffset": "N"
+        }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [
+            {
+              "naicsCode": "541930",
+              "naicsDescription": "Translation and Interpretation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            }
+          ],
+          "pscList": [
+            {
+              "pscCode": "R608",
+              "pscDescription": "SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING"
+            }
+          ]
+        },
+        "disasterReliefData": {
+          "disasterRegistryFlag": "YES",
+          "bondingFlag": "NO",
+          "geographicalAreaServed": [
+            {
+              "geographicalAreaServedStateCode": "Any",
+              "geographicalAreaServedStateName": null,
+              "geographicalAreaServedCountyCode": null,
+              "geographicalAreaServedCountyName": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaCode": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaName": null
+            }
+          ]
+        },
+        "ediInformation": {
+          "ediInformationFlag": "N"
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "FRIENDS",
+          "title": "Owner",
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": "0905",
+          "countryCode": "USA"
+        },
+        "electronicBusinessPOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "Friends",
+          "title": "Owner",
+          "addressLine1": "204 Volney Hl",
+          "addressLine2": null,
+          "city": "Shenandoah Junction",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25442",
+          "zipCodePlus4": "4846",
+          "countryCode": "USA"
+        },
+        "governmentBusinessAlternatePOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "FRIENDS",
+          "title": "Owner",
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": "0905",
+          "countryCode": "USA"
+        },
+        "electronicBusinessAlternatePOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "FRIENDS",
+          "title": "Owner",
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": "0905",
+          "countryCode": "USA"
+        },
+        "pastPerformancePOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "FRIENDS",
+          "title": "Owner",
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformanceAlternatePOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "FRIENDS",
+          "title": "Owner",
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        }
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v3/entities?api_key=REPLACE_WITH_API_KEY&ueiSAM=VJ1RLKHJ2LF3&registrationStatus=A&includeSections=entityRegistration%2CcoreData%2Cassertions%2CpointsOfContact&page=0&size=10"
+  }
+}

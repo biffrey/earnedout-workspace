@@ -1,0 +1,9 @@
+Iteration 58 complete.
+
+**Step executed:** RESOLVE phase — cleared finding **IMPROVE-s4-2** (one finding per iteration; all 10 stages already `verified`, `final_audit_passed: true`).
+
+**What changed:** Rewrote the §2.1 Legacy DUNS resolution-ladder step in `entity_resolution.md` to state explicitly that the DUNS key is a documented exception to first-match-wins — it is evaluated only after confirming neither record carries a `norm_uei`, and is skipped entirely when either record has a UEI. Spec-clarity only; no resolution/dedup behavior changed.
+
+**State updated:** `iteration` 57 → 58; `unresolved_findings` 25 → 24; IMPROVE-s4-2 moved to FINDINGS.md "Resolved"; logged to IMPLEMENTATION_LOG.md; committed locally.
+
+**Signal:** `CONTINUE` — 24 findings remain in the RESOLVE phase; `open_blockers: 0`, iteration 58 < max 120.

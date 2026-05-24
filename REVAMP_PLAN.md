@@ -56,22 +56,23 @@ earnedout-workspace/
 │   └── skills/
 │       ├── overnight-search/          # this skill (revamped)
 │       │   └── skill.md
-│       ├── prospect-evaluation/       # copied from Google Drive path
-│       │   └── skill.md
+│       ├── prospect-evaluation/       # self-contained skill (migrated from Google Drive)
+│       │   ├── skill.md
+│       │   ├── references/            # buy box / industries / research playbook
+│       │   │   ├── buy-box-and-scoring.md
+│       │   │   ├── industries-and-geography.md
+│       │   │   └── research-playbook.md
+│       │   └── templates/             # single-report + batch-screen
+│       │       ├── single-report.md
+│       │       ├── single-report.html
+│       │       └── batch-screen.md
 │       └── submit-url/                # NEW: manual URL submission skill
 │           └── skill.md
 ├── config/
 │   ├── search_config.md               # existing, updated with new fields
 │   ├── outreach_templates.md          # existing, updated with new template
 │   └── credentials-setup.md           # NEW: 1Password setup instructions
-├── references/                         # from prospect-evaluation skill
-│   ├── buy-box-and-scoring.md
-│   ├── industries-and-geography.md
-│   └── research-playbook.md
-├── templates/                          # from prospect-evaluation skill
-│   ├── single-report.md
-│   ├── single-report.html
-│   ├── batch-screen.md
+├── templates/
 │   └── daily-dashboard.html           # NEW: template for daily report
 ├── output/
 │   ├── reports/                        # prospect eval reports per lead
@@ -83,7 +84,7 @@ earnedout-workspace/
 
 **Migration steps:**
 1. Create `earnedout-workspace` repo on GitHub
-2. Copy prospect-evaluation skill files from Google Drive path into `references/`, `templates/`, `.claude/skills/prospect-evaluation/`
+2. Copy the prospect-evaluation skill (`skill.md` plus its `references/` and `templates/` folders) from the Google Drive path into `.claude/skills/prospect-evaluation/`
 3. Move published-listing-search files into `.claude/skills/overnight-search/`, `config/`, `search_reports/`
 4. Create the `submit-url` skill
 5. Commit and push

@@ -1,0 +1,84 @@
+# TRANSLATION EXCELLENCE INC. — Prospect Evaluation
+
+**Prepared for:** Biffrey Braxton / EarnedOut
+**Report date:** 2026-05-22
+**Prepared by:** Claude (off-market-search pipeline, prospect-evaluation rubric, rollup_addon mode)
+**Lead source:** Off-Market — ASL Bolt-on (gov / open data: USAspending)
+
+**Gov Entity ID:** `UEI:LSEHC45NMB28`
+
+---
+
+## Buy Box Screening
+
+| # | Criterion | Status | Evidence |
+|---|-----------|:------:|----------|
+| 1 | ≥ 10 full-time employees | ⚠️ | employee count not disclosed — needs follow-up (operating company; gov contracts imply >10 FTE but unconfirmed) |
+| 2 | EBITDA $1M–$4M | ⚠️ | EBITDA not disclosed — not-for-sale off-market target; financials are private |
+| 3 | 10+ years in business | ✅ | Founded 2010-01-01 — 15 years |
+| 4 | 3+ yrs YoY rev/profit growth | ⚠️ | private financials — growth trend cannot be evaluated without disclosure |
+| 5 | Asking price ≤ 4.0x EBITDA | ⚠️ | not for sale — no asking price (off-market). Valuation line not awarded — not a failure |
+| 6 | DSCR > 1.4 (informational) | ⚠️ | DSCR not computable without P&L — informational only |
+
+**Eval mode:** `rollup_addon` (Applied Development roll-up add-on, /110)
+**Lead Score:** **25 / 110**
+**Overall Buy Box:** **CONDITIONAL** — off-market private firm; 5 of 6 hard checks are ⚠️ insufficient data (typical for off-market). Pursue as proprietary approach for Applied Development add-on.
+
+
+## Lead Score Breakdown
+
+| Item | Awarded | Max | Justification |
+|------|:-------:|:---:|---------------|
+| Industry match | 10 | 20 | Adjacent — sits in NAICS 541930 universe but firm's primary line is broader than core ASL/CART. Multi-language LSP, not deaf-services-only — adjacent fit for Applied Development |
+| EBITDA tier (non-cumulative) | 0 | 15 | EBITDA not disclosed — off-market private company. Insufficient data — not awarded. |
+| Years in business ≥10 | 10 | 10 | 15 years in business (formation 2010-01-01) |
+| 3 yrs consistent rev + profit growth | 0 | 10 | 3-year rev/profit trend not visible for private off-market firm. Insufficient data — not awarded. |
+| Recurring revenue | 0 | 10 | Federal contract revenue often multi-year IDIQ; mix unconfirmed. Insufficient data — not awarded. |
+| Customer concentration <20% | 0 | 5 | Customer concentration unknown; federal-prime profile suggests material concentration. Insufficient data — not awarded. |
+| Employees ≥10 | 0 | 10 | Headcount not disclosed; firms with material federal contract revenue likely meet ≥10. Insufficient data — not awarded. |
+| Valuation multiple | 0 | 15 | No asking price (off-market) — valuation line scores 0 as 'insufficient data — not awarded'. Not a failure and not an abort (per scoring_integration.md §3.2). |
+| Low owner dependence | 0 | 5 | Owner-dependence not assessable from public data. Insufficient data — not awarded. |
+| Roll-up / add-on strategic fit (Applied Development) | 5 | 10 | Adjacent strategic fit: multi-language LSP with an ASL service line — partial Applied Development fit. (Per off-market §13, adjacent gets bonus 5, not 10.) |
+| **Total** | **25** | **110** | |
+
+## 1. Executive Summary
+
+- **Company overview:** Aurora CO. Translation, interpretation, and language training in 135+ languages. Offers ASL interpreting (on-site, video remote, specialized) as one service among many. ISO certified (9001, 17100, 13485). Established 2010.
+- **Industry / target class:** Multi-language LSP (135 languages) with ASL service line (NAICS 541930, adjacent — spoken-language firm with deaf-services add-on)
+- **Location:** Aurora, CO
+- **Federal award total (size proxy):** $39,217,430 — trailing 5 FYs
+- **Buy Box screening summary:** CONDITIONAL — off-market intake; private financials block hard scoring
+- **Why pursue:** Adjacent-fit LSP — surfaced for completeness, lower priority.
+
+## 2. Company Overview
+
+Aurora CO. Translation, interpretation, and language training in 135+ languages. Offers ASL interpreting (on-site, video remote, specialized) as one service among many. ISO certified (9001, 17100, 13485). Established 2010.
+
+## Contact (for outreach)
+
+- **Name:** — needs follow-up
+- **Title:** — needs follow-up
+- **Email:** — needs follow-up
+- **Phone:** — needs follow-up
+
+## Provenance
+
+- **Government data sources:** USAspending
+- https://www.usaspending.gov/recipient/4b7782a3-fead-45c1-c503-62a27d415340-C/latest
+- Company website: https://translationexcellence.com/
+
+## Enrichment Gaps (needs follow-up)
+
+- contact email — needs follow-up
+- primary contact name — needs follow-up
+- employee count — needs follow-up
+
+## Material Notes / Caveats
+
+- Multi-language LSP, not deaf-services-only — adjacent fit for Applied Development
+
+## Scoring Notes
+
+- Eval mode: rollup_addon
+- No asking price (off-market) — valuation line not awarded, not a failure.
+- All financial fields left blank or marked insufficient data per skill rule 1 (never fabricate financials).

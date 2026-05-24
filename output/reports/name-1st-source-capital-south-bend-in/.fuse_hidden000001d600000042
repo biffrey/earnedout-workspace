@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>1st Source Capital Corporation — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  .selftest-banner {
+    grid-column: 1 / -1;
+    background: rgba(245,166,35,.12);
+    border: 1px solid rgba(245,166,35,.45);
+    border-radius: 12px; padding: 14px 18px; color: #f5d79a; font-size: 13px;
+  }
+  .selftest-banner strong { color: var(--warn); }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .gate-callout {
+    background: rgba(47,191,113,.10); border: 1px solid rgba(47,191,113,.4);
+    border-radius: 10px; padding: 14px 18px; margin-top: 14px;
+  }
+  .sba-callout {
+    background: rgba(245,166,35,.10); border: 1px solid rgba(245,166,35,.45);
+    border-radius: 10px; padding: 14px 18px;
+  }
+  .info-note {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px; margin-top: 12px;
+    font-size: 13px; color: var(--muted);
+  }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="selftest-banner">
+    <strong>⚙️ BUILD-LOOP s10 END-TO-END DRY-RUN ARTIFACT</strong> — Regenerated by the
+    off-market-search build loop, stage <strong>s10 (assembly &amp; end-to-end dry run)
+    IMPLEMENT</strong> (iter 31), to resolve <strong>BLOCKING-s10-1</strong>. Produced by
+    driving the Class-2 (SBIC) <code>LeadPacket</code> at <code>lead-packet.json</code>
+    through the unmodified <code>prospect-evaluation</code> skill in <strong>SBIC mode</strong>,
+    scored <strong>strictly from that packet</strong> — no value appears here that is not in
+    <code>lead-packet.json</code>. This is a test artifact, not a live deal recommendation.
+  </div>
+
+  <header class="banner">
+    <div>
+      <h1>1st Source Capital Corporation — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-22 &nbsp;·&nbsp;
+        Lead source: Off-market search — SBA SBIC directory &nbsp;·&nbsp;
+        Eval mode: <strong>SBIC</strong>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict conditional">Buy Box: Conditional</span>
+      <div class="score-badge">
+        <div class="num">20</div>
+        <div class="label">Lead Score / 100 · informational</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#sba">SBA Approval Condition</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <div class="info-note">
+        <strong>SBIC mode.</strong> For an SBIC GP / management-company acquisition the
+        standard six Buy Box checks are <strong>reported but non-gating</strong>. The
+        <strong>sole hard gate</strong> is the SBIC license being active and in good
+        standing — see the SBIC License Gate below. The 0–100 lead score is
+        <strong>informational only</strong>.
+      </div>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:90px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip warn">INSUF. DATA</span></td><td>SBIC GP/management entity's FTE headcount not disclosed in the <code>LeadPacket</code>.</td></tr>
+          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td><span class="chip warn">INSUF. DATA</span></td><td>No standalone P&amp;L for the SBIC management entity. Fund size ($2.85M) is fund-level informational data, not GP EBITDA. Not a ❌.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip warn">INSUF. DATA</span></td><td><strong>Insufficient data — not awarded.</strong> The <code>LeadPacket</code> sets <code>formation_date</code>/<code>years_in_business</code> to <code>null</code> and lists "formation date" in <code>enrichment_gaps</code>. SBIC fund vintage (1983) is fund-level data, not the company's formation date — a gap stays a gap. Not a ❌.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">INSUF. DATA</span></td><td>No standalone SBIC-entity revenue/profit series disclosed.</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip warn">INSUF. DATA</span></td><td><strong>Off-market target — not for sale, no asking price.</strong> Expected state, not an error. No multiple computable. Not a ❌.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">INSUF. DATA</span></td><td>No deal financing structure exists (off-market, no ask). Not computable.</td></tr>
+        </tbody>
+      </table>
+      <div class="gate-callout">
+        <strong style="color:var(--pass);">SBIC License Gate (sole hard criterion): ✅ PASS</strong><br>
+        <code>sbic_license_status: Good Standing</code>. The SBA SBIC directory publishes no
+        standing flag; s5 enrichment's good-standing cross-check resolved the license as
+        active and in good standing. Per <code>scoring_integration.md</code> §4:
+        <code>Good Standing → buybox_gate: pass</code>.
+      </div>
+      <p style="margin-top:14px;">
+        <strong>Overall Buy Box:</strong> <span class="chip warn">CONDITIONAL</span> — In SBIC
+        mode the only hard gate (license good standing) <strong>PASSES</strong>. All six
+        standard checks are ⚠️ "insufficient data" because this is an off-market,
+        not-for-sale target with no disclosed standalone GP financials and an unresolved
+        formation date — none are deal-killers in SBIC mode, and none caused the run to
+        abort.<br><br>
+        <strong>Lead Score:</strong> <strong>20 / 100</strong> <em style="color:var(--muted);">(informational only)</em>
+      </p>
+      <div class="info-note">
+        <strong>Score is informational.</strong> Per <code>prospect-evaluation</code> rule 13
+        and <code>scoring_integration.md</code> §2, the 0–100 score does <strong>not</strong>
+        gate an SBIC acquisition. It is low because off-market enrichment legitimately leaves
+        the standalone GP's EBITDA, FTE, growth, concentration, owner dependence, formation
+        date, and (by definition) the valuation multiple <strong>undisclosed</strong> — each
+        scores 0 as "insufficient data — not awarded", which is <em>not</em> a negative
+        judgment. The acquisition decision rests on the license gate (PASS) plus SBA
+        change-of-control approval, not on this number.
+      </div>
+    </section>
+
+    <section id="sba">
+      <h2>⚠️ SBIC Closing Condition — SBA Prior Approval of Change of Control</h2>
+      <div class="sba-callout">
+        <strong style="color:var(--warn);">Acquiring a licensed SBIC requires SBA prior approval of the change of control.</strong>
+        Any transaction that transfers control of 1st Source Capital Corporation (the entity
+        holding the SBA SBIC license) cannot close until the U.S. Small Business
+        Administration has approved the change of control. This is a mandatory regulatory
+        closing condition on every SBIC acquisition and must be built into the deal timeline
+        and the purchase agreement as a condition precedent to closing.
+        <br><br>
+        <em style="color:var(--muted);">Source: off-market <code>LeadPacket</code> government fact; SBA SBIC program rules (13 CFR Part 107).</em>
+      </div>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>1st Source Capital Corporation</td><td>Off-market LeadPacket (SBA SBIC directory)</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>Off-market search — SBA SBIC directory (gov open data)</td><td>Off-market LeadPacket</td></tr>
+          <tr><td>3</td><td>Years in business</td><td><em style="color:var(--muted);">Not disclosed — formation_date / years_in_business are null (enrichment gap)</em></td><td>Off-market LeadPacket</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td><em style="color:var(--muted);">Not disclosed — needs follow-up</em></td><td>Enrichment gap</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>9</td><td>Business address</td><td>South Bend, IN <em style="color:var(--muted);">(city/state only — street address not in LeadPacket)</em></td><td>Off-market LeadPacket</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>18</td><td>Asking price</td><td><strong>Not for sale — no asking price</strong> (off-market target)</td><td>Off-market LeadPacket</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td><em style="color:var(--muted);">Not computable — no revenue series</em></td><td>—</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td><em style="color:var(--muted);">Not computable</em></td><td>—</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">Not disclosed (blank per rule 3)</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">Not disclosed (blank per rule 3)</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td><em style="color:var(--muted);">Not disclosed</em></td><td>—</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td><em style="color:var(--muted);">None — no data room (off-market)</em></td><td>—</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>20 / 100</strong> <em style="color:var(--muted);">(informational only — SBIC mode)</em></td><td>computed</td></tr>
+        </tbody>
+      </table>
+      <div class="info-note">
+        <strong>Informational fund-level data (NOT mapped to any Buy Box financial criterion).</strong>
+        SBIC <code>sbic_gp_economics</code>: fund vintage 1983; fund size $2,850,000; average
+        investment $283,740; strategy "Direct Lending"; <strong>not currently making new
+        investments</strong>. Per <code>scoring_integration.md</code> §3.1 these are fund-level
+        descriptors of the SBIC vehicle, not the GP/management entity's audited P&amp;L or
+        formation date — they were deliberately <strong>not</strong> mapped onto the EBITDA,
+        revenue, valuation, or years-in-business lines.
+      </div>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:90px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>SBIC GP / management company is an explicitly supported standalone target type (rule 13). Clean match.</td></tr>
+          <tr><td>EBITDA tier (non-cumulative)</td><td>0</td><td>15</td><td><strong>Insufficient data — not awarded.</strong> No standalone P&amp;L. Fund size is informational, not GP EBITDA — never mapped onto this line.</td></tr>
+          <tr><td>Years in business ≥10</td><td>0</td><td>10</td><td><strong>Insufficient data — not awarded.</strong> The <code>LeadPacket</code> sets <code>formation_date</code>/<code>years_in_business</code> to <code>null</code> and lists "formation date" in <code>enrichment_gaps</code>. SBIC fund vintage (1983) is fund-level data per §3.1, not the company formation date — a gap stays a gap (§3).</td></tr>
+          <tr><td>3 yrs consistent rev + profit growth</td><td>0</td><td>10</td><td><strong>Insufficient data — not awarded.</strong> No standalone revenue/profit series disclosed.</td></tr>
+          <tr><td>Recurring revenue</td><td>0</td><td>10</td><td><strong>Insufficient data — not awarded.</strong> SBIC GP economics not disclosed at the entity level; revenue mix unconfirmed.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td><strong>Insufficient data — not awarded.</strong> Portfolio / LP concentration not disclosed.</td></tr>
+          <tr><td>Employees ≥10</td><td>0</td><td>10</td><td><strong>Insufficient data — not awarded.</strong> SBIC entity headcount not disclosed in the <code>LeadPacket</code>.</td></tr>
+          <tr><td>Valuation multiple</td><td>0</td><td>15</td><td><strong>Insufficient data — not awarded.</strong> Off-market target — <strong>no asking price exists</strong>. Per §3.2 this is 0 "insufficient data", <strong>not a ❌</strong>; the run did not abort and the candidate was not dropped.</td></tr>
+          <tr><td>Low owner dependence</td><td>0</td><td>5</td><td><strong>Insufficient data — not awarded.</strong> GP managing principal not yet identified (directory POC is investor relations).</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>20</strong></td><td><strong>100</strong></td><td>Informational only — does not gate the SBIC decision.</td></tr>
+        </tbody>
+      </table>
+      <div class="info-note">
+        <strong>Math check:</strong> 20 + 0 + 0 + 0 + 0 + 0 + 0 + 0 + 0 = <strong>20</strong>.
+        Header (20) and per-line total (20) agree.<br><br>
+        <strong>Why the score is low — and why that is expected.</strong> Eight of the nine
+        rubric lines score 0 as "insufficient data — not awarded", not as failures. This is
+        the designed behavior for an off-market candidate: the SBA SBIC directory publishes
+        fund-level descriptors, not the GP entity's audited financials, headcount, formation
+        date, or ownership detail, and an off-market target has no asking price. In SBIC mode
+        the decision rests on the <strong>license good-standing gate (PASS)</strong> plus the
+        <strong>SBA change-of-control approval</strong> condition — not on this number.
+      </div>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> 1st Source Capital Corporation is an SBA-licensed Small Business Investment Company (SBIC) located in South Bend, Indiana. The off-market <code>LeadPacket</code> records an SBIC fund vintage of 1983, a $2.85M fund size, a $283,740 average investment, and a direct-lending strategy; per the SBIC directory it is <strong>not currently making new investments</strong>. The company's formation/incorporation date and ownership structure are <strong>not resolved</strong> in the <code>LeadPacket</code> (enrichment gaps).</li>
+        <li><strong>Financial highlights:</strong> The SBIC management entity's standalone financials are <strong>not disclosed</strong>. The only quantitative data in the <code>LeadPacket</code> is fund-level: $2.85M fund size, $283,740 average investment, direct-lending strategy — informational descriptors of the SBIC vehicle, not the GP entity's audited P&amp;L.</li>
+        <li><strong>Buy Box summary:</strong> <strong>CONDITIONAL</strong> — SBIC mode. The sole hard gate (license active and in good standing) <strong>PASSES</strong>. All six standard checks are ⚠️ "insufficient data" — an off-market, not-for-sale target with no disclosed standalone GP financials and an unresolved formation date.</li>
+        <li><strong>Why pursue (or not):</strong> <em>For</em> — a genuine SBA-licensed SBIC in good standing; the scarce license is the strategic asset. <em>Caution</em> — <strong>not for sale</strong>, with no indication of seller intent; the ownership structure is undisclosed, so whether an acquisition would be a clean buyout or a carve-out is an open question. <em>Hard condition</em> — any change of control requires <strong>SBA prior approval</strong>. <em>Score caveat</em> — the 20/100 is informational only and reflects off-market data gaps, not a quality judgment.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>Background and history:</strong> 1st Source Capital Corporation is an SBA-licensed Small Business Investment Company (SBIC) located in South Bend, Indiana. The <code>LeadPacket</code> records an SBIC fund vintage of 1983 and a direct-lending strategy. The company's formation/incorporation date is <strong>not disclosed</strong> in the <code>LeadPacket</code> and is flagged as an enrichment gap — the fund vintage (1983) is the SBIC vehicle's vintage year, not a verified company formation date, and was not used to derive years-in-business.</p>
+      <p><strong>Ownership structure:</strong> <strong>Not disclosed</strong> in the <code>LeadPacket</code> — an open enrichment gap. Whether the SBIC is independently held or a subsidiary of a larger entity, and therefore whether an acquisition would be a direct buyout or a carve-out, could not be determined from the packet.</p>
+      <p><strong>Key milestones:</strong> 1983 — SBIC fund vintage recorded in the <code>LeadPacket</code> (the earliest dated fact in the packet; the company's formation date itself is an enrichment gap). 2026-05 — SBA SBIC directory lists it as a licensed SBIC in good standing, not currently making new investments.</p>
+      <p><strong>Leadership:</strong> The SBIC entity's standalone managing principal is <strong>not disclosed</strong> by the SBA directory — the only published contact is investor relations (Ryan Fenstermaker). Identifying the GP managing principal is an open enrichment gap.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <h3>Ryan Fenstermaker — Investor Relations</h3>
+      <p><strong>Role:</strong> Directory / investor-relations point of contact. <strong>Note:</strong> this is <em>not</em> confirmed to be the SBIC's managing deal principal — it is the published IR contact. The actual GP managing principal is an open enrichment gap.<br>
+      <strong>Contact:</strong> Email fenstermakerr@1stsource.com · Phone 574-235-2180 · Office South Bend, IN.</p>
+      <h3>GP Managing Principal — NOT IDENTIFIED (open gap)</h3>
+      <p>The individual(s) actually running the SBIC's investment decisions are <strong>not disclosed</strong> in the <code>LeadPacket</code> and were not back-filled. Identifying the managing principal is a required follow-up before any outreach.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Descriptions:</strong> As an SBIC, 1st Source Capital Corporation deploys debt (and historically equity) capital into small businesses. The SBIC directory lists its strategy as <strong>Direct Lending</strong>. Entity-level product detail beyond the direct-lending strategy is <strong>not disclosed</strong> in the <code>LeadPacket</code>.</p>
+      <p><strong>Pricing model:</strong> SBIC vehicles typically earn interest income on direct-lending positions plus management economics. Entity-level fee/economics detail is <strong>not disclosed</strong>.</p>
+      <p><strong>Differentiators:</strong> The scarce, regulated SBA SBIC license itself; access to SBA-guaranteed leverage. A long operating history is plausible given the 1983 fund vintage, but the company's formation date is an unresolved enrichment gap and is not asserted here.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> SBICs are SBA-licensed private investment funds that provide debt and/or equity financing to small businesses using SBA government-guaranteed leverage. The SBIC program has seen renewed federal emphasis (2023–2024 SBA program expansions). Licenses are scarce and tightly regulated under 13 CFR Part 107.</p>
+      <p><strong>Drivers &amp; barriers:</strong> <em>Drivers</em> — SBA leverage amplifies investable capital; program tailwinds from recent modernization. <em>Barriers</em> — the regulatory regime, capital minimums (Regulatory Capital ≥ $5M for post-1996 licensees), and SBA approval of any control change.</p>
+      <p><strong>Competitive landscape:</strong> The peer set is the broader SBA SBIC directory (hundreds of licensed SBICs nationally). 1st Source Capital is a <strong>small SBIC</strong> ($2.85M fund size per the <code>LeadPacket</code>) that is <strong>not currently making new investments</strong> — effectively in a hold / wind-down posture rather than actively deploying.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Customer segments:</strong> Portfolio companies are small businesses receiving direct-lending capital. Specific portfolio detail is <strong>not disclosed</strong> in the <code>LeadPacket</code>.</p>
+      <p><strong>Recurring vs one-time revenue:</strong> Not disclosed at the entity level. SBIC economics are typically a mix of recurring interest/management income and realized gains — unconfirmed here, so the rubric recurring-revenue line was scored "insufficient data — not awarded".</p>
+      <p><strong>Top customer concentration:</strong> Not disclosed. With a small fund size, portfolio concentration is plausibly high, but this is not confirmed and was not scored as a ❌.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>2023</td><td>Not disclosed</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>2025 (annualized)</td><td>Not disclosed</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p>The standalone SBIC management entity's financial statements are <strong>not disclosed</strong> in the <code>LeadPacket</code>. <strong>No figures were estimated</strong> — per skill rule 1, missing beats guessed.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>not computable — off-market target, no asking price</strong>. SBIC GP / management-company transactions are typically priced on AUM, license value, and carried-interest economics rather than an EBITDA multiple; no public comp set was assembled for this dry run.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul><li>Holds a scarce SBA SBIC license in good standing</li><li>Established direct-lending SBIC vehicle (fund vintage 1983 per the <code>LeadPacket</code>)</li></ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul><li>SBIC entity standalone financials, FTE, formation date, and ownership detail not disclosed</li><li>Not currently making new investments — hold/wind-down posture</li></ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul><li>A licensed SBIC charter is a strategic asset; could be reactivated for deployment</li><li>SBA program tailwinds (recent modernization / expansion)</li></ul></div>
+        <div class="cell"><h4>Threats</h4><ul><li>Not for sale — no indication of seller intent</li><li>SBA prior approval of change of control is a mandatory, timeline-extending closing condition</li></ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> SBIC operations are tightly regulated under 13 CFR Part 107; SBA leverage carries compliance obligations; a dormant SBIC may face license-maintenance questions.</li>
+        <li><strong>Financial:</strong> Standalone entity financials are undisclosed — EBITDA, revenue, growth, and concentration could not be evaluated. Small fund size ($2.85M) implies limited standalone earnings power.</li>
+        <li><strong>Operational:</strong> GP managing principal not identified — key-person and continuity risk unassessed. The ownership structure is undisclosed; a carve-out, if applicable, would require disentangling shared services.</li>
+        <li><strong>Regulatory / legal:</strong> <strong>SBA prior approval of any change of control is mandatory</strong> — the deal cannot close without it. SBIC licensees must maintain regulatory capital and good standing.</li>
+        <li><strong>Deal conditions:</strong> (1) SBA approval of the change of control as a condition precedent to closing — build into LOI, PA, and timeline. (2) Confirm the SBIC license number and good standing with the SBA. (3) Identify the GP managing principal and confirm transition intent. (4) Obtain standalone SBIC-entity financials before assigning valuation. (5) Establish the ownership structure and whether the owner is a willing seller — this is an off-market target.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion potential:</strong> A licensed SBIC currently <em>not</em> deploying could be reactivated for new direct-lending or equity investment, drawing SBA-guaranteed leverage — the license is the platform.</p>
+      <p><strong>Operational upside:</strong> Reactivating dormant SBA leverage capacity; installing an active investment team; modernizing portfolio management.</p>
+      <p><strong>Strategic opportunities:</strong> For an acquirer seeking SBIC status, buying an existing good-standing license can be faster than a de novo SBA application — provided SBA approves the change of control.</p>
+      <p><strong>100-day plan sketch (if pursued):</strong> (1) Confirm SBA license number and good standing; open the change-of-control approval dialogue early. (2) Establish the ownership structure and whether the owner is a willing seller; if so, obtain standalone SBIC-entity financials. (3) Identify and meet the GP managing principal. (4) Model valuation on AUM / license / carry economics. (5) Structure the LOI with SBA change-of-control approval as an explicit condition precedent.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://www.sba.gov/funding-programs/investment-capital/sbic-directory">SBA SBIC Directory</a> — SBIC listing, fund vintage (1983), fund size ($2.85M), average investment ($283,740), direct-lending strategy, "not making new investments" status, IR contact, as resolved into the off-market <code>LeadPacket</code>.</li>
+        <li><code>output/reports/name-1st-source-capital-south-bend-in/lead-packet.json</code> — the off-market <code>LeadPacket</code>; the <strong>sole input</strong> to this report.</li>
+      </ul>
+      <p style="color:var(--muted); font-size:13px;">No external sources (SEC EDGAR, CB Insights, Wikipedia, press, etc.) were used: this report is scored strictly from the <code>LeadPacket</code> per <code>scoring_integration.md</code> §3. Any value not in the packet appears here as "not disclosed".</p>
+      <h3>B. Assumptions</h3>
+      <ul><li><strong>None.</strong> No financial, headcount, valuation, or formation-date values were estimated or back-filled. Every undisclosed field is left blank or marked "not disclosed" per skill rule 1 and <code>scoring_integration.md</code> §3 (a gap stays a gap).</li></ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>None</strong> — no <span style="color:var(--warn);">(est.)</span> values appear in this report.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul><li><code>output/reports/name-1st-source-capital-south-bend-in/lead-packet.json</code> — the off-market <code>LeadPacket</code>; source of the SBIC license status, GP economics, contact, government fact, and enrichment gaps. This is the only document reviewed.</li></ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>Confirm the SBA SBIC license number and current good-standing status directly with the SBA (license number not published by the directory — open gap).</li>
+        <li>Identify the GP managing principal (directory POC is investor relations, not the deal principal).</li>
+        <li>Obtain the SBIC management entity's standalone financials (revenue, EBITDA, FTE).</li>
+        <li>Confirm the ownership structure and whether the owner is a willing seller — this is an off-market target.</li>
+        <li>Confirm the company's formation/incorporation date — an open enrichment gap in the <code>LeadPacket</code>.</li>
+      </ul>
+      <h3>F. s10 dry-run notes (build-loop bookkeeping)</h3>
+      <ul>
+        <li><code>eval_mode</code>: <strong>sbic</strong> (Class 2 → SBIC mode per <code>scoring_integration.md</code> §2).</li>
+        <li><code>score_is_informational</code>: <strong>true</strong> — the 20/100 score does not gate the SBIC decision.</li>
+        <li><code>buybox_gate</code>: <strong>pass</strong> — derived from <code>sbic_license_status: Good Standing</code> per §4.</li>
+        <li>"No asking price" handling: <strong>graceful</strong> — Buy Box line 5 marked ⚠️ "insufficient data"; rubric valuation line scored <strong>0 "insufficient data — not awarded"</strong>. The run did not crash, abort, or drop the candidate (§3.2 satisfied).</li>
+        <li>Formation date handling: <strong>gap passed through</strong> — <code>formation_date</code>/<code>years_in_business</code> are <code>null</code> in the packet; Buy Box line 3 and the rubric years-in-business line scored <strong>0 "insufficient data — not awarded"</strong>, never back-filled (BLOCKING-s10-1 fix).</li>
+        <li><code>sbic_gp_economics</code> treated as <strong>informational fund-level data</strong> — not mapped onto any Buy Box financial criterion or the years-in-business line (§3.1).</li>
+        <li>SBA prior-approval-of-change-of-control fact: <strong>present</strong> (dedicated section + Risk Factors).</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut — build-loop s10 end-to-end dry-run artifact. All figures are from the off-market LeadPacket; no value not in the packet appears here.</footer>
+</div>
+</body>
+</html>

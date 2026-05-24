@@ -1,0 +1,27 @@
+=== off-market-search run started 2026-05-22T23:10:25Z ===
+All 9 steps complete. Here's the supervised first-live-run summary:
+
+## Off-market run — 2026-05-22 — COMPLETED
+
+**Schema preflight:** PASSED (all §8.4 fields + both Source values + all SBIC License Status options live on `tblSmNrHROMLm7vOS`).
+
+**Sources queried:** S1 USAspending (NAICS 541930 + PSC R608, trailing 5 FYs → 100+100 awards, 49 unique recipients, 26 keyword-passing) + S4 SBA SBIC Directory (397 fund rows → 232 distinct management firms). S2/S3 (SAM.gov) intentionally not exercised to preserve the public 10/day quota for this first run. S5 good-standing cross-check ran per Class-2 candidate; S10 IAPD confirmed CenterHarbor.
+
+**Scope (bounded for supervised first run):** 6 Class-1 (top USAspending recipients by deaf-services keyword density × $awards, with Applied Development LLC excluded as self) + 6 Class-2 (top Phase-1-state SBIC managers by active-investing % × aggregate fund size).
+
+**Resolved & deduped:** 12 canonical entities, **all new** vs. the 167-row tracker (0 collisions on Key A/B/C).
+
+**Scored (per `prospect-evaluation` rubric, inline):**
+- Class 1 (`rollup_addon`, /110): DAS 40, MAIG 40, TCS 30, Access 30, Translation Excellence 25 (adjacent), Seneca 15 (adjacent/low fit)
+- Class 2 (`sbic`, informational /100, all gate=PASS): Tecum 30, Argosy 30, Canapi/CenterHarbor/Boundary Street/Hidden River 20
+
+**Airtable:** 12 new records created in `tblSmNrHROMLm7vOS`, each with `Gov Entity ID`, `Gov Data Source`, `Federal Award History $` (where applicable), `SBIC License Status` (Class 2), `Source`, `Disposition=Active`, and Notes. The IDs are in the run log.
+
+**Outreach:** 4 proprietary-approach drafts (OM-1: TCS V1, DAS V2 / OM-2: CenterHarbor V1, Hidden River V2) appended to Notes + `search_reports/offmarket_outreach_drafts_2026-05-22.md`. 8 leads logged as contact-discovery follow-ups. **Nothing sent.**
+
+**Dashboard:** `output/dashboards/dashboard_2026-05-22.html` regenerated — 25 `chip offmarket` badge instances rendered.
+
+**Material flag in Notes:** Boundary Street Capital — Stonepeak acquisition announced 2025; license still Good Standing pending close.
+
+**Run log:** `search_reports/offmarket_run_log_2026-05-22.md` — operator follow-ups enumerated (contact discovery, SOS confirmation, S2 1k/day quota readiness, broader Class-2 coverage next run).
+=== off-market-search run finished 2026-05-22T23:36:13Z (exit 0) ===

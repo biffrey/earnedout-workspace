@@ -1,0 +1,46 @@
+{
+  "entity_id": "UEI:NLGQMMKF25X7",
+  "target_class": 1,
+  "business_name": "DEAF ACCESS SOLUTIONS, INC",
+  "industry": "Sign-language interpreting + CART + VRI (NAICS 541930, core deaf-services line)",
+  "location": {
+    "city": "Bethesda",
+    "state": "MD"
+  },
+  "website": "https://deafaccess.com/",
+  "website_status": "live",
+  "screenshot_path": "output/screenshots/uei-nlgqmmkf25x7.png",
+  "formation_date": "2002-01-01",
+  "years_in_business": 24,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "signal: $28.3M of federal contract revenue trailing 5 FYs \u2014 top deaf-services federal prime \u2014 gov-contract revenue only",
+  "federal_award_total": 28295892.54,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": null,
+    "email": "info@deafaccess.com",
+    "phone": "(202) 391-0074"
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": null,
+  "sbic_gp_economics": null,
+  "gov_data_source": [
+    "USAspending"
+  ],
+  "provenance_urls": [
+    "https://www.usaspending.gov/recipient/f062ef8f-5a92-eb7e-7996-3f367f83ad4b-C/latest"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": "core",
+  "summary": "Premier DC metro ASL interpreting agency, established 2002, providing 125,000+ interpreting hours/year. Services: ASL interpreting, VRI, captioning, Cued Speech, Tactile Interpretation. Long-time federal government deaf-services prime.",
+  "fit_note": null,
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "primary contact name \u2014 needs follow-up",
+    "employee count \u2014 needs follow-up"
+  ],
+  "deaf_specificity": "strong",
+  "sbic_funds": null
+}

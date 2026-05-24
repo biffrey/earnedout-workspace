@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>25-Year NYC Roll-Off &amp; Carting Company — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 24px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  .callout { background: var(--panel-2); border: 1px solid rgba(245,166,35,.4);
+             border-left: 3px solid var(--warn); border-radius: 8px;
+             padding: 12px 14px; margin: 0 0 16px; font-size: 14px; color: #e7ecf3; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+  .shot { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>25-Year NYC Waste Management Company — Roll-Off &amp; Carting</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream listing #4s78q1
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict conditional">Buy Box: Conditional (add-on)</span>
+      <span class="verdict conditional">Add-on: Fambro Waste</span>
+      <div class="score-badge">
+        <div class="num">72</div>
+        <div class="label">Lead Score / 110</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <div class="callout">
+      <strong>Roll-up add-on evaluation — Fambro Waste Management.</strong> This target is in commercial/construction
+      waste (roll-off + carting) and is screened as a potential add-on for <strong>Fambro Waste Management</strong>.
+      Relaxed add-on thresholds apply (&ge;5 FTE / &ge;$500K EBITDA / &ge;5 yrs) and the score is out of <strong>110</strong>
+      with a +10 strategic-fit bonus line.
+    </div>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:90px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>&ge; 10 full-time employees (add-on floor &ge;5)</td><td><span class="chip warn">DATA GAP</span></td><td>Headcount not disclosed. Asset-heavy $10.6M NYC roll-off/carting hauler implies ~30&ndash;40 FTE (est.); clears the add-on floor of 5 comfortably.</td></tr>
+          <tr><td>2</td><td>EBITDA &ge; $1M / yr (add-on floor &ge;$500K)</td><td><span class="chip pass">PASS</span></td><td>2025 cash flow $1,680,000 on $10.6M sales. Clears both the $1M floor and the add-on $500K floor.</td></tr>
+          <tr><td>3</td><td>10+ years in business (add-on floor &ge;5)</td><td><span class="chip pass">PASS</span></td><td>25 years in operation per the listing.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">DATA GAP</span></td><td>Only 2025 disclosed. 2024 and prior not separately disclosed &mdash; trend cannot be verified. Needs broker follow-up.</td></tr>
+          <tr><td>5</td><td>Asking price &le; 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>$7,950,000 &divide; $1,680,000 = 4.73x &mdash; above the 4.0x ceiling; sits in the 4.0&ndash;5.5x negotiation band.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">DATA GAP</span></td><td>No financing structure yet. Indicative: 75% debt, 9%/10-yr &rarr; ~$906K debt service; $1.68M &divide; $906K &asymp; 1.85 (est.).</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;"><strong>Overall Buy Box: CONDITIONAL (add-on)</strong> &mdash; 2 hard PASS, 1 FAIL (price 4.73x, negotiable), 3 data-gap items.
+      Does not meet the standalone Buy Box cleanly, but qualifies as a roll-up add-on for <strong>Fambro Waste Management</strong>
+      (relaxed floors &ge;5 FTE / &ge;$500K EBITDA / &ge;5 yrs, all cleared).
+      <strong>Lead Score: 72 / 110.</strong></p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>25-Year NYC Waste Management Co. (roll-off &amp; carting) &mdash; legal name withheld (confidential)</td><td>DealStream #4s78q1</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream listing #4s78q1 (overnight published-listing search)</td><td>DealStream</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>25 years (founded ~2001)</td><td>DealStream listing</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>Not disclosed</td><td>&mdash;</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>~$2.8M total assets (fleet + containers); debt-free</td><td>DealStream listing</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>~35 <span class="est">(est.)</span></td><td>est. &mdash; rev/FTE benchmark</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not disclosed</td><td>&mdash;</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Not disclosed</td><td>&mdash;</td></tr>
+          <tr><td>9</td><td>Business address</td><td>New York, NY (NYC metro) &mdash; address withheld (confidential)</td><td>DealStream listing</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>Not disclosed &mdash; needs broker follow-up</td><td>&mdash;</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>Not disclosed &mdash; needs broker follow-up</td><td>&mdash;</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>Not disclosed &mdash; needs broker follow-up</td><td>&mdash;</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$10,600,000</td><td>DealStream listing</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed &mdash; needs broker follow-up</td><td>&mdash;</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>Not disclosed &mdash; needs broker follow-up</td><td>&mdash;</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>Not disclosed &mdash; needs broker follow-up</td><td>&mdash;</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>$1,680,000 (listed as "cash flow"; likely SDE/adj. EBITDA &mdash; confirm)</td><td>DealStream listing</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>$7,950,000</td><td>DealStream listing</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>Cannot compute &mdash; only 2025 disclosed</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed</td><td>&mdash;</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>15.8% ($1.68M &divide; $10.6M)</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>&mdash;</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>&mdash;</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>Not disclosed &mdash; "most prominent GCs &amp; key city agencies" implies concentration</td><td>&mdash;</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td>Not available &mdash; request from broker</td><td>&mdash;</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>72 / 110</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Commercial/construction waste &mdash; roll-off, dumpster, debris removal, C&amp;D recycling. Direct target industry and direct Fambro roll-up vertical.</td></tr>
+          <tr><td>EBITDA tier</td><td>5</td><td>15</td><td>2025 cash flow $1.68M &mdash; above the $1M tier (5 pts), below the $2M tier. Non-cumulative.</td></tr>
+          <tr><td>Years in business &ge;10</td><td>10</td><td>10</td><td>25 years in operation.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>0</td><td>10</td><td>Insufficient data &mdash; not awarded. Only 2025 disclosed; no verifiable 3-year trend.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>Project/call-based roll-off &amp; carting, but long-tenured repeat GC/agency relationships &mdash; repeat-but-not-contracted. Mixed.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Insufficient data &mdash; not awarded. Not disclosed; marquee-GC framing implies concentration.</td></tr>
+          <tr><td>Employees &ge;10</td><td>10</td><td>10</td><td>Headcount not disclosed but a $10.6M asset-heavy NYC hauler is firmly &ge;10 FTE (est. ~35); clears the add-on floor of 5.</td></tr>
+          <tr><td>Valuation multiple</td><td>7</td><td>15</td><td>4.73x cash flow &mdash; in the 4.0&ndash;5.5x band. Negotiate to &le;4.0x ($6.72M) as a closing condition.</td></tr>
+          <tr><td>Low owner dependence</td><td>5</td><td>5</td><td>Management stays; owner prepared for an orderly transition &mdash; second-line management runs day-to-day.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>10</td><td>10</td><td>Direct add-on for Fambro Waste Management: same vertical, instant NYC platform, debt-free, 20% equity roll + seller financing, management stays.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>72</strong></td><td><strong>110</strong></td><td></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Valuation note:</strong> The valuation line scored in the 4.0&ndash;5.5x band (7 pts).
+      <strong>The deal requires negotiation to &le;4.0x EBITDA (~$6.72M) as a closing condition.</strong>
+      <strong>Roll-up note:</strong> Scored as a roll-up add-on for Fambro Waste Management; relaxed thresholds applied, denominator 110.
+      72/110 sits in the "pursue with conditions" range &mdash; disposition: <strong>Revisit for Roll-up</strong>.</p>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> 25-year-old NYC-metro roll-off and carting company &mdash; dumpster rental, construction-debris removal, and recycling &mdash; serving New York City's most prominent general contractors and key city agencies.</li>
+        <li><strong>Financial highlights:</strong> 2025 revenue $10.6M; 2025 cash flow $1.68M (15.8% margin); ~$2.8M in assets; debt-free. Prior-year financials not separately disclosed.</li>
+        <li><strong>Buy Box summary:</strong> CONDITIONAL (add-on) &mdash; clears EBITDA and tenure outright; price is 4.73x (above the 4.0x ceiling); headcount, multi-year growth trend, and DSCR are unconfirmed data gaps.</li>
+        <li><strong>Why pursue (or not):</strong> Direct, high-fit roll-up add-on for Fambro Waste Management &mdash; same vertical, instant NYC-metro platform, marquee customer base, and seller-friendly LBO terms (seller financing, 20% equity roll, management stays). Caution: only one year of financials disclosed, price must come down ~16% to hit 4.0x, and likely customer concentration is unquantified.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>Background and history:</strong> Founded approximately 2001 (25 years per the listing), the company built a NYC-metro roll-off and carting operation focused on the construction and demolition (C&amp;D) waste stream &mdash; dumpster placement, debris removal, and recycling. Over 25 years it became a go-to hauler for the city's largest general contractors and several city agencies, a customer base that is slow and difficult to build in NYC's heavily regulated trade-waste market.</p>
+      <p><strong>Ownership structure:</strong> Confidential listing &mdash; legal entity and ownership percentages not disclosed. Presumed owner-operated S-corp or LLC; the owner is preparing for an orderly transition and is open to rolling 20% equity.</p>
+      <p><strong>Key milestones:</strong> ~2001 founded &mdash; 2001&ndash;2026 builds fleet/container inventory and marquee GC and city-agency relationships, reaching ~$10.6M revenue debt-free &mdash; Dec 14, 2025 listed on DealStream &mdash; Apr 2, 2026 listing renewed.</p>
+      <p><strong>Organizational structure and leadership:</strong> Management team is in place and will remain post-sale per the listing; the owner functions in an oversight role rather than as sole daily operator, supporting a low owner-dependence assessment. Detailed org-chart information (dispatch, fleet/maintenance, sales) was not disclosed.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <p>The seller is confidential; principal names are not disclosed in the listing. The only named individual is the listing broker.</p>
+      <h3>Brian Dunn &mdash; Senior Business Advisor (listing broker)</h3>
+      <p><strong>Role:</strong> Sell-side broker / business advisor representing the seller on DealStream listing #4s78q1.
+      <strong>Background:</strong> Associated with Hedgestone Business Advisors as a business broker (per BizQuest and BizBuySell broker profiles), with a lower-middle-market M&amp;A and brokerage focus. Identity matching across multiple same-name public records could not be fully confirmed.
+      <strong>Contact:</strong> via DealStream listing #4s78q1 messaging; direct phone/email not published in the listing.</p>
+      <p style="color:var(--muted);">Open question for the broker: owner/principal identity and contact, plus management-team names and tenure.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Services:</strong> (1) <em>Roll-off dumpster rental</em> &mdash; container placement and pickup at construction/demolition sites; (2) <em>Construction-debris removal / carting</em> &mdash; hauling C&amp;D material to transfer stations and processors; (3) <em>Recycling</em> &mdash; source-separated C&amp;D recycling consistent with NYC DSNY requirements.</p>
+      <p><strong>Pricing model:</strong> Per-pull / per-haul and tonnage-based pricing typical of NYC roll-off operations (regional reference ~$140/ton for construction material), plus container rental fees. Project-based, anchored by repeat orders from the same GCs.</p>
+      <p><strong>Differentiators:</strong> 25-year operating history and entrenched relationships with NYC's most prominent GCs and city agencies; asset-heavy, debt-free fleet and container inventory (~$2.8M); presumed BIC carter registration; and a C&amp;D focus that places it in the segment <strong>exempt</strong> from NYC's new Commercial Waste Zone franchise system.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> C&amp;D debris is more than 60% of NYC's solid-waste stream (NYC DSNY) &mdash; far above the 25&ndash;45% national norm &mdash; driven by continuous NYC construction and renovation. The U.S. roll-off/dumpster-rental market is highly fragmented (~232 dumpster-rental companies nationally), fueling active PE-backed and strategic roll-up M&amp;A.</p>
+      <p><strong>Drivers / barriers:</strong> Drivers &mdash; sustained NYC construction volume, C&amp;D source-separation/recycling mandates, consolidation tailwinds favoring licensed operators. Barriers &mdash; BIC licensing and rate caps, high NYC fleet/labor/insurance costs, and construction-cycle sensitivity.</p>
+      <p><strong>CWZ exemption &mdash; a key positive:</strong> NYC's Commercial Waste Zone program (Local Law 199 of 2019) is re-franchising commercial putrescible carting into 20 zones with up to three awarded carters each &mdash; a structural threat to independent carters. <strong>Construction and demolition debris is explicitly excluded from the CWZ program</strong> and remains regulated by BIC, not by zone franchise. A roll-off/C&amp;D-focused operator is therefore largely insulated from the CWZ disruption squeezing traditional putrescible carters &mdash; a meaningful competitive advantage. Diligence must confirm the CWZ-exempt C&amp;D vs. CWZ-covered putrescible revenue split.</p>
+      <p><strong>Competitive landscape:</strong> Action Environmental / Filco Carting (Interstate Waste Services) &mdash; large NYC carter, Filco recently acquired by IWS, evidencing active NYC consolidation; Waste Connections &mdash; national operator with NYC roll-off presence; Royal Waste / Cooper Recycling &mdash; independent NYC-area carting and C&amp;D recycling peers.</p>
+      <p><strong>Valuation comps:</strong> 2025 waste-management M&amp;A data puts $3M&ndash;$5M EBITDA companies at ~5.0x&ndash;7.0x and &gt;$5M EBITDA at ~6.0x&ndash;8.0x; smaller dumpster operations transact ~2.5x&ndash;6x. At $1.68M cash flow this is a sub-$2M-EBITDA business; the 4.73x ask is mid-range but above Biffrey's 4.0x discipline.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Customer segments:</strong> B2B &mdash; NYC's most prominent general contractors plus key city agencies. A construction/government-anchored book, not consumer.</p>
+      <p><strong>Retention:</strong> Not disclosed. 25-year tenure with marquee GCs implies strong de-facto retention, but no churn/renewal figures were provided.</p>
+      <p><strong>Recurring vs. one-time:</strong> Predominantly project/call-based (per-pull roll-off and per-haul carting); no contracted MRR, but the same GCs and agencies generate repeat orders job after job &mdash; repeat-but-not-contracted.</p>
+      <p><strong>Top customer concentration:</strong> Not disclosed. "Most prominent general contractors and key city agencies" implies a concentrated book. This is the single most important unquantified risk &mdash; the broker must provide a top-5/top-10 customer revenue breakdown.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA / Cash Flow</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr><td>2023</td><td>Not disclosed</td><td>Not disclosed</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr><td>2025</td><td>$10,600,000</td><td>$1,680,000</td><td>15.8%</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M) — only 2025 disclosed</text>
+          </g>
+          <g fill="#2a3342">
+            <rect x="60"  y="60" width="60" height="100" rx="3" />
+            <rect x="160" y="60" width="60" height="100" rx="3" />
+            <rect x="260" y="60" width="60" height="100" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="10" fill="#8a97ab" text-anchor="middle">
+            <text x="90"  y="110">n/d</text>
+            <text x="190" y="110">n/d</text>
+            <text x="290" y="110">n/d</text>
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="360" y="50" width="60" height="110" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="175">2022</text>
+            <text x="190" y="175">2023</text>
+            <text x="290" y="175">2024</text>
+            <text x="390" y="175">2025</text>
+          </g>
+          <g font-family="sans-serif" font-size="10" fill="#e7ecf3" text-anchor="middle">
+            <text x="390" y="44">$10.6M</text>
+          </g>
+        </svg>
+      </div>
+      <p>Only 2025 is disclosed, so no trajectory can be verified. The growth-trend scoring line was awarded 0 (insufficient data, not a judgment). Obtaining 2022&ndash;2024 P&amp;Ls is the single highest-priority diligence item.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>4.73x</strong> cash flow ($7.95M &divide; $1.68M). Sub-$2M-EBITDA waste/dumpster operators typically trade ~2.5x&ndash;6x. At Biffrey's 4.0x discipline, fair value is <strong>~$6.72M</strong>; the negotiation band tolerance to 5.5x makes the ask workable, but target entry should be &le;4.0x. The debt-free balance sheet and ~$2.8M of hard assets provide downside support and LBO collateral.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>25-year history; entrenched NYC top-GC and city-agency relationships</li>
+          <li>Debt-free, asset-heavy (~$2.8M owned fleet/containers)</li>
+          <li>C&amp;D focus is exempt from NYC's disruptive CWZ franchise system</li>
+          <li>Seller-friendly terms: seller financing, 20% equity roll, management stays</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>Only 2025 financials disclosed &mdash; no verifiable 3-year growth trend</li>
+          <li>15.8% EBITDA margin &mdash; solid but thin; sub-$2M EBITDA scale</li>
+          <li>Likely customer concentration in a few large GCs/agencies (undisclosed)</li>
+          <li>Project/call-based revenue &mdash; no contracted recurring base</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>Direct roll-up add-on for Fambro Waste Management &mdash; instant NYC platform</li>
+          <li>Cross-sell and route-density gains as a Fambro tuck-in</li>
+          <li>Add containerized/compactor citywide-contract or recycling capacity</li>
+          <li>Negotiate price to &le;4.0x; structure as an LBO with a seller note</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>NYC construction-cycle downturn would directly cut roll-off volume</li>
+          <li>BIC rate caps and NYC regulatory/licensing burden</li>
+          <li>Well-capitalized consolidators (IWS/Action, Waste Connections)</li>
+          <li>Insurance, labor, and fleet-cost inflation compressing margins</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> Heavy BIC regulation including rate caps; CWZ rollout reshaping the broader carting market (C&amp;D roll-off exempt, but any putrescible-carting revenue is exposed); construction-cycle demand sensitivity.</li>
+        <li><strong>Financial:</strong> Probable customer concentration among a few large GCs/agencies (undisclosed). Only one year of financials disclosed &mdash; growth trend and margin stability unverifiable. "Cash flow" basis (SDE vs. adjusted EBITDA) must be confirmed; owner add-backs could make the effective multiple higher than 4.73x.</li>
+        <li><strong>Operational:</strong> Asset-heavy fleet implies ongoing truck-replacement and container-maintenance capex; CDL driver/dispatcher retention and availability in NYC are pressure points; confirm management depth and contracts.</li>
+        <li><strong>Regulatory / legal:</strong> Confirm active BIC carter registration in good standing; review BIC violations, NYSDEC C&amp;D-facility compliance, and DOT/FMCSA fleet safety. NYC Comptroller reporting has flagged carters with safety/environmental violations &mdash; run a clean-record check.</li>
+        <li><strong>Deal conditions:</strong> Negotiate from 4.73x to &le;4.0x EBITDA (~$6.72M) as a condition of the deal; obtain 2022&ndash;2024 P&amp;Ls and balance sheets; obtain customer-concentration breakdown; confirm FTE headcount and the SDE-vs-EBITDA basis of the $1.68M figure.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion potential:</strong> As a Fambro Waste Management add-on, the company becomes Fambro's NYC-metro beachhead &mdash; additional roll-off routes, container fleet, and adjacent boroughs/counties layered onto an established BIC-registered platform; containerized-waste/compactor citywide contracts are an adjacent lane.</p>
+      <p><strong>Operational upside:</strong> Standardized dispatch/routing technology and fleet telematics; tighter pricing discipline against BIC rate caps; a formalized sales function to broaden the GC base and reduce concentration. EOS/process installation is a clear value-add given a likely owner-built operation.</p>
+      <p><strong>Strategic opportunities:</strong> Tuck-in additional small NYC-area C&amp;D haulers under the combined Fambro platform; integrate C&amp;D recycling/processing for margin capture; consolidate vendor and insurance spend across the platform.</p>
+      <p><strong>100-day plan sketch:</strong> (1) Close 3-year financials, customer-concentration, and BIC/compliance diligence; finalize SDE-vs-EBITDA basis. (2) Negotiate price to &le;4.0x; structure LBO with seller note + 20% equity rollover. (3) Retain and incentivize management and key CDL drivers/dispatchers. (4) Map routes against Fambro's footprint for density and cross-sell synergies. (5) Stand up standardized dispatch/telematics and KPI reporting.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>Listing screenshot</h3>
+      <p><img class="shot" src="4s78q1.png" alt="DealStream listing 4s78q1 screenshot" /></p>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/waste-management/4s78q1">dealstream.com/d/biz-sale/waste-management/4s78q1</a> — primary listing; page returned HTTP 403 to automated fetch, data taken from the structured lead extract provided 2026-05-21.</li>
+        <li><a href="https://dealstream.com/united-states/waste-management-businesses-for-sale">DealStream waste-management category</a> — comparable independent NYC/NY listings.</li>
+        <li><a href="https://www.nyc.gov/site/dsny/businesses/commercial-waste-zones.page">DSNY Commercial Waste Zones</a> — CWZ program overview.</li>
+        <li><a href="https://www.nyc.gov/site/dsny/news/24-007/new-york-city-department-sanitation-key-details-contract-awards-zone-for">DSNY CWZ contract awards</a> — zone structure and awards.</li>
+        <li><a href="https://www.nyc.gov/assets/bic/downloads/pdf/notices/bic-cwz-faq-082022.pdf">BIC / CWZ FAQ (PDF)</a> — C&amp;D debris exemption and BIC registration requirement.</li>
+        <li><a href="https://actioncarting.com/cwz-faq-pdf/">Action Environmental CWZ FAQ</a> — C&amp;D / roll-off exemption detail.</li>
+        <li><a href="https://www.nyc.gov/html/ddc/downloads/pdf/waste.pdf">NYC C&amp;D waste manual (PDF)</a> — C&amp;D as &gt;60% of NYC solid-waste stream.</li>
+        <li><a href="https://www.wastedive.com/news/iws-action-acquire-filco-carting-new-york-city/806507/">Waste Dive — IWS/Action acquire Filco Carting</a> — NYC consolidation comp.</li>
+        <li><a href="https://firstpagesage.com/business/waste-management-ebitda-valuation-multiples/">First Page Sage — 2025 waste-management EBITDA multiples</a>.</li>
+        <li><a href="https://www.capstonepartners.com/insights/article-waste-and-recycling-ma-update/">Capstone Partners — Waste &amp; Recycling M&amp;A update</a>.</li>
+        <li><a href="https://www.bizquest.com/business-broker/hedgestone-business-advisors/brian-dunn/BW45607/">BizQuest broker profile — Brian Dunn / Hedgestone</a>.</li>
+        <li><a href="https://www.bizbuysell.com/business-broker/brian-dunn/hedgestone-business-advisors/37551/">BizBuySell broker profile — Brian Dunn</a>.</li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>"Cash flow" of $1,680,000 treated as a proxy for adjusted EBITDA / SDE for screening; SDE-vs-EBITDA basis must be confirmed with the broker.</li>
+        <li>C&amp;D roll-off revenue assumed exempt from the NYC CWZ franchise system per BIC/DSNY guidance; exact CWZ-covered vs. exempt revenue split unconfirmed.</li>
+        <li>BIC carter registration assumed active (all NYC C&amp;D carters must be BIC-registered) — to be verified in diligence.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #6 — Full-time employees</strong> — Estimated at ~35 (est.).<br>
+         Method: Solid-waste collection (NAICS 562111) revenue-per-employee runs ~$250K–$350K for asset-heavy haulers. $10,600,000 &divide; ~$300K/FTE &asymp; 35 FTE. A NYC roll-off/carting operation running a CDL truck fleet plus dispatch, maintenance, and administration is firmly above the 10-FTE floor and far above the 5-FTE add-on floor.<br>
+         Sources: Revenue/FTE benchmark for NAICS 562111 (industry-standard ratio); listing-stated $10.6M revenue and asset-heavy fleet description.</p>
+      <p><strong>Field #3 — Years in business</strong> — Founding year ~2001 (est.), derived as 2026 &minus; 25 years stated in the listing. The "25 years" figure itself is listing-stated, not estimated.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li>output/screenshots/4s78q1.png — DealStream listing screenshot for #4s78q1.</li>
+        <li>Structured lead extract (provided 2026-05-21) — asking price, revenue, cash flow, asset value, tenure, customer description, deal terms, broker, listing dates.</li>
+      </ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>2022, 2023, and 2024 revenue and cash flow — required to verify the 3-year YoY revenue and profit growth trend.</li>
+        <li>Is the $1,680,000 "cash flow" SDE or adjusted EBITDA? What add-backs are included?</li>
+        <li>Full-time employee headcount, plus part-time and 1099 counts.</li>
+        <li>Top-5 / top-10 customer concentration — largest GC and largest city-agency revenue share.</li>
+        <li>Revenue split between CWZ-exempt C&amp;D roll-off and any CWZ-covered putrescible carting.</li>
+        <li>BIC carter registration status and any BIC, NYSDEC, or DOT/FMCSA violations or open enforcement.</li>
+        <li>Is any real estate (yard, transfer station, garage) owned or leased? If owned, assessed value.</li>
+        <li>Management team that will stay — names, roles, tenure, and contract status.</li>
+        <li>2025 trailing-12 P&amp;L and a current balance sheet as of the latest month-end.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources. Roll-up add-on evaluation for Fambro Waste Management — scored out of 110.</footer>
+</div>
+</body>
+</html>

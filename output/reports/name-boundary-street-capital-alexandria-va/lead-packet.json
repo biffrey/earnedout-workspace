@@ -1,0 +1,73 @@
+{
+  "entity_id": "NAME:boundary street capital|alexandria va",
+  "target_class": 2,
+  "business_name": "Boundary Street Capital",
+  "industry": "SBIC GP \u2014 Private credit / venture debt (digital infrastructure & enterprise software)",
+  "location": {
+    "city": "Alexandria",
+    "state": "VA"
+  },
+  "website": "https://www.boundarystreetcapital.com/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "needs follow-up",
+  "federal_award_total": null,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": "GP principal",
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": "Good Standing",
+  "sbic_gp_economics": {
+    "aum": 700000000,
+    "fund_count": 2,
+    "vintage_range": "2020+",
+    "strategy": "Private credit / venture debt"
+  },
+  "gov_data_source": [
+    "SBA SBIC"
+  ],
+  "provenance_urls": [
+    "https://www.sba.gov/funding-programs/investment-capital/sbic-directory"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": null,
+  "summary": "Alexandria VA private credit specialist. Founded 2018. $700M+ AUM. Lower-middle-market venture debt: digital infrastructure, enterprise software, technology services. SBIC II (2020 vintage, $329M). Material change: 2025 acquisition by Stonepeak announced \u2014 firm is no longer independent.",
+  "fit_note": "Pending acquisition by Stonepeak announced 2025 \u2014 management firm is no longer independent",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "primary contact name \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up",
+    "revenue signal \u2014 needs follow-up"
+  ],
+  "deaf_specificity": null,
+  "sbic_funds": [
+    {
+      "fund_name": "BSCP SBIC I, LP",
+      "vintage": "2020",
+      "fund_size": "329108214",
+      "strategy": "Direct Lending",
+      "style": "Private Credit",
+      "making_new": "Yes",
+      "avg_inv": "6913770"
+    },
+    {
+      "fund_name": "BSCP SBIC II, LP",
+      "vintage": "2023",
+      "fund_size": "113411998",
+      "strategy": "Direct Lending",
+      "style": "Private Credit",
+      "making_new": "Yes",
+      "avg_inv": "5762500"
+    }
+  ]
+}

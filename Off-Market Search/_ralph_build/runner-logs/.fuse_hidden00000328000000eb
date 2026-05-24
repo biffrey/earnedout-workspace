@@ -1,0 +1,11 @@
+Iteration 11 complete — **s5 (Enrichment & qualification pre-filters) IMPLEMENT**.
+
+**Step executed:** s2 is `blocked` (B4), s3/s4 `verified`, so s5 was the lowest-numbered non-blocked, non-verified stage. Advanced it one phase: `not_started → drafted`.
+
+**Built:**
+- `references/enrichment.md` — the s5 procedure: §7.4 cheap pre-filters run first (drop non-fits before expensive work), then website discovery + Playwright validation + screenshot (reusing `overnight-search` Step 3), B1-gated SOS formation-date lookup, financial-signal enrichment, contact discovery, and the Class-2 SBIC good-standing cross-check. Output is a `LeadPacket` per passing candidate.
+- `skill.md` Step 4 updated to point at the new reference.
+
+**Constraints honored:** never fabricate (unknowns → "needs follow-up", logged in `enrichment_gaps`; financial figures labelled as signals); SBIC `Unknown` standing is honest, never defaulted to `Good Standing`; B1 handled as a graceful gap, not a hard stop; no new scorer/tracker.
+
+**State:** iteration 11, s5 `drafted`, open_blockers 4, unresolved_findings 9. Committed locally; `.loop_signal` set to **CONTINUE** — next step is s5 SELF-TEST.

@@ -1,0 +1,180 @@
+{
+  "FUT6MQ1MCDC9": {
+    "uei": "FUT6MQ1MCDC9",
+    "cage": "4YL49",
+    "legalBusinessName": "ACCESS INTERPRETING INC",
+    "dba": null,
+    "registrationDate": "2008-01-10",
+    "registrationStatus": "Active",
+    "physicalAddress": {
+      "addressLine1": "10507 OAKTON RIDGE CT",
+      "addressLine2": null,
+      "city": "OAKTON",
+      "stateOrProvinceCode": "VA",
+      "zipCode": "22124",
+      "zipCodePlus4": "1650",
+      "countryCode": "USA"
+    },
+    "entityURL": "http://www.ainterpreting.com",
+    "naicsList": [
+      "541930"
+    ],
+    "gpoc": {
+      "name": "Brad Leon",
+      "title": null
+    }
+  },
+  "VJ1RLKHJ2LF3": {
+    "uei": "VJ1RLKHJ2LF3",
+    "cage": "6JPP0",
+    "legalBusinessName": "FRIENDS INTERPRETING SERVICES LLC",
+    "dba": null,
+    "registrationDate": "2011-09-22",
+    "registrationStatus": "Active",
+    "physicalAddress": {
+      "addressLine1": "204 VOLNEY HILL ROAD",
+      "addressLine2": null,
+      "city": "SHENANDOAH JUNCTION",
+      "stateOrProvinceCode": "WV",
+      "zipCode": "25442",
+      "zipCodePlus4": null,
+      "countryCode": "USA"
+    },
+    "entityURL": "http://www.friendsinterpretingservices.com",
+    "naicsList": [
+      "541930"
+    ],
+    "gpoc": {
+      "name": "Alice Ann FRIENDS",
+      "title": "Owner"
+    }
+  },
+  "LCYFBNAT8EY4": {
+    "uei": "LCYFBNAT8EY4",
+    "cage": "43EA3",
+    "legalBusinessName": "Mid-Atlantic Interpreting Group, Inc.",
+    "dba": null,
+    "registrationDate": "2005-08-17",
+    "registrationStatus": "Active",
+    "physicalAddress": {
+      "addressLine1": "8174 LARK BROWN RD STE 202",
+      "addressLine2": null,
+      "city": "ELKRIDGE",
+      "stateOrProvinceCode": "MD",
+      "zipCode": "21075",
+      "zipCodePlus4": "6426",
+      "countryCode": "USA"
+    },
+    "entityURL": "https://interpretmaig.com",
+    "naicsList": [
+      "541512",
+      "541519",
+      "541611",
+      "541614",
+      "541690",
+      "541930",
+      "541990",
+      "561110",
+      "561210",
+      "561410",
+      "561492",
+      "561720",
+      "611420",
+      "611430",
+      "621610",
+      "624120"
+    ],
+    "gpoc": {
+      "name": "Nancy Bender",
+      "title": null
+    }
+  },
+  "MQ42VNNUK3J9": {
+    "uei": "MQ42VNNUK3J9",
+    "cage": "1FPR1",
+    "legalBusinessName": "TCS INTERPRETING, INC.",
+    "dba": "TCS INTERPRETING",
+    "registrationDate": "2002-01-14",
+    "registrationStatus": "Active",
+    "physicalAddress": {
+      "addressLine1": "8701 GEORGIA AVE STE 510",
+      "addressLine2": null,
+      "city": "SILVER SPRING",
+      "stateOrProvinceCode": "MD",
+      "zipCode": "20910",
+      "zipCodePlus4": "3723",
+      "countryCode": "USA"
+    },
+    "entityURL": "http://www.TCSinterpreting.com",
+    "naicsList": [
+      "541519",
+      "541611",
+      "541690",
+      "541930",
+      "541990",
+      "561492",
+      "561499",
+      "561990",
+      "611420",
+      "611710",
+      "624120",
+      "624310",
+      "812990"
+    ],
+    "gpoc": {
+      "name": "TCS Contracts",
+      "title": null
+    }
+  },
+  "NLGQMMKF25X7": {
+    "uei": "NLGQMMKF25X7",
+    "cage": "6USV1",
+    "legalBusinessName": "DEAF ACCESS SOLUTIONS, INC",
+    "dba": null,
+    "registrationDate": "2013-02-18",
+    "registrationStatus": "Active",
+    "physicalAddress": {
+      "addressLine1": "4813 LELAND ST",
+      "addressLine2": null,
+      "city": "BETHESDA",
+      "stateOrProvinceCode": "MD",
+      "zipCode": "20815",
+      "zipCodePlus4": null,
+      "countryCode": "USA"
+    },
+    "entityURL": "www.deafaccess.com",
+    "naicsList": [
+      "541930",
+      "561492"
+    ],
+    "gpoc": {
+      "name": "Karl Kosiorek",
+      "title": "President"
+    }
+  },
+  "DVTECSRREMZ8": {
+    "uei": "DVTECSRREMZ8",
+    "cage": "8BNK9",
+    "legalBusinessName": "FIS-DAS INTERPRETING SERVICES",
+    "dba": null,
+    "registrationDate": "2019-05-20",
+    "registrationStatus": "Active",
+    "physicalAddress": {
+      "addressLine1": "204 VOLNEY HL",
+      "addressLine2": null,
+      "city": "SHENANDOAH JUNCTION",
+      "stateOrProvinceCode": "WV",
+      "zipCode": "25442",
+      "zipCodePlus4": "4846",
+      "countryCode": "USA"
+    },
+    "entityURL": "www.fis-das.com",
+    "naicsList": [
+      "541930"
+    ],
+    "gpoc": {
+      "name": "Alice Ann Friends",
+      "title": "CEO & Owner"
+    }
+  }
+}

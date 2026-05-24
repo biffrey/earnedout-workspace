@@ -1,0 +1,64 @@
+{
+  "entity_id": "NAME:argosy management|wayne pa",
+  "target_class": 2,
+  "business_name": "Argosy Management LP",
+  "industry": "SBIC GP \u2014 Lower-middle-market PE (manufacturing & business services)",
+  "location": {
+    "city": "Wayne",
+    "state": "PA"
+  },
+  "website": "https://argosycapital.com/private-equity/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "needs follow-up",
+  "federal_award_total": null,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": "GP principal",
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": "Good Standing",
+  "sbic_gp_economics": {
+    "aum": 3100000000,
+    "fund_count": 6,
+    "vintage_range": "1990-2021",
+    "strategy": "LMM control buyouts"
+  },
+  "gov_data_source": [
+    "SBA SBIC"
+  ],
+  "provenance_urls": [
+    "https://www.sba.gov/funding-programs/investment-capital/sbic-directory"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": null,
+  "summary": "Wayne PA. Founded 1990. $3.1B AUM (PE + RE + credit + secondaries). Six SBICs pursued over 27+ years, most recent licensed 2021. LMM PE in U.S. manufacturing and business services ($3-10M EBITDA). Family/founder-led businesses, often in LMI areas/HUBZones. Track record: revenue +56% by year 3, +44% job creation. SEC-registered RIA. SBA-recognized 2024 SBIC of the Year.",
+  "fit_note": "Established, multi-billion-AUM platform \u2014 SBIC of the Year \u2014 high-quality but high-cost target",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "primary contact name \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up",
+    "revenue signal \u2014 needs follow-up"
+  ],
+  "deaf_specificity": null,
+  "sbic_funds": [
+    {
+      "fund_name": "Argosy Investment Partners SBIC 7, L.P.",
+      "vintage": "2025",
+      "fund_size": "175000000",
+      "strategy": "Mezzanine",
+      "style": "Private Equity",
+      "making_new": "Yes",
+      "avg_inv": ""
+    }
+  ]
+}

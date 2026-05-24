@@ -1,0 +1,1653 @@
+[
+  {
+    "recipient_id": "aee3ebde-7484-0fac-c8b8-43896b620d02-C",
+    "name": "SOS INTERNATIONAL LLC",
+    "award_total": 731938211.86,
+    "award_count": 24,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "FL",
+      "SC",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SOS INTERNATIONAL  LANGUAGE SERVICES FOR EOIR",
+      "SOS INTERNATIONAL IN-PERSON AND SCHEDULED TELEPHONIC INTERPRETING SERVICES CONTRACT # DJJ-15-C-2610",
+      "SOS INTERNATIONAL  LANGUAGE SERVICES FOR EOIR"
+    ],
+    "narrow_kw_hits": [
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "4b7782a3-fead-45c1-c503-62a27d415340-C",
+    "name": "TRANSLATION EXCELLENCE INC.",
+    "award_total": 48485697.59,
+    "award_count": 13,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CO",
+      "DC",
+      "GA",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "NATIONWIDE SIGN LANGUAGE & CAPTION ACCESS REAL-TIME SERVICES",
+      "SIGN LANGUAGE AND TRANSCRIPTION SERVICES",
+      "SIGN LANGUAGE INTERPRETING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [
+      "FOREIGN LANGUAGE"
+    ],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "7fc32726-99ce-8f72-bbcf-42af91b856ea-C",
+    "name": "ACCESS INTERPRETING INC",
+    "award_total": 40080137.68,
+    "award_count": 12,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SIGN LANGUAGE INTERPRETING, CART (COMMUNICATION ACCESS REAL-TIME TRANSLATION), AND CUED SPEECH LANGUAGE TRANSLITERATOR SERVICES FOR THE DEAF AND HARD OF HEARING EMPLOYEES.",
+      "SIGN LANGUAGE INTERPRETING SERVICE",
+      "SIGN LANGUAGE INTERPRETING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "81ba951a-b70e-7794-cbbc-d6477bc9b084-C",
+    "name": "TCS INTERPRETING, INC.",
+    "award_total": 34767311.31,
+    "award_count": 12,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "IGF::OT::IGF - AGENCY-WIDE ASL INTERPRETER AND CART SERVICES MANAGED BY OCRD.",
+      "THE SERVICE OBJECTIVE OF THIS CALL ORDER IS TO PROCURE AMERICAN SIGN LANGUAGE (ASL) INTERPRETATION SERVICES THAT MEET THE OBJECTIVES IN THE BELOW PERFORMANCE WORK STATEMENT (PWS).  THIS BPA CALL ORDER FOR ASL SUPPORT SERVICES FOR THE OFFICE OF EQUAL",
+      "VIDEO REMOTE INTERPRETING (VRI) AND RELAY CONFERENCE CAPTIONING (RCC) / COMMUNICATION ACCESS REALTIME TRANSLATION (CART)"
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "VIDEO REMOTE INTERPRETING",
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "INTERPRETER",
+      "INTERPRETING",
+      "VIDEO REMOTE INTERPRETING",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "8f12f55c-624d-ecf7-7165-2f952e2ad87f-C",
+    "name": "FIS-DAS INTERPRETING SERVICES",
+    "award_total": 33099492.24,
+    "award_count": 11,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD",
+      "WV"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "THIS IS A NEW TASK ORDER FROM 9/30/2024 - 9/29/2025 FOR RAPID RESPONSE & DOS WORK ORDERS",
+      "THIS IS A NEW TASK ORDER FOR CONTRACT #28321322D00060019 FOR JANUARY 1, 2024, THROUGH SEPTEMBER 29, 2024, FOR RAPID RESPONSE & DOS WORK ORDERS.",
+      "THIS IS A NEW TASK ORDER TO PROVIDE SIGN LANGUAGE INTERPRETING SERVICES FOR 6 MONTHS FROM 9/30/2025 - 3/29/2026."
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "DEAF",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "DEAF",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "f062ef8f-5a92-eb7e-7996-3f367f83ad4b-C",
+    "name": "DEAF ACCESS SOLUTIONS, INC",
+    "award_total": 30999608.13,
+    "award_count": 8,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CA",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "FURNISH SIGN LANGUAGE INTERPRETING SERVICES IN RELATION TO THE AGENCYS REASONABLE ACCOMMODATION PROGRAM ON AN AS NEEDED BASIS AND PROVIDE ORAL TRANSLITERATION AND COMPUTER ASSISTED REAL TIME TRANSLATION SERVICE ON AN AS NEEDED BASIS.",
+      "SIGN LANGUAGE INTERPRETING SERVICES",
+      "SIGN LANGUAGE INTERPRETATION SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "DEAF",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "DEAF",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "9515182c-9747-d27e-b80f-6610b179fede-C",
+    "name": "SENECA GLOBAL SERVICES LLC",
+    "award_total": 30032109.84,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ASL INTERPRETER AND CART SERVICES",
+      "ASL INTERPRETER AND CART SERVICES",
+      "ASL INTERPRETER AND CART SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "ASL",
+      "CART"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "CART",
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "07a1c44a-872c-34ae-fdef-bb78050db1bd-C",
+    "name": "APPLIED DEVELOPMENT, LLC",
+    "award_total": 27454610.31,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ASL INTERPRETING/CART/NOTETAKING SERVICES ASL/CART/NT",
+      "SIGN LANGUAGE INTERPRETING SERVICES-UNCLASSIFIED, SECRET, AND CLASSIFIED UP TO TS",
+      "INTERPRETER SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "ASL",
+      "CART",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "CART",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "5f8bdab0-9170-04b3-598a-8167483b971e-C",
+    "name": "MID-ATLANTIC INTERPRETING GROUP, INC.",
+    "award_total": 22219534.03,
+    "award_count": 7,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "PROVIDE AMERICAN SIGN LANGUAGE (ASL)/ENGLISH INTERPRETING SERVICES FOR THE DEPARTMENT BASED ON THE LEGAL MANDATE SET FORTH IN THE REHABILITATION ACT OF 1973, AS AMENDED, 29 U.S.C. 791 ET SEQ.  UNDER THIS LAW, TOGETHER WITH THE AMERICANS WITH DISABILITIES ACT AMENDMENTS ACT OF 2008, THAT IS INCORPORATED INTO FEDERAL REGULATIONS AT 29 CFR 1630 GOVERNING THE EQUAL EMPLOYMENT OPPORTUNITY COMMISSION, FEDERAL AGENCIES MUST PROVIDE REASONABLE ACCOMMODATION TO QUALIFIED EMPLOYEES AND APPLICANTS FOR EMPLOYMENT WITH DISABILITIES, WITH LIMITED EXCEPTIONS INCLUDING, BUT NOT LIMITED TO, BUSINESS NECESSITY, UNDUE HARDSHIP, AND DIRECT THREAT.IGF::OT::IGF",
+      "ON-CALL SIGN LANGUAGE INTERPRETING SERVICES",
+      "REASONABLE ACCOMMODATIONS SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CAPTIONING SERVICES",
+      "CART",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CAPTIONING SERVICES",
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "1e60693e-378c-12b4-1711-75de32cd68a2-C",
+    "name": "FRIENDS INTERPRETING SERVICES LLC",
+    "award_total": 16379734.69,
+    "award_count": 7,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC",
+      "MD",
+      "WV"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "U.S DEPARTMENT OF TRANSPORTATION DOT-WIDE INTERPRETING & CAPTIONING SERVICES CONTRACT FOR ALL OPERATING ADMINISTRATIONS WITHIN THE DOT.",
+      "TASK ORDER FOR SIGN LANGUAGE INTERPRETING SERVICES ONE BASE PERIOD [10 MONTHS] AND 4 OPTION YEARS.",
+      "HUD INTERPRETER SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "CAPTIONING SERVICES",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "CAPTIONING SERVICES",
+      "DEAF",
+      "HARD OF HEARING",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "f7747802-731c-0690-b7a1-8774bfbfae9b-C",
+    "name": "GREAT HILL SOLUTIONS, LLC",
+    "award_total": 11491870.48,
+    "award_count": 2,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "UNCLEARED, SECRET CLEARED, TOP-SECRET/SCI CLEARED ASL INTERPRETER SVS.",
+      "UNCLEARED, SECRET CLEARED, TOP-SECRET/SCI CLEARED ASL INTERPRETER SVS."
+    ],
+    "narrow_kw_hits": [
+      "ASL"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "63dca34f-443d-8160-2fff-748d4453fe44-C",
+    "name": "DIVERSIFIED SIGN LANGUAGE SERVICES, LLC",
+    "award_total": 8096605.93,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "PROVIDE SIGN LANGUAGE INTERPRETING SERVICES AT NASA GODDARD SPACE FLIGHT CENTER AND WALLOPS.",
+      "SIGN LANGUAGE INTERPRETING SERVICES AND CART SERVICES",
+      "PROVIDE SIGN LANGUAGE INTERPRETING SERVICES AT NASA GODDARD SPACE FLIGHT CENTER AND WALLOPS."
+    ],
+    "narrow_kw_hits": [
+      "CART",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "195a3661-c629-785f-6d21-698b164d196b-C",
+    "name": "VITAL SIGNS, LLC.",
+    "award_total": 7160782.08,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "CONTRACT TO PROVIDE SIGN LANGUAGE INTERPRETERS AND COMMUNICATION ACCESS REALTIME TRANSLATION SERVICES FOR THE IRS NATIONWIDE.",
+      "THE PURPOSE OF THIS TASK ORDER IS THAT THE CONTRACTOR SHALL PROVIDE FOR SIGN LANGUAGE INTERPRETING SERVICES FOR DOT-WIDE WHICH INCLUDES REGION 1 (WASHINGTON DC METROPOLITAN AREA) AND REGION 2 (OUTSIDE OF WASHINGTON DC METROPOLITAN AREA), IN ACCORDAN",
+      "NEW DELIVERY ORDER UNDER IDIQ DTOS5917D00500 FOR SIGN LANGUAGE INTERPRETING SERVICES FOR DOT-WIDE WHICH INCLUDES REGION 1 (WASHINGTON DC METROPOLITAN AREA) AND REGION 2 (OUTSIDE OF WASHINGTON DC METROPOLITAN AREA)  THE PERIOD OF PERFORMANCE OF THI"
+    ],
+    "narrow_kw_hits": [
+      "COMMUNICATION ACCESS",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "COMMUNICATION ACCESS",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "d2a8fc4b-7447-a358-2cf6-38bf68043039-C",
+    "name": "STUART B. CONSULTANTS, INC.",
+    "award_total": 6399547.62,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "CART & VRI SERVICES",
+      "IGF::OT::IGF INTERPRETING AND SIGN LANGUAGE SERVICES",
+      "FDA REMOTE CONFERENCE CAPTIONING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "CAPTIONING SERVICES",
+      "CART",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "CAPTIONING SERVICES",
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "29a4a4cb-dc3a-dbbe-c94f-0de2faa13e00-C",
+    "name": "DEAF SERVICES UNLIMITED, INC.",
+    "award_total": 4590952.09,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC",
+      "IA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "FOREST SERVICE, OFFICE OF CIVIL RIGHTS (OCR) IS RESPONSIBLE FOR PROVIDING DEAF AND HARD OF HEARING (D/HH) SERVICES AS A REASONABLE ACCOMMODATION TO FOREST SERVICE EMPLOYEES AS REQUIRED BY THE REHABILITATION ACT OF 1973, AS AMENDED AND FOREST SERVICE",
+      "DHH INTERIM ASL CONTRACT IS FOR EMPLOYEES' PART OF THE DEAF AND HARD OF HEARING COMMUNITY AND WILL ENSURE THEY HAVE THE SUPPORT NEEDED TO PERFORM THEIR MISSION CRITICAL WORK.",
+      "USDA FS CR ASL SIGN LANGUAGE INTERPRETIVE SERVICES FOR THE 1ST & 2ND QUARTER FY 2022 WITH AND OPTION TO EXTEND."
+    ],
+    "narrow_kw_hits": [
+      "ASL",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "9dc3e81f-0ac2-b6b8-468b-595a82587ab4-C",
+    "name": "WRIGHT & ASSOCIATES, LLC",
+    "award_total": 2265981.25,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SIGN LANGUAGE INTERPRETING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "3fa5e53b-4569-9dd4-2b0e-339cc8675d97-C",
+    "name": "JB INTERPRETING, LLC",
+    "award_total": 2005892.84,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SIGN LANGUAGE INTERPRETING AND CART  FIRM FIXED PRICE"
+    ],
+    "narrow_kw_hits": [
+      "CART",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "23b307a1-db11-efe5-fff5-dae3506632ed-C",
+    "name": "VANCRO",
+    "award_total": 1391367.47,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "CO"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ASL INTERPRETER SERVICES FOR DENVER REGIONAL OFFICE"
+    ],
+    "narrow_kw_hits": [
+      "ASL"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "INTERPRETER"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "6173daa5-78f1-b542-8184-6873be6fa6f6-C",
+    "name": "WORLDWIDE LANGUAGE RESOURCES, LLC",
+    "award_total": 600878951.36,
+    "award_count": 5,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "NC"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "IGF:OT:IGF",
+      "CONUS OCONUS LINGUIST SUPPORT SERVICES (LSS)",
+      "TASK ORDER 1 (10 MONTHS) INCLUDES TRANSITION IN OF 30 DAYS AND USES RATES FROM IDIQ CARD - ORDERING YEAR 1 (15JULY2025-14JULY2026)."
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "79fdca41-2358-930e-3033-0ef8538e1f4e-C",
+    "name": "THE KACE COMPANY, LLC.",
+    "award_total": 308513242.37,
+    "award_count": 12,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "IGF::OT::IGF  TITLE III MONITORING, GENERAL TRANSLATION AND TRANSCRIPTION (T&T) SERVICES",
+      "THIS ORDER PROVIDES MONITORING, TRANSCRIPTION, AND TRANSLATION SERVICES WHICH SUPPORTS HOMELAND SECURITY INVESTIGATIONS NATIONWIDE WHEN CONDUCTING CRIMINAL INVESTIGATIONS.",
+      "INTERIM TITLE III TRANSLATION AND TRANSCRIPTION SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "ab31bfe9-b318-214a-7705-2e7acc80675b-C",
+    "name": "TECHTRANS INTERNATIONAL INC",
+    "award_total": 286107940.84,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "TX"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "IGF::OT::IGF OTHER FUNCTIONS RUSSIAN LANGUAGE AND LOGISTICS SERVICES (RLLS)",
+      "RUSSIAN LANGUAGE AND LOGISTICS SERVICES.",
+      "IGF::OT::IGF OTHER FUNCTIONS RUSSIAN LANGUAGE AND LOGISTICS SERVICES (RLLS)"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "1f42d514-d16f-3de7-cf1d-9ae2333baabb-C",
+    "name": "PGLS LLC",
+    "award_total": 189881521.04,
+    "award_count": 70,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "FOREIGN LANGUAGE TRANSLATIONS & INTERPRETATION SERVICE - BPA",
+      "FOREIGN LANGUAGE TRANSLATIONS & INTERPRETATION SERVICE",
+      "FOREIGN LANGUAGE TRANSLATIONS & INTERPRETATION SERVICE"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [
+      "FOREIGN LANGUAGE"
+    ],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "3e6e094f-59a2-bb7c-57b7-be44e7849e6f-C",
+    "name": "LANGUAGE SELECT, LLC",
+    "award_total": 157505880.64,
+    "award_count": 16,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CA",
+      "MD",
+      "MN"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "TELEPHONE AND VIDEO INTERPRETER SERVICES CALL ORDER FOR SERVICES FROM 2/1/2025 THROUGH 8/31/2025",
+      "TELEPHONE AND VIDEO INTERPRETER SERVICES CALL ORDER FROM 2/1/2024 THROUGH 1/31/2025",
+      "CALL ORDER FOR WORLDWIDE TELEPHONE INTERPRETER SERVICES FROM 2/1/2021 - 1/31/2022"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "b37ddcf2-0924-f6e0-0fee-c40823f5789b-C",
+    "name": "LEIDOS, INC.",
+    "award_total": 143992696.84,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [],
+    "agencies": [],
+    "description_sample": [
+      "COURTROOM AND CASE PREPARATION SUPPORT SERVICES",
+      "LEARNED COUNSEL / EXPERT",
+      "COURTROOM & CASE PREPARATION SUPPORT SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "ee8c8a25-73f8-fee0-9578-0f9c99ba16be-C",
+    "name": "CHENEGA LOGISTICS, LLC",
+    "award_total": 90525874.28,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "AK"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "LINGUIST SERVICES",
+      "LINGUIST SERVICES FOR MISSION IRAQ  IGF::OT::IGF",
+      "LINGUIST SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "046561e7-77a0-4403-951e-063ac3d78704-C",
+    "name": "LEGAL INTERPRETING SERVICES, INC.",
+    "award_total": 81868462.13,
+    "award_count": 14,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "NC",
+      "NY",
+      "PA",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "LANGUAGE LINE INTERPRETATION AND TRANSLATIONS SERVICES",
+      "IGF::OT::IGF, TITLE III/GENERAL TRANSLATION AND TRANSCRIPTIONS (T&T) SERVICE",
+      "CULTURAL ADVISOR SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "b617c119-a6de-433d-fbd9-4e833a52b3bf-C",
+    "name": "THE PROVIDENCIA GROUP LLC",
+    "award_total": 68503217.58,
+    "award_count": 2,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "PROVIDE TRANSLATION AND CULTURAL SUPPORT SERVICES TO AFGHAN UNACCOMPANIED CHILDREN.",
+      "PROVIDE TRANSLATION AND CULTURAL SUPPORT SERVICES TO AFGHAN UNACCOMPANIED CHILDREN."
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "148051d0-d031-9a14-16f7-c89323f757c4-C",
+    "name": "LIONBRIDGE GLOBAL SOLUTIONS II INC.",
+    "award_total": 68304761.82,
+    "award_count": 15,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ICE LANGUAGE SERVICES",
+      "IGF::OT::IGF LANGUAGE TRANSLATION SERVICES FOR ALL IHSC FACILITIES.",
+      "THE PURPOSE OF THIS AWARD IS TO PROVIDE TRANSLATION, TRANSCRIPTION, AND INTERPRETATION SERVICES, THROUGH A LANGUAGE LINE THAT IS AVAILABLE 24 HOURS A DAY, SEVEN DAYS A WEEK, AND 365 DAYS A YEAR 24/7/365."
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [
+      "FOREIGN LANGUAGE"
+    ],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "3556ff14-9057-c609-dd5b-c3bda33c6a0a-C",
+    "name": "ATLAS ADVISORS LLC",
+    "award_total": 67599674.59,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "LINGUIST SERVICES IN DOHA, QATAR & TIRANA, ALBANIA",
+      "LINGUIST SUPPORT",
+      "LINGUIST SUPPORT"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "2fe70380-ac1c-0e58-f869-e0a2fd22ba5a-C",
+    "name": "LANGUAGE LINE, LLC",
+    "award_total": 64418550.52,
+    "award_count": 9,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CA",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "TELEPHONIC INTERPRETER SERVICES AT THE 3 RECOVERY SERVICE CENTERS IN MD, TX, AND VA VALUED AT $2.5M OVER 5 YEARS.",
+      "INTERPRETATION SERVICES FOR THE THE REFUGEE, ASYLUM, AND INTERNATIONAL OPERATIONS DIVISION",
+      "LANGUAGE & INTERPRETATION SUPPORT SERVICES FOR THE UNITED STATES CITIZENSHIP AND IMMIGRATION SERVICES (USCIS) REFUGEE, ASYLUM, INTERNATIONAL OPERATIONS (RAIO) DIRECTORATE AND F"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "645df5f2-66e3-8d2b-a612-3bff6ed3da30-C",
+    "name": "AMAZON WEB SERVICES, INC.",
+    "award_total": 48126560.63,
+    "award_count": 1,
+    "naics": [
+      "{'code': '518210', 'description': 'COMPUTING INFRASTRUCTURE PROVIDERS, DATA PROCESSING, WEB HOSTING, AND RELATED SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "AWS CLOUD SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "c04bbdd9-b54c-7ae0-95b3-d6697d007f78-C",
+    "name": "TRANSLATIONS INTERNATIONAL INC.",
+    "award_total": 38135522.69,
+    "award_count": 5,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MN",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "TRANSLATION SERVICES IGF::OT::IGF - OTHER",
+      "6-MONTH CONTRACT AND ADD FUND INCREMENTALLY FOR THREE MONTHS. POP: 03/29/2023 - 09/28/2023.",
+      "TRANSLATIONS AND INTERPRETATION SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "b0540572-b3ff-5a18-ae1c-c18561079743-C",
+    "name": "RIVA SOLUTIONS INC",
+    "award_total": 18740865.22,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "AS REQUIRED BY EXECUTIVE ORDER 13166, \"IMPROVING ACCESS TO SERVICES FOR PERSONS WITH LIMITED ENGLISH PROFICIENCY, AND AS PART OF ITS IMPLEMENTATION OF THE FEBRUARY 17, 2011, MEMORANDUM FROM ATTORNEY GENERAL ERIC HOLDER (FEDERAL GOVERNMENTS RENEWED COMMITMENT TO LANGUAGE ACCESS OBLIGATIONS UNDER EXECUTIVE ORDER 13166), THE UNITED STATES ENVIRONMENTAL PROTECTION AGENCY (EPA),OFFICE OF GENERAL COUNSEL (OGC), EXTERNAL CIVIL RIGHTS COMPLIANCE OFFICE (ECRCO) IS COMMITTED TO ESTABLISHING A VEHICLE FOR TRANSLATION, IN-PERSON INTERPRETATION, AND TELEPHONIC INTERPRETATION SERVICES TO BE MADE AVAILABLE FOR ALL EPA REGIONAL AND PROGRAM OFFICES.  THE IMPLEMENTATION OF THESE SERVICES WILL BETTER ENABLE COMMUNICATION WITH LIMITED ENGLISH PROFICIENT (LEP) INDIVIDUALS THROUGHOUT THE UNITED STATES AND ITS TERRITORIES.",
+      "CONSECUTIVE INTERPRETERS",
+      "AS REQUIRED BY EXECUTIVE ORDER 13166, \"IMPROVING ACCESS TO SERVICES FOR PERSONS WITH LIMITED ENGLISH PROFICIENCY, AND AS PART OF ITS IMPLEMENTATION OF THE FEBRUARY 17, 2011, MEMORANDUM FROM ATTORNEY GENERAL ERIC HOLDER (FEDERAL GOVERNMENTS RENEWED COMMITMENT TO LANGUAGE ACCESS OBLIGATIONS UNDER EXECUTIVE ORDER 13166), THE UNITED STATES ENVIRONMENTAL PROTECTION AGENCY (EPA),OFFICE OF GENERAL COUNSEL (OGC), EXTERNAL CIVIL RIGHTS COMPLIANCE OFFICE (ECRCO) IS COMMITTED TO ESTABLISHING A VEHICLE FOR TRANSLATION, IN-PERSON INTERPRETATION, AND TELEPHONIC INTERPRETATION SERVICES TO BE MADE AVAILABLE FOR ALL EPA REGIONAL AND PROGRAM OFFICES.  THE IMPLEMENTATION OF THESE SERVICES WILL BETTER ENABLE COMMUNICATION WITH LIMITED ENGLISH PROFICIENT (LEP) INDIVIDUALS THROUGHOUT THE UNITED STATES AND ITS TERRITORIES."
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "e5a4a8c6-5034-d359-1f8d-7448f5685209-C",
+    "name": "AMERICAN COUNCIL ON THE TEACHING OF FOREIGN LANGUAGES, INC.",
+    "award_total": 17237614.48,
+    "award_count": 3,
+    "naics": [
+      "{'code': '611710', 'description': 'EDUCATIONAL SUPPORT SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "TIER 1 ORAL PROFICIENCY INTERVIEWS",
+      "TIER 1 ORAL PROFICIENCY INTERVIEWS - TO #1 FOR OY3",
+      "FOREIGN LANGUAGE TESTING, TASK ORDER #1 OF OY2"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [
+      "FOREIGN LANGUAGE"
+    ],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "ab545306-3a00-5ebf-5ebd-5aa2e585211a-C",
+    "name": "JTG, INC.",
+    "award_total": 17096690.59,
+    "award_count": 6,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "THIS ACQUISITION IS FOR LANGUAGE SERVICE TRANSLATION AND INTERPRETATION FOR NATIONAL VIRTUAL TRANSLATION CENTER.",
+      "LANGUAGE ANALYSTS IGF::OT::IGF",
+      "THIS CONTRACT IS AVAILABLE FOR USE BY THE DEPARTMENT OF JUSTICE ON AN INDEFINITE DELIVERY/INDEFINITE QUANTITY TASK ORDER BASIS TO OBTAIN LANGUAGE SERVICE AS DEFINED HEREIN."
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "ccff2236-58a4-bdbe-3deb-8a5333f10f7f-C",
+    "name": "KADIAK LLC",
+    "award_total": 12068964.8,
+    "award_count": 2,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "CONSECUTIVE INTERPRETERS",
+      "CONSECUTIVE INTERPRETERS"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "262843c6-b02f-949d-4e1f-2161285c92a8-C",
+    "name": "ACCLAIM TECHNICAL SERVICES, LLC",
+    "award_total": 11789668.19,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "NVTC LANGUAGE SERVICES BPA# DJF-17-1200-S-0003056",
+      "LANGUAGE SERVICES",
+      "NVTC LANGUAGE SERVICES BPA# DJF-17-1200-S-0003056"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "455555be-773d-eab1-1e6b-7b94400b757e-C",
+    "name": "GENERAL DYNAMICS INFORMATION TECHNOLOGY, INC.",
+    "award_total": 11600170.95,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541512', 'description': 'COMPUTER SYSTEMS DESIGN SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "COMPUTER SECURITY INCIDENT RESPONSE CENTER (CSIRC)COVID-19"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "e4fbde69-98a0-8bcb-7b59-b480bc1c0348-C",
+    "name": "AL MASSAQ SUPPORT SERVICES LTD CO",
+    "award_total": 10759191.89,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541614', 'description': 'PROCESS, PHYSICAL DISTRIBUTION, AND LOGISTICS CONSULTING SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [],
+    "agencies": [],
+    "description_sample": [
+      "IGF::OT::IGF INTERPRETER SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "5aee0df0-f9f8-326d-79c9-a52dc43826fa-C",
+    "name": "ACCENT ON LANGUAGES, INC.",
+    "award_total": 10675370.0,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CA",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "USCIS LANGUAGE & INTERPRETATION SUPPORT SERVICES",
+      "ADDITIONAL INTERPRETER SERVICES REQUIRED FOR USCIS ASYLUM.",
+      "USCIS LANGUAGE & INTERPRETATION SUPPORT SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "8cf0f5fc-b2ff-a5ae-8b1d-832482741a2a-C",
+    "name": "A2 FEDERAL, INC.",
+    "award_total": 10477044.62,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "INDONESIAN/MALAYSIAN CONSEC LINGUIST",
+      "LINGUISTIC SUPPORT SERVICES",
+      "LINGUISTIC SUPPORT SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "b51fa0d1-00b7-70f9-3f7b-84a97f11843f-C",
+    "name": "PURDY GROUP LLC",
+    "award_total": 10313371.1,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "INTERPRETER SERVICES",
+      "LINGUIST TASK ORDER AWARD",
+      "INTERPRETER SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "ffc0b6e2-522d-a70c-555d-0a5c29c662fd-C",
+    "name": "PRISMA INTERNATIONAL, INC.",
+    "award_total": 5463660.83,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "MD",
+      "MN"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ADDITIONAL INTERPRETER SERVICES REQUIRED FOR USCIS ASYLUM.",
+      "CALL ORDER 15 FOR TRANSLATION SERVICES",
+      "CISA TRANSLATION SERVICES"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "ebfaba2f-88df-188b-0c40-848e63926c8b-C",
+    "name": "PAE APPLIED TECHNOLOGIES LLC",
+    "award_total": 5336499.82,
+    "award_count": 1,
+    "naics": [
+      "{'code': '561210', 'description': 'FACILITIES SUPPORT SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [],
+    "agencies": [],
+    "description_sample": [
+      "IGF::OT::IGF  CENTCOM TRANSLATOR/LINGUISTS"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "7adf2132-2d3c-a53f-eafc-0648350c9964-C",
+    "name": "CNI GLOBAL SOLUTIONS, LLC",
+    "award_total": 4225360.0,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541511', 'description': 'CUSTOM COMPUTER PROGRAMMING SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "OK"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "OCS DASHBOARD AND ANALYTICS SOLUTION SUPPORT"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "10548111-d8c7-c33e-61a9-4c9963f25c8d-C",
+    "name": "MSM TECHNOLOGY LLC",
+    "award_total": 3747136.54,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541512', 'description': 'COMPUTER SYSTEMS DESIGN SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "NATIONAL VIRTUAL TRANSLATION CENTER NVTC TONS"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "be981229-795b-c2d9-3c78-7000de7175a3-C",
+    "name": "ARETEC, INC",
+    "award_total": 3162104.27,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541611', 'description': 'ADMINISTRATIVE MANAGEMENT AND GENERAL MANAGEMENT CONSULTING SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "TX"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "4 FTE SECURITY SPECIALIST (6 MONTHS)"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "c74ef19a-66b8-7c0a-e3c6-817b5b675967-C",
+    "name": "AKIRA TECHNOLOGIES INC.",
+    "award_total": 3149074.4,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541512', 'description': 'COMPUTER SYSTEMS DESIGN SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "DIGITAL MANAGEMENT AND BUSINESS SOLUTION SUPPORT"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.PSC_R608"
+    ]
+  },
+  {
+    "recipient_id": "8f063d66-aeab-0ffc-d1c6-7dceeab657ca-C",
+    "name": "ANDEAN CONSULTING SOLUTIONS INTERNATIONAL LLC",
+    "award_total": 2706412.5,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ADDITIONAL INTERPRETER SERVICES FOR WEEKEND WORK FOR TITLE 42."
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETER"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  },
+  {
+    "recipient_id": "102c76f6-e143-3439-6650-4a24e063b9cf-C",
+    "name": "INDY INTERPRETING INC",
+    "award_total": 1810000.0,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "FL"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "M/OAA TRANSLATION AND EVENT INTERPRETATION SERVICES LINGUISTIC SERVICES BLANKET PURCHASE AGREEMENT (LSBPA) CALL ORDER"
+    ],
+    "narrow_kw_hits": [],
+    "broad_kw_hits": [
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "adjacent",
+    "source_ids": [
+      "S1.NAICS541930"
+    ]
+  }
+]

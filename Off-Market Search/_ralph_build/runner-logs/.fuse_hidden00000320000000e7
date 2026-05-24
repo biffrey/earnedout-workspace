@@ -1,0 +1,14 @@
+Iteration 25 complete — **s9 (Orchestration & cadence) IMPLEMENT**.
+
+**Stop checks:** not COMPLETE (s2/s7 blocked on B4, s9/s10 incomplete); iteration 25 < 80; not all-blocked (s9, s10 advanceable). Verified B4 still open via live schema read — `Source` field still has only `Overnight Search` / `Manual Submission`, so s2 and s7 stay blocked. Lowest non-verified, non-blocked stage = **s9** (`not_started` → IMPLEMENT).
+
+**Built:**
+- `references/orchestration.md` — wires steps 1–9: stage hand-off contract, the halt-vs-degrade failure rule, the run-log template, the manual single-entity path, and dry-run/fixture mode.
+- `config/offmarket_schedule.md` — weekly `/schedule` cron (Mondays 06:00), trigger prompt, registration command, launchd fallback. No `op` needed (no login-walled source).
+- `run-offmarket-search.sh` — headless `claude -p` entrypoint (`bash -n` clean, executable).
+- `config/launchd/ai.earnedout.offmarket-search.plist` — version-controlled fallback plist (`plutil -lint` OK).
+- `skill.md` — SKELETON banner → WIRED/pending-verification; expanded Step 9, Orchestration, Manual path, and Cadence sections.
+
+**Honest note:** the cron is fully *defined* but not *live-registered* — registering it while B4 is open would make the weekly run fail-loud at preflight every Monday. The one-line registration command is documented as the B4-gated install step. Recorded in the implementation log for the SELF-TEST/VERIFY phases.
+
+STATE updated (iter 25, s9 → `drafted`; `open_blockers: 4`, `unresolved_findings: 21` unchanged), committed locally as `ddb5e08`. Signal: **CONTINUE** — s9 SELF-TEST/VERIFY and all of s10 remain non-blocked.

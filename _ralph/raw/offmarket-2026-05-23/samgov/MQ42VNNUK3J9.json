@@ -1,0 +1,313 @@
+{
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "samRegistered": "Yes",
+        "ueiSAM": "MQ42VNNUK3J9",
+        "entityEFTIndicator": null,
+        "cageCode": "1FPR1",
+        "dodaac": null,
+        "legalBusinessName": "TCS INTERPRETING, INC.",
+        "dbaName": "TCS INTERPRETING",
+        "purposeOfRegistrationCode": "Z2",
+        "purposeOfRegistrationDesc": "All Awards",
+        "registrationStatus": "Active",
+        "evsSource": "E&Y",
+        "registrationDate": "2002-01-14",
+        "lastUpdateDate": "2025-11-05",
+        "registrationExpirationDate": "2026-11-03",
+        "activationDate": "2025-11-05",
+        "ueiStatus": "Active",
+        "ueiExpirationDate": null,
+        "ueiCreationDate": "2020-05-01",
+        "publicDisplayFlag": "Y",
+        "exclusionStatusFlag": "N",
+        "exclusionURL": null,
+        "dnbOpenData": null
+      },
+      "coreData": {
+        "entityInformation": {
+          "entityURL": "http://www.TCSinterpreting.com",
+          "entityDivisionName": null,
+          "entityDivisionNumber": null,
+          "entityStartDate": "1982-01-06",
+          "fiscalYearEndCloseDate": "12/31",
+          "submissionDate": "2025-11-03"
+        },
+        "physicalAddress": {
+          "addressLine1": "8701 GEORGIA AVE STE 510",
+          "addressLine2": null,
+          "city": "SILVER SPRING",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": "3723",
+          "countryCode": "USA"
+        },
+        "mailingAddress": {
+          "addressLine1": "8701 GEORGIA AVE STE 510",
+          "addressLine2": null,
+          "city": "SILVER SPRING",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": "3723",
+          "countryCode": "USA"
+        },
+        "congressionalDistrict": "08",
+        "generalInformation": {
+          "entityStructureCode": "2L",
+          "entityStructureDesc": "Corporate Entity (Not Tax Exempt)",
+          "entityTypeCode": "F",
+          "entityTypeDesc": "Business or Organization",
+          "profitStructureCode": "2X",
+          "profitStructureDesc": "For Profit Organization",
+          "organizationStructureCode": null,
+          "organizationStructureDesc": null,
+          "stateOfIncorporationCode": "MD",
+          "stateOfIncorporationDesc": "MARYLAND",
+          "countryOfIncorporationCode": "USA",
+          "countryOfIncorporationDesc": "UNITED STATES"
+        },
+        "businessTypes": {
+          "businessTypeList": [
+            {
+              "businessTypeCode": "23",
+              "businessTypeDesc": "Minority-Owned Business"
+            },
+            {
+              "businessTypeCode": "27",
+              "businessTypeDesc": "Self Certified Small Disadvantaged Business"
+            },
+            {
+              "businessTypeCode": "2X",
+              "businessTypeDesc": "For Profit Organization"
+            },
+            {
+              "businessTypeCode": "8W",
+              "businessTypeDesc": "Women-Owned Small Business"
+            },
+            {
+              "businessTypeCode": "A2",
+              "businessTypeDesc": "Women-Owned Business"
+            },
+            {
+              "businessTypeCode": "F",
+              "businessTypeDesc": "Business or Organization"
+            },
+            {
+              "businessTypeCode": "G9",
+              "businessTypeDesc": "Individual or concern, other than one of the preceding"
+            },
+            {
+              "businessTypeCode": "HQ",
+              "businessTypeDesc": "DOT Certified DBE"
+            }
+          ],
+          "sbaBusinessTypeList": [
+            {
+              "sbaBusinessTypeCode": null,
+              "sbaBusinessTypeDesc": null,
+              "certificationEntryDate": null,
+              "certificationExitDate": null
+            }
+          ]
+        },
+        "financialInformation": {
+          "creditCardUsage": "Y",
+          "debtSubjectToOffset": "N"
+        }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [
+            {
+              "naicsCode": "541519",
+              "naicsDescription": "Other Computer Related Services",
+              "sbaSmallBusiness": "E",
+              "naicsException": "YY"
+            },
+            {
+              "naicsCode": "541611",
+              "naicsDescription": "Administrative Management and General Management Consulting Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541690",
+              "naicsDescription": "Other Scientific and Technical Consulting Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541930",
+              "naicsDescription": "Translation and Interpretation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541990",
+              "naicsDescription": "All Other Professional, Scientific, and Technical Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561492",
+              "naicsDescription": "Court Reporting and Stenotype Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561499",
+              "naicsDescription": "All Other Business Support Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561990",
+              "naicsDescription": "All Other Support Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "611420",
+              "naicsDescription": "Computer Training ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "611710",
+              "naicsDescription": "Educational Support Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "624120",
+              "naicsDescription": "Services for the Elderly and Persons with Disabilities ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "624310",
+              "naicsDescription": "Vocational Rehabilitation Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "812990",
+              "naicsDescription": "All Other Personal Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            }
+          ],
+          "pscList": [
+            {
+              "pscCode": "R608",
+              "pscDescription": "SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING"
+            }
+          ]
+        },
+        "disasterReliefData": {
+          "disasterRegistryFlag": "YES",
+          "bondingFlag": "NO",
+          "geographicalAreaServed": [
+            {
+              "geographicalAreaServedStateCode": "Any",
+              "geographicalAreaServedStateName": null,
+              "geographicalAreaServedCountyCode": null,
+              "geographicalAreaServedCountyName": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaCode": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaName": null
+            }
+          ]
+        },
+        "ediInformation": {
+          "ediInformationFlag": "N"
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "TCS",
+          "middleInitial": null,
+          "lastName": "Contracts",
+          "title": null,
+          "addressLine1": "8701 Georgia Ave",
+          "addressLine2": "Ste 510",
+          "city": "Silver Spring",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessPOC": {
+          "firstName": "TCS",
+          "middleInitial": null,
+          "lastName": "Contracts",
+          "title": null,
+          "addressLine1": "8701 Georgia Ave",
+          "addressLine2": "Ste 510",
+          "city": "Silver Spring",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "governmentBusinessAlternatePOC": {
+          "firstName": "Jessica",
+          "middleInitial": null,
+          "lastName": "Aiello",
+          "title": null,
+          "addressLine1": "8701 Georgia Ave",
+          "addressLine2": "Suite 510",
+          "city": "Silver Spring",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessAlternatePOC": {
+          "firstName": "TCS",
+          "middleInitial": null,
+          "lastName": "Contracts",
+          "title": null,
+          "addressLine1": "8701 Georgia Ave",
+          "addressLine2": "Ste 510",
+          "city": "Silver Spring",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformancePOC": {
+          "firstName": "TCS",
+          "middleInitial": null,
+          "lastName": "Contracts",
+          "title": null,
+          "addressLine1": "8701 Georgia Ave",
+          "addressLine2": "Ste 510",
+          "city": "Silver Spring",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20910",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformanceAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        }
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v3/entities?api_key=REPLACE_WITH_API_KEY&ueiSAM=MQ42VNNUK3J9&registrationStatus=A&includeSections=entityRegistration%2CcoreData%2Cassertions%2CpointsOfContact&page=0&size=10"
+  }
+}

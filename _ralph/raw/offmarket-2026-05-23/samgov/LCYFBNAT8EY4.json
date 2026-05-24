@@ -1,0 +1,333 @@
+{
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "samRegistered": "Yes",
+        "ueiSAM": "LCYFBNAT8EY4",
+        "entityEFTIndicator": null,
+        "cageCode": "43EA3",
+        "dodaac": null,
+        "legalBusinessName": "Mid-Atlantic Interpreting Group, Inc.",
+        "dbaName": null,
+        "purposeOfRegistrationCode": "Z2",
+        "purposeOfRegistrationDesc": "All Awards",
+        "registrationStatus": "Active",
+        "evsSource": "E&Y",
+        "registrationDate": "2005-08-17",
+        "lastUpdateDate": "2025-05-30",
+        "registrationExpirationDate": "2026-05-28",
+        "activationDate": "2025-05-30",
+        "ueiStatus": "Active",
+        "ueiExpirationDate": null,
+        "ueiCreationDate": "2020-05-01",
+        "publicDisplayFlag": "Y",
+        "exclusionStatusFlag": "N",
+        "exclusionURL": null,
+        "dnbOpenData": null
+      },
+      "coreData": {
+        "entityInformation": {
+          "entityURL": "https://interpretmaig.com",
+          "entityDivisionName": "Mid-Atlantic Interpreting Group, Inc.",
+          "entityDivisionNumber": null,
+          "entityStartDate": "2005-06-15",
+          "fiscalYearEndCloseDate": "12/31",
+          "submissionDate": "2025-05-28"
+        },
+        "physicalAddress": {
+          "addressLine1": "8174 LARK BROWN RD STE 202",
+          "addressLine2": null,
+          "city": "ELKRIDGE",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": "6426",
+          "countryCode": "USA"
+        },
+        "mailingAddress": {
+          "addressLine1": "8174 Lark Brown Rd Suite 202",
+          "addressLine2": null,
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": "6426",
+          "countryCode": "USA"
+        },
+        "congressionalDistrict": "03",
+        "generalInformation": {
+          "entityStructureCode": "2L",
+          "entityStructureDesc": "Corporate Entity (Not Tax Exempt)",
+          "entityTypeCode": "F",
+          "entityTypeDesc": "Business or Organization",
+          "profitStructureCode": "2X",
+          "profitStructureDesc": "For Profit Organization",
+          "organizationStructureCode": "XS",
+          "organizationStructureDesc": "Subchapter S Corporation",
+          "stateOfIncorporationCode": "MD",
+          "stateOfIncorporationDesc": "MARYLAND",
+          "countryOfIncorporationCode": "USA",
+          "countryOfIncorporationDesc": "UNITED STATES"
+        },
+        "businessTypes": {
+          "businessTypeList": [
+            {
+              "businessTypeCode": "27",
+              "businessTypeDesc": "Self Certified Small Disadvantaged Business"
+            },
+            {
+              "businessTypeCode": "2X",
+              "businessTypeDesc": "For Profit Organization"
+            },
+            {
+              "businessTypeCode": "8W",
+              "businessTypeDesc": "Women-Owned Small Business"
+            },
+            {
+              "businessTypeCode": "A2",
+              "businessTypeDesc": "Women-Owned Business"
+            },
+            {
+              "businessTypeCode": "F",
+              "businessTypeDesc": "Business or Organization"
+            },
+            {
+              "businessTypeCode": "HQ",
+              "businessTypeDesc": "DOT Certified DBE"
+            },
+            {
+              "businessTypeCode": "XS",
+              "businessTypeDesc": "Subchapter S Corporation"
+            }
+          ],
+          "sbaBusinessTypeList": [
+            {
+              "sbaBusinessTypeCode": "A0",
+              "sbaBusinessTypeDesc": "SBA-Certified Economically Disadvantaged Women-Owned Small Business",
+              "certificationEntryDate": "2024-02-27",
+              "certificationExitDate": null
+            },
+            {
+              "sbaBusinessTypeCode": "A9",
+              "sbaBusinessTypeDesc": "SBA-Certified Women-Owned Small Business",
+              "certificationEntryDate": "2024-02-27",
+              "certificationExitDate": null
+            }
+          ]
+        },
+        "financialInformation": {
+          "creditCardUsage": "Y",
+          "debtSubjectToOffset": "N"
+        }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [
+            {
+              "naicsCode": "541512",
+              "naicsDescription": "Computer Systems Design Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541519",
+              "naicsDescription": "Other Computer Related Services",
+              "sbaSmallBusiness": "E",
+              "naicsException": "YY"
+            },
+            {
+              "naicsCode": "541611",
+              "naicsDescription": "Administrative Management and General Management Consulting Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541614",
+              "naicsDescription": "Process, Physical Distribution, and Logistics Consulting Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541690",
+              "naicsDescription": "Other Scientific and Technical Consulting Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541930",
+              "naicsDescription": "Translation and Interpretation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "541990",
+              "naicsDescription": "All Other Professional, Scientific, and Technical Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561110",
+              "naicsDescription": "Office Administrative Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561210",
+              "naicsDescription": "Facilities Support Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561410",
+              "naicsDescription": "Document Preparation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561492",
+              "naicsDescription": "Court Reporting and Stenotype Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561720",
+              "naicsDescription": "Janitorial Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "611420",
+              "naicsDescription": "Computer Training ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "611430",
+              "naicsDescription": "Professional and Management Development Training ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "621610",
+              "naicsDescription": "Home Health Care Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "624120",
+              "naicsDescription": "Services for the Elderly and Persons with Disabilities ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            }
+          ],
+          "pscList": [
+            {
+              "pscCode": "R608",
+              "pscDescription": "SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING"
+            }
+          ]
+        },
+        "disasterReliefData": {
+          "disasterRegistryFlag": "YES",
+          "bondingFlag": "NO",
+          "geographicalAreaServed": [
+            {
+              "geographicalAreaServedStateCode": "Any",
+              "geographicalAreaServedStateName": null,
+              "geographicalAreaServedCountyCode": null,
+              "geographicalAreaServedCountyName": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaCode": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaName": null
+            }
+          ]
+        },
+        "ediInformation": {
+          "ediInformationFlag": "N"
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "Nancy",
+          "middleInitial": null,
+          "lastName": "Bender",
+          "title": null,
+          "addressLine1": "8174 Lark Brown Road",
+          "addressLine2": "Suite 202",
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessPOC": {
+          "firstName": "Gina",
+          "middleInitial": null,
+          "lastName": "D'Amore",
+          "title": "President",
+          "addressLine1": "8174 Lark Brown Road",
+          "addressLine2": "Suite 202",
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "governmentBusinessAlternatePOC": {
+          "firstName": "Nancy",
+          "middleInitial": "L",
+          "lastName": "Bender",
+          "title": "COO",
+          "addressLine1": "8174 Lark Brown Road",
+          "addressLine2": "Suite 202",
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessAlternatePOC": {
+          "firstName": "Nancy",
+          "middleInitial": null,
+          "lastName": "Bender",
+          "title": "COO",
+          "addressLine1": "8174 Lark Brown Road",
+          "addressLine2": "Suite 202",
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformancePOC": {
+          "firstName": "Nancy",
+          "middleInitial": "L",
+          "lastName": "Bender",
+          "title": "Ms.",
+          "addressLine1": "8174 Lark Brown Road",
+          "addressLine2": "Suite 202",
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformanceAlternatePOC": {
+          "firstName": "Nancy",
+          "middleInitial": null,
+          "lastName": "Bender",
+          "title": null,
+          "addressLine1": "8174 Lark Brown Road",
+          "addressLine2": "Suite 202",
+          "city": "Elkridge",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "21075",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        }
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v3/entities?api_key=REPLACE_WITH_API_KEY&ueiSAM=LCYFBNAT8EY4&registrationStatus=A&includeSections=entityRegistration%2CcoreData%2Cassertions%2CpointsOfContact&page=0&size=10"
+  }
+}

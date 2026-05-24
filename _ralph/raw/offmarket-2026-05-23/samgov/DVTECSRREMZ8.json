@@ -1,0 +1,245 @@
+{
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "samRegistered": "Yes",
+        "ueiSAM": "DVTECSRREMZ8",
+        "entityEFTIndicator": null,
+        "cageCode": "8BNK9",
+        "dodaac": null,
+        "legalBusinessName": "FIS-DAS INTERPRETING SERVICES",
+        "dbaName": null,
+        "purposeOfRegistrationCode": "Z2",
+        "purposeOfRegistrationDesc": "All Awards",
+        "registrationStatus": "Active",
+        "evsSource": "E&Y",
+        "registrationDate": "2019-05-20",
+        "lastUpdateDate": "2025-12-26",
+        "registrationExpirationDate": "2026-12-24",
+        "activationDate": "2025-12-26",
+        "ueiStatus": "Active",
+        "ueiExpirationDate": null,
+        "ueiCreationDate": "2020-06-20",
+        "publicDisplayFlag": "Y",
+        "exclusionStatusFlag": "N",
+        "exclusionURL": null,
+        "dnbOpenData": null
+      },
+      "coreData": {
+        "entityInformation": {
+          "entityURL": "www.fis-das.com",
+          "entityDivisionName": null,
+          "entityDivisionNumber": null,
+          "entityStartDate": "2016-04-19",
+          "fiscalYearEndCloseDate": "12/30",
+          "submissionDate": "2025-12-24"
+        },
+        "physicalAddress": {
+          "addressLine1": "204 VOLNEY HL",
+          "addressLine2": null,
+          "city": "SHENANDOAH JUNCTION",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25442",
+          "zipCodePlus4": "4846",
+          "countryCode": "USA"
+        },
+        "mailingAddress": {
+          "addressLine1": "P.O. Box 905",
+          "addressLine2": null,
+          "city": "Ranson",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25438",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "congressionalDistrict": "02",
+        "generalInformation": {
+          "entityStructureCode": "ZZ",
+          "entityStructureDesc": "Other",
+          "entityTypeCode": "F",
+          "entityTypeDesc": "Business or Organization",
+          "profitStructureCode": "2X",
+          "profitStructureDesc": "For Profit Organization",
+          "organizationStructureCode": null,
+          "organizationStructureDesc": null,
+          "stateOfIncorporationCode": "WV",
+          "stateOfIncorporationDesc": "WEST VIRGINIA",
+          "countryOfIncorporationCode": "USA",
+          "countryOfIncorporationDesc": "UNITED STATES"
+        },
+        "businessTypes": {
+          "businessTypeList": [
+            {
+              "businessTypeCode": "27",
+              "businessTypeDesc": "Self Certified Small Disadvantaged Business"
+            },
+            {
+              "businessTypeCode": "2X",
+              "businessTypeDesc": "For Profit Organization"
+            },
+            {
+              "businessTypeCode": "8C",
+              "businessTypeDesc": "Women-Owned Small Business (WOSB) Joint Venture eligible under the WOSB Program"
+            },
+            {
+              "businessTypeCode": "8D",
+              "businessTypeDesc": "Economically Disadvantaged Women-Owned Small Business (EDWOSB) Joint Venture"
+            },
+            {
+              "businessTypeCode": "8W",
+              "businessTypeDesc": "Women-Owned Small Business"
+            },
+            {
+              "businessTypeCode": "A2",
+              "businessTypeDesc": "Women-Owned Business"
+            },
+            {
+              "businessTypeCode": "F",
+              "businessTypeDesc": "Business or Organization"
+            },
+            {
+              "businessTypeCode": "HQ",
+              "businessTypeDesc": "DOT Certified DBE"
+            },
+            {
+              "businessTypeCode": "JS",
+              "businessTypeDesc": "Small Business Joint Venture"
+            }
+          ],
+          "sbaBusinessTypeList": [
+            {
+              "sbaBusinessTypeCode": null,
+              "sbaBusinessTypeDesc": null,
+              "certificationEntryDate": null,
+              "certificationExitDate": null
+            }
+          ]
+        },
+        "financialInformation": {
+          "creditCardUsage": "Y",
+          "debtSubjectToOffset": "N"
+        }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [
+            {
+              "naicsCode": "541930",
+              "naicsDescription": "Translation and Interpretation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            }
+          ],
+          "pscList": [
+            {
+              "pscCode": "R608",
+              "pscDescription": "SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING"
+            }
+          ]
+        },
+        "disasterReliefData": {
+          "disasterRegistryFlag": "YES",
+          "bondingFlag": "NO",
+          "geographicalAreaServed": [
+            {
+              "geographicalAreaServedStateCode": "Any",
+              "geographicalAreaServedStateName": null,
+              "geographicalAreaServedCountyCode": null,
+              "geographicalAreaServedCountyName": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaCode": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaName": null
+            }
+          ]
+        },
+        "ediInformation": {
+          "ediInformationFlag": "N"
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "Alice Ann",
+          "middleInitial": null,
+          "lastName": "Friends",
+          "title": "CEO & Owner",
+          "addressLine1": "204 Volney Hl",
+          "addressLine2": null,
+          "city": "Shenandoah Junction",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25442",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessPOC": {
+          "firstName": "PJ",
+          "middleInitial": null,
+          "lastName": "Carberg",
+          "title": "Busines Development",
+          "addressLine1": "204 Volney Hill",
+          "addressLine2": null,
+          "city": "Shenandoah Junction",
+          "stateOrProvinceCode": "WV",
+          "zipCode": "25442",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "governmentBusinessAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        },
+        "electronicBusinessAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        },
+        "pastPerformancePOC": {
+          "firstName": "Karl",
+          "middleInitial": null,
+          "lastName": "Kosiorek",
+          "title": null,
+          "addressLine1": "6900 Wisconsin Ave",
+          "addressLine2": null,
+          "city": "Bethesda",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20824",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformanceAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        }
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v3/entities?api_key=REPLACE_WITH_API_KEY&ueiSAM=DVTECSRREMZ8&registrationStatus=A&includeSections=entityRegistration%2CcoreData%2Cassertions%2CpointsOfContact&page=0&size=10"
+  }
+}

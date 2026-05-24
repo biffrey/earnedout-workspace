@@ -1,0 +1,47 @@
+{
+  "_fixture": {
+    "source_id": "S2",
+    "kind": "structural-fixture",
+    "endpoint": "GET https://api.sam.gov/entity-information/v3/entities (x-api-key)",
+    "note": "STRUCTURAL ONLY — shape recorded from the SAM.gov Entity Management API public field schema. Identifiers below are illustrative placeholders, NOT a real registered entity. Used solely to exercise the S2 normalization mapping while B3 (no API key) is open. Must not be written to the tracker as a discovered prospect outside a test context."
+  },
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "ueiSAM": "ZZTEST00FIX1",
+        "cageCode": "0ZZ11",
+        "legalBusinessName": "EXAMPLE INTERPRETING FIXTURE LLC",
+        "dbaName": null,
+        "registrationStatus": "Active",
+        "registrationExpirationDate": "2026-11-30"
+      },
+      "coreData": {
+        "physicalAddress": {
+          "addressLine1": "100 Sample St",
+          "city": "Anytown",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "20001",
+          "countryCode": "USA"
+        },
+        "entityInformation": { "entityURL": "https://example-fixture.invalid" }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [{ "naicsCode": "541930", "naicsDescription": "Translation and Interpretation Services" }]
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "Pat",
+          "lastName": "Sample",
+          "title": "Owner",
+          "email": null,
+          "phone": null
+        }
+      },
+      "socioEconomic": { "businessTypeList": ["Small Business"] }
+    }
+  ]
+}

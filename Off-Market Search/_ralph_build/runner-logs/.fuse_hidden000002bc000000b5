@@ -1,0 +1,17 @@
+Iteration 30 complete — one (stage, phase) step done.
+
+**Step executed:** s10 (Assembly, end-to-end dry run) — **VERIFY**
+
+A fresh-context critic subagent independently inspected the s10 artifacts and the two scored report sets on disk. Verdict: **FAIL — 1 BLOCKING**.
+
+**BLOCKING-s10-1** — The Class-2 report (`1st-source-capital-corporation-report.md`) awards 10/10 "Years in business ≥10" points (10 of R2's 30) citing a 1983 formation date, street address, and SEC/CB Insights data that are *absent* from its own `lead-packet.json` — which sets `formation_date: null` and lists "formation date" in `enrichment_gaps`. That back-fills a gap the scorer must pass through as "insufficient data — not awarded". It's fabrication relative to the packet; honest R2 score is 20/100, not 30. The s10 SELF-TEST missed it because C3 inspected only the JSON packets, never the report bodies.
+
+Checks that passed: R1 fixture acceptable (synthetic nature loudly disclosed; plan permits a fixture sample), both lead packets clean, 0 live writes, NOT-SENT markers present, no parallel tracker / no new scorer, blockers honestly disclosed.
+
+**State updated:**
+- s10 → `not_started` (BLOCKING returns the stage to IMPLEMENT)
+- `unresolved_findings` 23 → 27 (BLOCKING-s10-1 + IMPROVE-s10-1, IMPROVE-s10-2, NIT-s10-1)
+- `iteration` → 30
+- Logged in `VERIFY_LOG.md` and `FINDINGS.md`; committed locally (`340ca2d`).
+
+**Signal:** `CONTINUE` — s10 must be re-IMPLEMENTed (re-score R2 strictly from its packet, reconcile the report with `lead-packet.json`); non-blocked work remains.

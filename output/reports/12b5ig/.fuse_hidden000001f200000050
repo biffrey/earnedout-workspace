@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sought After Aircraft Fuel &amp; Service Center — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+  .flag { background: rgba(231,76,60,.10); border: 1px solid rgba(231,76,60,.35);
+          border-radius: 8px; padding: 12px 14px; margin-top: 8px; }
+  .shot { width: 100%; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Sought After Aircraft Fuel &amp; Service Center — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream overnight search (Listing ID 12b5ig)
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict fail">Buy Box: FAIL</span>
+      <div class="score-badge">
+        <div class="num">33</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <div class="flag">
+        <strong>STALE FINANCIALS.</strong> The disclosed Sales ($4,112,992) and Cash Flow ($123,948) cover only the
+        <strong>10 months ending October 2023</strong>. The listing first posted Nov 8 2023 and was renewed Nov 1 2024;
+        as of 2026-05-21 the figures are ~2.5 years old and partial-year. All financial conclusions below treat them as stale.
+      </div>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip warn">INSUF.</span></td><td>"Fully staffed aircraft service center" but no headcount disclosed. 10–20 FTE (est.); not confirmed.</td></tr>
+          <tr><td>2</td><td>EBITDA ≥ $1M / year</td><td><span class="chip fail">FAIL</span></td><td>Disclosed Cash Flow $123,948 for 10 mo ending Oct 2023 (~$148.7K annualized est.). No separate EBITDA; ~7x below the $1M floor.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>Established multi-line FBO on a broad-use ground lease; 10+ years (est.). Confirm founding date with broker / CA SOS.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">INSUF.</span></td><td>Only one 10-month snapshot disclosed. No 3-year trend — cannot verify.</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip warn">INSUF.</span></td><td>Asking price "Not Disclosed / On Request" and EBITDA undisclosed — multiple cannot be computed.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">INSUF.</span></td><td>No asking price, debt structure, or current financials — DSCR cannot be modeled.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Overall Buy Box: FAIL</strong> (1 PASS, 1 FAIL, 4 insufficient data). Deal-killer: ~$149K annualized cash flow is roughly one-seventh of the $1M EBITDA floor, on a structurally thin ~3% margin; headline figures are stale.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>"Sought After Aircraft Fuel &amp; Service Center" (anonymized listing title)</td><td>DealStream 12b5ig</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream overnight published-listing search</td><td>Pipeline</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>10+ <span class="est">(est.)</span></td><td>Listing context</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>$0 — operates on a ground lease (land not owned)</td><td>Listing</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>Not disclosed (fuel trucks, leasehold improvements, shop equipment, rental vehicles implied)</td><td>Listing</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>10–20 <span class="est">(est.)</span></td><td>Listing ("fully staffed")</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>9</td><td>Business address</td><td>Northern California (specific airport not disclosed)</td><td>DealStream listing</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>$4,112,992 — 10 mo ending Oct 2023 only (stale, partial-year)</td><td>DealStream listing</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>$123,948 — "Cash Flow", 10 mo ending Oct 2023 (stale, partial-year)</td><td>DealStream listing</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>Not Disclosed / On Request</td><td>DealStream listing</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>Cannot compute — only one partial-year period disclosed</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>~3.0% <span class="est">(est.)</span> — cash flow $123,948 ÷ sales $4,112,992, same 10-mo period</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">left blank per spec</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">left blank per spec</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td>Not available — request from broker</td><td>—</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>33 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Aerospace TOP-PRIORITY — an FBO / aircraft service center (aviation mechanical services, avionics, parts, maintenance). Non-weapons.</td></tr>
+          <tr><td>EBITDA tier</td><td>0</td><td>15</td><td>Disclosed cash flow $123,948 (10-mo) ≈ $148.7K annualized — ≤$1M tier → 0 pts.</td></tr>
+          <tr><td>Years in business ≥10</td><td>10</td><td>10</td><td>Established multi-line FBO on a long-term ground lease; 10+ years (est.).</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>0</td><td>10</td><td>Insufficient data — only one 10-month snapshot disclosed → not awarded.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>Mixed — hangar/office rentals &amp; aircraft management recurring; fuel, MRO, brokerage, vehicle rental transactional. Partial credit.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Not disclosed — never guess → not awarded.</td></tr>
+          <tr><td>Employees ≥10</td><td>0</td><td>10</td><td>Insufficient data — "fully staffed" but no headcount → not awarded.</td></tr>
+          <tr><td>Valuation multiple</td><td>0</td><td>15</td><td>Asking price AND EBITDA undisclosed — multiple cannot be computed → not awarded (no guessed pass).</td></tr>
+          <tr><td>Low owner dependence</td><td>3</td><td>5</td><td>"Management will stay" — favorable, but GM vs. owner-operator structure unknown. Partial credit.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>0</td><td>10</td><td>N/A — standalone target (not translation/interpretation or commercial waste).</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>33</strong></td><td><strong>100</strong></td><td>Band: &lt; 50 — Pass.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> Anonymized multi-line fixed-base operation (FBO) / aircraft service center at a Northern California airport, on a ground lease — fuel sales, aviation mechanical services, hangar &amp; office rentals, aircraft sales &amp; brokerage, avionics, parts, and vehicle rental. Listed by Michael Floorman, President of BTI Group / Business Team.</li>
+        <li><strong>Financial highlights:</strong> Disclosed Sales $4,112,992 and Cash Flow $123,948 — but only for the 10 months ending October 2023 (~3.0% cash-flow margin; ~$148.7K annualized). All figures ~2.5 years stale.</li>
+        <li><strong>Buy Box summary:</strong> FAIL — EBITDA ~7x below the $1M floor; financials stale; asking price &amp; EBITDA undisclosed so the valuation gate cannot be tested; headcount and 3-year growth unverifiable.</li>
+        <li><strong>Why not pursue:</strong> Cash flow (~$149K annualized) is an order of magnitude below EarnedOut's $1M floor — SBA-scale, not an LBO target. Margins are structurally thin (~3%) because fuel resale is a low-margin pass-through that inflates "sales." Leasehold operation — no owned real estate; ground-lease terms unknown.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p>A "sought after" aircraft fuel and service center at a Northern California general-aviation airport. The business holds a ground lease whose permitted uses are broad — ground &amp; flight school, aircraft maintenance &amp; repair, parts sales, charter &amp; rental, avionics upgrades, and aircraft management — indicating an established, multi-decade FBO footprint. Ownership entity not disclosed; confirm via California Secretary of State.</p>
+      <p><strong>Timeline:</strong> Year unknown — FBO established on a ground lease. Nov 8 2023 — listed on DealStream by BTI Group. Nov 1 2024 — listing renewed (still unsold ~1 year later). 2026-05-21 — still listed; financials shown remain the Jan–Oct 2023 period.</p>
+      <p><strong>Leadership:</strong> "Fully staffed" with management that "will stay" post-sale. Whether a non-owner general manager runs day-to-day operations is not disclosed.</p>
+      <img class="shot" src="12b5ig.png" alt="DealStream listing screenshot for listing 12b5ig" />
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <p>The seller and operating principals are not disclosed (anonymized listing). The only named contact is the broker.</p>
+      <h3>Michael Floorman — President, BTI Group / Business Team (Broker, not a principal)</h3>
+      <p>Listing broker / intermediary. Senior figure at BTI Group / Business Team, the largest business brokerage in the Western US (5,600+ closed transactions since 1981), with offices in San Jose / Campbell and Sacramento, CA. Broker profiles on BizBuySell and BizQuest. Open diligence item: obtain seller/owner identity, the operating GM, and any A&amp;P-certificated mechanics on staff.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Lines of business:</strong> fuel services &amp; sales (avgas / Jet-A — the dominant, thin-margin line); aviation mechanical services (aircraft maintenance &amp; repair); hangar &amp; office rentals (recurring leasehold income); aircraft sales &amp; brokerage (episodic); vehicle rental. Latent permitted lines under the ground lease: ground &amp; flight school, parts sales, charter &amp; rental, avionics upgrades, aircraft management.</p>
+      <p><strong>Pricing model:</strong> mostly transactional (per-gallon fuel, T&amp;M maintenance, per-deal brokerage) with a recurring slice from hangar/office leases and any aircraft-management contracts.</p>
+      <p><strong>Differentiators:</strong> location on a fixed airport footprint with a broad-use ground lease — an FBO's value is its airport access. Being the "sought after" service center at its field suggests an entrenched, possibly sole-FBO position.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> The US FBO market is large and growing — global FBO market estimates range ~$23B–$35B in 2025 with CAGR estimates from ~4.4% to low double digits. Business aviation is ~73% of US FBO demand; private-jet departures sit ~15% above pre-pandemic levels. SAF adoption and eVTOL infrastructure are emerging tailwinds; 34+ FBO M&amp;A transactions globally in 2023 signal active consolidation.</p>
+      <p><strong>Drivers:</strong> strong business-aviation traffic, SAF demand, hangar-space scarcity supporting rental pricing. <strong>Headwinds:</strong> FBO economics are dominated by fuel — a volatile, low-margin pass-through; ground-lease tenure is existential.</p>
+      <p><strong>Valuation benchmarks:</strong> FBOs are valued on a multiple of EBITDA; healthy FBOs commonly trade ~4x–7x EBITDA, at or above EarnedOut's 4.0x ceiling. National chains (Signature, Atlantic, Million Air) are the consolidators; an independent single-field FBO this size is a small tuck-in, not a platform. At ~$149K annualized cash flow this target is materially sub-scale.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Segments:</strong> based aircraft owners (hangar/office tenants, maintenance, fuel), transient general-aviation and business-jet traffic, and brokerage-line buyers/sellers. B2B and prosumer. <strong>Recurring vs one-time:</strong> mixed — hangar/office rentals and aircraft management recurring; fuel, maintenance, brokerage, vehicle rental transactional or repeat-but-uncontracted. <strong>Retention</strong> and <strong>customer concentration</strong> not disclosed; hangar tenancy tends to be sticky given regional hangar scarcity.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2023 (10 mo, Jan–Oct)</td><td>$4,112,992</td><td>Cash Flow $123,948 (no separate EBITDA)</td><td>~3.0% cash-flow</td><td>—</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2025 (annualized)</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <p>No trajectory can be drawn — only a single partial-year (10-month) period is disclosed, and it is ~2.5 years old. Per the skill's anti-fabrication rule, revenue and cash flow for 2022/2024/2025 are left blank. A meaningful read requires full-year 2023, 2024, and 2025-YTD P&amp;Ls plus a balance sheet from the broker.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>cannot be computed</strong> — asking price "Not Disclosed / On Request" and EBITDA undisclosed. Healthy FBOs trade ~4x–7x EBITDA. Even at a generous 4.0x on ~$149K annualized cash flow, implied enterprise value (~$0.6M) is far below EarnedOut's deal size — the decisive issue is absolute earnings scale, not the multiple.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>Aerospace — EarnedOut TOP-PRIORITY industry</li>
+          <li>Established multi-line FBO; broad-use ground lease (school, MRO, charter, avionics, management permitted)</li>
+          <li>Diversified revenue; hangar income recurring</li>
+          <li>Management to stay post-sale</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>Cash flow ~$149K annualized — ~7x below the $1M EBITDA floor</li>
+          <li>~3% cash-flow margin — structurally thin (fuel-resale pass-through)</li>
+          <li>No owned real estate — leasehold operation; ground-lease term unknown</li>
+          <li>All disclosed financials stale (10 mo ending Oct 2023)</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>Activate latent permitted lines — flight school, charter, avionics, aircraft management</li>
+          <li>Hangar-space scarcity supports rental pricing/occupancy upside</li>
+          <li>SAF adoption and business-aviation tailwinds</li>
+          <li>Pricing/yield modernization (into-plane margin, hangar yield)</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Fuel-price volatility and margin compression</li>
+          <li>Ground-lease non-renewal / unfavorable reset could erase enterprise value</li>
+          <li>National FBO chains compete for fuel volume and hangar tenants</li>
+          <li>Listing unsold since Nov 2023 despite renewal — pricing or earnings-quality signal</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> FBO profitability is hostage to fuel volume and into-plane margin; fuel is a volatile, low-margin pass-through that inflates "sales" without proportionate earnings.</li>
+        <li><strong>Financial:</strong> Cash flow ~7x below the Buy Box floor; ~3% margin; no 3-year trend; undisclosed customer concentration; stale headline figures.</li>
+        <li><strong>Operational:</strong> Headcount unconfirmed; depends on retaining A&amp;P-certificated mechanics and line staff; owner-dependence unknown.</li>
+        <li><strong>Regulatory / legal:</strong> FAA oversight of any Part 145 repair-station or Part 135 charter activity; airport-sponsor minimum-standards compliance; environmental exposure from fuel storage/handling (USTs/ASTs, spill liability).</li>
+        <li><strong>Deal conditions:</strong> Asking price undisclosed — cannot test the 4.0x ceiling. Financials stale — full-year 2023/2024/2025-YTD P&amp;Ls and a balance sheet required before further work. Ground-lease term, escalators, and assignability must be verified — potential deal-killers independent of the financials.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p>Real upside exists on paper — the ground lease already permits flight school, charter, avionics upgrades, and aircraft management, lines with better margins than fuel resale. But realizing it requires capital and operating runway disproportionate to a ~$149K-cash-flow base. Hangar yield management and into-plane margin discipline could lift earnings without changing the sub-scale starting point. The business could be a small tuck-in for a regional FBO operator; it is not a standalone EarnedOut platform or add-on.</p>
+      <p><strong>Recommendation: Pass.</strong> Even granting best-case assumptions on the four "insufficient data" lines, the EBITDA gate fails decisively — disclosed cash flow is ~7x below the floor on a structurally thin margin, and the figures are stale. Revisit only if the broker produces current full-year statements showing EBITDA has grown past ~$1M (a roughly 7x jump), which is not plausible from the disclosed trajectory.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/oth-personal-svc/12b5ig">dealstream.com/d/biz-sale/oth-personal-svc/12b5ig</a> — primary listing: description, disclosed Sales $4,112,992 / Cash Flow $123,948 (10 mo ending Oct 2023), broker, location, ground-lease detail.</li>
+        <li>output/screenshots/12b5ig.png — captured listing screenshot confirming undisclosed asking price and the financials block.</li>
+        <li><a href="https://www.bizbuysell.com/business-broker/michael-floorman/bti-group-business-team/25718/">BizBuySell — Michael Floorman / BTI Group</a> — broker identity / affiliation.</li>
+        <li><a href="https://www.bizquest.com/business-broker/bti-group-inc/michael-floorman/BW32850/">BizQuest — Michael Floorman / BTI Group</a> — corroborating broker profile.</li>
+        <li><a href="https://business-team.com/btigroupma/sell.html">business-team.com/btigroupma</a> — BTI Group / Business Team firm background.</li>
+        <li><a href="https://www.aviationpros.com/home/article/10388326/determining-fbo-multiples">AviationPros — Determining FBO Multiples</a> — FBO EBITDA-multiple valuation practice.</li>
+        <li><a href="https://www.marketresearchfuture.com/reports/fixed-base-operators-fbo-market-26079">Market Research Future — FBO market</a> — market size and ~4.41% CAGR.</li>
+        <li><a href="https://datahorizzonresearch.com/blog/fixed-base-operators-fbo-market-business-aviation-companies-397">DataHorizzon — FBO market</a> — business aviation ~73% of US FBO demand; consolidation.</li>
+        <li><a href="https://www.gminsights.com/industry-analysis/aviation-fuel-market">GM Insights — Aviation Fuel Market</a> — aviation-fuel context and SAF trend.</li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>Annualized cash flow: $123,948 × 12/10 = $148,738 full-year-equivalent (est.). Used only to scale the partial-year figure; not treated as actual EBITDA.</li>
+        <li>"10+ years in business" inferred from listing language describing an established, "sought after" multi-line FBO on a broad-use ground lease. Not confirmed against CA SOS; tagged (est.).</li>
+        <li>"10–20 FTE" inferred from "fully staffed" multi-line FBO. Not awarded Buy Box / scoring credit.</li>
+        <li>EBITDA margin ~3.0% computed from the two disclosed same-period figures; labeled cash-flow margin, not a verified EBITDA margin.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #3 — Years in business</strong> — Estimated at 10+ years.<br>
+         Method: qualitative inference from listing language (established "sought after" FBO; broad-use long-term ground lease). No primary source confirms a founding date.<br>
+         Sources: https://dealstream.com/d/biz-sale/oth-personal-svc/12b5ig</p>
+      <p><strong>Field #6 — Full-time employees</strong> — Estimated at 10–20.<br>
+         Method: inference from "fully staffed aircraft service center" running multiple lines (fuel, maintenance, rentals, brokerage). No headcount disclosed.<br>
+         Sources: https://dealstream.com/d/biz-sale/oth-personal-svc/12b5ig</p>
+      <p><strong>Field #21 — EBITDA margin</strong> — Estimated at ~3.0%.<br>
+         Method: disclosed Cash Flow $123,948 ÷ disclosed Sales $4,112,992 = 3.01%, both for the 10 months ending Oct 2023. Cash-flow margin on a partial period; true EBITDA margin requires full-year statements.<br>
+         Sources: https://dealstream.com/d/biz-sale/oth-personal-svc/12b5ig</p>
+      <h3>D. Documents reviewed</h3>
+      <ul><li>output/screenshots/12b5ig.png — DealStream listing screenshot; confirmed undisclosed asking price, the disclosed Sales/Cash Flow block, broker, and "Deal Terms — Available On Request" fields.</li></ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>Provide full-year 2023, full-year 2024, and 2025-YTD P&amp;Ls plus a current balance sheet — disclosed figures cover only Jan–Oct 2023.</li>
+        <li>What is the asking price, and how is it derived?</li>
+        <li>Separately stated EBITDA (vs. "Cash Flow") and add-backs included?</li>
+        <li>Ground lease: lessor (airport sponsor?), remaining term, rent and escalators, renewal options, assignability on change of control.</li>
+        <li>Confirmed FTE / PT / 1099 headcount, including A&amp;P-certificated mechanics.</li>
+        <li>Revenue mix by line and the recurring-vs-transactional split.</li>
+        <li>Customer concentration — largest customer and top-5 share.</li>
+        <li>Founding date / entity history.</li>
+        <li>Does a non-owner GM run day-to-day operations? What does "management will stay" mean contractually?</li>
+        <li>Owned real estate, fuel-storage assets (UST/AST), and environmental compliance status.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources.</footer>
+</div>
+</body>
+</html>

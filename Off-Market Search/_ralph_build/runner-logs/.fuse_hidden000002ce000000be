@@ -1,0 +1,11 @@
+Iteration 61 complete — RESOLVE phase.
+
+**Step taken:** Resolved **NIT-s5-1** (cosmetic provenance mis-citation in s4 SELF-TEST evidence).
+
+- Changed the §6.1 R1 cluster bullet in `evidence/s4-selftest.md`: `psc [R608]` "(from rec 3-shape)" → "(from rec 5/S3 only)" — record 3 is a different entity (S1); the actual sole `psc` contributor is rec 5 (S3 `pscCode`), per the iter-60 merge trace.
+- Refreshed the merge-trace footnote that had named the label as still-open.
+- Moved NIT-s5-1 to FINDINGS.md "Resolved"; `unresolved_findings` 22 → 21.
+- `STATE.md`: `iteration` 60 → 61.
+- Logged to `IMPLEMENTATION_LOG.md`, committed `3027e3b`.
+
+Evidence-only change — no resolution/dedup/merge behavior touched. 21 findings remain; signal set to **CONTINUE**.

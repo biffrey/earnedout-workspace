@@ -1,0 +1,47 @@
+{
+  "entity_id": "UEI:LSEHC45NMB28",
+  "target_class": 1,
+  "business_name": "TRANSLATION EXCELLENCE INC.",
+  "industry": "Multi-language LSP (135 languages) with ASL service line (NAICS 541930, adjacent \u2014 spoken-language firm with deaf-services add-on)",
+  "location": {
+    "city": "Aurora",
+    "state": "CO"
+  },
+  "website": "https://translationexcellence.com/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": "2010-01-01",
+  "years_in_business": 15,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "signal: $39.2M of federal contract revenue trailing 5 FYs \u2014 multi-language firm, ASL is one revenue stream \u2014 gov-contract revenue only",
+  "federal_award_total": 39217429.83,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": null,
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": null,
+  "sbic_gp_economics": null,
+  "gov_data_source": [
+    "USAspending"
+  ],
+  "provenance_urls": [
+    "https://www.usaspending.gov/recipient/4b7782a3-fead-45c1-c503-62a27d415340-C/latest"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": "adjacent",
+  "summary": "Aurora CO. Translation, interpretation, and language training in 135+ languages. Offers ASL interpreting (on-site, video remote, specialized) as one service among many. ISO certified (9001, 17100, 13485). Established 2010.",
+  "fit_note": "Multi-language LSP, not deaf-services-only \u2014 adjacent fit for Applied Development",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "primary contact name \u2014 needs follow-up",
+    "employee count \u2014 needs follow-up"
+  ],
+  "deaf_specificity": "weak",
+  "sbic_funds": null
+}

@@ -1,0 +1,1217 @@
+[
+  {
+    "recipient_id": "aee3ebde-7484-0fac-c8b8-43896b620d02-C",
+    "name": "SOS INTERNATIONAL LLC",
+    "award_total": 731938211.86,
+    "award_count": 24,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "FL",
+      "SC",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SOS INTERNATIONAL  LANGUAGE SERVICES FOR EOIR",
+      "SOS INTERNATIONAL IN-PERSON AND SCHEDULED TELEPHONIC INTERPRETING SERVICES CONTRACT # DJJ-15-C-2610",
+      "SOS INTERNATIONAL  LANGUAGE SERVICES FOR EOIR"
+    ],
+    "narrow_kw_hits": [
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "INTERPRETER",
+      "INTERPRETING",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "L3VCKMD7J585",
+    "duns": "078405331",
+    "parent_name": "SOS INTERNATIONAL LLC",
+    "parent_uei": "L3VCKMD7J585",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "limited_liability_corporation",
+      "other_than_small_business",
+      "special_designations",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "1881 CAMPUS COMMONS DRIVE",
+      "city": "RESTON",
+      "state": "VA",
+      "zip": "20191",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": []
+  },
+  {
+    "recipient_id": "4b7782a3-fead-45c1-c503-62a27d415340-C",
+    "name": "TRANSLATION EXCELLENCE INC.",
+    "award_total": 48485697.59,
+    "award_count": 13,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CO",
+      "DC",
+      "GA",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "NATIONWIDE SIGN LANGUAGE & CAPTION ACCESS REAL-TIME SERVICES",
+      "SIGN LANGUAGE AND TRANSCRIPTION SERVICES",
+      "SIGN LANGUAGE INTERPRETING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [
+      "FOREIGN LANGUAGE"
+    ],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "LSEHC45NMB28",
+    "duns": "037881967",
+    "parent_name": "TRANSLATION EXCELLENCE INC.",
+    "parent_uei": "LSEHC45NMB28",
+    "business_types": [
+      "8a_program_participant",
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "historically_underutilized_business_firm",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "3300 S PARKER RD",
+      "city": "AURORA",
+      "state": "CO",
+      "zip": "80014",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "TRANSLATION EXCELLENCE INC"
+    ]
+  },
+  {
+    "recipient_id": "7fc32726-99ce-8f72-bbcf-42af91b856ea-C",
+    "name": "ACCESS INTERPRETING INC",
+    "award_total": 40080137.68,
+    "award_count": 12,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SIGN LANGUAGE INTERPRETING, CART (COMMUNICATION ACCESS REAL-TIME TRANSLATION), AND CUED SPEECH LANGUAGE TRANSLITERATOR SERVICES FOR THE DEAF AND HARD OF HEARING EMPLOYEES.",
+      "SIGN LANGUAGE INTERPRETING SERVICE",
+      "SIGN LANGUAGE INTERPRETING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "FUT6MQ1MCDC9",
+    "duns": "809104529",
+    "parent_name": "ACCESS INTERPRETING INC",
+    "parent_uei": "FUT6MQ1MCDC9",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "small_business",
+      "special_designations",
+      "subchapter_s_corporation",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "10507 OAKTON RIDGE CT",
+      "city": "OAKTON",
+      "state": "VA",
+      "zip": "22124",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "ACCESS INTERPRETING INC."
+    ]
+  },
+  {
+    "recipient_id": "81ba951a-b70e-7794-cbbc-d6477bc9b084-C",
+    "name": "TCS INTERPRETING, INC.",
+    "award_total": 34767311.31,
+    "award_count": 12,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "IGF::OT::IGF - AGENCY-WIDE ASL INTERPRETER AND CART SERVICES MANAGED BY OCRD.",
+      "THE SERVICE OBJECTIVE OF THIS CALL ORDER IS TO PROCURE AMERICAN SIGN LANGUAGE (ASL) INTERPRETATION SERVICES THAT MEET THE OBJECTIVES IN THE BELOW PERFORMANCE WORK STATEMENT (PWS).  THIS BPA CALL ORDER FOR ASL SUPPORT SERVICES FOR THE OFFICE OF EQUAL",
+      "VIDEO REMOTE INTERPRETING (VRI) AND RELAY CONFERENCE CAPTIONING (RCC) / COMMUNICATION ACCESS REALTIME TRANSLATION (CART)"
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "VIDEO REMOTE INTERPRETING",
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CART",
+      "COMMUNICATION ACCESS",
+      "DEAF",
+      "HARD OF HEARING",
+      "INTERPRETER",
+      "INTERPRETING",
+      "VIDEO REMOTE INTERPRETING",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "MQ42VNNUK3J9",
+    "duns": "112636170",
+    "parent_name": "TCS INTERPRETING, INC.",
+    "parent_uei": "MQ42VNNUK3J9",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "8701 GEORGIA AVE STE 510",
+      "city": "SILVER SPRING",
+      "state": "MD",
+      "zip": "20910",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "ABACUS N BYTES INCORPORATED",
+      "ABACUS-N-BYTES  INC.",
+      "ABACUS-N-BYTES, INC",
+      "ABACUS-N-BYTES, INC.",
+      "TCS INTERPRETING  INC."
+    ]
+  },
+  {
+    "recipient_id": "8f12f55c-624d-ecf7-7165-2f952e2ad87f-C",
+    "name": "FIS-DAS INTERPRETING SERVICES",
+    "award_total": 33099492.24,
+    "award_count": 11,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD",
+      "WV"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "THIS IS A NEW TASK ORDER FROM 9/30/2024 - 9/29/2025 FOR RAPID RESPONSE & DOS WORK ORDERS",
+      "THIS IS A NEW TASK ORDER FOR CONTRACT #28321322D00060019 FOR JANUARY 1, 2024, THROUGH SEPTEMBER 29, 2024, FOR RAPID RESPONSE & DOS WORK ORDERS.",
+      "THIS IS A NEW TASK ORDER TO PROVIDE SIGN LANGUAGE INTERPRETING SERVICES FOR 6 MONTHS FROM 9/30/2025 - 3/29/2026."
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "DEAF",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "DEAF",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "DVTECSRREMZ8",
+    "duns": "117064591",
+    "parent_name": "FIS-DAS INTERPRETING SERVICES",
+    "parent_uei": "DVTECSRREMZ8",
+    "business_types": [
+      "category_business",
+      "dot_certified_disadvantaged_business_enterprise",
+      "joint_venture_economically_disadvantaged_women_owned_small_business",
+      "joint_venture_women_owned_small_business",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "204 VOLNEY HL",
+      "city": "SHENANDOAH JUNCTION",
+      "state": "WV",
+      "zip": "25442",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": []
+  },
+  {
+    "recipient_id": "f062ef8f-5a92-eb7e-7996-3f367f83ad4b-C",
+    "name": "DEAF ACCESS SOLUTIONS, INC",
+    "award_total": 30999608.13,
+    "award_count": 8,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "CA",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "FURNISH SIGN LANGUAGE INTERPRETING SERVICES IN RELATION TO THE AGENCYS REASONABLE ACCOMMODATION PROGRAM ON AN AS NEEDED BASIS AND PROVIDE ORAL TRANSLITERATION AND COMPUTER ASSISTED REAL TIME TRANSLATION SERVICE ON AN AS NEEDED BASIS.",
+      "SIGN LANGUAGE INTERPRETING SERVICES",
+      "SIGN LANGUAGE INTERPRETATION SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "DEAF",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "DEAF",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "NLGQMMKF25X7",
+    "duns": "078748913",
+    "parent_name": "DEAF ACCESS SOLUTIONS, INC",
+    "parent_uei": "NLGQMMKF25X7",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "small_business",
+      "special_designations",
+      "subchapter_s_corporation",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "4813 LELAND ST",
+      "city": "BETHESDA",
+      "state": "MD",
+      "zip": "20815",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "DEAF ACCESS SOLUTIONS  INC",
+      "DEAF ACCESS SOLUTIONS, INC."
+    ]
+  },
+  {
+    "recipient_id": "9515182c-9747-d27e-b80f-6610b179fede-C",
+    "name": "SENECA GLOBAL SERVICES LLC",
+    "award_total": 30032109.84,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ASL INTERPRETER AND CART SERVICES",
+      "ASL INTERPRETER AND CART SERVICES",
+      "ASL INTERPRETER AND CART SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "ASL",
+      "CART"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "CART",
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "HYDWL7JCHBG4",
+    "duns": "828832449",
+    "parent_name": "SENECA GLOBAL SERVICES LLC",
+    "parent_uei": "HYDWL7JCHBG4",
+    "business_types": [
+      "8a_program_participant",
+      "american_indian_owned_business",
+      "category_business",
+      "government",
+      "indian_native_american_tribal_government",
+      "limited_liability_corporation",
+      "minority_owned_business",
+      "native_american_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "sole_proprietorship",
+      "special_designations",
+      "tribally_owned_firm",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "14200 PARK MEADOW DR",
+      "city": "CHANTILLY",
+      "state": "VA",
+      "zip": "20151",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "NEXUS TECHNOLOGY SOLUTIONS LLC",
+      "RAVENTEK MISSION SYSTEMS, LLC",
+      "SENECA GLOBAL SERVICES, LLC"
+    ]
+  },
+  {
+    "recipient_id": "07a1c44a-872c-34ae-fdef-bb78050db1bd-C",
+    "name": "APPLIED DEVELOPMENT, LLC",
+    "award_total": 27454610.31,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "DC",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ASL INTERPRETING/CART/NOTETAKING SERVICES ASL/CART/NT",
+      "SIGN LANGUAGE INTERPRETING SERVICES-UNCLASSIFIED, SECRET, AND CLASSIFIED UP TO TS",
+      "INTERPRETER SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "ASL",
+      "CART",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "CART",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "HD22ZQ4MGK33",
+    "duns": "078516013",
+    "parent_name": "APPLIED DEVELOPMENT, LLC",
+    "parent_uei": "HD22ZQ4MGK33",
+    "business_types": [
+      "8a_program_participant",
+      "black_american_owned_business",
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "economically_disadvantaged_women_owned_small_business",
+      "historically_underutilized_business_firm",
+      "limited_liability_corporation",
+      "minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "service_disabled_veteran_owned_business",
+      "small_business",
+      "special_designations",
+      "subchapter_s_corporation",
+      "us_owned_business",
+      "veteran_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "6200 BALTIMORE AVE STE 300-R27",
+      "city": "RIVERDALE",
+      "state": "MD",
+      "zip": "20737",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "APPLIED DEVELOPMENT",
+      "APPLIED DEVELOPMENT  LLC",
+      "APPLIED DEVELOPMENT LLC"
+    ]
+  },
+  {
+    "recipient_id": "5f8bdab0-9170-04b3-598a-8167483b971e-C",
+    "name": "MID-ATLANTIC INTERPRETING GROUP, INC.",
+    "award_total": 22219534.03,
+    "award_count": 7,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD",
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "PROVIDE AMERICAN SIGN LANGUAGE (ASL)/ENGLISH INTERPRETING SERVICES FOR THE DEPARTMENT BASED ON THE LEGAL MANDATE SET FORTH IN THE REHABILITATION ACT OF 1973, AS AMENDED, 29 U.S.C. 791 ET SEQ.  UNDER THIS LAW, TOGETHER WITH THE AMERICANS WITH DISABILITIES ACT AMENDMENTS ACT OF 2008, THAT IS INCORPORATED INTO FEDERAL REGULATIONS AT 29 CFR 1630 GOVERNING THE EQUAL EMPLOYMENT OPPORTUNITY COMMISSION, FEDERAL AGENCIES MUST PROVIDE REASONABLE ACCOMMODATION TO QUALIFIED EMPLOYEES AND APPLICANTS FOR EMPLOYMENT WITH DISABILITIES, WITH LIMITED EXCEPTIONS INCLUDING, BUT NOT LIMITED TO, BUSINESS NECESSITY, UNDUE HARDSHIP, AND DIRECT THREAT.IGF::OT::IGF",
+      "ON-CALL SIGN LANGUAGE INTERPRETING SERVICES",
+      "REASONABLE ACCOMMODATIONS SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CAPTIONING SERVICES",
+      "CART",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "AMERICAN SIGN LANGUAGE",
+      "ASL",
+      "CAPTIONING SERVICES",
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "LCYFBNAT8EY4",
+    "duns": "555696884",
+    "parent_name": "MID-ATLANTIC INTERPRETING GROUP, INC.",
+    "parent_uei": "LCYFBNAT8EY4",
+    "business_types": [
+      "8a_program_participant",
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "economically_disadvantaged_women_owned_small_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "subchapter_s_corporation",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "8174 LARK BROWN RD STE 202",
+      "city": "ELKRIDGE",
+      "state": "MD",
+      "zip": "21075",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "MID ATLANTIC INTERPRETING GROUP INCORPORATED",
+      "MID-ATLANTIC INTERPRETING GROUP  INC."
+    ]
+  },
+  {
+    "recipient_id": "1e60693e-378c-12b4-1711-75de32cd68a2-C",
+    "name": "FRIENDS INTERPRETING SERVICES LLC",
+    "award_total": 16379734.69,
+    "award_count": 7,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC",
+      "MD",
+      "WV"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "U.S DEPARTMENT OF TRANSPORTATION DOT-WIDE INTERPRETING & CAPTIONING SERVICES CONTRACT FOR ALL OPERATING ADMINISTRATIONS WITHIN THE DOT.",
+      "TASK ORDER FOR SIGN LANGUAGE INTERPRETING SERVICES ONE BASE PERIOD [10 MONTHS] AND 4 OPTION YEARS.",
+      "HUD INTERPRETER SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "CAPTIONING SERVICES",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "CAPTIONING SERVICES",
+      "DEAF",
+      "HARD OF HEARING",
+      "INTERPRETER",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "VJ1RLKHJ2LF3",
+    "duns": "968925409",
+    "parent_name": "FRIENDS INTERPRETING SERVICES LLC",
+    "parent_uei": "VJ1RLKHJ2LF3",
+    "business_types": [
+      "8a_program_participant",
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "economically_disadvantaged_women_owned_small_business",
+      "joint_venture_women_owned_small_business",
+      "limited_liability_corporation",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "204 VOLNEY HILL ROAD",
+      "city": "SHENANDOAH JUNCTION",
+      "state": "WV",
+      "zip": "25442",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "FRIENDS INTERPRETING SERVICES  LLC",
+      "FRIENDS INTERPRETING SERVICES, LLC"
+    ]
+  },
+  {
+    "recipient_id": "f7747802-731c-0690-b7a1-8774bfbfae9b-C",
+    "name": "GREAT HILL SOLUTIONS, LLC",
+    "award_total": 11491870.48,
+    "award_count": 2,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "UNCLEARED, SECRET CLEARED, TOP-SECRET/SCI CLEARED ASL INTERPRETER SVS.",
+      "UNCLEARED, SECRET CLEARED, TOP-SECRET/SCI CLEARED ASL INTERPRETER SVS."
+    ],
+    "narrow_kw_hits": [
+      "ASL"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "INTERPRETER",
+      "INTERPRETING"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "D3DYHNPJ6W14",
+    "duns": "081088054",
+    "parent_name": "GREAT HILL SOLUTIONS, LLC",
+    "parent_uei": "D3DYHNPJ6W14",
+    "business_types": [
+      "8a_program_participant",
+      "american_indian_owned_business",
+      "category_business",
+      "government",
+      "indian_native_american_tribal_government",
+      "limited_liability_corporation",
+      "minority_owned_business",
+      "native_american_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "sole_proprietorship",
+      "special_designations",
+      "tribally_owned_firm",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "14200 PARK MEADOW DR",
+      "city": "CHANTILLY",
+      "state": "VA",
+      "zip": "20151",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "GREAT HILL SOLUTIONS  LLC",
+      "GREAT HILL SOLUTIONS LLC"
+    ]
+  },
+  {
+    "recipient_id": "63dca34f-443d-8160-2fff-748d4453fe44-C",
+    "name": "DIVERSIFIED SIGN LANGUAGE SERVICES, LLC",
+    "award_total": 8096605.93,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [
+      "{'code': 'R608', 'description': 'SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING'}"
+    ],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "PROVIDE SIGN LANGUAGE INTERPRETING SERVICES AT NASA GODDARD SPACE FLIGHT CENTER AND WALLOPS.",
+      "SIGN LANGUAGE INTERPRETING SERVICES AND CART SERVICES",
+      "PROVIDE SIGN LANGUAGE INTERPRETING SERVICES AT NASA GODDARD SPACE FLIGHT CENTER AND WALLOPS."
+    ],
+    "narrow_kw_hits": [
+      "CART",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930",
+      "S1.PSC_R608"
+    ],
+    "uei": "LVLAMSB8NHM1",
+    "duns": "825481922",
+    "parent_name": "DIVERSIFIED SIGN LANGUAGE SERVICES, LLC",
+    "parent_uei": "LVLAMSB8NHM1",
+    "business_types": [
+      "8a_program_participant",
+      "black_american_owned_business",
+      "category_business",
+      "dot_certified_disadvantaged_business_enterprise",
+      "limited_liability_corporation",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "11208 SILVER TREE PL",
+      "city": "COLUMBIA",
+      "state": "MD",
+      "zip": "21044",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "DIVERSIFIED SIGN LANGUAGE SERVICES  LLC",
+      "DIVERSIFIED SIGN LANGUAGE SERVICES LIMITED LIABILITY COMPANY"
+    ]
+  },
+  {
+    "recipient_id": "195a3661-c629-785f-6d21-698b164d196b-C",
+    "name": "VITAL SIGNS, LLC.",
+    "award_total": 7160782.08,
+    "award_count": 4,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC",
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "CONTRACT TO PROVIDE SIGN LANGUAGE INTERPRETERS AND COMMUNICATION ACCESS REALTIME TRANSLATION SERVICES FOR THE IRS NATIONWIDE.",
+      "THE PURPOSE OF THIS TASK ORDER IS THAT THE CONTRACTOR SHALL PROVIDE FOR SIGN LANGUAGE INTERPRETING SERVICES FOR DOT-WIDE WHICH INCLUDES REGION 1 (WASHINGTON DC METROPOLITAN AREA) AND REGION 2 (OUTSIDE OF WASHINGTON DC METROPOLITAN AREA), IN ACCORDAN",
+      "NEW DELIVERY ORDER UNDER IDIQ DTOS5917D00500 FOR SIGN LANGUAGE INTERPRETING SERVICES FOR DOT-WIDE WHICH INCLUDES REGION 1 (WASHINGTON DC METROPOLITAN AREA) AND REGION 2 (OUTSIDE OF WASHINGTON DC METROPOLITAN AREA)  THE PERIOD OF PERFORMANCE OF THI"
+    ],
+    "narrow_kw_hits": [
+      "COMMUNICATION ACCESS",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "COMMUNICATION ACCESS",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "U36EW1EKB3D3",
+    "duns": "198988693",
+    "parent_name": "VITAL SIGNS  LLC.",
+    "parent_uei": "XPRPBYXP1HN9",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "economically_disadvantaged_women_owned_small_business",
+      "limited_liability_corporation",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "1308 HEATHER CREST TER",
+      "city": "SILVER SPRING",
+      "state": "MD",
+      "zip": "20902",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "JOYCE DWORSKY SROUR",
+      "JOYCE M DWORSKY SROUR",
+      "JOYCE M DWORSKY-SROUR",
+      "VITAL SIGNS  LLC.",
+      "VITAL SIGNS LLC"
+    ]
+  },
+  {
+    "recipient_id": "d2a8fc4b-7447-a358-2cf6-38bf68043039-C",
+    "name": "STUART B. CONSULTANTS, INC.",
+    "award_total": 6399547.62,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "MD"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "CART & VRI SERVICES",
+      "IGF::OT::IGF INTERPRETING AND SIGN LANGUAGE SERVICES",
+      "FDA REMOTE CONFERENCE CAPTIONING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "CAPTIONING SERVICES",
+      "CART",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "broad_kw_hits": [
+      "CAPTIONING SERVICES",
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE",
+      "VRI"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "MRXCK2NUH7D5",
+    "duns": "196560239",
+    "parent_name": "STUART B. CONSULTANTS  INC",
+    "parent_uei": "HWJZMZGJK3D3",
+    "business_types": [
+      "black_american_owned_business",
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "3509 SHEPHERD ST",
+      "city": "CHEVY CHASE",
+      "state": "MD",
+      "zip": "20815",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "STUART B CONSULTANT INC",
+      "STUART B CONSULTANTS INCORPORATED",
+      "STUART B CONSULTANTS, INC",
+      "STUART B. CONSULTANTS  INC."
+    ]
+  },
+  {
+    "recipient_id": "29a4a4cb-dc3a-dbbe-c94f-0de2faa13e00-C",
+    "name": "DEAF SERVICES UNLIMITED, INC.",
+    "award_total": 4590952.09,
+    "award_count": 3,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC",
+      "IA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "FOREST SERVICE, OFFICE OF CIVIL RIGHTS (OCR) IS RESPONSIBLE FOR PROVIDING DEAF AND HARD OF HEARING (D/HH) SERVICES AS A REASONABLE ACCOMMODATION TO FOREST SERVICE EMPLOYEES AS REQUIRED BY THE REHABILITATION ACT OF 1973, AS AMENDED AND FOREST SERVICE",
+      "DHH INTERIM ASL CONTRACT IS FOR EMPLOYEES' PART OF THE DEAF AND HARD OF HEARING COMMUNITY AND WILL ENSURE THEY HAVE THE SUPPORT NEEDED TO PERFORM THEIR MISSION CRITICAL WORK.",
+      "USDA FS CR ASL SIGN LANGUAGE INTERPRETIVE SERVICES FOR THE 1ST & 2ND QUARTER FY 2022 WITH AND OPTION TO EXTEND."
+    ],
+    "narrow_kw_hits": [
+      "ASL",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "DEAF",
+      "HARD OF HEARING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "YWASFMP9BCA7",
+    "duns": "958178584",
+    "parent_name": "DEAF SERVICES UNLIMITED, INC.",
+    "parent_uei": "YWASFMP9BCA7",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "subchapter_s_corporation",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "6925 HICKMAN RD",
+      "city": "URBANDALE",
+      "state": "IA",
+      "zip": "50322",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "DEAF SERVICES UNLIMITED  INC.",
+      "DEAF SERVICES UNLIMITED INC",
+      "DEAF SERVICES UNLIMITED INCORPORATED"
+    ]
+  },
+  {
+    "recipient_id": "9dc3e81f-0ac2-b6b8-468b-595a82587ab4-C",
+    "name": "WRIGHT & ASSOCIATES, LLC",
+    "award_total": 2265981.25,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "DC"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SIGN LANGUAGE INTERPRETING SERVICES"
+    ],
+    "narrow_kw_hits": [
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "GAR9MU6J52F7",
+    "duns": "797407074",
+    "parent_name": "WRIGHT & ASSOCIATES, LLC",
+    "parent_uei": "GAR9MU6J52F7",
+    "business_types": [
+      "8a_program_participant",
+      "black_american_owned_business",
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "dot_certified_disadvantaged_business_enterprise",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "self_certified_small_disadvanted_business",
+      "small_business",
+      "special_designations",
+      "subchapter_s_corporation",
+      "us_owned_business"
+    ],
+    "address": {
+      "address_line1": "11202 LOCHTON ST UPPR",
+      "city": "UPPER MARLBORO",
+      "state": "MD",
+      "zip": "20774",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "WRIGHT & ASSOCIATES  LLC"
+    ]
+  },
+  {
+    "recipient_id": "3fa5e53b-4569-9dd4-2b0e-339cc8675d97-C",
+    "name": "JB INTERPRETING, LLC",
+    "award_total": 2005892.84,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "VA"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "SIGN LANGUAGE INTERPRETING AND CART  FIRM FIXED PRICE"
+    ],
+    "narrow_kw_hits": [
+      "CART",
+      "SIGN LANGUAGE"
+    ],
+    "broad_kw_hits": [
+      "CART",
+      "INTERPRETING",
+      "SIGN LANGUAGE"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "Y7CKBDGT7RQ9",
+    "duns": "159796031",
+    "parent_name": "JB INTERPRETING, LLC",
+    "parent_uei": "Y7CKBDGT7RQ9",
+    "business_types": [
+      "category_business",
+      "limited_liability_corporation",
+      "minority_owned_business",
+      "other_minority_owned_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business",
+      "woman_owned_business",
+      "women_owned_small_business"
+    ],
+    "address": {
+      "address_line1": "8115 GLENHURST DR",
+      "city": "FAIRFAX STATION",
+      "state": "VA",
+      "zip": "22039",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": [
+      "JB INTERPRETING  LLC",
+      "JB INTERPRETING LLC"
+    ]
+  },
+  {
+    "recipient_id": "23b307a1-db11-efe5-fff5-dae3506632ed-C",
+    "name": "VANCRO",
+    "award_total": 1391367.47,
+    "award_count": 1,
+    "naics": [
+      "{'code': '541930', 'description': 'TRANSLATION AND INTERPRETATION SERVICES'}"
+    ],
+    "psc": [],
+    "states": [
+      "CO"
+    ],
+    "agencies": [],
+    "description_sample": [
+      "ASL INTERPRETER SERVICES FOR DENVER REGIONAL OFFICE"
+    ],
+    "narrow_kw_hits": [
+      "ASL"
+    ],
+    "broad_kw_hits": [
+      "ASL",
+      "INTERPRETER"
+    ],
+    "exclusion_hits": [],
+    "keyword_tier": "core",
+    "source_ids": [
+      "S1.NAICS541930"
+    ],
+    "uei": "JZNMT9HFJTB3",
+    "duns": "602776705",
+    "parent_name": "VANCRO",
+    "parent_uei": "JZNMT9HFJTB3",
+    "business_types": [
+      "category_business",
+      "corporate_entity_not_tax_exempt",
+      "service_disabled_veteran_owned_business",
+      "small_business",
+      "special_designations",
+      "us_owned_business",
+      "veteran_owned_business"
+    ],
+    "address": {
+      "address_line1": "437 GROWLERS GULCH",
+      "city": "CASTLE ROCK",
+      "state": "WA",
+      "zip": "98611",
+      "country": "UNITED STATES"
+    },
+    "total_prime_amount": null,
+    "total_prime_awards": null,
+    "alternate_names": []
+  }
+]

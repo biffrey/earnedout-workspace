@@ -1,0 +1,16 @@
+Iteration 6 complete — one (stage, phase) step.
+
+**Step executed:** s3 (Source adapters) — SELF-TEST (`drafted → self_checked`)
+
+**What I did:**
+- Exercised the s3 adapters against real endpoints:
+  - **S1 USAspending.gov** — live `spending_by_award` query on NAICS 541930 returned 5 real recipient rows.
+  - **Code validation** — NAICS `541930` confirmed active (not retired), PSC `R608` resolves.
+  - **S4 SBA SBIC directory** — live CSV download, 13 columns, real licensees.
+- Created `evidence/s3-fixtures/` with `S1.json`/`S4.json` (live recordings) and `S2.json`/`S3.json` (structural fixtures, clearly labeled) so the B3/B1-blocked adapters and downstream stages can run.
+- Recorded normalized `RawRecord` output per adapter in `evidence/s3-selftest.md`.
+- All **7 checks PASS** (logged in `TEST_LOG.md`). Two non-blocking findings carried to the VERIFY critic: NIT-s3-1 (S4 prose cites column `"Managed by"`; live header is `Manager`) and IMPROVE-s3-1 (S1 needs a recipient-detail follow-up to populate `uei`).
+
+**State:** iteration 6/80; s3 → `self_checked`; open_blockers 4, unresolved_findings 2 (unchanged). Committed `720820a`.
+
+**Signal:** `CONTINUE` — next non-blocked step is s3 VERIFY; s2 remains blocked on B4.

@@ -1,0 +1,17 @@
+Iteration 14 complete — one (stage, phase) step executed.
+
+**Step:** s5 (Enrichment & qualification pre-filters) — **IMPLEMENT** (re-implement)
+
+s5 was at `not_started` after iter-13 VERIFY returned it on `BLOCKING-s5-1`. This iteration fixed that blocking finding:
+
+- **`references/enrichment.md` §5.1 added** — an explicit `source_id → Gov Data Source` mapping table using only the eight live Airtable choices: S1→USAspending, S2→SAM.gov, S3→SAM.gov Contract Awards, S4/S5→SBA SBIC, S6→SBS, S7→GSA eLibrary, S8→State, S9→RID. S10/S11 documented as enrichment-only (not discovery sources → no `Gov Data Source` value).
+- **Fail-loud rule** in §5.1 — an unmapped `source_id` halts the skill; the multi-select is never silently auto-grown with a free-text string.
+- §1 and §5 `gov_data_source` rows re-pointed at §5.1 (was a dangling reference to a non-existent table in `airtable_schema_preflight.md`).
+- **`evidence/s5-selftest.md`** corrected — line 97 → `["SAM.gov", "SAM.gov Contract Awards"]`, line 125 → `["SBA SBIC"]`, both live choices.
+- **`FINDINGS.md`** — `BLOCKING-s5-1` moved to a new `## Resolved` section with resolution recorded.
+
+**State changes:**
+- `STATE.md` — `iteration: 14`, `s5_enrichment: drafted`, `unresolved_findings: 15 → 14`, `open_blockers: 4` (unchanged, B1–B4 still open)
+- Committed `4643e49`; `.loop_signal` set to `CONTINUE`
+
+Next iteration will run s5 **SELF-TEST** to re-exercise the pre-filters/enrichment and confirm §5.1 yields only live `Gov Data Source` choices.

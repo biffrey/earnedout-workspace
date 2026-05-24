@@ -190,7 +190,11 @@ same report layout so s7 and the dashboard treat them identically.
 2. **Invoke `prospect-evaluation`** (`.claude/skills/prospect-evaluation/skill.md`)
    in **single mode** with the §3-mapped lead data and the §2 `eval_mode`. It
    runs its full workflow: Buy Box screening → 26-field scorecard → lead score
-   with per-line math → full deal memo.
+   with per-line math → full deal memo. **Actually invoke the skill — do not
+   score "inline" or from memory.** The skill loads its rubric from its own
+   `references/buy-box-and-scoring.md` (the single source of truth, beside its
+   `skill.md`); reproducing or approximating the rubric instead of running the
+   skill is a **BLOCKING** defect.
 3. **Capture both outputs** — `prospect-evaluation` writes
    `{company-slug}-report.md` and `{company-slug}-report.html` to the working
    directory; ensure both land in `output/reports/{report_slug}/`. **Never skip

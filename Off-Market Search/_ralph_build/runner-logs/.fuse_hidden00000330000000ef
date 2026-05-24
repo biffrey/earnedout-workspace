@@ -1,0 +1,13 @@
+Iteration 65 complete — **RESOLVE phase**, cleared one finding.
+
+**Resolved NIT-s5-2** — `LeadPacket.employee_count` was typed `number | string`, inconsistent with every other unknown-able field's `… | null` + `enrichment_gaps` pattern.
+
+Changes (spec-clarity only, no behavior change):
+- `enrichment.md` — retyped `employee_count` to `number | null`; reworded the §3.3 bullet so an absent count is `null` with the gap in `enrichment_gaps`.
+- `scoring_integration.md:100` — note now `often null (a gap → passed as missing)`.
+- `evidence/s5-selftest.md` C4 row — R1 `employee_count` → `null` (gap already enumerated).
+- `airtable_write.md` already mapped a non-real count to blank — no change.
+
+State: `iteration: 65`, `unresolved_findings: 18 → 17`, `open_blockers: 0`, all 10 stages `verified`, `final_audit_passed: true`. 17 findings remain — RESOLVE phase continues.
+
+Signal: **CONTINUE**.

@@ -153,15 +153,15 @@ Each stage has **dependencies**, **IMPLEMENT** actions, and **SELF-TEST** checks
 *Plan: "Repository Reorganization", "Implementation Order" #1. Dependencies: none.*
 
 IMPLEMENT:
-- Ensure the workspace folder is structured as the plan's `earnedout-workspace` tree: `.claude/skills/{overnight-search,prospect-evaluation,submit-url}/`, `config/`, `references/`, `templates/`, `output/{reports,screenshots,dashboards}/`, `search_reports/`, and `README.md`. Create anything missing.
-- Ensure the prospect-evaluation skill is migrated in: copy `skill.md` into `.claude/skills/prospect-evaluation/`, and its reference and template files into the workspace `references/` and `templates/`, from the Google Drive source path above.
+- Ensure the workspace folder is structured as the plan's `earnedout-workspace` tree: `.claude/skills/{overnight-search,prospect-evaluation,submit-url}/` (the prospect-evaluation skill is self-contained — it carries its own `references/` and `templates/` subfolders), `config/`, `templates/` (for `daily-dashboard.html`), `output/{reports,screenshots,dashboards}/`, `search_reports/`, and `README.md`. Create anything missing.
+- Ensure the prospect-evaluation skill is migrated in: copy `skill.md` together with its `references/` and `templates/` folders into `.claude/skills/prospect-evaluation/`, from the Google Drive source path above.
 - Ensure git is initialized and `origin` points at the `earnedout-workspace` GitHub repo. If `origin` is missing, create the repo (`gh repo create` if the GitHub CLI is authenticated; otherwise via a connected GitHub MCP; otherwise log a blocker).
 - Commit and push.
 
 SELF-TEST:
 - `find` the directory tree; every directory and file listed above exists and is non-empty. Record the tree in `TEST_LOG.md`.
 - `git remote -v` shows `origin`; `git status` is clean after commit; `git log` shows the commit pushed.
-- `.claude/skills/prospect-evaluation/skill.md` exists and is non-empty; `references/` contains `buy-box-and-scoring.md`, `industries-and-geography.md`, `research-playbook.md`; `templates/` contains `single-report.md`, `single-report.html`, `batch-screen.md`.
+- `.claude/skills/prospect-evaluation/skill.md` exists and is non-empty; `.claude/skills/prospect-evaluation/references/` contains `buy-box-and-scoring.md`, `industries-and-geography.md`, `research-playbook.md`; `.claude/skills/prospect-evaluation/templates/` contains `single-report.md`, `single-report.html`, `batch-screen.md`.
 
 ### Stage 2 — `s2_playwright`: Playwright MCP
 *Plan: "Step 0 — Prerequisites", "Implementation Order" #2. Dependencies: none.*
@@ -231,7 +231,7 @@ SELF-TEST:
 *Plan: "Step 7". "Implementation Order" #8. Dependencies: s1.*
 
 IMPLEMENT:
-- Create `templates/daily-dashboard.html` as a Jinja-style, self-contained template with the four sections: A — Last Night's New Finds (+ price-drop badge), B — Running Queue (all `Disposition = Active`, with a Date Added column), C — Revisit Bucket (`Disposition = Revisit for Roll-up`), D — Run Summary (totals, per-industry/platform breakdowns, errors). CSS styled to match `templates/single-report.html`.
+- Create `templates/daily-dashboard.html` as a Jinja-style, self-contained template with the four sections: A — Last Night's New Finds (+ price-drop badge), B — Running Queue (all `Disposition = Active`, with a Date Added column), C — Revisit Bucket (`Disposition = Revisit for Roll-up`), D — Run Summary (totals, per-industry/platform breakdowns, errors). CSS styled to match `.claude/skills/prospect-evaluation/templates/single-report.html`.
 
 SELF-TEST:
 - The file is valid HTML, contains all four sections, and has the template placeholders for each. Render it headlessly (load in a browser) and confirm no console errors and the layout appears.

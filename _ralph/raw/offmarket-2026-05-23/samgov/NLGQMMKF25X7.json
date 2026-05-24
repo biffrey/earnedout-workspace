@@ -1,0 +1,231 @@
+{
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "samRegistered": "Yes",
+        "ueiSAM": "NLGQMMKF25X7",
+        "entityEFTIndicator": null,
+        "cageCode": "6USV1",
+        "dodaac": null,
+        "legalBusinessName": "DEAF ACCESS SOLUTIONS, INC",
+        "dbaName": null,
+        "purposeOfRegistrationCode": "Z2",
+        "purposeOfRegistrationDesc": "All Awards",
+        "registrationStatus": "Active",
+        "evsSource": "E&Y",
+        "registrationDate": "2013-02-18",
+        "lastUpdateDate": "2025-10-07",
+        "registrationExpirationDate": "2026-10-03",
+        "activationDate": "2025-10-07",
+        "ueiStatus": "Active",
+        "ueiExpirationDate": null,
+        "ueiCreationDate": "2020-06-21",
+        "publicDisplayFlag": "Y",
+        "exclusionStatusFlag": "N",
+        "exclusionURL": null,
+        "dnbOpenData": null
+      },
+      "coreData": {
+        "entityInformation": {
+          "entityURL": "www.deafaccess.com",
+          "entityDivisionName": null,
+          "entityDivisionNumber": "DAS",
+          "entityStartDate": "2012-03-08",
+          "fiscalYearEndCloseDate": "12/31",
+          "submissionDate": "2025-10-03"
+        },
+        "physicalAddress": {
+          "addressLine1": "4813 LELAND ST",
+          "addressLine2": null,
+          "city": "BETHESDA",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20815",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "mailingAddress": {
+          "addressLine1": "6900 Wisconsin Ave, #31111",
+          "addressLine2": null,
+          "city": "Bethesda",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20824",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "congressionalDistrict": "08",
+        "generalInformation": {
+          "entityStructureCode": "2L",
+          "entityStructureDesc": "Corporate Entity (Not Tax Exempt)",
+          "entityTypeCode": "F",
+          "entityTypeDesc": "Business or Organization",
+          "profitStructureCode": "2X",
+          "profitStructureDesc": "For Profit Organization",
+          "organizationStructureCode": "XS",
+          "organizationStructureDesc": "Subchapter S Corporation",
+          "stateOfIncorporationCode": "DE",
+          "stateOfIncorporationDesc": "DELAWARE",
+          "countryOfIncorporationCode": "USA",
+          "countryOfIncorporationDesc": "UNITED STATES"
+        },
+        "businessTypes": {
+          "businessTypeList": [
+            {
+              "businessTypeCode": "2X",
+              "businessTypeDesc": "For Profit Organization"
+            },
+            {
+              "businessTypeCode": "F",
+              "businessTypeDesc": "Business or Organization"
+            },
+            {
+              "businessTypeCode": "XS",
+              "businessTypeDesc": "Subchapter S Corporation"
+            }
+          ],
+          "sbaBusinessTypeList": [
+            {
+              "sbaBusinessTypeCode": null,
+              "sbaBusinessTypeDesc": null,
+              "certificationEntryDate": null,
+              "certificationExitDate": null
+            }
+          ]
+        },
+        "financialInformation": {
+          "creditCardUsage": "Y",
+          "debtSubjectToOffset": "N"
+        }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [
+            {
+              "naicsCode": "541930",
+              "naicsDescription": "Translation and Interpretation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            },
+            {
+              "naicsCode": "561492",
+              "naicsDescription": "Court Reporting and Stenotype Services ",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            }
+          ],
+          "pscList": [
+            {
+              "pscCode": "R606",
+              "pscDescription": "SUPPORT- ADMINISTRATIVE: COURT REPORTING"
+            },
+            {
+              "pscCode": "R608",
+              "pscDescription": "SUPPORT- ADMINISTRATIVE: TRANSLATION AND INTERPRETING"
+            }
+          ]
+        },
+        "disasterReliefData": {
+          "disasterRegistryFlag": "YES",
+          "bondingFlag": "NO",
+          "geographicalAreaServed": [
+            {
+              "geographicalAreaServedStateCode": "Any",
+              "geographicalAreaServedStateName": null,
+              "geographicalAreaServedCountyCode": null,
+              "geographicalAreaServedCountyName": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaCode": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaName": null
+            }
+          ]
+        },
+        "ediInformation": {
+          "ediInformationFlag": "N"
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "Karl",
+          "middleInitial": null,
+          "lastName": "Kosiorek",
+          "title": "President",
+          "addressLine1": "6900 Wisconsin Ave, #31111",
+          "addressLine2": null,
+          "city": "Bethesda",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20824",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessPOC": {
+          "firstName": "PJ",
+          "middleInitial": null,
+          "lastName": "Carberg",
+          "title": "Director of Business Development",
+          "addressLine1": "6900 Wisconsin Ave, #31111",
+          "addressLine2": null,
+          "city": "Bethesda",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20824",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "governmentBusinessAlternatePOC": {
+          "firstName": "PJ",
+          "middleInitial": null,
+          "lastName": "Carberg",
+          "title": "Director of Business Development",
+          "addressLine1": "6900 Wisconsin Ave, #31111",
+          "addressLine2": null,
+          "city": "Bethesda",
+          "stateOrProvinceCode": "MD",
+          "zipCode": "20824",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        },
+        "pastPerformancePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        },
+        "pastPerformanceAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        }
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v3/entities?api_key=REPLACE_WITH_API_KEY&ueiSAM=NLGQMMKF25X7&registrationStatus=A&includeSections=entityRegistration%2CcoreData%2Cassertions%2CpointsOfContact&page=0&size=10"
+  }
+}

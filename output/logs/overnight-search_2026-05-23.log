@@ -1,0 +1,37 @@
+=== overnight-search run started 2026-05-23T06:37:02Z ===
+# STOP — 1Password CLI not signed in
+
+The skill's fail-loud authentication check failed. Per `overnight-search/skill.md` Step 1 and `config/credentials-setup.md`, I must stop immediately rather than proceed to DealStream unauthenticated (which silently returns incomplete results).
+
+## Error
+
+```
+$ op whoami
+[ERROR] 2026/05/23 02:37:18 account is not signed in
+```
+
+## What this blocks
+
+- **DealStream authenticated search** — cannot retrieve `op://Personal/dealstream.com/username` / `password`.
+- Per the skill, I am NOT falling back to cached/blank/hard-coded credentials, and NOT continuing the run partial-without-auth (the rule is fail loud on the `op` step before the public platforms run, since DealStream is the primary source).
+
+## To unblock
+
+Run one of the following in your terminal, then re-invoke the overnight search:
+
+```bash
+# If you use Touch ID / biometric unlock:
+eval $(op signin)
+
+# Or with your account shorthand:
+op signin <my>
+
+# Verify:
+op whoami
+op read "op://Personal/dealstream.com/username"
+```
+
+Once `op whoami` returns your account and `op read` for the DealStream item succeeds, say "rerun overnight search" and I'll pick up from Step 1 (Playwright login → all platforms → validate → score → Airtable → dashboard) at normal nightly scope.
+
+No Airtable writes, screenshots, drafts, or dashboard regeneration were performed on this run.
+=== overnight-search run finished 2026-05-23T06:37:36Z (exit 0) ===

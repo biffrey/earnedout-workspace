@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Commercial Demolition (Interiors), Denver — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419; --panel: #171d26; --panel-2: #1f2733; --text: #e7ecf3;
+    --muted: #8a97ab; --border: #2a3342; --accent: #5aa7ff;
+    --pass: #2fbf71; --fail: #e74c3c; --warn: #f5a623; --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55; font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+  header.banner { grid-column: 1 / -1; background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px;
+    display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 24px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .score-badge { background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center; }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+  nav.toc { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px; align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+  .chart { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; overflow-x: auto; }
+  .shot { width: 100%; border: 1px solid var(--border); border-radius: 8px; margin-top: 10px; }
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Commercial Demolition Focused on Interiors (Denver Metro) — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream listing mwlpo5 (broker: Cortney Sells, The Firm)
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict conditional">Buy Box: Conditional (Add-on)</span>
+      <span class="verdict conditional">Add-on: Fambro Waste</span>
+      <div class="score-badge">
+        <div class="num">72</div>
+        <div class="label">Lead Score / 110</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <p>Evaluated as a <strong>roll-up add-on for Fambro Waste Management</strong> (commercial/construction &amp; demolition waste). Relaxed add-on thresholds apply: &ge;5 FTE / &ge;$500K EBITDA / &ge;5 years. Score is out of 110.</p>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>&ge; 5 full-time employees (relaxed add-on floor)</td><td><span class="chip pass">PASS</span></td><td>Org chart: senior estimator, estimator, safety coordinator, head foreman, 4 foremen, dumpster driver, plus skilled labor crew — ~10+ staff.</td></tr>
+          <tr><td>2</td><td>EBITDA &ge; $500K/yr (relaxed add-on floor)</td><td><span class="chip pass">PASS</span></td><td>Listing cash flow $642,941 (SDE/discretionary proxy — not add-back-verified EBITDA).</td></tr>
+          <tr><td>3</td><td>&ge; 5 years in business (relaxed add-on floor)</td><td><span class="chip warn">INSUFF.</span></td><td>Founding year not disclosed; legal name masked. Deep org chart, $850K backlog and DPS/airport relationships imply est. 12+ yrs — unconfirmed.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">INSUFF.</span></td><td>No 2024/2025 revenue split disclosed; only a single trailing figure given. Trend unverifiable.</td></tr>
+          <tr><td>5</td><td>Asking price &le; 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>$3,525,000 ÷ $642,941 = 5.48x cash flow — above the 4.0x ceiling; top of the 4.0–5.5x band.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">INSUFF.</span></td><td>Not computable without a financing structure; rough proforma DSCR ≈ 1.3–1.5 — borderline.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px;"><strong>Overall Buy Box: CONDITIONAL (add-on)</strong> — 2 hard PASS, 3 insufficient-data, 1 FAIL. Does not meet standalone thresholds but qualifies as a roll-up add-on for <strong>Fambro Waste Management</strong> (relaxed floors). Conditions: seller must disclose a 2–3 year revenue/profit history, and price must be negotiated from 5.48x toward &le;4.0x cash flow as a closing condition.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Commercial Demolition Focused on Interiors (legal name withheld)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream listing mwlpo5 — manual submission</td><td>Task input</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>12+ <span class="est">(est.)</span></td><td>Inferred — see Appendix C</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>None disclosed (12,000 sq ft facility, likely leased)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>$505,000 ($345K vehicles/trailers + $160K equipment)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>~10+ (estimating, safety, 5 foremen, dumpster driver, crew)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>9</td><td>Business address</td><td>Denver metro, CO (exact address withheld)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>Not disclosed (no split given)</td><td>—</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$2,957,133 (trailing "Sales" as listed)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>$642,941 (listing "Cash Flow" — SDE proxy)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>$3,525,000 (seller financing available)</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>Not computable — only one year disclosed</td><td>—</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed (repeat GC/municipal clients implied)</td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>21.7% ($642,941 ÷ $2,957,133) — SDE margin proxy</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>No single-customer % disclosed; segments: GCs ~30%, city/county ~20%, homeowners &lt;1%</td><td>DealStream mwlpo5</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td><em style="color:var(--muted);">Not provided — request from broker (Cortney Sells, The Firm)</em></td><td>—</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>72 / 110</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Commercial/C&amp;D demolition + debris removal with in-house hauling — core adjacency to Fambro Waste Management.</td></tr>
+          <tr><td>EBITDA tier</td><td>5</td><td>15</td><td>Cash flow $642,941 — above $500K, not above $1M. &gt;$1M tier = 5 pts. (SDE proxy.)</td></tr>
+          <tr><td>Years in business &ge;10</td><td>10</td><td>10</td><td>Founding year not disclosed; deep team, $850K backlog and DPS/airport relationships strongly indicate a 10+ yr firm. Awarded with (est.).</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>0</td><td>10</td><td>No multi-year revenue/profit history disclosed — insufficient data, not awarded.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>Project/T&amp;M demolition — not contracted recurring — but a repeat base of commercial GCs and municipal clients. Mixed = 5.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>No single-customer % disclosed; cannot confirm &lt;20%. Mitigant: seller financing offered.</td></tr>
+          <tr><td>Employees &ge;10</td><td>10</td><td>10</td><td>~10+ staff named; clears relaxed (&ge;5) and standard (&ge;10) floors.</td></tr>
+          <tr><td>Valuation multiple</td><td>7</td><td>15</td><td>5.48x cash flow — inside the 4.0–5.5x negotiation band (7 pts). Negotiate to &le;4.0x as a closing condition.</td></tr>
+          <tr><td>Low owner dependence</td><td>5</td><td>5</td><td>Estimating team, safety coordinator and head foreman over 4 foremen run operations; management stays post-sale.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>10</td><td>10</td><td>Direct add-on for Fambro Waste Management — demolition feedstock + existing dumpster/hauling capability = immediate vertical integration.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>72</strong></td><td><strong>110</strong></td><td></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;color:var(--warn);"><strong>Note:</strong> Valuation line is in the 4.0–5.5x band — the deal requires negotiation to &le;4.0x cash flow (≈$2.57M) as a closing condition. Scored as a roll-up add-on for Fambro Waste Management; relaxed thresholds applied, denominator 110. 72/110 ≈ Pursue with conditions / revisit for the roll-up.</p>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> A Denver-metro commercial demolition contractor specializing exclusively in demolition and debris removal — interior gut-outs to the studs, concrete demolition, and select exterior (asphalt/parking-lot) work. No renovation or build-back. Listed Jan 7, 2026 by Cortney Sells of The Firm.</li>
+        <li><strong>Financial highlights:</strong> Trailing sales $2,957,133; cash flow $642,941 (≈21.7% SDE margin); $850K backlog, $800K pipeline, $150K WIP. No multi-year revenue split disclosed.</li>
+        <li><strong>Buy Box summary:</strong> CONDITIONAL (add-on) — qualifies as a roll-up add-on for Fambro Waste Management under relaxed thresholds; fails the standalone valuation ceiling (5.48x) and three criteria are unverifiable from the listing.</li>
+        <li><strong>Why pursue (or not):</strong> Strong, clean strategic fit — demolition generates C&amp;D debris Fambro can capture and dispose at margin, and the target already runs a dumpster driver and in-house hauling. Real institutional clients (Denver Public Schools, airport) and an $850K backlog give revenue visibility. Caution: no disclosed 2–3 year trend, above-ceiling multiple, and SDE-not-EBITDA cash flow.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p>A Denver-metro contractor focused purely on demolition and debris removal. The exclusive-demolition positioning (no renovation/build-back) keeps the business asset-light relative to a full general contractor. Founding year and legal name are withheld in the confidential listing; the depth of the team and the standing institutional client base imply a well-established firm.</p>
+      <p><strong>Ownership:</strong> Not disclosed. The listing offers seller financing and states management will stay on post-sale.</p>
+      <p><strong>Milestones:</strong> (Year unknown) founded as a Denver-metro demolition specialist; built recurring project relationships with commercial GCs and municipal clients including Denver Public Schools and airport projects; listed for sale Jan 7, 2026 via Cortney Sells, The Firm.</p>
+      <p><strong>Organization:</strong> Estimating function (senior estimator + estimator), a dedicated safety coordinator, and a field organization led by a head foreman over 4 additional foremen, a dumpster driver, and a skilled labor crew — a genuine management layer, not an owner-operator shop.</p>
+      <img class="shot" src="mwlpo5.png" alt="DealStream listing screenshot mwlpo5" />
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <p>The listing is marketed confidentially; the owner's name, legal entity and principals are withheld pending NDA. Functional roles only are known.</p>
+      <h3>Owner / Seller — name withheld</h3>
+      <p>Role not disclosed. Listing indicates management will remain post-sale, suggesting the owner is not the sole point of field execution. Background and contact withheld pending broker contact.</p>
+      <h3>Broker — Cortney Sells, President, The Firm (The Firm Advisors, LLC)</h3>
+      <p>Listing broker / seller's representative. President of The Firm; 150+ business transactions since 2010; Main Street to lower-middle-market. Contact via DealStream listing mwlpo5 or The Firm Advisors, LLC.</p>
+      <h3>Key employees (titles only)</h3>
+      <p>Senior Estimator &amp; Estimator (bidding/pricing); Safety Coordinator (OSHA/site safety — critical in demolition); Head Foreman + 4 Foremen (field leadership); Dumpster Driver (in-house debris hauling).</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Services:</strong> Commercial demolition and debris removal only — interior demolition (gut-outs to the studs), concrete demolition (CMU/structural), and select exterior demolition (asphalt and parking-lot removal). Explicitly no renovation or build-back.</p>
+      <p><strong>Pricing model:</strong> Project-based — fixed-price bids and time-and-materials demolition contracts. No recurring/subscription revenue. Estimating handled in-house by a two-person team.</p>
+      <p><strong>Differentiators:</strong> Pure-play demolition focus (avoids GC capital/warranty exposure); in-house debris hauling (dumpster driver + trailers) — the exact overlap with Fambro's waste platform; dedicated safety coordinator (a credential for institutional/municipal bids); established relationships with commercial GCs and municipal buyers (Denver Public Schools, airport).</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size &amp; trends:</strong> The U.S. Demolition &amp; Wrecking industry is ~$11.2B in 2026, growing at a ~5.1% CAGR over 2020–2025 (IBISWorld). The broader C&amp;D waste management market grew from ~$216B (2025) to ~$233B (2026), a ~7.5% CAGR, driven by sustainability mandates and urban redevelopment. U.S. C&amp;D recycling rates are near 76%.</p>
+      <p><strong>Drivers &amp; barriers:</strong> Drivers — urban redevelopment, commercial tenant-improvement churn, school and infrastructure renovation, and landfill-diversion requirements. Barriers — fuel and subcontracted-labor inflation has compressed demolition-contractor profits; revenue is project-cyclical with commercial construction.</p>
+      <p><strong>Competitive landscape (Denver peers):</strong> Superior Demolition, Inc. (commercial interior/exterior demolition since 1997); Gorilla Demolition, Englewood (woman-owned, 15+ yrs, Denver airport client); American Demolition, Inc. (1,000+ Colorado projects). Construction-sector M&amp;A comps: specialty/heavy construction ≈ 2.0x–4.1x EBITDA and ≈ 2.2x–2.9x SDE — the subject's 5.48x ask is clearly above market.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Segments:</strong> Commercial general contractors ~30%; city/county/municipal ~20% (notably Denver Public Schools and airport projects); homeowners &lt;1%. The remaining ~49% is unspecified — request a full breakdown from the broker.</p>
+      <p><strong>Retention:</strong> Not disclosed. Repeat institutional and GC relationships imply meaningful repeat business but no contracted retention figure exists.</p>
+      <p><strong>Recurring vs one-time:</strong> Effectively 0% contracted recurring — demolition is project-based. Revenue is repeat-but-not-contracted through standing GC and municipal relationships.</p>
+      <p><strong>Concentration:</strong> No single-customer percentage disclosed; only segment-level mix (largest segment ≈30%). Concentration risk cannot be confirmed — an open diligence item. Seller financing is offered, which partially mitigates concentration risk per the Buy Box rules.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA / Cash Flow</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2023</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2025 (trailing as listed)</td><td>$2,957,133</td><td>$642,941 (SDE proxy)</td><td>21.7%</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M) — only trailing year disclosed</text>
+          </g>
+          <g fill="#2a3342">
+            <rect x="60"  y="60" width="60" height="100" rx="3" />
+            <rect x="160" y="60" width="60" height="100" rx="3" />
+            <rect x="260" y="60" width="60" height="100" rx="3" />
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="360" y="50"  width="60" height="110" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="10" fill="#8a97ab" text-anchor="middle">
+            <text x="90"  y="115">no data</text>
+            <text x="190" y="115">no data</text>
+            <text x="290" y="115">no data</text>
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#e7ecf3" text-anchor="middle">
+            <text x="390" y="44">$2.96M</text>
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="175">2022</text>
+            <text x="190" y="175">2023</text>
+            <text x="290" y="175">2024</text>
+            <text x="390" y="175">2025</text>
+          </g>
+        </svg>
+      </div>
+      <p>Only a single trailing year is disclosed, so no growth trend can be drawn. Forward indicators are constructive: $850K backlog + $800K pipeline + $150K WIP ≈ $1.8M of identified forward work (~60% of trailing revenue) — supportive of near-term visibility but not a substitute for an audited 3-year history.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>5.48x</strong> trailing cash flow ($3,525,000 ÷ $642,941). Industry comps: ≈ 2.0x–4.1x EBITDA / 2.2x–2.9x SDE — the ask is well above market. At Biffrey's 4.0x ceiling, fair value ≈ <strong>$2.57M</strong>; the 5.5x tolerance caps it at ≈ $3.54M (essentially the ask). Negotiate toward $2.57M–$3.0M, supported by the absence of a disclosed multi-year track record. ~$630K of A/R is included in the price, improving working-capital economics at close.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>Pure-play demolition focus; asset-light vs. full GC</li>
+          <li>In-house hauling + dumpster capability (Fambro synergy)</li>
+          <li>Real management layer; management stays post-sale</li>
+          <li>Institutional clients: Denver Public Schools, airport</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>No disclosed 2–3 year revenue/profit history</li>
+          <li>Project-based revenue — zero contracted recurring</li>
+          <li>Cash flow figure is SDE/discretionary, not verified EBITDA</li>
+          <li>Single facility, modest equipment base ($505K FF&amp;E)</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>Vertical integration with Fambro waste/disposal margin</li>
+          <li>Cross-sell debris-hauling/recycling to existing clients</li>
+          <li>Front Range geographic expansion under the platform</li>
+          <li>~$1.8M forward backlog/pipeline to convert</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Demolition revenue is cyclical with commercial construction</li>
+          <li>Fuel &amp; subcontracted-labor cost inflation compressing margins</li>
+          <li>Competitive Denver market (Superior, Gorilla, ADI)</li>
+          <li>Customer concentration unknown — possible hidden risk</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> Demolition is cyclical and tied to commercial construction; fuel and subcontracted-labor inflation is compressing margins industry-wide. Asbestos/hazardous-material exposure on interior gut-outs carries regulatory and liability risk.</li>
+        <li><strong>Financial:</strong> No multi-year financials disclosed — the 3-year growth trend cannot be verified. "Cash flow" is an SDE proxy, not verified EBITDA; normalized EBITDA after a market owner's wage may be lower. Project revenue creates working-capital swings.</li>
+        <li><strong>Operational:</strong> Customer concentration undisclosed (largest segment ≈30%); a single large GC or municipal account could be material. Safety performance and OSHA/EMR history must be verified.</li>
+        <li><strong>Regulatory / legal:</strong> OSHA demolition standards, Colorado/Denver demolition permitting, asbestos abatement licensing (AHERA/state), landfill-diversion requirements. Confirm all licenses transfer and EMR is clean.</li>
+        <li><strong>Deal conditions:</strong> Negotiate price from 5.48x to &le;4.0x cash flow (≈$2.57M) as a condition of the deal; obtain 2022–2025 P&amp;L and balance sheet to confirm the 3-year growth requirement; confirm whether cash flow is EBITDA or SDE and re-cast with a market owner wage; verify founding date via SOS filing.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion:</strong> Front Range geographic expansion (Fort Collins to Colorado Springs) under the Fambro platform; broaden into adjacent selective-demolition niches.</p>
+      <p><strong>Operational upside:</strong> Install EOS-style process discipline; tighten estimating-to-margin tracking; capture debris-disposal margin in-house rather than paying third-party tipping fees.</p>
+      <p><strong>Strategic — Fambro Waste Management roll-up thesis:</strong> The central reason to pursue. Demolition is a direct generator of C&amp;D waste; bolting it onto Fambro lets the platform capture the disposal/recycling margin currently leaking to third parties, cross-sell dumpster/hauling services to the demolition company's GC and municipal client base, and consolidate equipment, safety and back-office functions. The target already operates a dumpster driver and trailers — integration friction is low.</p>
+      <p><strong>100-day plan sketch:</strong> (1) Re-cast financials to true EBITDA; reconcile SDE add-backs and confirm the 3-year trend. (2) Route demolition debris through Fambro disposal/recycling assets. (3) Retain the estimating team and safety coordinator; lock key-employee agreements. (4) Cross-sell Fambro waste/hauling into the DPS / GC / municipal base. (5) Standardize safety, permitting and bonding under the platform.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/other-const/mwlpo5">dealstream.com/d/biz-sale/other-const/mwlpo5</a> — primary listing (price, cash flow, sales, assets, client mix, backlog, team). Detail page returned HTTP 403 to the automated fetcher; figures used are those provided in the task input as extracted from the live listing 2026-05-21.</li>
+        <li><a href="https://www.bizbuysell.com/business-broker/cortney-sells/the-firm-advisors-llc/9448/">BizBuySell — Cortney Sells / The Firm Advisors broker profile</a> (403 to fetcher; summary from search index).</li>
+        <li><a href="https://www.bizquest.com/business-broker/the-firm-advisors-llc/cortney-sells/BW15655/">BizQuest — Cortney Sells broker cross-reference</a>.</li>
+        <li><a href="https://www.ibisworld.com/united-states/industry/demolition-wrecking/207/">IBISWorld — U.S. Demolition &amp; Wrecking</a> (~$11.2B 2026, ~5.1% CAGR).</li>
+        <li><a href="https://www.fortunebusinessinsights.com/construction-and-demolition-waste-management-market-105550">Fortune Business Insights — C&amp;D Waste Management market</a>.</li>
+        <li><a href="https://demolitionforum.com/demolition-news-demolition-forum/construction-and-demolition-waste-management-market-report-2026-2035-a-310-65-billion-market-by-2030/">Demolition Forum — C&amp;D waste market 2025→2026 ($216B→$233B)</a>.</li>
+        <li><a href="https://marksparksolutions.com/reports/us-demolition-waste-recycling-market">Mark &amp; Spark — U.S. C&amp;D recycling volume / ~76% recycling rate</a>.</li>
+        <li><a href="https://firstpagesage.com/business/ebitda-valuation-multiples-for-construction-companies/">First Page Sage — construction-sector EBITDA multiples</a>.</li>
+        <li><a href="https://www.bizbuysell.com/learning-center/valuation-benchmarks/heavy-construction/">BizBuySell — heavy-construction earnings multiples (~2.9x)</a>.</li>
+        <li><a href="https://peakbusinessvaluation.com/valuation-multiples-for-a-construction-company/">Peak Business Valuation — construction SDE multiples (~2.2x–2.9x)</a>.</li>
+        <li><a href="https://superiordemo.com/">Superior Demolition, Inc.</a> — Denver peer (est. 1997).</li>
+        <li><a href="https://gorillademolition.com/">Gorilla Demolition</a> — Denver-area peer (15+ yrs, airport client).</li>
+        <li><a href="https://www.adicolorado.com/services/">American Demolition, Inc.</a> — Denver peer.</li>
+        <li><a href="https://www.naics.com/naics-code-description/?code=238910">NAICS 238910</a> — Site Preparation Contractors (demolition contractors classified here).</li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>"Cash Flow" $642,941 as listed is treated as SDE / seller's discretionary earnings (standard broker-listing convention) and used as an EBITDA proxy.</li>
+        <li>EBITDA margin = $642,941 ÷ $2,957,133 = 21.7%.</li>
+        <li>Implied multiple = $3,525,000 ÷ $642,941 = 5.48x.</li>
+        <li>Years-in-business estimate of 12+ is inferred (see C); not from a primary source.</li>
+        <li>NAICS 238910 (Site Preparation Contractors) is the standard classification for demolition contractors (indexed sub-class 238910-15).</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #3 — Years in business</strong> — Estimated at <strong>12+ years (est.)</strong>.<br>
+        Method: The listing does not disclose a founding year and the legal name is withheld, so no Colorado Secretary of State record could be matched. The estimate is inferred from operational depth — a two-person estimating function, a dedicated safety coordinator, a head foreman over four additional foremen, an $850K contracted backlog, an $800K pipeline, and standing relationships with institutional buyers (Denver Public Schools, airport projects). A demolition firm does not accumulate that team structure, bonding capacity and municipal client base in under roughly a decade. Denver demolition peers with comparable institutional positioning (Superior Demolition est. 1997; Gorilla Demolition 15+ yrs) corroborate that such firms are typically 10+ years old. The Buy Box years criterion is marked INSUFFICIENT in the header but awarded rubric points on this (est.) basis — confirm via SOS filing in diligence.<br>
+        Sources: dealstream.com/d/biz-sale/other-const/mwlpo5 ; superiordemo.com ; gorillademolition.com</p>
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li>output/screenshots/mwlpo5.png — listing screenshot (copied to output/reports/mwlpo5/mwlpo5.png). Visual confirmation of the DealStream listing.</li>
+        <li>No CIM, P&amp;L, or tax returns were provided. All financials are from the public DealStream listing as extracted 2026-05-21.</li>
+      </ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>Founding year / Colorado SOS registration date?</li>
+        <li>2022–2025 revenue and EBITDA/SDE by year — needed to verify the 3-year growth criterion.</li>
+        <li>Is $642,941 EBITDA or SDE? Provide the add-back schedule and a market owner replacement wage.</li>
+        <li>Largest single customer as a % of revenue, and top-5 concentration?</li>
+        <li>Is the 12,000 sq ft facility leased or owned? Lease terms / assignability?</li>
+        <li>OSHA/EMR history and safety record?</li>
+        <li>Confirm all demolition and asbestos-abatement licenses transfer with the sale.</li>
+        <li>Backlog composition (fixed-price vs T&amp;M) and conversion timeline?</li>
+        <li>Terms of the offered seller financing (note, rate, term, % of price)?</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources. Roll-up add-on evaluation for Fambro Waste Management — scored out of 110.</footer>
+</div>
+</body>
+</html>

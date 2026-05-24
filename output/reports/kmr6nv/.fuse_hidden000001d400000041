@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Personal Injury Lead Generation Platform — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  .alert { background: rgba(245,166,35,.1); border: 1px solid rgba(245,166,35,.4);
+           border-radius: 8px; padding: 12px 14px; margin: 6px 0 14px; color: #f0d9b0; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+  .shot { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Personal Injury Lead Generation Platform — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream listing kmr6nv (listed 2025-10-13)
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict fail">Buy Box: FAIL</span>
+      <div class="score-badge">
+        <div class="num">30</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <div class="alert"><strong>Disclosure discrepancy:</strong> the listing TITLE claims "Million Dollar Net Profit per year," but the DealStream Cash Flow field shows <strong>$581,384</strong>. All scoring uses the disclosed $581,384. True net profit is unverified and <strong>needs broker follow-up</strong>.</div>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:90px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>&ge; 10 full-time employees</td><td><span class="chip warn">INSUFF.</span></td><td>Headcount not disclosed. Estimated ~8 FTE (est.) from revenue/headcount benchmark; cannot confirm &ge;10.</td></tr>
+          <tr><td>2</td><td>EBITDA $1M&ndash;$4M / year</td><td><span class="chip fail">FAIL</span></td><td>Disclosed Cash Flow $581,384 — below the $1M floor. (Title claims "$1M net profit" — unverified.)</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip fail">FAIL</span></td><td>Operating since 2018 (~8 years). Below the 10-year minimum.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">INSUFF.</span></td><td>No multi-year revenue or profit history disclosed.</td></tr>
+          <tr><td>5</td><td>Asking price &le; 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>$5,000,000 &divide; $581,384 = 8.60x. Far above the 4.0x ceiling / 5.5x band.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">INSUFF.</span></td><td>No debt-service terms or seller financing disclosed.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Overall Buy Box: FAIL</strong> — 0 of 6 passed (3 FAIL, 3 insufficient data). Deal-killers: cash flow below $1M floor; ~8 years vs. 10-year minimum; 8.60x ask vs. 4.0x ceiling.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Anonymous listing — "Personal Injury Lead Generation Platform"; identified (high confidence) as Lead Need LLC, d/b/a Accident Records</td><td>DealStream; LinkedIn/ZoomInfo contact match</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream listing kmr6nv</td><td>DealStream</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>2018 (~8 years)</td><td>Listing; Lead Need website</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>None disclosed (leased suite, New Port Richey FL)</td><td>Lead Need website</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>None disclosed; asset-light digital business</td><td>Inference</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>8 <span class="est">(est.)</span></td><td>Estimate — see Appendix C</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Not disclosed (SEO-firm partnerships referenced)</td><td>Lead Need website</td></tr>
+          <tr><td>9</td><td>Business address</td><td>5633 State Road 54, Suite C, New Port Richey, FL 34652</td><td>Lead Need website</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$7,206,805 (listing "Sales" field, period unspecified)</td><td>DealStream</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>$581,384 (listing Cash Flow — conflicts with title)</td><td>DealStream</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>$5,000,000</td><td>DealStream</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>Cannot compute — one revenue year only</td><td>—</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>8.1% ($581,384 / $7,206,805)</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td>Not available — anonymous listing, no data room</td><td>—</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>30 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Digital marketing / performance lead generation — squarely inside the Marketing target industry. Marketing vendor, not a law firm — jurisdiction rule N/A.</td></tr>
+          <tr><td>EBITDA tier</td><td>0</td><td>15</td><td>Disclosed cash flow $581,384 &le; $1M &rarr; 0 pts.</td></tr>
+          <tr><td>Years in business &ge;10</td><td>0</td><td>10</td><td>~8 years (founded 2018). Below threshold.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>0</td><td>10</td><td>Insufficient data — no multi-year history. Not awarded.</td></tr>
+          <tr><td>Recurring revenue</td><td>10</td><td>10</td><td>Flat monthly territorial retainer model — majority-recurring subscription revenue.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Insufficient data — concentration not disclosed. Not awarded.</td></tr>
+          <tr><td>Employees &ge;10</td><td>0</td><td>10</td><td>Estimated ~8 FTE (est.); cannot confirm &ge;10.</td></tr>
+          <tr><td>Valuation multiple</td><td>0</td><td>15</td><td>8.60x disclosed cash flow — above the 5.5x band &rarr; 0 pts.</td></tr>
+          <tr><td>Low owner dependence</td><td>0</td><td>5</td><td>Owner is CEO/Founder and the listing contact — daily operator; no GM identified.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>30</strong></td><td><strong>100</strong></td><td>Interpretation: &lt;50 &rarr; Pass.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> Florida-based, asset-light digital marketing / lead-generation business operating since 2018 (~8 years). Runs a proprietary "auto accident report" system that captures new MVA victims and delivers exclusive real-time leads to PI attorneys nationwide. Identified with high confidence as Lead Need LLC (d/b/a Accident Records), New Port Richey, FL.</li>
+        <li><strong>Financial highlights:</strong> Sales $7,206,805; disclosed Cash Flow $581,384 (8.1% margin). Asking $5,000,000 — 8.60x disclosed cash flow. Listing title's "$1M net profit" claim contradicts the disclosed field and is unverified.</li>
+        <li><strong>Buy Box summary:</strong> FAIL — 0 of 6 met. EBITDA below floor, under 10 years old, priced at &gt;2x the valuation ceiling.</li>
+        <li><strong>Why not pursue:</strong> Cash flow below the $1M minimum; ~8 vs. 10-year requirement; 8.60x well outside the 4.0x/5.5x band; thin 8.1% margin; material title-vs-financials discrepancy undermines trust in the numbers.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>Background and history:</strong> Founded 2018; pioneered an "auto accident report search" model that captures newly-injured accident victims before they retain an attorney or doctor and routes them as exclusive leads to PI firms. Lead Need's website states "8+ years of data," consistent with a 2018 start.</p>
+      <p><strong>Ownership:</strong> Private LLC. Scott Coletti is CEO &amp; Founder (LinkedIn, ZoomInfo). The DealStream listing names "Scott L Coletti" as the contact — i.e., owner-marketed rather than handled by an independent broker.</p>
+      <p><strong>Milestones:</strong> 2018 — founded, proprietary system launched. 2018–2025 — built nationwide delivery and an 8-year accident-data asset. 2025-10-13 — listed on DealStream at $5,000,000.</p>
+      <p><strong>Org structure:</strong> Owner-led. Website references former Google staff and SEO-firm partnerships, but no GM/COO identified — a key-person concern.</p>
+      <img class="shot" src="kmr6nv.png" alt="DealStream listing screenshot kmr6nv" />
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <h3>Scott Coletti — CEO &amp; Founder</h3>
+      <ul>
+        <li><strong>Role:</strong> Founder and chief executive; operating principal and named contact on the sale listing.</li>
+        <li><strong>Background:</strong> Founded Lead Need LLC in 2018; background in PI lead generation; builds and runs the proprietary accident-report system.</li>
+        <li><strong>Education:</strong> Not publicly confirmed.</li>
+        <li><strong>Contact:</strong> Email s***@leadneed.com (ZoomInfo-masked); LinkedIn linkedin.com/in/scottcoletti; Office 5633 State Road 54, Suite C, New Port Richey, FL 34652.</li>
+        <li><em>Note:</em> a separate Dr. Scott Coletti, D.C. (a New Port Richey chiropractor) appears in searches — a different individual.</li>
+      </ul>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>What they sell:</strong> Exclusive, real-time auto-accident lead generation for PI attorneys (and PI doctors). Proprietary system uses custom client-branded landing pages; accident victims submit accident date, contact details, location and a representation-interest question; qualifying leads are forwarded immediately. Built-in follow-up sequences re-engage initially uninterested prospects.</p>
+      <p><strong>Pricing model:</strong> Flat monthly retainer by territory — ~$2,500 per million people targeted; a 3M-population region runs ~$7,500/month, billed upfront. Recurring, territorially-exclusive subscription model.</p>
+      <p><strong>Differentiators:</strong> Proprietary accident-report search methodology; 8+ years of accident data; claimed lower cost-per-closed-lead vs. traditional PPC; geographic exclusivity; positioned as dominant in the accident-report-search niche.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> US PI legal market ~$61.7B in 2025 (IBISWorld), ~2.5% CAGR. PI advertising spend exceeded $2.5B in 2024; PI leads carry the highest CPLs in legal marketing ($100–$600+).</p>
+      <p><strong>Drivers / barriers:</strong> Drivers — attorneys' persistent appetite for case volume, premium pricing for exclusivity, and an 8-year accident-data moat. Barriers — Google Ads cost/policy volatility, TCPA / FTC lead-gen scrutiny, state-bar advertising rules, crowded competitor field.</p>
+      <p><strong>Peer benchmarks:</strong> Quintessa Marketing (large-scale, human-prescreened MVA retainers); On Point Legal Leads (exclusive MVA leads, founded ~2016); 4LegalLeads (~20-year-old exclusive auto-injury provider). Marketing-agency M&amp;A comps: generally 4x–8x EBITDA; only &gt;20%-margin, low-concentration, high-retention agencies reach 8x–12x. This target's 8.1% disclosed margin sits well below that premium tier, making the 8.60x ask hard to justify.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Segments:</strong> B2B — PI law firms and PI-focused medical providers, nationwide, sold on a territorially-exclusive basis.</p>
+      <p><strong>Retention:</strong> Not disclosed.</p>
+      <p><strong>Recurring vs one-time:</strong> Predominantly recurring — flat monthly territorial retainers. Exact recurring % not disclosed but structurally subscription-based.</p>
+      <p><strong>Concentration:</strong> Not disclosed. Exclusive-territory pricing creates real concentration risk in any large metro — must be confirmed with the seller.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA / Cash Flow</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2023</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2025 (trailing, per listing)</td><td>$7,206,805</td><td>$581,384</td><td>8.1%</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Only one disclosed period — no trend can be drawn</text>
+          </g>
+          <g fill="#2a3342">
+            <rect x="60"  y="120" width="60" height="40" rx="3" />
+            <rect x="160" y="120" width="60" height="40" rx="3" />
+            <rect x="260" y="120" width="60" height="40" rx="3" />
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="360" y="50"  width="60" height="110" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="175">2022 n/d</text>
+            <text x="190" y="175">2023 n/d</text>
+            <text x="290" y="175">2024 n/d</text>
+            <text x="390" y="175">2025 $7.2M</text>
+          </g>
+        </svg>
+      </div>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>8.60x</strong> ($5,000,000 / $581,384 disclosed cash flow). Industry comps: 4x–8x EBITDA typical; 8x–12x only for premium &gt;20%-margin agencies. At Biffrey's 4.0x ceiling, fair value is ~$2.3M; at the 5.5x stretch, ~$3.2M. The $5.0M ask is roughly $1.8M–$2.7M above any defensible entry. Even if the title's "$1M net profit" claim were verified, a $5M ask is still 5.0x — outside the 4.0x ceiling.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul><li>Proprietary accident-report system with an 8-year data asset</li><li>Recurring, territorially-exclusive subscription revenue</li><li>Large, high-CPL, durable PI market</li></ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul><li>Disclosed cash flow $581,384 below the $1M floor</li><li>Thin 8.1% margin vs. 15%+ preference / 20%+ buyer norm</li><li>~8 years old; owner-dependent, no GM</li></ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul><li>Sell more exclusive territories; cross-sell PI medical providers</li><li>Margin expansion via automation and pricing discipline</li><li>Add a GM to remove the key-person discount</li></ul></div>
+        <div class="cell"><h4>Threats</h4><ul><li>Google Ads cost/policy volatility erodes lead economics</li><li>TCPA / FTC / state-bar regulation on legal lead generation</li><li>Crowded competitor set (Quintessa, On Point, 4LegalLeads)</li></ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> Heavy dependence on paid search makes lead cost/volume sensitive to Google policy and pricing; legal lead gen faces TCPA / state-bar advertising exposure.</li>
+        <li><strong>Financial:</strong> Single-year financials only; no verifiable growth trend; thin 8.1% margin; possible undisclosed territory/customer concentration; the Cash Flow figure itself is in question given the title discrepancy.</li>
+        <li><strong>Operational:</strong> Owner is CEO/founder and deal contact — high key-person dependence; no GM/COO identified; lead systems may be tied to the owner's know-how.</li>
+        <li><strong>Regulatory / legal:</strong> TCPA consent, FTC lead-gen enforcement, ABA / state-bar attorney-advertising and fee-sharing rules. This is a marketing vendor, not a law firm — the law-firm jurisdiction rule does NOT apply.</li>
+        <li><strong>Deal conditions:</strong> Reconcile the "$1M net profit" title claim vs. the disclosed $581,384 (obtain 3 years of tax returns / P&amp;Ls first); price would need to fall from 8.60x to &le;4.0x (~$2.3M on disclosed cash flow) to enter the buy box; confirm headcount, concentration, and post-owner viability.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion:</strong> Sell additional exclusive territories; expand into PI-medical/chiropractic buyers; geographic whitespace remains under the per-population pricing model.</p>
+      <p><strong>Operational upside:</strong> Margin is the headline opportunity — 8.1% is low for an asset-light digital model; automation, ad-spend optimization and pricing discipline could lift it materially. A GM hire would remove the key-person discount.</p>
+      <p><strong>Strategic:</strong> The 8-year accident dataset is a defensible moat a larger marketing platform could leverage; upsell SEO/GEO and CRM integration onto the recurring base.</p>
+      <p><strong>100-day plan (only after a price reset and financial verification):</strong> obtain/verify 3 years of tax returns and monthly P&amp;Ls and reconcile the net-profit discrepancy; confirm FTE count, contractor mix, territory concentration; renegotiate toward &le;4.0x of verified EBITDA; recruit/promote a GM and document the proprietary system; audit Google Ads accounts and TCPA compliance.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/ad-agencies/kmr6nv">dealstream.com/d/biz-sale/ad-agencies/kmr6nv</a> — primary listing (price, cash flow, sales, founding year, contact); direct fetch returned HTTP 403, data from task-provided extraction.</li>
+        <li><a href="https://leadneed.com/">leadneed.com</a> — company website; business model, proprietary accident-report system, New Port Richey FL address, "8+ years of data," pricing (~$2,500/million population/month).</li>
+        <li><a href="https://www.linkedin.com/in/scottcoletti/">linkedin.com/in/scottcoletti</a> — Scott Coletti, CEO of LeadNeed.com (identity match to listing contact; profile body blocked HTTP 999).</li>
+        <li><a href="https://www.zoominfo.com/p/Scott-Coletti/1622232385">zoominfo.com/p/Scott-Coletti</a> — Scott Coletti, CEO &amp; Founder, Lead Need.</li>
+        <li><a href="https://www.zoominfo.com/c/lead-need-llc/1314226442">zoominfo.com/c/lead-need-llc</a> — Lead Need LLC company overview, New Port Richey FL.</li>
+        <li><a href="https://www.ibisworld.com/united-states/market-size/personal-injury-lawyers-attorneys/4812/">IBISWorld — PI lawyers market size</a> — US PI legal market $61.7B (2025), ~2.5% CAGR.</li>
+        <li><a href="https://www.leadgen-economy.com/blog/personal-injury-lead-generation-cpl-guide/">leadgen-economy.com</a> — PI lead CPL benchmarks ($100–$600+).</li>
+        <li><a href="https://firstpagesage.com/business/marketing-agency-valuation-multiples-and-valuations/">First Page Sage</a> — marketing-agency EBITDA multiple ranges.</li>
+        <li><a href="https://www.capitala.co/acquisitions/20570/marketing-agency-valuations-and-ebitda-multiples/">Capital A</a> — agency valuation drivers (&gt;20% margin, retention).</li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>Employee estimate uses a ~$850K–$950K revenue-per-FTE benchmark for asset-light digital lead-gen / performance-marketing operations (high ad-spend pass-through inflates revenue per head).</li>
+        <li>"Years in business" ~8 derives from the stated 2018 founding, corroborated by the Lead Need website's "8+ years of data."</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #6 — Full-time employees</strong> — Estimated at 8 (est.).<br>
+         Method: Revenue $7,206,805 &divide; ~$900K revenue-per-FTE benchmark for asset-light digital lead-generation businesses &asymp; 8 FTE. Order-of-magnitude estimate only; actual headcount must be confirmed with the seller.<br>
+         Sources: Lead Need website (business model); general digital-agency revenue-per-employee norms.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul><li>output/screenshots/kmr6nv.png — DealStream listing screenshot (copied to output/reports/kmr6nv/kmr6nv.png); confirmed price, cash flow, sales, title and date.</li></ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>Reconcile the discrepancy: title says "Million Dollar Net Profit per year" but Cash Flow shows $581,384 — which is correct, and on what basis (net income vs. SDE vs. EBITDA)?</li>
+        <li>Provide 3 years of tax returns and monthly P&amp;Ls (2022–2025) plus YTD.</li>
+        <li>How many full-time employees, part-time staff and 1099 contractors?</li>
+        <li>What is the largest single client / largest exclusive-territory share of revenue?</li>
+        <li>What is monthly/annual client retention and churn on territorial retainers?</li>
+        <li>How owner-dependent is the business? Is there a GM who can run it post-sale?</li>
+        <li>Is seller financing available, and what is the reason for selling?</li>
+        <li>What share of revenue is Google Ads spend passed through vs. retained service margin?</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources. Net-profit figure flagged for broker follow-up.</footer>
+</div>
+</body>
+</html>

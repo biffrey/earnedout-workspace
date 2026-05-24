@@ -1,0 +1,21 @@
+{
+  "listing_id": "maya0n",
+  "platform": "DealStream",
+  "direct_url": "https://dealstream.com/d/biz-sale/hvac/maya0n",
+  "business_name": "Thriving HVAC Business (Southwestern South Dakota)",
+  "industry": "HVAC / Mechanical Contractors (Home Services)",
+  "location": "South Dakota, USA",
+  "asking_price": 1495000,
+  "cash_flow_sde": 41515,
+  "revenue_2025": 1036842,
+  "years_in_business": 42,
+  "founded": 1984,
+  "broker": "represented by broker (name not disclosed on listing)",
+  "listed_date": "2024-07-11",
+  "renewed_date": "2026-04-29",
+  "link_health": "Live",
+  "notes": "Geothermal + ductwork specialty, residential + commercial, small SD community",
+  "captured": "2026-05-21",
+  "tag": "[RALPH TEST]",
+  "price_drop_test": "Airtable record will be pre-seeded with Asking Price 1800000 to demonstrate price-drop detection vs live 1495000"
+}

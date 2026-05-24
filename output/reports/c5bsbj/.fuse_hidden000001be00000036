@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Southeast-US Language Translation and Interpreting Business — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 24px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  .callout { background: rgba(245,166,35,.10); border: 1px solid rgba(245,166,35,.4);
+             border-radius: 10px; padding: 14px 16px; margin-bottom: 18px; color: #f0d9b5; }
+  .callout.addon { background: rgba(90,167,255,.10); border-color: rgba(90,167,255,.4); color: #cfe3ff; }
+  .callout strong { color: #fff; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+  .shot { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Southeast-US Language Translation and Interpreting Business — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-21 &nbsp;·&nbsp;
+        Lead source: DealStream listing c5bsbj
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <span class="verdict fail">Buy Box: FAIL (standalone)</span>
+      <span class="verdict conditional">Add-on: Applied Development</span>
+      <div class="score-badge">
+        <div class="num">55</div>
+        <div class="label">Lead Score / 110</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <div class="callout"><strong>STATUS RISK — UNDER CONTRACT.</strong> The listing is flagged UNDER CONTRACT as of the live extraction (2026-05-21) and is not actively available for purchase. This is a timing/availability deal-killer at present — pursue only as a backup-offer position or if the pending transaction collapses. Scoring below evaluates the deal on its merits assuming it re-enters the market.</div>
+
+    <div class="callout addon"><strong>ROLL-UP ADD-ON EVALUATION — Applied Development.</strong> The target is in translation/interpretation services (NAICS 541930) and is screened as a potential roll-up add-on for Applied Development (communications-access / interpretation platform). Applied Development add-ons have <strong>no size floor</strong>; the +10 strategic-fit bonus line is included and the score is reported out of <strong>110</strong>.</div>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip warn">INSUFF.</span></td><td>Listing names an experienced General Manager; total FTE not disclosed. Firms this size typically run a small salaried core plus a large 1099 linguist pool. Needs broker follow-up.</td></tr>
+          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td><span class="chip fail">FAIL</span></td><td>Listing discloses Cash Flow (SDE) of $216,461 — well below the $1M floor. SDE used as EBITDA proxy.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip warn">INSUFF.</span></td><td>Founding date not disclosed in the anonymized listing; no public company match found. Needs broker follow-up.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip warn">INSUFF.</span></td><td>No per-year (2024/2025) revenue or profit split disclosed. Cannot evaluate — needs broker follow-up.</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip pass">PASS</span></td><td>$800,000 ÷ $216,461 SDE = 3.70x — inside the 4.0x ceiling (multiple is on SDE, not normalized EBITDA).</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">INSUFF.</span></td><td>Cannot compute — no financing structure modeled and EBITDA unconfirmed. Informational only; not scored.</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Overall Buy Box:</strong> FAIL (standalone) / CONDITIONAL (add-on). Does not meet standalone EBITDA thresholds (SDE $216K vs $1M floor), but qualifies as a roll-up add-on for Applied Development on a direct industry match, an in-place GM, and a 3.70x entry multiple. Primary blocker is the UNDER CONTRACT status; three of six checks are unverifiable from the anonymized listing.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Southeast-US Language Translation and Interpreting Business (anonymized confidential listing — true identity not disclosed)</td><td>DealStream c5bsbj</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>DealStream listing c5bsbj; brokered by Alliant Capital Advisors</td><td>DealStream / Alliant</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>Not disclosed — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>None disclosed (interpreting businesses are typically asset-light / leased)</td><td>—</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>Not disclosed; GM confirmed in place. Likely small salaried core + large 1099 interpreter pool</td><td>DealStream / industry norm</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Not disclosed; an 80+-language roster is almost certainly delivered largely via 1099 contract linguists</td><td>Industry norm (NAICS 541930)</td></tr>
+          <tr><td>9</td><td>Business address</td><td>Southeast US — exact state/metro not disclosed</td><td>DealStream</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>Not disclosed — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>Not disclosed — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>Not disclosed — needs broker follow-up (do not fabricate)</td><td>—</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>Not disclosed; listing gives trailing Gross Revenue of $1,634,006 without a year label</td><td>DealStream / Alliant</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>Not disclosed; listing gives trailing Cash Flow (SDE) of $216,461 without a year label</td><td>DealStream / Alliant</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>$800,000</td><td>DealStream / Alliant</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>Cannot compute — no per-year revenue disclosed</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>13.2% SDE margin ($216,461 ÷ $1,634,006) — below 15% criterion; true EBITDA margin lower after owner-comp normalization</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>Not disclosed — needs broker follow-up</td><td>—</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td>Not available — confidential; released to buyers under NDA</td><td>—</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>55 / 110</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--muted);font-size:13px;">No values are tagged <span class="est">(est.)</span> — all financials are taken directly from the listing; missing fields are left explicitly blank rather than guessed, per skill rules.</p>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Direct hit — translation &amp; interpretation services, NAICS 541930. 80+ languages, commercial interpretation + translation. Exactly the Applied Development target space.</td></tr>
+          <tr><td>EBITDA tier (non-cumulative)</td><td>0</td><td>15</td><td>SDE of $216,461 is in the ≤$1M tier → 0 pts. SDE used as proxy; normalized EBITDA would be lower.</td></tr>
+          <tr><td>Years in business ≥10</td><td>0</td><td>10</td><td>Founding date not disclosed and no public match found — insufficient data, not awarded.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>0</td><td>10</td><td>No per-year revenue/profit split disclosed — insufficient data, not awarded.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>Commercial-client interpretation/translation is typically repeat work, but no contracted-MRR or retainer mix disclosed → mixed → 5 pts.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Largest-customer share not disclosed — insufficient data, not awarded.</td></tr>
+          <tr><td>Employees ≥10</td><td>0</td><td>10</td><td>FTE count not disclosed — insufficient data, not awarded. GM confirmed; full headcount unknown.</td></tr>
+          <tr><td>Valuation multiple</td><td>15</td><td>15</td><td>$800K ÷ $216,461 SDE = 3.70x — inside the ≤4.0x band → full 15 pts.</td></tr>
+          <tr><td>Low owner dependence</td><td>5</td><td>5</td><td>Experienced General Manager in place; management staying post-sale → not owner-dependent.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>10</td><td>10</td><td>Direct add-on for Applied Development — same NAICS 541930, complementary spoken/foreign-language capability, 80+ languages expand platform reach.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>55</strong></td><td><strong>110</strong></td><td></td></tr>
+        </tbody>
+      </table>
+      <p>Scored as a roll-up add-on for Applied Development; no size floor applied. Three of the zero lines (years, growth, employees, concentration) are zero purely because the anonymized listing withholds the data — not because the business failed. Confirming founding date, headcount, per-year financials, and concentration could move the score to roughly 80–85/110 if those checks pass. <strong>Interpretation band: 50–69 → Review with partner before spending time.</strong></p>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> A Southeast-US language services firm providing interpretation and translation across 80+ languages to commercial clients, sold confidentially via Alliant Capital Advisors. An experienced General Manager runs day-to-day operations and management intends to stay post-sale.</li>
+        <li><strong>Financial highlights:</strong> Trailing Gross Revenue $1,634,006; trailing Cash Flow (SDE) $216,461 (13.2% SDE margin); asking $800,000 = 3.70x SDE. No per-year history disclosed.</li>
+        <li><strong>Buy Box summary:</strong> FAIL (standalone) / CONDITIONAL (add-on) — SDE is far below the $1M EBITDA floor; qualifies for evaluation only as a no-size-floor Applied Development add-on.</li>
+        <li><strong>Why pursue (or not):</strong> For — direct Applied Development add-on, sub-4x multiple, GM-run, 80+ languages. Against — UNDER CONTRACT (not buyable now), small $216K SDE (tuck-in scale), three Buy Box checks unverifiable. Net — a genuine roll-up candidate blocked on availability; log and monitor as a backup-offer / future tuck-in.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>Background and history:</strong> A translation and interpreting services provider serving commercial clients across the Southeast US, offering 80+ languages. Sold as a confidential listing — legal name, founding date, and exact location withheld pending NDA. No public company match could be identified from the disclosed attributes.</p>
+      <p><strong>Ownership structure:</strong> Not disclosed. Run by Alliant Capital Advisors as intermediary, typically indicating a single-owner or family-owned private company seeking exit.</p>
+      <p><strong>Key milestones:</strong> 2025-12-08/09 — listed on DealStream (c5bsbj). 2026-01-19 — listing renewed. On/before 2026-05-21 — moved to UNDER CONTRACT.</p>
+      <p><strong>Organizational structure:</strong> An experienced General Manager runs daily operations; management will remain post-sale. Delivery is almost certainly a small salaried coordination/PM core plus a contracted linguist network — standard for an 80+-language interpreting operation.</p>
+      <h3>Listing screenshot</h3>
+      <img class="shot" src="c5bsbj.png" alt="DealStream listing c5bsbj screenshot" />
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <p>The seller and General Manager are not named in the confidential listing. The only identified principal is the sell-side broker.</p>
+      <h3>Angela Graham — Managing Partner, Alliant Capital Advisors LLC (sell-side broker)</h3>
+      <ul>
+        <li><strong>Role:</strong> Listing broker / M&amp;A intermediary — confidential marketing, buyer pre-screening, NDA management, negotiation and diligence coordination.</li>
+        <li><strong>Background:</strong> Second-generation business broker; daughter of Alliant founder Bill Marrero. Stepped into Managing Partner role in 2022 alongside Jeff Brasher and Bill Oates. Prior career in food-service management, retail management, legal services, and corporate marketing.</li>
+        <li><strong>Education:</strong> Auburn University; Bob Jones High School (Madison, AL).</li>
+        <li><strong>Notable:</strong> Alliant Capital Advisors has closed 150+ businesses since 2005 across the mid-South; offices in Huntsville, AL and Nashville, TN.</li>
+        <li><strong>Contact:</strong> Email pattern a***@alliantbroker.com (confirm with firm) · <a href="https://www.linkedin.com/in/angelaalliantbroker/">LinkedIn</a> · <a href="https://alliantbrokers.com/team/angela-graham/">Team profile</a> · Office: Huntsville, AL / Nashville, TN</li>
+      </ul>
+      <p style="color:var(--muted);">Seller and GM to be identified during NDA-gated diligence.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Descriptions:</strong> Spoken-language interpretation and written translation in 80+ languages, sold to commercial (B2B) clients. The breadth implies on-demand / scheduled interpreting (phone, video remote, and/or on-site) plus document translation.</p>
+      <p><strong>Pricing model:</strong> Not disclosed. Industry norm is per-hour or per-minute for interpretation and per-word for translation, often with minimums and scheduled-account arrangements.</p>
+      <p><strong>Differentiators:</strong> Breadth of language coverage (80+), an established commercial-client base, and an in-place GM providing continuity. No certifications (ISO 17100, ATA corporate membership) or proprietary technology disclosed.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry size and trends:</strong> The global language services market is estimated at roughly $58B–$79B for 2025 depending on source (Mordor ~$72B; Coherent ~$79B). The US Translation Services industry (IBISWorld, NAICS 54193) has grown ~4.1% CAGR 2020–2025; forward global forecasts run 5–9% CAGR. Translation contributes ~43% and interpretation ~32% of category revenue.</p>
+      <p><strong>Drivers and barriers:</strong> Drivers — demand for healthcare, legal, and government language access; immigration-driven demand for less-common languages. Headwinds — AI machine translation is compressing pricing on commodity translation; interpretation (rare languages, legal/medical settings) is more defensible against AI substitution.</p>
+      <p><strong>Competitive landscape:</strong> LanguageLine Solutions / large national LSPs (enterprise-scale OPI/VRI, set price floors); regional LSPs such as ALTA Language Services (mid-market commercial/government accounts); small independent translation/interpreting firms — the target's peer set, typically trading at ~2.5x–4.0x SDE for sub-$1M-SDE deals.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Segments:</strong> Commercial (B2B) clients in the Southeast US; specific verticals not disclosed.</p>
+      <p><strong>Retention:</strong> Not disclosed.</p>
+      <p><strong>Recurring vs one-time:</strong> Not disclosed. Commercial interpretation/translation is typically repeat business and frequently account-based, but no contracted/retainer percentage was provided — treated as mixed in scoring.</p>
+      <p><strong>Top customer concentration:</strong> Not disclosed — a key diligence item. Small LSPs frequently carry meaningful concentration in one or two anchor accounts (a hospital system, a court).</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA / SDE</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2023</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>2024</td><td>Not disclosed</td><td>Not disclosed</td><td>—</td><td>—</td></tr>
+          <tr><td>Trailing (year label not given)</td><td>$1,634,006</td><td>$216,461 (SDE)</td><td>13.2% (SDE)</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M) — only one trailing data point disclosed</text>
+          </g>
+          <g fill="#2a3342">
+            <rect x="60"  y="40" width="60" height="120" rx="3" />
+            <rect x="160" y="40" width="60" height="120" rx="3" />
+            <rect x="260" y="40" width="60" height="120" rx="3" />
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="360" y="50" width="60" height="110" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="175">2022 n/d</text>
+            <text x="190" y="175">2023 n/d</text>
+            <text x="290" y="175">2024 n/d</text>
+            <text x="390" y="175">Trailing 1.63</text>
+          </g>
+        </svg>
+      </div>
+      <p>No per-year history was disclosed, so the YoY trend cannot be assessed and the 3-year-growth Buy Box check is unverifiable. The single trailing point shows $1.63M revenue at a 13.2% SDE margin — modestly below the 15% EBITDA-margin criterion even before owner-comp normalization. Obtaining 3–5 years of P&amp;Ls is the single most important diligence step.</p>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>3.70x SDE</strong> ($800,000 ÷ $216,461). Comparable small LSPs trade ~2.5x–4.0x SDE; 3.70x is at the upper end of the small-firm range but within Biffrey's 4.0x ceiling. A conservative entry would be $540K–$760K (2.5x–3.5x SDE). The multiple is on SDE, not normalized EBITDA — after deducting a market GM salary the effective EBITDA multiple is higher than 3.70x.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul><li>Direct NAICS 541930 fit — clean add-on for Applied Development</li><li>80+ languages — broad coverage useful to a platform</li><li>Experienced GM in place; low owner dependence</li><li>Attractive 3.70x SDE entry multiple</li></ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul><li>Small absolute cash flow ($216K SDE) — tuck-in scale only</li><li>13.2% SDE margin below the 15% criterion</li><li>No per-year financials, founding date, headcount, or concentration disclosed</li><li>Likely 1099-heavy delivery model</li></ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul><li>Fold linguist network and accounts into Applied Development; cross-sell</li><li>Add VRI/OPI tech and contracted-account structure to lift margin</li><li>Geographic/vertical expansion under platform brand</li><li>Normalize owner comp and consolidate G&amp;A</li></ul></div>
+        <div class="cell"><h4>Threats</h4><ul><li><strong>UNDER CONTRACT</strong> — not currently available</li><li>AI machine translation compressing commodity pricing</li><li>Unknown customer concentration — possible anchor dependency</li><li>1099 worker-classification regulatory exposure</li></ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> AI/machine translation erodes pricing on commodity written translation; interpretation (rare languages, regulated settings) is more defensible — confirm translation-vs-interpretation split.</li>
+        <li><strong>Financial:</strong> Thin 13.2% SDE margin; unknown customer concentration; no multi-year trend. True normalized EBITDA likely below SDE once a market GM salary is deducted, raising the effective entry multiple.</li>
+        <li><strong>Operational:</strong> Delivery almost certainly depends on a contracted linguist network — interpreter retention and 1099-vs-W-2 classification are material. GM is the operational linchpin; confirm a retention/transition arrangement.</li>
+        <li><strong>Regulatory / legal:</strong> Court/healthcare interpreting may require certified interpreters — confirm credentialed-linguist coverage. 1099 classification exposure under federal/state labor rules.</li>
+        <li><strong>Deal conditions:</strong> UNDER CONTRACT — not actionable today; pursue only as a backup offer or if the pending deal collapses. Multiple is on SDE not EBITDA — re-underwrite at a market GM salary and negotiate price down if the effective EBITDA multiple exceeds 4.0x. Obtain 3–5 years of P&amp;Ls and tax returns to verify the 3-year-growth and 10-year-tenure checks before committing time.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion potential:</strong> As an Applied Development add-on, the 80+-language roster and Southeast commercial accounts extend platform language coverage and regional footprint. Standalone, the firm is sub-scale.</p>
+      <p><strong>Operational upside:</strong> Margin expansion via account-based/contracted pricing, VRI/OPI technology adoption, G&amp;A consolidation into the platform, and owner-comp normalization. Process installation on a GM-run base is straightforward.</p>
+      <p><strong>Strategic opportunities:</strong> Classic roll-up tuck-in — absorb the linguist network and client list into Applied Development, cross-sell platform services (sign language, CART) into acquired commercial accounts, consolidate back-office.</p>
+      <p><strong>100-day plan sketch (if pursued and available):</strong> (1) NDA, then obtain 3–5 years of P&amp;Ls, tax returns, and a customer-concentration schedule. (2) Re-underwrite at a normalized GM salary; confirm the effective EBITDA multiple and renegotiate if &gt;4.0x. (3) Lock GM and top linguists with retention agreements; audit 1099 classification. (4) Integrate scheduling/billing into Applied Development systems; map cross-sell. (5) Shift commodity translation toward AI-assisted workflows to lift margin.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><a href="https://dealstream.com/d/biz-sale/other-biz-service/c5bsbj">DealStream c5bsbj</a> — primary listing (HTTP 403 on direct fetch; data confirmed via the source below and the supplied extraction).</li>
+        <li><a href="https://alliantbrokers.com/businesses-for-sale/">alliantbrokers.com/businesses-for-sale</a> — confirmed asking price $800,000, gross revenue $1,634,006, cash flow $216,461, date added Dec 8 2025, UNDER CONTRACT status, Southeast-US location.</li>
+        <li><a href="https://alliantbrokers.com/team/angela-graham/">alliantbrokers.com/team/angela-graham</a> — broker bio, background, firm history.</li>
+        <li><a href="https://www.linkedin.com/in/angelaalliantbroker/">linkedin.com/in/angelaalliantbroker</a> — broker LinkedIn profile.</li>
+        <li><a href="https://www.zoominfo.com/p/Angela-Graham/2436633611">zoominfo.com — Angela Graham</a> — broker email pattern and title.</li>
+        <li><a href="https://www.ibisworld.com/united-states/industry/translation-services/1446/">IBISWorld — US Translation Services</a> — industry data (NAICS 54193, ~4.1% CAGR 2020–2025).</li>
+        <li><a href="https://www.mordorintelligence.com/industry-reports/language-services-market">Mordor Intelligence — Language Services Market</a> — global market size (~$72B 2025) and CAGR.</li>
+        <li><a href="https://www.coherentmarketinsights.com/industry-reports/language-services-market">Coherent Market Insights — Language Services Market</a> — alternate global size (~$79B 2025) and 9% CAGR.</li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>No scorecard financial fields were estimated — all financial figures are taken directly from the broker/DealStream listing; unavailable fields are left explicitly blank per skill rules.</li>
+        <li>"SDE used as an EBITDA proxy" — the listing reports "Cash Flow," which on DealStream for owner-operated small businesses is Seller's Discretionary Earnings. True EBITDA after a market GM salary would be lower; stated, not computed, because GM compensation is undisclosed.</li>
+        <li>1099-heavy delivery-model characterization is an industry-norm inference for NAICS 541930 multi-language interpreting, used for narrative/risk context only — not scored.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p>No <span class="est">(est.)</span>-tagged values appear in the scorecard. Computed (non-estimated) figures:</p>
+      <p><strong>Field #21 — EBITDA margin</strong> — 13.2%. Method: $216,461 SDE ÷ $1,634,006 revenue = 0.1324. Labeled an SDE margin, not a normalized EBITDA margin.<br>
+      <strong>Implied multiple</strong> — 3.70x. Method: $800,000 asking price ÷ $216,461 SDE = 3.696x.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul><li>output/screenshots/c5bsbj.png — DealStream listing screenshot supplied with the lead; confirmed business name, $800,000 ask, $216,461 cash flow, $1,634,000 sales, UNDER CONTRACT banner, Alliant Capital Advisors broker. Copied to output/reports/c5bsbj/c5bsbj.png.</li></ul>
+      <h3>E. Open questions for the seller / broker</h3>
+      <ul>
+        <li>Is a backup-offer position being accepted while under contract? Expected timeline / drop-dead date on the current contract?</li>
+        <li>Founding year / years in business?</li>
+        <li>Full-time employee count vs. 1099 contract linguists?</li>
+        <li>2022–2025 revenue and SDE/EBITDA by year (to test 3-year-growth and tenure checks)?</li>
+        <li>Customer concentration — largest client and top-5 share of revenue?</li>
+        <li>Recurring/contracted vs. project revenue mix; are commercial accounts under written contracts?</li>
+        <li>Translation vs. interpretation revenue split; share of remote (OPI/VRI) vs. on-site?</li>
+        <li>Exact state/metro location; owned real estate or material FF&amp;E?</li>
+        <li>GM compensation (to normalize EBITDA) and willingness to sign a retention agreement?</li>
+        <li>Court/medical-certified interpreters on roster; how is 1099 classification handled?</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources. Roll-up add-on evaluation for Applied Development — scored out of 110.</footer>
+</div>
+</body>
+</html>

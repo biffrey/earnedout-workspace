@@ -1,0 +1,221 @@
+{
+  "totalRecords": 1,
+  "entityData": [
+    {
+      "entityRegistration": {
+        "samRegistered": "Yes",
+        "ueiSAM": "FUT6MQ1MCDC9",
+        "entityEFTIndicator": null,
+        "cageCode": "4YL49",
+        "dodaac": null,
+        "legalBusinessName": "ACCESS INTERPRETING INC",
+        "dbaName": null,
+        "purposeOfRegistrationCode": "Z2",
+        "purposeOfRegistrationDesc": "All Awards",
+        "registrationStatus": "Active",
+        "evsSource": "E&Y",
+        "registrationDate": "2008-01-10",
+        "lastUpdateDate": "2026-04-20",
+        "registrationExpirationDate": "2027-04-10",
+        "activationDate": "2026-04-20",
+        "ueiStatus": "Active",
+        "ueiExpirationDate": null,
+        "ueiCreationDate": "2020-05-01",
+        "publicDisplayFlag": "Y",
+        "exclusionStatusFlag": "N",
+        "exclusionURL": null,
+        "dnbOpenData": null
+      },
+      "coreData": {
+        "entityInformation": {
+          "entityURL": "http://www.ainterpreting.com",
+          "entityDivisionName": null,
+          "entityDivisionNumber": null,
+          "entityStartDate": "2007-12-06",
+          "fiscalYearEndCloseDate": "12/31",
+          "submissionDate": "2026-04-10"
+        },
+        "physicalAddress": {
+          "addressLine1": "10507 OAKTON RIDGE CT",
+          "addressLine2": null,
+          "city": "OAKTON",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "22124",
+          "zipCodePlus4": "1650",
+          "countryCode": "USA"
+        },
+        "mailingAddress": {
+          "addressLine1": "200 Lawyers Road NW #1993",
+          "addressLine2": null,
+          "city": "Vienna",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "22180",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "congressionalDistrict": "11",
+        "generalInformation": {
+          "entityStructureCode": "2L",
+          "entityStructureDesc": "Corporate Entity (Not Tax Exempt)",
+          "entityTypeCode": "F",
+          "entityTypeDesc": "Business or Organization",
+          "profitStructureCode": "2X",
+          "profitStructureDesc": "For Profit Organization",
+          "organizationStructureCode": "XS",
+          "organizationStructureDesc": "Subchapter S Corporation",
+          "stateOfIncorporationCode": "VA",
+          "stateOfIncorporationDesc": "VIRGINIA",
+          "countryOfIncorporationCode": "USA",
+          "countryOfIncorporationDesc": "UNITED STATES"
+        },
+        "businessTypes": {
+          "businessTypeList": [
+            {
+              "businessTypeCode": "2X",
+              "businessTypeDesc": "For Profit Organization"
+            },
+            {
+              "businessTypeCode": "F",
+              "businessTypeDesc": "Business or Organization"
+            },
+            {
+              "businessTypeCode": "XS",
+              "businessTypeDesc": "Subchapter S Corporation"
+            }
+          ],
+          "sbaBusinessTypeList": [
+            {
+              "sbaBusinessTypeCode": null,
+              "sbaBusinessTypeDesc": null,
+              "certificationEntryDate": null,
+              "certificationExitDate": null
+            }
+          ]
+        },
+        "financialInformation": {
+          "creditCardUsage": "Y",
+          "debtSubjectToOffset": "N"
+        }
+      },
+      "assertions": {
+        "goodsAndServices": {
+          "primaryNaics": "541930",
+          "naicsList": [
+            {
+              "naicsCode": "541930",
+              "naicsDescription": "Translation and Interpretation Services",
+              "sbaSmallBusiness": "Y",
+              "naicsException": null
+            }
+          ],
+          "pscList": [
+            {
+              "pscCode": null,
+              "pscDescription": null
+            }
+          ]
+        },
+        "disasterReliefData": {
+          "disasterRegistryFlag": "YES",
+          "bondingFlag": "NO",
+          "geographicalAreaServed": [
+            {
+              "geographicalAreaServedStateCode": "Any",
+              "geographicalAreaServedStateName": null,
+              "geographicalAreaServedCountyCode": null,
+              "geographicalAreaServedCountyName": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaCode": null,
+              "geographicalAreaServedmetropolitanStatisticalAreaName": null
+            }
+          ]
+        },
+        "ediInformation": {
+          "ediInformationFlag": "N"
+        }
+      },
+      "pointsOfContact": {
+        "governmentBusinessPOC": {
+          "firstName": "Brad",
+          "middleInitial": null,
+          "lastName": "Leon",
+          "title": null,
+          "addressLine1": "200 Lawyers Road NW #1993",
+          "addressLine2": null,
+          "city": "Vienna",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "22180",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessPOC": {
+          "firstName": "Brad",
+          "middleInitial": null,
+          "lastName": "Leon",
+          "title": null,
+          "addressLine1": "200 Lawyers Road NW #1993",
+          "addressLine2": null,
+          "city": "Vienna",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "22180",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "governmentBusinessAlternatePOC": {
+          "firstName": "Kimberley",
+          "middleInitial": null,
+          "lastName": "Chemerika",
+          "title": null,
+          "addressLine1": "200 Lawyers Road #1993",
+          "addressLine2": null,
+          "city": "Vienna",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "22180",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "electronicBusinessAlternatePOC": {
+          "firstName": "Julianna",
+          "middleInitial": null,
+          "lastName": "Emery",
+          "title": null,
+          "addressLine1": "200 Lawyers Road, #1993",
+          "addressLine2": "#1993",
+          "city": "Vienna",
+          "stateOrProvinceCode": "VA",
+          "zipCode": "22180",
+          "zipCodePlus4": null,
+          "countryCode": "USA"
+        },
+        "pastPerformancePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        },
+        "pastPerformanceAlternatePOC": {
+          "firstName": null,
+          "middleInitial": null,
+          "lastName": null,
+          "title": null,
+          "addressLine1": null,
+          "addressLine2": null,
+          "city": null,
+          "stateOrProvinceCode": null,
+          "zipCode": null,
+          "zipCodePlus4": null,
+          "countryCode": null
+        }
+      }
+    }
+  ],
+  "links": {
+    "selfLink": "https://api.sam.gov/entity-information/v3/entities?api_key=REPLACE_WITH_API_KEY&ueiSAM=FUT6MQ1MCDC9&registrationStatus=A&includeSections=entityRegistration%2CcoreData%2Cassertions%2CpointsOfContact&page=0&size=10"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "entity_id": "UEI:HYDWL7JCHBG4",
+  "target_class": 1,
+  "business_name": "SENECA GLOBAL SERVICES LLC",
+  "industry": "Federal professional services / staffing (NAICS 541930 contract revenue but firm is broader gov consulting, not a pure ASL/CART line)",
+  "location": {
+    "city": "Chantilly",
+    "state": "VA"
+  },
+  "website": "https://senecanationgroup.com/companies/seneca-global-services/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "signal: $28.0M of NAICS 541930 federal contract revenue (subset of broader federal services portfolio) \u2014 gov-contract revenue only",
+  "federal_award_total": 27963698.84,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": null,
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": null,
+  "sbic_gp_economics": null,
+  "gov_data_source": [
+    "USAspending"
+  ],
+  "provenance_urls": [
+    "https://www.usaspending.gov/recipient/9515182c-9747-d27e-b80f-6610b179fede-C/latest"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": "adjacent",
+  "summary": "Subsidiary of the Seneca Nation Group (tribally-owned). Provides executive consulting and programmatic support to Federal Civilian, Defense, and Intelligence Community clients. NAICS 541930 awards reflect language-services contracts but firm is not a pure ASL/CART agency.",
+  "fit_note": "Tribal-owned federal staffing subsidiary \u2014 not a roll-up-ready ASL agency; surfaced for completeness only",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "primary contact name \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up"
+  ],
+  "deaf_specificity": "weak",
+  "sbic_funds": null
+}

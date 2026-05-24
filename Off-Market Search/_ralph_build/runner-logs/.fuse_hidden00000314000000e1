@@ -1,0 +1,18 @@
+Iteration 33 complete — one step done.
+
+**Step executed:** s2 (Airtable schema) — SELF-TEST phase.
+
+**What I did:**
+- Drove the fail-loud preflight Procedure live against base `appOsvuyy5eK43QTx` / table `tblSmNrHROMLm7vOS` via the Airtable MCP (`list_tables_for_base` + `get_table_schema`).
+- All 6 checks PASS:
+  - C1 — all six required fields exist with correct name+type
+  - C2 — both off-market `Source` values present, byte-for-byte (em dash U+2014)
+  - C3 — `SBIC License Status` has all five standing options
+  - C4 — `Gov Data Source` carries the eight expected choices; currency config correct
+  - C5 — preflight passes end-to-end against the live schema
+  - C6 — fail-loud branch confirmed (the iter-21 s7 SELF-TEST observed a real halt when B4 was open)
+- No BLOCKING defect, no new findings.
+
+**State changes:** s2 `drafted → self_checked`; `iteration` 32→33; `unresolved_findings` 27, `open_blockers` 0 (unchanged). Logged to `TEST_LOG.md`, updated `evidence/s2-airtable-schema.md`, committed `6adef91`.
+
+**Signal:** `CONTINUE` — s2 next goes to VERIFY; s7 and s10 also remain non-blocked.

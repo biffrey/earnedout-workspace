@@ -1,0 +1,22 @@
+Iteration 18 complete — one step executed.
+
+## Summary
+
+**Step: s6 (Scoring integration) — SELF-TEST** (`drafted → self_checked`)
+
+s2 is `blocked` (B4 — operator must add the two off-market `Source` values), so s6 was the lowest non-blocked, non-verified stage.
+
+Drove the s6 procedure over the two s5 `LeadPacket`s, scoring each by invoking the **unmodified** `prospect-evaluation` skill:
+
+| Candidate | Mode | Score | Notes |
+|---|---|---|---|
+| R1 — EXAMPLE INTERPRETING FIXTURE LLC (Class 1, fixture) | `rollup_addon` | 30 / 110 | full +10 line-10 bonus (core tier) |
+| R2 — 1st Source Capital Corporation (Class 2, real SBIC) | `sbic` | 30 / 100 (informational) | SBIC gate ✅ PASS from `Good Standing` |
+
+**All 7 checks PASS, 0 BLOCKING.** Verified artifacts on disk (not just subagent claims): both `.md`+`.html` reports + `lead-packet.json` in `output/reports/{report_slug}/`. "No asking price" handled gracefully as "insufficient data — not awarded" in both runs (no crash/abort/drop); `report_slug`s filesystem-safe and deterministic; no fabrication; SBA prior-approval change-of-control fact carried on the Class-2 report.
+
+Two non-blocking carry-notes to the VERIFY critic: R1 is a fixture (genuine Class-1 real-company end-to-end score deferred to s10, per the existing IMPROVE-s3-1 chain); and a pre-existing EBITDA-band wording inconsistency inside the unmodified `prospect-evaluation` skill (out of scope).
+
+**Updated:** `evidence/s6-selftest.md` (new), `TEST_LOG.md`, `STATE.md` (iter 18, s6 → `self_checked`). Committed `d14a211`.
+
+**Signal: `CONTINUE`** — s6 VERIFY plus s7–s10 remain (open_blockers: 4, unresolved_findings: 15).

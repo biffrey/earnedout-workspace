@@ -1,0 +1,73 @@
+{
+  "entity_id": "NAME:canapi ventures|washington dc",
+  "target_class": 2,
+  "business_name": "Canapi Ventures",
+  "industry": "SBIC GP \u2014 Fintech venture capital",
+  "location": {
+    "city": "Washington",
+    "state": "DC"
+  },
+  "website": "https://www.canapi.com/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "needs follow-up",
+  "federal_award_total": null,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": "GP principal",
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": "Good Standing",
+  "sbic_gp_economics": {
+    "aum": 1400000000,
+    "fund_count": 2,
+    "vintage_range": "2019-2022",
+    "strategy": "Fintech venture"
+  },
+  "gov_data_source": [
+    "SBA SBIC"
+  ],
+  "provenance_urls": [
+    "https://www.sba.gov/funding-programs/investment-capital/sbic-directory"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": null,
+  "summary": "DC-based fintech VC, founded 2018. $1.4B AUM across two SBIC funds. Backed by ~70 American financial institutions. Strategy: B2B fintech and financial infrastructure. Note: Canapi is advised by Canapi Advisors LLC, a Live Oak Bancshares subsidiary, and CenterHarbor Advisors \u2014 captive corporate-VC structure complicates standalone acquisition.",
+  "fit_note": "Captive corporate-VC structure (Live Oak Bancshares affiliate) \u2014 acquisition path is complex",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "primary contact name \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up",
+    "revenue signal \u2014 needs follow-up"
+  ],
+  "deaf_specificity": null,
+  "sbic_funds": [
+    {
+      "fund_name": "Canapi Ventures SBIC Fund II, L.P.",
+      "vintage": "2022",
+      "fund_size": "269607907",
+      "strategy": "Balanced Venture",
+      "style": "Venture",
+      "making_new": "Yes",
+      "avg_inv": "2643736"
+    },
+    {
+      "fund_name": "Canapi Ventures SBIC Fund II, LP",
+      "vintage": "2022",
+      "fund_size": "272334119",
+      "strategy": "Venture",
+      "style": "Hybrid",
+      "making_new": "Yes",
+      "avg_inv": ""
+    }
+  ]
+}

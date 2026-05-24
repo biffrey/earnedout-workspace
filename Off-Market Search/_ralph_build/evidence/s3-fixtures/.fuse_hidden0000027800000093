@@ -1,0 +1,51 @@
+{
+  "_fixture": {
+    "source_id": "S1",
+    "kind": "live-recording",
+    "endpoint": "POST https://api.usaspending.gov/api/v2/search/spending_by_award/",
+    "captured_at": "2026-05-22",
+    "query": {
+      "filters": {
+        "naics_codes": ["541930"],
+        "award_type_codes": ["A", "B", "C", "D"],
+        "time_period": [{ "start_date": "2020-10-01", "end_date": "2025-09-30" }]
+      },
+      "limit": 5,
+      "sort": "Award Amount",
+      "order": "desc"
+    }
+  },
+  "results": [
+    {
+      "internal_id": 272140569,
+      "Award ID": "0001",
+      "Recipient Name": "THE MISSION ESSENTIAL GROUP, LLC",
+      "recipient_id": "d3ea8c01-41f3-84ef-1c1c-3c5736094cc5-C",
+      "Award Amount": 1109510733.69,
+      "Awarding Agency": "Department of Defense",
+      "naics_code": "541930",
+      "generated_internal_id": "CONT_AWD_0001_9700_W911W411D0007_9700"
+    },
+    {
+      "internal_id": 306297111,
+      "Award ID": "H9222213C0053",
+      "Recipient Name": "WORLDWIDE LANGUAGE RESOURCES, LLC",
+      "recipient_id": "6173daa5-78f1-b542-8184-6873be6fa6f6-C",
+      "Award Amount": 461722814.2,
+      "Awarding Agency": "Department of Defense",
+      "naics_code": "541930",
+      "generated_internal_id": "CONT_AWD_H9222213C0053_9700_-NONE-_-NONE-"
+    },
+    {
+      "internal_id": 278314690,
+      "Award ID": "15JPSS24F00000704",
+      "Recipient Name": "SOS INTERNATIONAL LLC",
+      "recipient_id": "aee3ebde-7484-0fac-c8b8-43896b620d02-C",
+      "Award Amount": 125898658.05,
+      "Awarding Agency": "Department of Justice",
+      "naics_code": "541930",
+      "generated_internal_id": "CONT_AWD_15JPSS24F00000704_1501_15JPSS20D00000366_1501"
+    }
+  ],
+  "page_metadata": { "page": 1, "hasNext": true }
+}

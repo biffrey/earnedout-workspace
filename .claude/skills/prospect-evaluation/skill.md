@@ -7,6 +7,8 @@ description: Evaluates US-based businesses against Biffrey Braxton / EarnedOut's
 
 Evaluates US-based businesses as acquisition targets for Biffrey Braxton (EarnedOut). Produces a deterministic Buy Box screen, a 0–100 lead score, and a full deal memo.
 
+> **Path note.** Every `references/…` and `templates/…` path in this skill is relative to **this skill's own directory** — the folder that contains this `skill.md`. Load those files from beside this file. Do not resolve them against the caller's working directory, and never fall back to a copy under `~/.claude/` or any other location. The rubric in `references/buy-box-and-scoring.md` is the single source of truth — read it from disk and apply it verbatim; never score from memory or approximation.
+
 ## Core outputs (always, in this order)
 
 1. **Buy Box Screening Header** — six ✅/❌ checks, each with a cited data point.
@@ -107,6 +109,8 @@ Verify all of:
 13. **SBIC targets.** An SBIC acquisition is the purchase of the GP / management entity holding an SBA SBIC license. The sole gating criterion is that the license is **active and in good standing**; the standard EBITDA / FTE / growth / valuation criteria are reported but non-gating, and the 0–100 score is informational only. Any change of control of a licensed SBIC requires SBA approval (closing condition). See `references/buy-box-and-scoring.md` → "SBIC (Small Business Investment Company) targets".
 
 ## Reference files (load only when needed)
+
+These live in this skill's own `references/` directory, beside this `skill.md` (see the Path note above).
 
 - `references/buy-box-and-scoring.md` — Buy Box criteria, full financial/operational criteria, deal structure prefs, and the exact 0–100 rubric.
 - `references/industries-and-geography.md` — Target industries with keyword lists, exclusions, geography priorities, law-firm jurisdiction rules.

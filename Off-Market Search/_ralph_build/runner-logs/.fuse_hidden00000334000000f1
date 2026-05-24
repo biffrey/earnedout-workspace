@@ -1,0 +1,13 @@
+Iteration 72 complete — one RESOLVE step.
+
+**What I did:** Cleared finding **IMPROVE-s4-4** (s4 — the resolution-accuracy spot-check never exercised the primary Class-1 source because every S1/USAspending record fell to `needs_operator_review`).
+
+Since its blocking precondition **IMPROVE-s3-1** is now resolved (iter 55 — the S1 adapter populates a real `uei` via the `recipient/{recipient_id}` follow-up), I:
+- Added an explicit **"S1 coverage gate"** to §6 of `entity_resolution.md` requiring s10's larger-sample accuracy spot-check to include real S1-sourced resolution clusters once a live S1 query has run.
+- Refreshed the stale "Caveat" bullet in `s4-selftest.md` that mis-cited "once B3 clears" — re-attributed it to IMPROVE-s3-1 and the new §6 gate.
+
+Spec-clarity/evidence change only — no resolution, dedup, or merge behavior changed; no fabrication, no scorer touched, no outreach sent.
+
+**State:** iteration 71→72; `unresolved_findings` 11→10; finding moved to FINDINGS.md "Resolved"; committed locally (`offmarket-build: iter 72 — RESOLVE IMPROVE-s4-4`).
+
+**Signal:** `CONTINUE` — 10 IMPROVE/NIT findings remain, all stages verified, 0 open blockers; the loop continues clearing findings one per iteration toward COMPLETE.

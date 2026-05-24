@@ -47,10 +47,10 @@ mutations).
 >
 > **2. [No issue] Check 3 (prospect-evaluation skill + references + templates)
 > verified.** I ran `[ -s ]` on all 7 named files: `prospect-evaluation/skill.md`
-> (10576 B), `references/buy-box-and-scoring.md` (11730 B),
-> `references/industries-and-geography.md` (12931 B),
-> `references/research-playbook.md` (12061 B), `templates/single-report.md`
-> (9475 B), `templates/single-report.html` (16556 B), `templates/batch-screen.md`
+> (10576 B), `.claude/skills/prospect-evaluation/references/buy-box-and-scoring.md` (11730 B),
+> `.claude/skills/prospect-evaluation/references/industries-and-geography.md` (12931 B),
+> `.claude/skills/prospect-evaluation/references/research-playbook.md` (12061 B), `.claude/skills/prospect-evaluation/templates/single-report.md`
+> (9475 B), `.claude/skills/prospect-evaluation/templates/single-report.html` (16556 B), `.claude/skills/prospect-evaluation/templates/batch-screen.md`
 > (2969 B). All sizes match TEST_LOG Iteration 12 byte-for-byte. Content heads
 > confirm genuine migrated content, not stubs (valid YAML frontmatter, real
 > headings, `<!doctype html>`). The plan-required `templates/daily-dashboard.html`
@@ -748,7 +748,7 @@ s1→s10 scan skipped `s1_repo`/`s2_playwright`/`s4_airtable`/`s5_overnight_skil
 Spawned an independent general-purpose critic subagent (Appendix C brief):
 skeptical fresh context, told to read `REVAMP_PLAN.md` "Step 7" +
 "Implementation Order" #8, `_ralph/TEST_LOG.md` Iteration 19, the artifact
-`templates/daily-dashboard.html`, `templates/single-report.html`, and the
+`templates/daily-dashboard.html`, `.claude/skills/prospect-evaluation/templates/single-report.html`, and the
 committed evidence under `_ralph/evidence/iter19/`; read-only (no file
 modification).
 

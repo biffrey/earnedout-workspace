@@ -1,0 +1,48 @@
+{
+  "entity_id": "UEI:FUT6MQ1MCDC9",
+  "target_class": 1,
+  "business_name": "ACCESS INTERPRETING INC",
+  "industry": "Sign-language interpreting + CART + spoken language (NAICS 541930, core deaf-services line)",
+  "location": {
+    "city": "Oakton",
+    "state": "VA"
+  },
+  "website": "https://ainterpreting.com/",
+  "website_status": "live",
+  "screenshot_path": "output/screenshots/uei-fut6mq1mcdc9.png",
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "signal: $22.3M of federal contract revenue trailing 5 FYs \u2014 gov-contract revenue only",
+  "federal_award_total": 22341506.52,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": null,
+    "title": null,
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": null,
+  "sbic_gp_economics": null,
+  "gov_data_source": [
+    "USAspending"
+  ],
+  "provenance_urls": [
+    "https://www.usaspending.gov/recipient/7fc32726-99ce-8f72-bbcf-42af91b856ea-C/latest"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": "core",
+  "summary": "Deaf and CODA-owned for-profit S-Corp in Oakton, VA. On-site, phone, and virtual interpreting: ASL, CART, spoken language interpreting, document translation (100+ languages). Industries: healthcare, education, government, law.",
+  "fit_note": null,
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "primary contact name \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up"
+  ],
+  "deaf_specificity": "strong",
+  "sbic_funds": null
+}

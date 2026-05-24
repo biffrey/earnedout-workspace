@@ -163,6 +163,15 @@ Per the §13 resolution: off-market rows get an **"Off-Market" badge**, **not** 
 new `Source` column. The badge is added to `templates/daily-dashboard.html` by
 this stage (s7); s9 wires the lead dicts that drive it.
 
+**Whole-tracker rendering (not per-run).** The dashboard's Section B
+(`running_queue`) and Section C (`revisit_bucket`) must be populated from a
+fresh read of the **entire** `tblSmNrHROMLm7vOS` tracker — every
+`Disposition = "Active"` row into B, every `"Revisit for Roll-up"` row into C —
+exactly as `overnight-search` Step 10 does. Section A (`new_finds`) carries only
+this run's leads. Populating B/C from the off-market run's own leads alone drops
+every on-market lead and every prior-run row from the dashboard; the badge logic
+below is additive and does not change this.
+
 - **Badge style.** A `.chip.offmarket` class, sibling to the existing
   `.chip.price-drop` / `.chip.manual` chips, in the dashboard `<style>` block.
 - **Render condition.** In Section A (New Finds) and Section B (Running Queue),

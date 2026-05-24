@@ -1,0 +1,63 @@
+{
+  "entity_id": "NAME:centerharbor canapi ventures investment advisors|washington dc",
+  "target_class": 2,
+  "business_name": "CenterHarbor Canapi Ventures Investment Advisors LLC",
+  "industry": "SBIC GP \u2014 Fintech venture capital (Canapi vehicle)",
+  "location": {
+    "city": "Washington",
+    "state": "DC"
+  },
+  "website": "https://www.canapi.com/",
+  "website_status": "live",
+  "screenshot_path": null,
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "needs follow-up",
+  "federal_award_total": null,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": "James Mahan",
+    "title": "Managing Partner",
+    "email": null,
+    "phone": null
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": "Good Standing",
+  "sbic_gp_economics": {
+    "aum": 524335318,
+    "fund_count": 1,
+    "vintage": "2019",
+    "strategy": "Fintech venture"
+  },
+  "gov_data_source": [
+    "SBA SBIC"
+  ],
+  "provenance_urls": [
+    "https://www.sba.gov/funding-programs/investment-capital/sbic-directory"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": null,
+  "summary": "Legal management entity for Canapi Ventures SBIC Fund I (2019 vintage, $524M). James Mahan (Live Oak CEO) Managing Partner; Dan Beldy Partner. Founders Neil Underwood, Walker Forehand. Same operational footprint as Canapi Ventures.",
+  "fit_note": "Same operational unit as Canapi Ventures \u2014 duplicate fund-management layer",
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "contact email \u2014 needs follow-up",
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up",
+    "revenue signal \u2014 needs follow-up"
+  ],
+  "deaf_specificity": null,
+  "sbic_funds": [
+    {
+      "fund_name": "Canapi Ventures SBIC Fund, L.P.",
+      "vintage": "2020",
+      "fund_size": "524335318",
+      "strategy": "Venture",
+      "style": "Venture",
+      "making_new": "Yes",
+      "avg_inv": "8021693"
+    }
+  ]
+}

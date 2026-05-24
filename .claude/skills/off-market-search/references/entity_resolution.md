@@ -143,13 +143,26 @@ protects the §2.2 **<5% duplicate-rate** metric.
 Read the tracker once per run (Airtable MCP `list_records_for_table`, fields:
 `Gov Entity ID`, `Business Name`, `Business Address`, `SBIC License #`,
 `Source`, `Disposition`, `Link Last Checked`, `Date Updated`, `Notes`) and build
-three in-memory lookup indexes — gov-id, normalized name+address, SBIC license.
+three in-memory lookup indexes — gov-id (keyed by the full prefixed
+`Gov Entity ID` string), normalized name+address, SBIC license. **Read every
+tracker row** — on-market *and* prior off-market rows are all dedup targets;
+do not filter the read by `Source`, and paginate if the table exceeds one page.
+**Sanity check:** once a prior off-market run has executed, the tracker will
+contain rows with an off-market `Source` and a populated `Gov Entity ID`; if
+this read returns zero such rows, treat it as a probable read failure and halt
+the write step rather than re-creating duplicates.
 
 ### Match keys (any one match ⇒ `existing`)
 
-- **Key A — government identifier.** Candidate `uei` **or** `cage_code` equals a
-  stored `Gov Entity ID` ⇒ existing record. (`Gov Entity ID` stores the
-  resolved id — see §5.) Exact match.
+- **Key A — government identifier.** Build the candidate's `entity_id` with its
+  §5 prefix (`UEI:<uei>` / `CAGE:<cage>` / `SBIC:<license_no>` /
+  `NAME:<norm_name>|<zip-or-citystate>`) and test that **full prefixed string**
+  for exact equality against each stored `Gov Entity ID`. The stored
+  `Gov Entity ID` is itself the §5-constructed form (e.g. `UEI:LCYFBNAT8EY4`),
+  **never** a bare identifier — so comparing a bare `uei`/`cage_code` against it
+  will never match and would re-surface every prior off-market row as a brand-new
+  duplicate. Always compare prefixed `entity_id` ⇄ `Gov Entity ID`. An exact
+  match ⇒ existing record.
 - **Key B — name + address.** `norm_name(candidate.legal_name)` ∈
   `{norm_name(all_names)}` equals `norm_name(Business Name)` **and**
   `norm_addr` agrees at ZIP / city+state grain ⇒ existing record. This is the

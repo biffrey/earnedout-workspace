@@ -1,0 +1,9 @@
+Iteration 64 complete — one RESOLVE step.
+
+**Resolved IMPROVE-s5-1** (s5 — screenshot path not filesystem-safe). The §3.1 screenshot path in `enrichment.md` used `{entity-id}` directly, but the off-market `entity_id` embeds `:`, `|`, spaces, and `/` (e.g. `NAME:abacus finance group|new york ny`, `SBIC:09/79-0292`) — fragile in filenames, unlike the alphanumeric `listing-id` the convention was copied from. I changed it to `{entity-id-slug}` with an explicit slug rule (lowercase, replace non-`[a-z0-9]` runs with `-`, collapse, trim) plus three worked examples. The canonical `entity_id` stays verbatim in `Gov Entity ID`; only the screenshot filename is slugified, and the slug form matches the existing `output/reports/` directory naming.
+
+- `STATE.md`: iteration 63 → 64, `unresolved_findings` 19 → 18
+- Finding moved to FINDINGS.md "Resolved"; logged to IMPLEMENTATION_LOG.md
+- Committed locally; signal → `CONTINUE`
+
+18 findings remain — RESOLVE phase continues next iteration.

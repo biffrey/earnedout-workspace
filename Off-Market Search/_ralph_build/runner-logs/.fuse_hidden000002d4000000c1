@@ -1,0 +1,12 @@
+Iteration 16 complete — one (stage, phase) step done.
+
+**Step:** s5 (Enrichment & qualification pre-filters) — **VERIFY**
+
+A fresh-context critic subagent independently re-inspected the s5 artifacts after the iter-14 re-IMPLEMENT and confirmed **PASS (0 BLOCKING)**:
+- **BLOCKING-s5-1 genuinely resolved** — the critic queried the live Airtable `Gov Data Source` field and verified the new §5.1 `source_id → Gov Data Source` mapping table uses only the eight live choices, with a concrete fail-loud rule on unmapped source IDs.
+- All three Done-when criteria met: complete lead packet, pre-filters drop non-fits before enrichment, SBIC standing cross-referenced beyond the directory.
+- One new non-blocking finding (IMPROVE-s5-4 — stale line refs in self-test C7).
+
+**State updated:** s5 → `verified`; iteration 15 → 16; `unresolved_findings` 14 → 15; `open_blockers` unchanged at 4. Committed locally (`e773dea`).
+
+**Signal:** `CONTINUE` — non-blocked work remains (s6 scoring is `not_started`; s2 stays blocked on B4). Next iteration: s6 IMPLEMENT.

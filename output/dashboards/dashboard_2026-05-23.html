@@ -1,0 +1,6091 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EarnedOut Daily Dashboard — 2026-05-23</title>
+<style>
+  /* Palette mirrors .claude/skills/prospect-evaluation/templates/single-report.html (prospect-evaluation aesthetic) */
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55; font-size: 15px;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+  /* Header banner — matches single-report.html header.banner */
+  header.banner {
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+
+  .stats-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .stat-card {
+    background: var(--badge); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 18px; text-align: center; min-width: 110px;
+  }
+  .stat-card .num { font-size: 30px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .stat-card .label {
+    font-size: 11px; color: var(--muted); letter-spacing: .08em;
+    text-transform: uppercase; margin-top: 4px;
+  }
+
+  /* Sections — matches single-report.html section */
+  section {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 18px;
+  }
+  section h2 {
+    margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+  section h2 .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; margin-left: 8px;
+    background: rgba(90,167,255,.15); color: var(--accent);
+    border: 1px solid rgba(90,167,255,.3);
+  }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+
+  /* Tables — matches single-report.html */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td {
+    text-align: left; padding: 9px 10px;
+    border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  th {
+    color: var(--muted); font-weight: 600; font-size: 12px;
+    letter-spacing: .04em; text-transform: uppercase; background: var(--panel-2);
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(90,167,255,.04); }
+
+  /* Score cell + chips */
+  .score { font-weight: 800; font-size: 16px; }
+  .score.high { color: var(--pass); }
+  .score.mid  { color: var(--accent); }
+  .score.low  { color: var(--fail); }
+
+  .chip {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; margin-left: 6px;
+  }
+  .chip.price-drop {
+    background: rgba(245,166,35,.15); color: var(--warn);
+    border: 1px solid rgba(245,166,35,.4);
+  }
+  .chip.manual {
+    background: rgba(90,167,255,.15); color: var(--accent);
+    border: 1px solid rgba(90,167,255,.3);
+  }
+  /* Off-market badge — set on rows whose Source starts with "Off-Market" */
+  .chip.offmarket {
+    background: rgba(47,191,113,.15); color: var(--pass);
+    border: 1px solid rgba(47,191,113,.4);
+  }
+
+  /* Run-summary grid */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 768px) { .summary-grid { grid-template-columns: 1fr; } }
+  .summary-card {
+    background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px;
+  }
+  .summary-card h3 {
+    font-size: 13px; color: var(--muted); letter-spacing: .06em;
+    text-transform: uppercase; margin: 0 0 10px 0;
+  }
+  .summary-card ul { list-style: none; }
+  .summary-card li { padding: 3px 0; font-size: 14px; }
+  .summary-card li strong { color: var(--text); }
+
+  .empty-state {
+    color: var(--muted); font-style: italic; text-align: center; padding: 22px;
+  }
+
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 16px; }
+  footer code { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="banner">
+    <div>
+      <h1>EarnedOut Daily Dashboard</h1>
+      <div class="meta">
+        2026-05-23 &nbsp;&middot;&nbsp; Overnight Search Run Report
+        &nbsp;&middot;&nbsp; Prepared for <strong>Biffrey Braxton / EarnedOut</strong>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="num">249</div>
+        <div class="label">New Finds</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">0</div>
+        <div class="label">Price Drops</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">50</div>
+        <div class="label">Active Queue</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">0</div>
+        <div class="label">Revisit Bucket</div>
+      </div>
+    </div>
+  </header>
+
+  
+  <section id="section-a">
+    <h2>Section A: Last Night's New Finds
+      <span class="badge">249 new</span>
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:50px;">Rank</th>
+          <th style="width:64px;">Score</th>
+          <th>Business Name</th>
+          <th>Industry</th>
+          <th style="width:60px;">State</th>
+          <th>Asking Price</th>
+          <th>EBITDA</th>
+          <th>Source</th>
+          <th style="width:70px;">Report</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>1</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            ACCESS INTERPRETING INC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-fut6mq1mcdc9/access-interpreting-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>2</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            TCS INTERPRETING, INC.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-mq42vnnuk3j9/tcs-interpreting-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>3</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            DEAF ACCESS SOLUTIONS, INC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-nlgqmmkf25x7/deaf-access-solutions-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>4</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            MID-ATLANTIC INTERPRETING GROUP, INC.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-lcyfbnat8ey4/mid-atlantic-interpreting-group-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>5</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            FRIENDS INTERPRETING SERVICES LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>WV</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-vj1rlkhj2lf3/friends-interpreting-services-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>6</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            SOS INTERNATIONAL LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-l3vckmd7j585/sos-international-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>7</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            TRANSLATION EXCELLENCE INC.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>CO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-lsehc45nmb28/translation-excellence-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>8</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            FIS-DAS INTERPRETING SERVICES
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>WV</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-dvtecsrremz8/fis-das-interpreting-services-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>9</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            SENECA GLOBAL SERVICES LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-hydwl7jchbg4/seneca-global-services-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>10</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            GREAT HILL SOLUTIONS, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-d3dyhnpj6w14/great-hill-solutions-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>11</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            DIVERSIFIED SIGN LANGUAGE SERVICES, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-lvlamsb8nhm1/diversified-sign-language-services-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>12</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            VITAL SIGNS, LLC.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-u36ew1ekb3d3/vital-signs-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>13</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            STUART B. CONSULTANTS, INC.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-mrxck2nuh7d5/stuart-b-consultants-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>14</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            DEAF SERVICES UNLIMITED, INC.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>IA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-ywasfmp9bca7/deaf-services-unlimited-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>15</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            WRIGHT & ASSOCIATES, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-gar9mu6j52f7/wright-associates-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>16</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            JB INTERPRETING, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-y7ckbdgt7rq9/jb-interpreting-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>17</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            VANCRO
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>WA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — ASL Bolt-on</td>
+          <td><a href="../reports/uei-jznmt9hfjtb3/vancro-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>18</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            NVP Associates, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-nvp-associates-llc-ca/nvp-associates-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>19</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Renovus Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-renovus-capital-partners-pa/renovus-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>20</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Five Points Capital, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-five-points-capital-inc-nc/five-points-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>21</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Eagle Private Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-eagle-private-capital-llc-mo/eagle-private-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>22</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Brookside Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-brookside-capital-partners-ct/brookside-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>23</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Valesco Industries
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-valesco-industries-tx/valesco-industries-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>24</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            NewSpring
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-newspring-pa/newspring-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>25</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Kian Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-kian-capital-nc/kian-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>26</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            BPV Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-bpv-management-llc-fl/bpv-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>27</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Lakeside Capital Management, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lakeside-capital-management-inc-mn/lakeside-capital-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>28</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Patriot Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-patriot-capital-md/patriot-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>29</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Petra Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-petra-capital-tn/petra-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>30</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Caltius Structured Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-caltius-structured-capital-ca/caltius-structured-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>31</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Avante Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-avante-capital-partners-ca/avante-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>32</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Centerfield Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-centerfield-capital-partners-in/centerfield-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>33</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Champlain Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-champlain-capital-partners-ca/champlain-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>34</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Boathouse Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-boathouse-capital-pa/boathouse-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>35</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Main Street Capital Corporation
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-main-street-capital-corporation-tx/main-street-capital-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>36</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Stellus Capital Management
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-stellus-capital-management-tx/stellus-capital-management-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>37</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Invision Management, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-invision-management-inc-il/invision-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>38</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Graycliff Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-graycliff-partners-ny/graycliff-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>39</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Deerpath Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-deerpath-capital-fl/deerpath-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>40</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Argosy Private Equity
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-argosy-private-equity-pa/argosy-private-equity-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>41</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            New Mountain Finance Advisors BDC, L.L.C.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-new-mountain-finance-advisors-bdc-l-l-c-ny/new-mountain-finance-advisors-bdc-l-l-c-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>42</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Argentum Fund Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-argentum-fund-management-llc-ny/argentum-fund-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>43</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Aldine Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-aldine-capital-partners-il/aldine-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>44</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Northcreek Management, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-northcreek-management-inc-oh/northcreek-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>45</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Oxer Capital, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-oxer-capital-inc-oh/oxer-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>46</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Salem Investment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-salem-investment-partners-nc/salem-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>47</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Balance Point Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-balance-point-capital-ct/balance-point-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>48</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Midwest Mezzanine Funds
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-midwest-mezzanine-funds-il/midwest-mezzanine-funds-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>49</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            GarMark Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-garmark-partners-ct/garmark-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>50</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            True West Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-true-west-capital-partners-ca/true-west-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>51</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Lineage Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lineage-capital-llc-ma/lineage-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>52</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Riverside Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-riverside-partners-llc-ny/riverside-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>53</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            New Canaan Funding Leverage Mezzanine Advisors, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-new-canaan-funding-leverage-mezzanine-advisors-llc-ct/new-canaan-funding-leverage-mezzanine-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>54</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            St. Cloud Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-st-cloud-capital-llc-ca/st-cloud-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>55</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Ironwood Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-ironwood-capital-ct/ironwood-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>56</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Southfield Mezzanine Associates LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-southfield-mezzanine-associates-llc-ct/southfield-mezzanine-associates-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>57</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Tennenbaum Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tennenbaum-capital-partners-llc-ca/tennenbaum-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>58</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Spring Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-spring-capital-partners-md/spring-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>59</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            First Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NE</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-first-capital-partners-ne/first-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>60</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Stonehenge Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-stonehenge-capital-oh/stonehenge-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>61</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Mosaic Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-mosaic-capital-partners-llc-nc/mosaic-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>62</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Tonka Bay Equity Partners LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tonka-bay-equity-partners-llc-mn/tonka-bay-equity-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>63</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Medallion Capital Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-medallion-capital-inc-mn/medallion-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>64</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Bluehenge Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>LA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-bluehenge-capital-partners-la/bluehenge-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>65</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            McLarty Capital Advisors SBIC, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-mclarty-capital-advisors-sbic-llc-ny/mclarty-capital-advisors-sbic-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>66</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Blue Sage Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-blue-sage-capital-tx/blue-sage-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>67</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Pelham S2K
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-pelham-s2k-ny/pelham-s2k-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>68</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            IBC Funds
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-ibc-funds-tx/ibc-funds-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>69</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Capital Private Advisors, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-capital-private-advisors-llc-nc/capital-private-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>70</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Propel Venture Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-propel-venture-partners-ca/propel-venture-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>71</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            SBJ Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-sbj-capital-ca/sbj-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>72</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Pelion, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>UT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-pelion-inc-ut/pelion-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>73</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Phineas Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-phineas-management-llc-pa/phineas-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>74</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            C3 Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-c3-capital-llc-mo/c3-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>75</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            North Atlantic Capital Corporation
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>ME</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-north-atlantic-capital-corporation-me/north-atlantic-capital-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>76</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Dos Rios Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-dos-rios-partners-tx/dos-rios-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>77</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            MCM Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-mcm-capital-partners-oh/mcm-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>78</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            PSCP Management, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-pscp-management-inc-ny/pscp-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>79</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Small Business Community Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-small-business-community-capital-llc-ct/small-business-community-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>80</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Zions
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>UT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-zions-ut/zions-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>81</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            CFB Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cfb-partners-llc-mo/cfb-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>82</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Crescent SBIC Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-crescent-sbic-management-llc-ma/crescent-sbic-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>83</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            SJF Management LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-sjf-management-llc-nc/sjf-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>84</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Walden Venture Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-walden-venture-capital-ca/walden-venture-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>85</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Enhanced Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-enhanced-capital-ny/enhanced-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>86</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Harbert Credit Solutions Funds
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>AL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-harbert-credit-solutions-funds-al/harbert-credit-solutions-funds-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>87</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            UMB Bank
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-umb-bank-mo/umb-bank-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>88</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Wasatch Management Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>UT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-wasatch-management-partners-llc-ut/wasatch-management-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>89</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Emigrant Capital Corporation
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-emigrant-capital-corporation-ny/emigrant-capital-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>90</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            DCA Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-dca-partners-ca/dca-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>91</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Marquette Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-marquette-capital-llc-mn/marquette-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>92</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            CC Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>AZ</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cc-management-llc-az/cc-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>93</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Diamond State Ventures
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>AR</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-diamond-state-ventures-ar/diamond-state-ventures-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>94</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            River Cities Management, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-river-cities-management-inc-oh/river-cities-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>95</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Kansas Venture Capital, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>KS</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-kansas-venture-capital-inc-ks/kansas-venture-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>96</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Veritas Capital Service, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-veritas-capital-service-llc-ny/veritas-capital-service-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>97</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Cambridge Ventures, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cambridge-ventures-inc-in/cambridge-ventures-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>98</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            University Ventures
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NJ</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-university-ventures-nj/university-ventures-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>99</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            1st Source Capital Corporation
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-1st-source-capital-corporation-in/1st-source-capital-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>100</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            na
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>KY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-na-ky/na-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>101</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Triad Investments
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-triad-investments-ny/triad-investments-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>102</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Plexus Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-plexus-capital-llc-nc/plexus-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>103</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Resolute Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-resolute-capital-partners-tn/resolute-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>104</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Firmament
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-firmament-ny/firmament-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>105</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Corbel Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-corbel-capital-ca/corbel-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>106</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            EC Management Services, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-ec-management-services-inc-tx/ec-management-services-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>107</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            RF Investment Management Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-rf-investment-management-company-llc-ny/rf-investment-management-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>108</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Saratoga Investment Advisors
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-saratoga-investment-advisors-ny/saratoga-investment-advisors-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>109</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Canapi Ventures
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>DC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-canapi-ventures-dc/canapi-ventures-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>110</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Hercules Capital, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-hercules-capital-inc-ca/hercules-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>111</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            CenterHarbor Canapi Ventures Investment Advisors LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>DC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-centerharbor-canapi-ventures-investment-advisors-llc-dc/centerharbor-canapi-ventures-investment-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>112</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Stonehenge Partners Corp.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-stonehenge-partners-corp-oh/stonehenge-partners-corp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>113</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            ONE SBIC Fund, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-one-sbic-fund-llc-co/one-sbic-fund-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>114</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LongueVue Management Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>LA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-longuevue-management-company-llc-la/longuevue-management-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>115</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            HCAP Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-hcap-partners-llc-ca/hcap-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>116</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Boundary Street Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-boundary-street-capital-va/boundary-street-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>117</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Tecum Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tecum-capital-pa/tecum-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>118</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Granite Creek Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-granite-creek-capital-partners-llc-il/granite-creek-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>119</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Capital Alignment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-capital-alignment-partners-tn/capital-alignment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>120</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Five Points Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-five-points-capital-llc-nc/five-points-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>121</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            RFE Investment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-rfe-investment-partners-ct/rfe-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>122</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Lightspring Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lightspring-capital-partners-llc-mn/lightspring-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>123</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Fidus Investment Advisors, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-fidus-investment-advisors-llc-il/fidus-investment-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>124</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Energy Impact Partners LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-energy-impact-partners-lp-ny/energy-impact-partners-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>125</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Tree Line Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tree-line-capital-partners-llc-ca/tree-line-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>126</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            GMB Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-gmb-capital-partners-mn/gmb-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>127</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Multiplier Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>DC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-multiplier-capital-llc-dc/multiplier-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>128</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Capital Southwest Corporation
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-capital-southwest-corporation-tx/capital-southwest-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>129</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Eagle Private Capital VI, Inc
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-eagle-private-capital-vi-inc-mo/eagle-private-capital-vi-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>130</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LNC Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lnc-management-llc-va/lnc-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>131</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Concentric Investment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-concentric-investment-partners-nc/concentric-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>132</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Source Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>GA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-source-capital-llc-ga/source-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>133</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Farragut Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-farragut-capital-partners-md/farragut-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>134</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Mizzen Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-mizzen-management-llc-ct/mizzen-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>135</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Route 2 Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>SC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-route-2-capital-partners-sc/route-2-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>136</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Star Mountain Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-star-mountain-capital-ny/star-mountain-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>137</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Riverside Investment Management Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-riverside-investment-management-company-llc-ma/riverside-investment-management-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>138</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Rochefort Asset Management LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-rochefort-asset-management-llc-fl/rochefort-asset-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>139</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Sound Growth Partners Fund 1, GP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>WA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-sound-growth-partners-fund-1-gp-wa/sound-growth-partners-fund-1-gp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>140</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Oaktree Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-oaktree-capital-ny/oaktree-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>141</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LWO LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>ND</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lwo-llc-nd/lwo-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>142</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Gemini Managers, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-gemini-managers-inc-ma/gemini-managers-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>143</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Centerfield Management VI, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-centerfield-management-vi-inc-in/centerfield-management-vi-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>144</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Barings
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-barings-nc/barings-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>145</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Haven Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-haven-capital-partners-llc-ny/haven-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>146</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Midwest Growth Advisors IV, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-midwest-growth-advisors-iv-llc-ia/midwest-growth-advisors-iv-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>147</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Hidden River Strategic Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-hidden-river-strategic-capital-pa/hidden-river-strategic-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>148</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            SharpVue SBIC Management, L.P.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-sharpvue-sbic-management-l-p-nc/sharpvue-sbic-management-l-p-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>149</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            AAVIN Private Equity
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-aavin-private-equity-ia/aavin-private-equity-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>150</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Southfield Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-southfield-capital-ct/southfield-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>151</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            GPCP MGMT, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-gpcp-mgmt-llc-tx/gpcp-mgmt-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>152</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Quilvest Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-quilvest-capital-partners-ny/quilvest-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>153</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Tecum Capital Management, Inc. (TMC)
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tecum-capital-management-inc-tmc-pa/tecum-capital-management-inc-tmc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>154</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Capitala
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-capitala-nc/capitala-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>155</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Northstar Company LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-northstar-company-llc-mn/northstar-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>156</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Balance Point Capital Advisors, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-balance-point-capital-advisors-llc-ct/balance-point-capital-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>157</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            NorthCoast Mezzanine
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-northcoast-mezzanine-mn/northcoast-mezzanine-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>158</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Ridgeline Capital Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-ridgeline-capital-management-llc-tn/ridgeline-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>159</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            DC Small Business Management Company
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-dc-small-business-management-company-fl/dc-small-business-management-company-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>160</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Holleway Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-holleway-capital-partners-llc-mo/holleway-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>161</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            BBK Ventures GP, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-bbk-ventures-gp-llc-tx/bbk-ventures-gp-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>162</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Spell Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-spell-capital-partners-llc-mn/spell-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>163</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            MinCal Management, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-mincal-management-inc-mn/mincal-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>164</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Wells Fargo Central Pacific Holdings. Inc
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-wells-fargo-central-pacific-holdings-inc-nc/wells-fargo-central-pacific-holdings-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>165</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            NorthCoast Mezzanine, LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-northcoast-mezzanine-lp-mn/northcoast-mezzanine-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>166</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            o15 Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>GA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-o15-capital-partners-ga/o15-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>167</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Willow Tree Credit Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-willow-tree-credit-partners-ny/willow-tree-credit-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>168</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Brightwood Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-brightwood-capital-ny/brightwood-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>169</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Enlightenment Capital SBIC, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-enlightenment-capital-sbic-llc-md/enlightenment-capital-sbic-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>170</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LC2 Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lc2-partners-llc-mn/lc2-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>171</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Turning Rock Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-turning-rock-partners-ny/turning-rock-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>172</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            SharpVue Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-sharpvue-capital-nc/sharpvue-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>173</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            CVF Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cvf-capital-partners-ca/cvf-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>174</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Argosy Management LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-argosy-management-lp-pa/argosy-management-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>175</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Brightwood Capital Advisors, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-brightwood-capital-advisors-llc-ny/brightwood-capital-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>176</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            New Mountain Capital, L.L.C.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-new-mountain-capital-l-l-c-ny/new-mountain-capital-l-l-c-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>177</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            SBJ Elevation, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-sbj-elevation-llc-ca/sbj-elevation-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>178</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Silver Lake Waterman Mangement Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-silver-lake-waterman-mangement-company-llc-ca/silver-lake-waterman-mangement-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>179</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Maranon Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-maranon-capital-il/maranon-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>180</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Everside
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-everside-ny/everside-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>181</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            The Tokarz Group Advisers, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-the-tokarz-group-advisers-llc-oh/the-tokarz-group-advisers-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>182</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Lafayette Square
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lafayette-square-fl/lafayette-square-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>183</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            High Street Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-high-street-capital-il/high-street-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>184</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Hamilton Lane Advisors, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-hamilton-lane-advisors-llc-pa/hamilton-lane-advisors-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>185</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            CapitalSpring
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-capitalspring-tn/capitalspring-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>186</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Siguler Guff & Company
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-siguler-guff-company-ny/siguler-guff-company-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>187</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Courage Capital Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-courage-capital-management-llc-tn/courage-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>188</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            High Peaks Management Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-high-peaks-management-company-llc-il/high-peaks-management-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>189</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LO3 Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lo3-capital-tn/lo3-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>190</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Star Mountain Fund Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-star-mountain-fund-management-llc-ny/star-mountain-fund-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>191</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            America's Frontier Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-america-s-frontier-management-llc-va/america-s-frontier-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>192</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Catalyst Investors, L.L.C.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-catalyst-investors-l-l-c-ny/catalyst-investors-l-l-c-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>193</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Quilvest Capital Partners USA, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-quilvest-capital-partners-usa-inc-ny/quilvest-capital-partners-usa-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>194</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Northstar Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-northstar-capital-mn/northstar-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>195</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            PCI Capital Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-pci-capital-management-llc-md/pci-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>196</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LBC Small Cap
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lbc-small-cap-pa/lbc-small-cap-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>197</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Hoist Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>AL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-hoist-capital-partners-llc-al/hoist-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>198</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Genesis Park
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-genesis-park-tx/genesis-park-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>199</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Snowpoint Ventures Management LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-snowpoint-ventures-management-llc-fl/snowpoint-ventures-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>200</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Tamarix
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tamarix-ny/tamarix-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>201</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Vocap Investment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-vocap-investment-partners-fl/vocap-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>202</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Charger Investment Partners, LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-charger-investment-partners-lp-ca/charger-investment-partners-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>203</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Latticework Capital Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-latticework-capital-management-llc-tx/latticework-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>204</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Seacoast Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-seacoast-capital-ma/seacoast-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>205</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            True West Management Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-true-west-management-company-llc-ca/true-west-management-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>206</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Pine Street Capital Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-pine-street-capital-partners-ny/pine-street-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>207</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            IMB Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-imb-partners-md/imb-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>208</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Bluehenge Capital Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>LA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-bluehenge-capital-management-llc-la/bluehenge-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>209</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LNC Management, L.P.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lnc-management-l-p-va/lnc-management-l-p-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>210</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Azul Management Company, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-azul-management-company-llc-tx/azul-management-company-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>211</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Abacus Finance Group, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-abacus-finance-group-llc-ny/abacus-finance-group-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>212</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Grayhawk Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>AZ</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-grayhawk-capital-llc-az/grayhawk-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>213</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Moneta Venture LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-moneta-venture-llc-ca/moneta-venture-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>214</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Merion Investment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-merion-investment-partners-pa/merion-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>215</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Hudson Ferry Capital Management, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-hudson-ferry-capital-management-llc-ct/hudson-ferry-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>216</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Spring Capital Management Company
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-spring-capital-management-company-md/spring-capital-management-company-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>217</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Bluestone Investment Manager, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>VA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-bluestone-investment-manager-llc-va/bluestone-investment-manager-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>218</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Michigan Capital Network Ventures, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MI</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-michigan-capital-network-ventures-llc-mi/michigan-capital-network-ventures-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>219</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Bluhaus Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PR</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-bluhaus-capital-pr/bluhaus-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>220</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Parliament Capital Management
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PR</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-parliament-capital-management-pr/parliament-capital-management-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>221</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            First In Ventures Fund 3 Critical Technologies LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-first-in-ventures-fund-3-critical-technologies-lp-fl/first-in-ventures-fund-3-critical-technologies-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>222</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Providence Investment Managers LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-providence-investment-managers-llc-tx/providence-investment-managers-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>223</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Growth Capital Management LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MI</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-growth-capital-management-llc-mi/growth-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>224</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Cyprium Investment Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cyprium-investment-partners-oh/cyprium-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>225</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Z2 SBIC Partners, LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-z2-sbic-partners-lp-ct/z2-sbic-partners-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>226</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            TZP SBIC Fund Manager I, L.P.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-tzp-sbic-fund-manager-i-l-p-ny/tzp-sbic-fund-manager-i-l-p-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>227</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            RFE Management Corporation
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-rfe-management-corporation-ct/rfe-management-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>228</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Skyline Investors
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-skyline-investors-ca/skyline-investors-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>229</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Milton Street Capital LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-milton-street-capital-llc-tx/milton-street-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>230</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Topmark Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-topmark-partners-fl/topmark-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>231</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Dauntless Ventures
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>UT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-dauntless-ventures-ut/dauntless-ventures-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>232</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Pivotal Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-pivotal-capital-ca/pivotal-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>233</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Signal Peak Operations, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>UT</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-signal-peak-operations-llc-ut/signal-peak-operations-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>234</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Svoboda Capital Partners LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-svoboda-capital-partners-llc-il/svoboda-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>235</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Brass Ring Capital, Inc.
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-brass-ring-capital-inc-mn/brass-ring-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>236</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            AE Industrial Partners - AE Ventures
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-ae-industrial-partners-ae-ventures-fl/ae-industrial-partners-ae-ventures-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>237</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Keswick Partners
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-keswick-partners-fl/keswick-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>238</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Costella Kirsch SBIC GP, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-costella-kirsch-sbic-gp-llc-ca/costella-kirsch-sbic-gp-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>239</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            LFE Capital, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-lfe-capital-llc-fl/lfe-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>240</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            BlueYard Capital
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>AR</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-blueyard-capital-ar/blueyard-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>241</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Cultivation Twain Seed Fund III Manager, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cultivation-twain-seed-fund-iii-manager-llc-mo/cultivation-twain-seed-fund-iii-manager-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>242</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Everside Capital Partners, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-everside-capital-partners-llc-ny/everside-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>243</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Chephas, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-chephas-llc-ny/chephas-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>244</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Innovate Capital Partners LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-innovate-capital-partners-llc-pa/innovate-capital-partners-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>245</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Altimer Capital A, LP
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-altimer-capital-a-lp-ma/altimer-capital-a-lp-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>246</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Mountain State Capital Management LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>WV</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-mountain-state-capital-management-llc-wv/mountain-state-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>247</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            New North Ventures
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NH</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-new-north-ventures-nh/new-north-ventures-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>248</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Cultivation Twain Seed Fund I Manager, LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-cultivation-twain-seed-fund-i-manager-llc-mo/cultivation-twain-seed-fund-i-manager-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>249</td>
+          <td><span class="score low">30</span></td>
+          <td>
+            Fin Venture Capital Management LLC
+            
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>
+            —
+            
+          </td>
+          <td>—</td>
+          <td>Off-Market — SBIC</td>
+          <td><a href="../reports/name-fin-venture-capital-management-llc-ca/fin-venture-capital-management-llc-report.html">View</a></td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+
+  
+  <section id="section-b">
+    <h2>Section B: Running Queue &mdash; Active Leads
+      <span class="badge">50 leads</span>
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:50px;">Rank</th>
+          <th style="width:64px;">Score</th>
+          <th>Business Name</th>
+          <th>Industry</th>
+          <th style="width:60px;">State</th>
+          <th>Asking Price</th>
+          <th>EBITDA</th>
+          <th>Date Added</th>
+          <th style="width:70px;">Report</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>1</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            ACCESS INTERPRETING INC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-fut6mq1mcdc9/access-interpreting-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>2</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            TCS INTERPRETING, INC.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-mq42vnnuk3j9/tcs-interpreting-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>3</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            DEAF ACCESS SOLUTIONS, INC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-nlgqmmkf25x7/deaf-access-solutions-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>4</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            MID-ATLANTIC INTERPRETING GROUP, INC.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-lcyfbnat8ey4/mid-atlantic-interpreting-group-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>5</td>
+          <td><span class="score mid">50</span></td>
+          <td>
+            FRIENDS INTERPRETING SERVICES LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>WV</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-vj1rlkhj2lf3/friends-interpreting-services-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>6</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            SOS INTERNATIONAL LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-l3vckmd7j585/sos-international-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>7</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            TRANSLATION EXCELLENCE INC.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>CO</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-lsehc45nmb28/translation-excellence-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>8</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            FIS-DAS INTERPRETING SERVICES
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>WV</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-dvtecsrremz8/fis-das-interpreting-services-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>9</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            SENECA GLOBAL SERVICES LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-hydwl7jchbg4/seneca-global-services-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>10</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            GREAT HILL SOLUTIONS, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-d3dyhnpj6w14/great-hill-solutions-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>11</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            DIVERSIFIED SIGN LANGUAGE SERVICES, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-lvlamsb8nhm1/diversified-sign-language-services-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>12</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            VITAL SIGNS, LLC.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-u36ew1ekb3d3/vital-signs-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>13</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            STUART B. CONSULTANTS, INC.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-mrxck2nuh7d5/stuart-b-consultants-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>14</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            DEAF SERVICES UNLIMITED, INC.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>IA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-ywasfmp9bca7/deaf-services-unlimited-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>15</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            WRIGHT & ASSOCIATES, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-gar9mu6j52f7/wright-associates-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>16</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            JB INTERPRETING, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>VA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-y7ckbdgt7rq9/jb-interpreting-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>17</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            VANCRO
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>Sign Language / Translation</td>
+          <td>WA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/uei-jznmt9hfjtb3/vancro-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>18</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            NVP Associates, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-nvp-associates-llc-ca/nvp-associates-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>19</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Renovus Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-renovus-capital-partners-pa/renovus-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>20</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Five Points Capital, Inc.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-five-points-capital-inc-nc/five-points-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>21</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Eagle Private Capital, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MO</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-eagle-private-capital-llc-mo/eagle-private-capital-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>22</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Brookside Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-brookside-capital-partners-ct/brookside-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>23</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Valesco Industries
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-valesco-industries-tx/valesco-industries-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>24</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            NewSpring
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-newspring-pa/newspring-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>25</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Kian Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-kian-capital-nc/kian-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>26</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            BPV Management, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-bpv-management-llc-fl/bpv-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>27</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Lakeside Capital Management, Inc.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MN</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-lakeside-capital-management-inc-mn/lakeside-capital-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>28</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Patriot Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>MD</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-patriot-capital-md/patriot-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>29</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Petra Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TN</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-petra-capital-tn/petra-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>30</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Caltius Structured Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-caltius-structured-capital-ca/caltius-structured-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>31</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Avante Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-avante-capital-partners-ca/avante-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>32</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Centerfield Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IN</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-centerfield-capital-partners-in/centerfield-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>33</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Champlain Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-champlain-capital-partners-ca/champlain-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>34</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Boathouse Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-boathouse-capital-pa/boathouse-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>35</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Main Street Capital Corporation
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-main-street-capital-corporation-tx/main-street-capital-corporation-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>36</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Stellus Capital Management
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>TX</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-stellus-capital-management-tx/stellus-capital-management-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>37</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Invision Management, Inc.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-invision-management-inc-il/invision-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>38</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Graycliff Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-graycliff-partners-ny/graycliff-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>39</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Deerpath Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>FL</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-deerpath-capital-fl/deerpath-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>40</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Argosy Private Equity
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>PA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-argosy-private-equity-pa/argosy-private-equity-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>41</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            New Mountain Finance Advisors BDC, L.L.C.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-new-mountain-finance-advisors-bdc-l-l-c-ny/new-mountain-finance-advisors-bdc-l-l-c-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>42</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Argentum Fund Management, LLC
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NY</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-argentum-fund-management-llc-ny/argentum-fund-management-llc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>43</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Aldine Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-aldine-capital-partners-il/aldine-capital-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>44</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Northcreek Management, Inc.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-northcreek-management-inc-oh/northcreek-management-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>45</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Oxer Capital, Inc.
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>OH</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-oxer-capital-inc-oh/oxer-capital-inc-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>46</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Salem Investment Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>NC</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-salem-investment-partners-nc/salem-investment-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>47</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Balance Point Capital
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-balance-point-capital-ct/balance-point-capital-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>48</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            Midwest Mezzanine Funds
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>IL</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-midwest-mezzanine-funds-il/midwest-mezzanine-funds-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>49</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            GarMark Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CT</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-garmark-partners-ct/garmark-partners-report.html">View</a></td>
+        </tr>
+        
+        <tr>
+          <td>50</td>
+          <td><span class="score low">40</span></td>
+          <td>
+            True West Capital Partners
+            
+            <span class="chip offmarket">OFF-MARKET</span>
+          </td>
+          <td>SBIC</td>
+          <td>CA</td>
+          <td>—</td>
+          <td>—</td>
+          <td>2026-05-23</td>
+          <td><a href="../reports/name-true-west-capital-partners-ca/true-west-capital-partners-report.html">View</a></td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+
+  
+  <section id="section-c">
+    <h2>Section C: Revisit Bucket &mdash; Roll-up Targets
+      <span class="badge">0 leads</span>
+    </h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:50px;">Rank</th>
+          <th style="width:64px;">Score</th>
+          <th>Business Name</th>
+          <th>Industry</th>
+          <th style="width:60px;">State</th>
+          <th>Asking Price</th>
+          <th>EBITDA</th>
+          <th>Date Added</th>
+          <th style="width:70px;">Report</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr><td colspan="9" class="empty-state">No roll-up targets flagged for revisit.</td></tr>
+        
+      </tbody>
+    </table>
+  </section>
+
+  
+  <section id="section-d">
+    <h2>Section D: Run Summary</h2>
+    <div class="summary-grid">
+
+      <div class="summary-card">
+        <h3>Search Totals</h3>
+        <ul>
+          <li><strong>314</strong> listings found across all platforms</li>
+          <li><strong>249</strong> new leads added</li>
+          <li><strong>0</strong> duplicates skipped</li>
+          <li><strong>0</strong> dead links caught</li>
+          <li><strong>0</strong> price drops detected &amp; re-evaluated</li>
+          <li><strong>0</strong> manual submissions added</li>
+        </ul>
+      </div>
+
+      <div class="summary-card">
+        <h3>Leads by Platform</h3>
+        <ul>
+          
+          <li><strong>USAspending.gov (S1):</strong> 82 found, 17 new</li>
+          
+          <li><strong>SAM.gov Entity API (S2):</strong> 6 found, 0 new</li>
+          
+          <li><strong>SBA SBIC Directory (S4):</strong> 397 found, 232 new</li>
+          
+        </ul>
+      </div>
+
+      <div class="summary-card">
+        <h3>Leads by Industry</h3>
+        <ul>
+          
+          <li><strong>Sign Language / Translation (Class 1):</strong> 17 new</li>
+          
+          <li><strong>SBIC (Class 2):</strong> 232 new</li>
+          
+        </ul>
+      </div>
+
+      <div class="summary-card">
+        <h3>Errors &amp; Warnings</h3>
+        <ul>
+          
+          <li>S2 SAM.gov public-tier quota: 6 of ~10 daily calls used (within budget).</li>
+          
+          <li>S3 SAM.gov Contract Awards: skipped this run to preserve shared quota.</li>
+          
+          <li>S6 SBS, S7 GSA eLibrary, S8 state portals (DC/VA/MD/PA/WV): skipped — ToS / UI-only adapters not invoked live.</li>
+          
+          <li>S5 SBIC good-standing cross-check: deferred per-entity; SBIC License Status = Unknown for all Class-2 records (operator follow-up).</li>
+          
+          <li>USAspending awarding_agency_name field returned null on award rows; agency-level note in records reads empty.</li>
+          
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    Generated by EarnedOut Overnight Search &nbsp;&middot;&nbsp; 2026-05-23T16:02:15Z
+    &nbsp;&middot;&nbsp;
+    Dashboard: <code>output/dashboards/dashboard_2026-05-23.html</code>
+  </footer>
+
+</div>
+</body>
+</html>

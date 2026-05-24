@@ -1,0 +1,16 @@
+Iteration 41 complete.
+
+**Step executed:** s10 (Assembly, end-to-end self-test) — **VERIFY** phase.
+
+A fresh-context critic subagent independently inspected the s10 dry-run artifacts. **Verdict: FAIL (1 BLOCKING).**
+
+- Five of six criteria passed — including confirmation that **BLOCKING-s10-1 is genuinely fixed** in both R2 report bodies (years-in-business now 0/10 "insufficient data", header = breakdown total).
+- **BLOCKING-s10-2** (new): the R2 OM-2 outreach draft — a deliverable of the same s10 dry run — asserts the company "has operated as a licensed SBIC ... **since 1983**", while its lead packet has `formation_date: null`, `years_in_business: null`, and an explicit "formation date — needs follow-up" gap. The `1983` is the SBIC fund's `vintage`, not a company formation date. I confirmed this directly against the file and packet before recording — it is the BLOCKING-s10-1 fabrication class recurring in the outreach artifact.
+
+**Updates made:**
+- `FINDINGS.md` — logged BLOCKING-s10-2 and IMPROVE-s10-4 (stale s8-only header label). The NIT (`</content>` token at line 106) is already tracked as NIT-s8-1, not double-counted.
+- `VERIFY_LOG.md` — iter 41 verdict recorded.
+- `STATE.md` — `iteration` 40→41, s10 `self_checked`→`not_started` (per the BLOCKING contract), `unresolved_findings` 28→30, `open_blockers` 0.
+- Committed locally; `.loop_signal` set to **CONTINUE**.
+
+Next iteration: s10 IMPLEMENT — rewrite the OM-2 draft to drop the "since 1983" claim and harden the draft-generation logic so a fund `vintage` cannot render as a company operating history.

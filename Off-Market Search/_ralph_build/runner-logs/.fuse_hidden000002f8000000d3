@@ -1,0 +1,14 @@
+Iteration 23 complete — **s8 (Outreach drafting) SELF-TEST**.
+
+**What ran:** Drove the s8 procedure over the s5/s6 SELF-TEST leads (Class-1 fixture R1, Class-2 real SBIC R2) plus a constructed no-contact case. Six checks, all PASS:
+
+- **C1** — Class-1 OM-1 draft generated for R1; all placeholders filled from real data, no raw `[...]` survives; partial contact (no email) drafted per spec.
+- **C2** — Class-2 OM-2 draft generated for R2; SBA-prior-approval sentence present as fixed body text.
+- **C3** — no-contact case (SYN-NC1) correctly yields no draft, logged skip.
+- **C4** — both drafts carry the `NOT SENT` markers; no send path exists in the deliverable.
+- **C5** — broker templates untouched (`config/outreach_templates.md` last modified by the on-market loop on 2026-05-21; no `offmarket-build` commit touches it).
+- **C6** — subject-variant alternation correct (R1→V1, R2→V2, skip consumed no slot).
+
+**Two carry-notes to the VERIFY critic** (not Done-when failures): (1) the `Notes`-append half of storage is B4-dependent — exercised at s10 once B4 clears; (2) OM-2 candidate IMPROVE — R2's only contact is an *Investor Relations* POC, not the GP principal the OM-2 body addresses.
+
+**State:** s8 `drafted → self_checked`; iteration 22 → 23; open_blockers 4, unresolved_findings 19 (unchanged). Committed `e0e38b0`. Signal: **CONTINUE** — s8 VERIFY, s9, s10 remain non-blocked.

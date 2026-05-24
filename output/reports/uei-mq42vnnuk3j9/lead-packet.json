@@ -1,0 +1,46 @@
+{
+  "entity_id": "UEI:MQ42VNNUK3J9",
+  "target_class": 1,
+  "business_name": "TCS INTERPRETING, INC.",
+  "industry": "Sign-language interpreting + CART (NAICS 541930, core ASL/CART/deaf-services line)",
+  "location": {
+    "city": "Silver Spring",
+    "state": "MD"
+  },
+  "website": "https://www.tcsinterpretingandcaptions.com/",
+  "website_status": "live",
+  "screenshot_path": "output/screenshots/uei-mq42vnnuk3j9.png",
+  "formation_date": null,
+  "years_in_business": null,
+  "sos_status": null,
+  "employee_count": null,
+  "revenue_signal": "signal: $23.0M of federal contract revenue trailing 5 FYs (NAICS 541930 / PSC R608) \u2014 gov-contract revenue only",
+  "federal_award_total": 23012156.319999997,
+  "asking_price": "not for sale \u2014 no asking price",
+  "contact": {
+    "name": "Jessica Aiello",
+    "title": "Founder",
+    "email": "TCSinfo@tcsteams.com",
+    "phone": "301-960-2580"
+  },
+  "sbic_license_no": null,
+  "sbic_license_status": null,
+  "sbic_gp_economics": null,
+  "gov_data_source": [
+    "USAspending"
+  ],
+  "provenance_urls": [
+    "https://www.usaspending.gov/recipient/81ba951a-b70e-7794-cbbc-d6477bc9b084-C/latest"
+  ],
+  "prefilter_verdict": "pass",
+  "keyword_tier": "core",
+  "summary": "Deaf-community focused ASL/CART agency in the DC metro. Founded by Jessica Aiello. Largest interpreter pool in DC metro area; national delivery via remote and in-person.",
+  "fit_note": null,
+  "socioeconomic_flags": [],
+  "enrichment_gaps": [
+    "formation date \u2014 needs follow-up (SOS lookup not exercised this run \u2014 Phase-1 jurisdictions live, but skipped for time)",
+    "employee count \u2014 needs follow-up"
+  ],
+  "deaf_specificity": "strong",
+  "sbic_funds": null
+}
