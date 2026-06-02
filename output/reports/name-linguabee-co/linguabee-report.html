@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Linguabee LLC — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+  .swot .cell ul { margin: 0; padding-left: 18px; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+
+  .highlight { background: rgba(90,167,255,.10); border-left: 3px solid var(--accent);
+               padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; }
+  .alert { background: rgba(245,166,35,.10); border-left: 3px solid var(--warn);
+           padding: 10px 14px; margin: 12px 0; border-radius: 0 6px 6px 0; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Linguabee LLC — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-05-11 &nbsp;·&nbsp;
+        Lead source: Lion People Global (Anonymous Teaser 1322)
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <span class="verdict conditional">Buy Box: CONDITIONAL</span>
+      <span class="verdict pass">Add-on: Applied Development</span>
+      <div class="score-badge">
+        <div class="num">95</div>
+        <div class="label">Lead Score / 110</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">PASS</span></td><td>Teaser: 22 employees + ~20 fractional contractors/vendors</td></tr>
+          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td><span class="chip pass">PASS</span></td><td>Teaser: 2025 Adj. EBITDA <strong>$3,199,474</strong> (20% margin); TTM Mar-2026 $3,370,171 (18%)</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>Founded 2011 by Patrick Boudreault &amp; Chad Taylor — <strong>15 years</strong></td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip fail">FAIL</span></td><td>Revenue grew every year, but Adj. EBITDA <strong>dropped in 2024</strong> ($781K → $674K) before re-accelerating to $3.20M in 2025</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip pass">PASS</span></td><td>LOI v4 caps PP at lesser of $10M or 4x avg EBITDA(2024,2025) ≈ <strong>$7.75M</strong>. $10M / 2025 EBITDA = <strong>3.13x</strong>; LOI effective = 2.42x of 2025</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">⚠️ N/A</span></td><td>Insufficient data — but proforma at $3M cash + $5M Seller Note (4%, 8-yr) yields ≈ 5.0x DSCR against TTM EBITDA</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Add-on thresholds (relaxed floors for roll-up)</h3>
+      <table>
+        <thead><tr><th>Criterion</th><th>Standard</th><th>Add-on floor</th><th>Linguabee</th><th style="width:80px;">Status</th></tr></thead>
+        <tbody>
+          <tr><td>Full-time employees</td><td>≥ 10</td><td>≥ 5</td><td>22</td><td><span class="chip pass">PASS</span></td></tr>
+          <tr><td>EBITDA</td><td>$1M–$4M</td><td>≥ $500K</td><td>$3.20M (2025) / $3.37M (TTM)</td><td><span class="chip pass">PASS</span></td></tr>
+          <tr><td>Years in business</td><td>≥ 10</td><td>≥ 5</td><td>15</td><td><span class="chip pass">PASS</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="highlight">
+        <strong>Conditional summary:</strong> 5 of 6 standard ✅. Only the 3-yr profit-growth check fails because 2024 EBITDA dipped before 2025 surged. All add-on floors cleared with comfortable headroom; relaxed thresholds are not technically needed. <strong>Customer concentration</strong> (top 1 ≈ 47.6%) is mitigated by the LOI's Performance Note structure. <strong>Diligence priority:</strong> understand the 2024 EBITDA dip.
+      </div>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Linguabee LLC (d/b/a Linguabee)</td><td>Teaser; Linguabee.com</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>Lion People Global / Lion Group sell-side broker</td><td>Anonymous Seller Teaser 1322</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>15 (founded 2011)</td><td>Linguabee.com/about; Meeting Guide</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>None disclosed (PO Box mailing; distributed remote ops)</td><td>Yelp; Teaser</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>&lt;$100K <span class="est">(est.)</span> — distributed remote</td><td>Org chart inference</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td><strong>22</strong></td><td>Teaser</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>Not separately disclosed</td><td>Teaser</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>~20 fractional + wider 1099 interpreter network</td><td>Teaser; SignalHire</td></tr>
+          <tr><td>9</td><td>Business address</td><td>7765 Wadsworth Blvd, PO Box 746453, Arvada, CO 80006</td><td>Yelp; LOI v4</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>$4,958,853</td><td>Teaser</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>$7,422,828</td><td>Teaser</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>$8,709,370</td><td>Teaser</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$16,363,252 accrual / $14.8M cash</td><td>Teaser; Meet &amp; Greet</td></tr>
+          <tr><td>14</td><td>Adj. EBITDA 2022</td><td>$572,335 (12%)</td><td>Teaser</td></tr>
+          <tr><td>15</td><td>Adj. EBITDA 2023</td><td>$781,299 (11%)</td><td>Teaser</td></tr>
+          <tr><td>16</td><td>Adj. EBITDA 2024</td><td>$673,628 (8%)</td><td>Teaser</td></tr>
+          <tr><td>17</td><td>Adj. EBITDA 2025</td><td>$3,199,474 (20%); Net income $2.5M accrual / $1.3M cash</td><td>Teaser; Meet &amp; Greet</td></tr>
+          <tr><td>18</td><td>Asking price</td><td>Seller target: <strong>$10M</strong> (excl. platform). LOI cap: lesser of $10M or 4x avg EBITDA(2024+2025) ≈ <strong>$7.75M effective</strong></td><td>Teaser; Meet &amp; Greet; LOI v4</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>+49.7% / +17.3% / +87.9% / +11.8% (TTM)</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not disclosed</td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>12% / 11% / 8% / <strong>20%</strong> / 18% (TTM)</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td><strong>Top 1 ≈ 47.6%; Top 10 = 76%; Top 30 = 91%</strong></td><td>Teaser</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td>Teaser PDF + LOI v4 references; full data room post-NDA</td><td>Anonymous Seller Teaser 1322</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>95 / 110</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td><strong>20</strong></td><td>20</td><td>Pure-play ASL interpreting — direct match for Applied Development's communications access platform</td></tr>
+          <tr><td>EBITDA tier (non-cumulative)</td><td><strong>15</strong></td><td>15</td><td>2025 Adj. EBITDA $3.2M &gt; $3M tier. TTM $3.37M confirms</td></tr>
+          <tr><td>Years in business ≥10</td><td><strong>10</strong></td><td>10</td><td>15 years (founded 2011)</td></tr>
+          <tr><td>3 yrs consistent rev + profit growth</td><td><strong>5</strong></td><td>10</td><td>Revenue grew every year; EBITDA dropped in 2024. Partial credit per rubric</td></tr>
+          <tr><td>Recurring revenue</td><td><strong>5</strong></td><td>10</td><td>Mixed: education+gov (≈48%) are sticky multi-year; corporate is SOW-based</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td><strong>0</strong></td><td>5</td><td>Top 1 ≈ 47.6%; top 10 = 76%. Above 20%. <em>Mitigated by seller financing in LOI</em></td></tr>
+          <tr><td>Employees ≥10</td><td><strong>10</strong></td><td>10</td><td>22 FTE</td></tr>
+          <tr><td>Valuation multiple</td><td><strong>15</strong></td><td>15</td><td>$10M / $3.2M 2025 = 3.13x; LOI effective = 2.42x. Comfortably ≤4.0x</td></tr>
+          <tr><td>Low owner dependence</td><td><strong>5</strong></td><td>5</td><td>Founders out (Chad CTO of Canadian VRS, Bucky interim CEO RID). Delegated org under Ryan</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td><strong>10</strong></td><td>10</td><td><strong>Direct add-on for Applied Development</strong> — SLI bullseye; diversifies federal-heavy book with commercial + K-12 + higher ed</td></tr>
+          <tr style="background:rgba(90,167,255,.08);"><td><strong>Total</strong></td><td><strong>95</strong></td><td><strong>110</strong></td><td>Top-tier add-on (95–110 band). Immediate pursue</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> Linguabee LLC is a Deaf-owned, Deaf-led ASL interpreting agency founded in 2011 in Colorado, serving K-12, higher ed, corporate enterprise, and government clients nationwide via a proprietary multi-sided marketplace platform (Ruby on Rails / Vue.js on AWS).</li>
+        <li><strong>Financial highlights:</strong> 2025 revenue $16.4M (+88% YoY); 2025 Adj. EBITDA $3.2M (20% margin); TTM Mar-2026 revenue $18.3M and EBITDA $3.37M. 3-year revenue CAGR 49.6%.</li>
+        <li><strong>Buy Box summary:</strong> <strong>CONDITIONAL</strong> — 5 of 6 standard checks pass; all relaxed add-on floors pass comfortably. The single ❌ on 3-year profit growth is explainable by the 2024 reinvestment year.</li>
+        <li><strong>Why pursue:</strong>
+          <ol>
+            <li><strong>Direct platform fit.</strong> Cleanest possible add-on for Applied Development — adds commercial + education diversification on top of the federal book (especially after the $5.2M DOGE contract cut).</li>
+            <li><strong>Sub-3x multiple at face ask.</strong> $10M target ÷ $3.2M 2025 EBITDA = 3.13x. LOI's "lesser of $10M or 4x avg(2024,2025)" mechanic protects against paying for an unsustainable 2025 spike (effective cap ≈ $7.75M).</li>
+            <li><strong>Proprietary tech with optionality.</strong> Owned scheduling/marketplace platform replaces uSked. 3-year 3%-of-net-sales royalty lets Linguabee participate if Applied Dev commercializes externally.</li>
+            <li><strong>Mature delegation.</strong> Founders are out; CEO Ryan Shephard has a real org chart underneath him. Ryan signaled he'll stay through transition.</li>
+          </ol>
+        </li>
+        <li><strong>Why be careful:</strong>
+          <ol>
+            <li><strong>Customer concentration.</strong> Top 1 ≈ 47.6% of 2025 revenue. Losing it would drop EBITDA back to 2024 levels.</li>
+            <li><strong>2024 margin compression.</strong> EBITDA dropped from 2023 even as revenue grew — diligence priority #1.</li>
+            <li><strong>Seasonality + close timing.</strong> Seller wants close before October 2026 to avoid school-year disruption.</li>
+          </ol>
+        </li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <h3>Background and history</h3>
+      <p>Linguabee was founded in 2011 by <strong>Patrick Boudreault</strong> (a Deaf mountain biker frustrated by agency friction) and <strong>Chad W. Taylor</strong> (Bay Area technologist who built the deaf-centered booking platform). The thesis: cut out the traditional "broker" interpreting agency and let Deaf consumers select their own interpreters through a marketplace. In 2016 the company merged with <strong>Justin "Bucky" Buckhold's</strong> TIA (The Interpreting Agency) — bringing in a deaf entrepreneur who'd built a separate interpreting business after being rejected from agency staff roles for being deaf. The merger crossed $1M for the first time. Four tuck-in acquisitions since (CA 2019, IA 2019, TN 2020, CA 2022). 2022 = first $5M year. 2025 = first $10M and $15M year.</p>
+
+      <h3>Ownership structure</h3>
+      <p>Four shareholders. Legal entity: <strong>Linguabee LLC</strong>, Colorado-domiciled. CEO succession: Shareholder1 (founder era) → Shareholder1 assumed CEO 2018 → <strong>Shareholder3 (Ryan Shephard) assumed CEO 2024</strong>. Shareholder4 granted partial ownership 2025.</p>
+
+      <h3>Key milestones</h3>
+      <ul>
+        <li><strong>2011</strong> — Founded by Patrick Boudreault &amp; Chad Taylor</li>
+        <li><strong>2016</strong> — Merger with Bucky's TIA; first $1M revenue year</li>
+        <li><strong>2019</strong> — Two tuck-in acquisitions (CA + IA)</li>
+        <li><strong>2020</strong> — Launched pre-scheduled VRI; TN acquisition</li>
+        <li><strong>2022</strong> — CA acquisition; major platform upgrade; signed university client needing 15+ interpreters/day; first $5M year</li>
+        <li><strong>2023</strong> — Large corporate enterprise client begins → becomes #1 customer</li>
+        <li><strong>2024</strong> — Ryan Shephard becomes CEO; EBITDA dips to $674K</li>
+        <li><strong>2025</strong> — Signed national DHH K-12 program; revenue doubles to $16.4M</li>
+      </ul>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <h3>Ryan Shephard — CEO ("Queen Bee")</h3>
+      <p>Day-to-day operating leader; primary point of contact (LOI v4 addressed to him). Took over May 2024. Deaf, CDI-credentialed. Based in St. Petersburg, FL while company HQ is Arvada, CO. Open to long-term involvement; eventually wants a 1-yr sabbatical. <br>LinkedIn: <a href="https://www.linkedin.com/in/ryan-shephard-cdi/">ryan-shephard-cdi</a> · <a href="https://www.linkedin.com/in/ryan-shephard-a0956591/">ryan-shephard-a0956591</a></p>
+
+      <h3>Patrick Boudreault — Co-Founder</h3>
+      <p>Co-founded Linguabee 2011 with the marketplace concept. Deaf mountain biker; conceived the business after struggling to book an interpreter for a first-aid class. Not currently active in operating role.</p>
+
+      <h3>Chad W. Taylor — Co-Founder</h3>
+      <p>Built the original tech platform. <strong>Currently CTO at a video relay service company in Canada</strong> (per Meet &amp; Greet). Bay Area technologist; co-author of accessibility articles (Model View Culture).</p>
+
+      <h3>Justin "Bucky" Buckhold — Shareholder</h3>
+      <p>Joined via 2016 merger; deaf entrepreneur, founded TIA (The Interpreting Agency) after agency rejections. <strong>Currently Interim CEO of RID</strong> (Registry of Interpreters for the Deaf) — major reputational asset; the national certifying body relationship is invaluable.</p>
+
+      <h3>Damon Timm — CFO/CTO</h3>
+      <p>Per Meeting Guide, oversees technology and finance. Owns the Ruby on Rails / Vue.js platform stack.</p>
+
+      <h3>Ashley Vickers — Operations</h3>
+      <p>Per Meeting Guide. Likely the Director of Operations role.</p>
+
+      <h3>Emily Cassese — Corporate Services</h3>
+      <p>Per Meeting Guide. Likely Director of Community Partnerships or senior Account Management.</p>
+
+      <h3>Kate / "Katie" — Senior team member</h3>
+      <p>Referenced in Meet &amp; Greet as a passionate team member. Biffrey requested she join the platform demo from the Applied Development side.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <h3>Service modalities (2025 revenue mix)</h3>
+      <ul>
+        <li><strong>Onsite ASL interpreting: 86%</strong> (up from 66% in 2022)</li>
+        <li><strong>Remote (VRI / phone / captioning): 14%</strong></li>
+      </ul>
+      <h3>Customer segments (2025)</h3>
+      <ul>
+        <li><strong>Corporate: 47.6%</strong> (one enterprise client dominates)</li>
+        <li><strong>K-12: 26.6%</strong> (national DHH K-12 program signed 2025)</li>
+        <li><strong>Post-secondary: 19.1%</strong> (15+-interpreter/day university client)</li>
+        <li><strong>General: 3.5%</strong></li>
+        <li><strong>Government: 2.2%</strong></li>
+        <li><strong>Medical: 0%</strong> (explicit segment exclusion)</li>
+      </ul>
+      <h3>Competitive differentiators</h3>
+      <ol>
+        <li><strong>Deaf-owned / Deaf-led</strong> brand — unreplicable trust capital with the deaf community.</li>
+        <li><strong>Proprietary marketplace platform.</strong> Deaf consumers select their own interpreter — structurally differentiated UX.</li>
+        <li><strong>Operational excellence as moat</strong> — automated billing/payouts/dispatch via owned tech.</li>
+        <li><strong>Long tenure with marquee clients</strong> — top 10 = 76% (concentrated, but also indicates stickiness).</li>
+      </ol>
+      <h3>Pricing model</h3>
+      <p>T&amp;M with SLA-tiered contracts. Some recurring multi-year district/university agreements. Not subscription.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p>The US ASL interpreting services market is highly fragmented and growing. ADA enforcement, K-12 IDEA mandates, and corporate accessibility commitments drive baseline demand. No national pure-play exceeds ~$50M revenue — Linguabee at $16-18M is meaningful scale in the niche.</p>
+
+      <h3>Growth drivers</h3>
+      <ul>
+        <li>Federal/state ADA enforcement actions</li>
+        <li>K-12 IDEA-mandated DHH services in inclusion classrooms (Linguabee just signed one of the largest national DHH K-12 programs in 2025)</li>
+        <li>Corporate ESG / DEI accessibility commitments</li>
+        <li>Telehealth and hybrid-meeting captioning demand</li>
+      </ul>
+
+      <h3>Growth barriers</h3>
+      <ul>
+        <li><strong>Interpreter shortage</strong> — RID-certified count is ~10K nationally vs. demand for many multiples. Wage inflation is real.</li>
+        <li><strong>Localized supply markets</strong> — onsite work requires geographic interpreter density.</li>
+        <li><strong>Procurement bureaucracy</strong> at education/government buyers.</li>
+      </ul>
+
+      <h3>Competitive landscape</h3>
+      <ul>
+        <li><strong>LanguageLine Solutions</strong> — generalist LSP (Teleperformance); $1B+ revenue; ASL non-core. Comp-set multiple 12-14x.</li>
+        <li><strong>Sorenson / CSDVRS</strong> — primarily VRS (subsidized by FCC TRS Fund); different model. PE-backed.</li>
+        <li><strong>Birnbaum Interpreting Services (BIS)</strong> — NY metro ASL specialist; estimated $5-15M. Closest direct comp.</li>
+        <li><strong>Regional ASL specialists</strong> ($2-10M range) — several PE-rolled. Transaction multiples typically 4-6x for clean assets.</li>
+      </ul>
+
+      <div class="highlight">
+        <strong>Roll-up rationale for Applied Development.</strong> Applied Dev's federal-heavy portfolio (and recent $5.2M DOGE-driven cut) needs commercial + education diversification. Linguabee delivers it: Corporate 47.6% + K-12 26.6% + Post-secondary 19.1% ≈ <strong>93% of revenue in segments Applied Dev under-indexes</strong>. The Meet &amp; Greet identified this explicitly as the buyer thesis.
+      </div>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <h3>Concentration metrics (2025)</h3>
+      <table>
+        <tbody>
+          <tr><td>Top 1 (corporate enterprise)</td><td><strong>~47.6%</strong> of revenue</td></tr>
+          <tr><td>Top 10</td><td><strong>76%</strong> of revenue (teaser)</td></tr>
+          <tr><td>Top 30</td><td><strong>91%</strong> of revenue (teaser)</td></tr>
+          <tr><td>All other clients</td><td>9% of revenue</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Top-customer profile</h3>
+      <p>The single largest customer is a corporate enterprise account that grew from relationship start in 2023 to #1 customer by 2024-25. Corporate jumped from 2.1% of revenue in 2022 to 47.6% in 2025 — essentially entirely driven by this one client.</p>
+
+      <h3>Recurring vs project mix</h3>
+      <p>Mixed. Education + government (~48% of 2025 rev) are effectively recurring (multi-year district/university contracts). Corporate is project-based-but-repeating. No subscription revenue.</p>
+
+      <div class="alert">
+        <strong>LOI customer-concentration mitigation.</strong> The 20% Performance Note (~$2M of the $10M illustrative PP) is contingent on Linguabee retaining ≥80% of 2025 revenue ($13.04M floor) in each of the 3 years post-close. If the corporate client departs and revenue collapses, that $2M is extinguished — effectively a built-in customer-concentration earnout.
+      </div>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>Adj. EBITDA</th><th>Margin</th><th>YoY rev</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>$4,958,853</td><td>$572,335</td><td>12%</td><td>—</td></tr>
+          <tr><td>2023</td><td>$7,422,828</td><td>$781,299</td><td>11%</td><td>+49.7%</td></tr>
+          <tr><td>2024</td><td>$8,709,370</td><td>$673,628</td><td>8%</td><td>+17.3%</td></tr>
+          <tr><td>2025</td><td>$16,363,252</td><td><strong>$3,199,474</strong></td><td><strong>20%</strong></td><td>+87.9%</td></tr>
+          <tr><td>TTM Mar-2026</td><td>$18,290,377</td><td>$3,370,171</td><td>18%</td><td>+11.8%</td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert">
+        <strong>Adjustment caveat.</strong> Per teaser footnote, Adjusted EBITDA includes addbacks for bonuses (exec/owner/employee), stock equity grants, and platform-related costs ("which may or may not be redundant depending on Buyer's intent"). Confirm the itemized addback schedule in diligence — go-forward EBITDA without platform addback may be $200-500K lower.
+      </div>
+
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="640" height="220" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M, accrual)</text>
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="60"  y="158" width="80" height="40"  rx="3" />
+            <rect x="170" y="135" width="80" height="63"  rx="3" />
+            <rect x="280" y="125" width="80" height="73"  rx="3" />
+            <rect x="390" y="62"  width="80" height="136" rx="3" />
+            <rect x="500" y="46"  width="80" height="152" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="100" y="215">2022 · $5.0</text>
+            <text x="210" y="215">2023 · $7.4</text>
+            <text x="320" y="215">2024 · $8.7</text>
+            <text x="430" y="215">2025 · $16.4</text>
+            <text x="540" y="215">TTM · $18.3</text>
+          </g>
+        </svg>
+      </div>
+
+      <h3>EBITDA trajectory</h3>
+      <div class="chart">
+        <svg width="640" height="220" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Adj. EBITDA ($M) — note 2024 dip</text>
+          </g>
+          <g>
+            <rect x="60"  y="178" width="80" height="20"  rx="3" fill="#5aa7ff" />
+            <rect x="170" y="170" width="80" height="28"  rx="3" fill="#5aa7ff" />
+            <rect x="280" y="174" width="80" height="24"  rx="3" fill="#f5a623" />
+            <rect x="390" y="60"  width="80" height="138" rx="3" fill="#5aa7ff" />
+            <rect x="500" y="56"  width="80" height="142" rx="3" fill="#5aa7ff" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="100" y="215">2022 · $0.57</text>
+            <text x="210" y="215">2023 · $0.78</text>
+            <text x="320" y="215">2024 · $0.67 ⚠</text>
+            <text x="430" y="215">2025 · $3.20</text>
+            <text x="540" y="215">TTM · $3.37</text>
+          </g>
+        </svg>
+      </div>
+
+      <h3>Estimated valuation</h3>
+      <table>
+        <thead><tr><th>Anchor</th><th>Multiple</th><th>Implied PP</th></tr></thead>
+        <tbody>
+          <tr><td>2025 EBITDA ($3.2M) at 4.0x ceiling</td><td>4.0x</td><td>$12.8M</td></tr>
+          <tr><td>2025 EBITDA at 5.5x stretch</td><td>5.5x</td><td>$17.6M</td></tr>
+          <tr><td>TTM EBITDA ($3.37M) at 4.0x</td><td>4.0x</td><td>$13.5M</td></tr>
+          <tr style="background:rgba(245,166,35,.08);"><td><strong>Seller stated target</strong></td><td>—</td><td><strong>$10.0M</strong></td></tr>
+          <tr style="background:rgba(47,191,113,.08);"><td><strong>LOI v4 effective cap</strong> (lesser of $10M or 4x avg 2024+2025)</td><td>4.0x of avg</td><td><strong>≈$7.75M</strong></td></tr>
+          <tr><td>Implied LOI multiple ($7.75M / 2025 EBITDA)</td><td>—</td><td><strong>2.42x</strong></td></tr>
+          <tr><td>Implied multiple at $10M cap ($10M / 2025 EBITDA)</td><td>—</td><td><strong>3.13x</strong></td></tr>
+        </tbody>
+      </table>
+      <p>Industry comps for small private ASL specialists support 4-6x, so even $10M is a discount. <strong>The LOI structure is intelligently buyer-favorable</strong> — "4x of two-year average" avoids overpaying for the 2025 spike, while leaving upside via the Performance Note ($2M) and platform royalty (3% of net sales, 3 years).</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell">
+          <h4>Strengths</h4>
+          <ul>
+            <li>Deaf-owned brand — unreplicable trust capital</li>
+            <li>Proprietary marketplace platform — owned tech</li>
+            <li>49.7% revenue CAGR 2022-2025</li>
+            <li>20% 2025 EBITDA margin (operational leverage realized)</li>
+            <li>Mature delegated org — founders out, real CEO + ops layer</li>
+            <li>RID connections via Bucky (interim RID CEO)</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h4>Weaknesses</h4>
+          <ul>
+            <li>Customer concentration: top 1 ≈ 48%, top 10 = 76%</li>
+            <li>2024 EBITDA dip ($781K → $674K) unexplained</li>
+            <li>Adj. EBITDA includes platform addbacks — go-forward uncertain</li>
+            <li>Onsite-heavy (86%) — interpreter geographic supply constrained</li>
+            <li>Founders' continued absence — institutional knowledge thin at top</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h4>Opportunities</h4>
+          <ul>
+            <li>K-12 RFP pipeline: TX + FL worth $1.3M annually</li>
+            <li>Bundled accessibility (CART, captioning, enterprise VRI)</li>
+            <li>Platform commercialization — 3% royalty captures upside</li>
+            <li>Diversification of Applied Dev's federal-heavy book</li>
+            <li>NextGen Academy × Linguabee deaf-community trust = expanded supply</li>
+          </ul>
+        </div>
+        <div class="cell">
+          <h4>Threats</h4>
+          <ul>
+            <li>Interpreter wage inflation compressing gross margin</li>
+            <li>PE-backed roll-up entrants (Sorenson, LanguageLine, etc.)</li>
+            <li>Top corporate client loss would collapse 2026 by ~$8M</li>
+            <li>1099 interpreter classification regulatory risk</li>
+            <li>Deaf-community optics if perceived as hearing-owned acquisition</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> Interpreter labor supply is structurally constrained (~10K RID-certified nationally). Wage inflation is real. 86% onsite is more exposed to geographic interpreter density than competitors with stronger VRI mix.</li>
+        <li><strong>Financial:</strong>
+          <ul>
+            <li><strong>Customer concentration</strong> — top 1 ≈ 47.6%. LOI Performance Note (~$2M) is the structural mitigation.</li>
+            <li><strong>2024 EBITDA dip</strong> ($781K → $674K) must be diligenced — platform investment, team buildout, or fundamental margin pressure?</li>
+            <li><strong>Accrual vs. cash $1.2M spread</strong> on net income suggests material AR buildup — confirm DSO and collections.</li>
+            <li><strong>Adjusted EBITDA addbacks</strong> include platform costs; if buyer keeps platform, go-forward EBITDA may be $200-500K lower.</li>
+          </ul>
+        </li>
+        <li><strong>Operational:</strong>
+          <ul>
+            <li>CEO Ryan Shephard is day-to-day operator; lives 1,800 miles from HQ.</li>
+            <li>Director of Operations role is new (CEO previously held it) — succession depth thin.</li>
+            <li>1099 interpreter classification — federal labor rules tightening.</li>
+          </ul>
+        </li>
+        <li><strong>Regulatory / legal:</strong>
+          <ul>
+            <li>ADA compliance — Linguabee's quality lapses can expose clients to indirect litigation.</li>
+            <li>State interpreter licensure varies by state — confirm coverage in all served states.</li>
+            <li>K-12 procurement compliance varies by district.</li>
+          </ul>
+        </li>
+        <li><strong>Deal-specific conditions:</strong>
+          <ul>
+            <li>Confirm platform IP ownership (no open-source obligations, no third-party developer claims).</li>
+            <li>Confirm exclusivity — 60-day per LOI v4; per Meet &amp; Greet, seller had "early discussions with few others".</li>
+            <li>Working Capital Target — finalize in Definitive Agreement; current LOI formula is illustrative.</li>
+            <li>All 4 shareholders aligned on $10M / LOI terms — Meeting Guide flagged as risk.</li>
+            <li>Deaf-community optics — Bucky's RID role is a reputational asset; protect it.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <h3>Expansion potential</h3>
+      <ul>
+        <li><strong>Geographic.</strong> Strongest in CO + CA + nationwide enterprise. Applied Dev's federal footprint opens MD/DC/VA + federal-adjacent commercial. Two K-12 RFPs in TX + FL worth $1.3M combined.</li>
+        <li><strong>Service-line.</strong> Hybrid live captioning, bundled accessibility, 1-click enterprise VRI. CART is the natural cross-sell with Applied Dev's existing CART practice.</li>
+        <li><strong>Customer segment.</strong> Government segment is only 2.2% of 2025 revenue — Applied Dev's federal experience can dramatically grow this.</li>
+      </ul>
+
+      <h3>Operational upside</h3>
+      <ul>
+        <li><strong>Platform-driven efficiency.</strong> AI dispatch assistant deployed; provider-scheduling AI roadmap. Each 1% of dispatch automation ≈ $160K margin uplift at current revenue.</li>
+        <li><strong>Pricing discipline.</strong> 2025 margin jump (8% → 20%) shows pricing power. Sustaining 18-22% is plausible.</li>
+        <li><strong>Combined-entity RFPs.</strong> Applied Dev's federal-grade compliance + Linguabee's commercial agility = enterprise + federal RFPs neither could win alone.</li>
+      </ul>
+
+      <h3>Strategic opportunities</h3>
+      <ul>
+        <li><strong>Tuck-in continuation.</strong> 4 small acquisitions done historically. Under Applied Dev capital, cadence can accelerate.</li>
+        <li><strong>Platform monetization.</strong> 3% royalty meaningful — even modest licensing to 5-10 mid-sized agencies at $100-300K/yr = $1-3M total over 3-yr royalty period.</li>
+        <li><strong>NextGen Academy × Linguabee deaf-community trust.</strong> Linguabee's brand validity is exactly what NextGen needs for credible scale.</li>
+      </ul>
+
+      <h3>100-day plan sketch</h3>
+      <ol>
+        <li><strong>Days 1-30:</strong> Close, integrate finance/legal, platform demo with Katie, retain Ryan for 90-day intensive. Signal top-customer continuity in writing.</li>
+        <li><strong>Days 31-60:</strong> Map uSked → Linguabee platform migration. Begin Applied Dev × Linguabee government-channel introduction.</li>
+        <li><strong>Days 61-100:</strong> Submit TX + FL K-12 RFPs with combined-entity capabilities. Launch CART expansion in mid-Atlantic. Lock Ryan's transition timeline and milestone bonuses.</li>
+      </ol>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+
+      <h3>A. Data sources</h3>
+      <p><strong>Source documents:</strong></p>
+      <ul>
+        <li><code>ANONYMOUS SELLER TEASER 1322.pdf</code> — Lion People Global teaser; financials, org chart, segment mix, platform tech, ideal-buyer profile</li>
+        <li><code>Meet &amp; Greet Linguabee.pdf</code> — Feb 4, 2026 meeting notes + full transcript</li>
+        <li><code>Linguabee_Meeting_Guide.docx</code> — Internal prep doc with founder names, key personnel</li>
+        <li><code>LOI_AppliedDev_Linguabee_v4.docx</code> — Mar 17, 2026 LOI; current draft with definitive deal terms</li>
+        <li>Earlier LOI drafts (v1-v3) — superseded by v4</li>
+      </ul>
+      <p><strong>Web sources:</strong></p>
+      <ul>
+        <li><a href="https://www.linguabee.com/">Linguabee.com</a> — services overview</li>
+        <li><a href="https://www.linguabee.com/about/">Linguabee.com/about</a> — founding story</li>
+        <li><a href="https://www.linkedin.com/company/linguabee">LinkedIn — Linguabee</a></li>
+        <li><a href="https://www.linkedin.com/in/ryan-shephard-cdi/">LinkedIn — Ryan Shephard (CDI)</a></li>
+        <li><a href="https://www.linkedin.com/in/ryan-shephard-a0956591/">LinkedIn — Ryan Shephard (Queen Bee)</a></li>
+        <li><a href="https://www.prnewswire.com/news-releases/linguabee-has-a-new-queen-bee-301709015.html">PRNewswire — "Linguabee Has a New Queen Bee"</a></li>
+        <li><a href="https://www.signalhire.com/companies/linguabee">SignalHire — Linguabee</a></li>
+        <li><a href="https://leadiq.com/c/linguabee/5a1db3a52300005b00ad074f">LeadIQ — Linguabee directory</a></li>
+        <li><a href="https://www.yelp.com/biz/linguabee-sign-language-interpreting-arvada">Yelp — Linguabee Arvada</a> (mailing address)</li>
+        <li><a href="https://modelviewculture.com/pieces/qa-making-tech-events-accessible-to-the-deaf-community">Model View Culture — Chad Taylor Q&amp;A</a></li>
+        <li><a href="http://www.deaffriendly.com/articles/tag/linguabee/">deaffriendly — Linguabee tag</a></li>
+        <li><a href="https://applied-dev.com/our-capabilities/deaf-hard-of-hearing-services/asl-interpreting/">Applied Development — ASL Interpreting</a></li>
+        <li><a href="https://www.inc.com/cameron-albert-deitch/inc5000-dc-series-applied-development-disabled-services.html">Inc. — Applied Development profile</a></li>
+      </ul>
+      <p><strong>Registries not yet fetched (recommended for full diligence):</strong></p>
+      <ul>
+        <li>Colorado Secretary of State filing for Linguabee LLC — exact registration date and members</li>
+        <li>RID member registry — interpreter bench depth</li>
+        <li>State interpreter licensure databases per state served</li>
+        <li>USASpending.gov / SAM.gov — federal contract history</li>
+        <li>PACER — confirm no pending litigation</li>
+      </ul>
+
+      <h3>B. Assumptions used for estimates</h3>
+      <ul>
+        <li><strong>Top-1 customer ≈ 47.6%</strong> — derived directly from the 2025 customer-group pie chart. Corporate went from 2.1% (2022) to 47.6% (2025); narrative confirms this is essentially one account.</li>
+        <li><strong>Industry comp multiples (4-6x for small ASL specialists)</strong> — based on practitioner knowledge of recent PE-led roll-ups in language services; no specific transaction comp cited.</li>
+        <li><strong>DSCR &gt; 2.0 proforma</strong> — assumes $3M cash + $5M Seller Note (4%, 8-yr am) ≈ $675K/yr service against $3.37M TTM EBITDA = ~5.0x.</li>
+      </ul>
+
+      <h3>C. Calculations for estimated fields</h3>
+      <p><strong>Field #5 — FF&amp;E value</strong> — <span class="est">(est.)</span> &lt;$100K. Linguabee is a distributed remote workforce headquartered at a PO Box; no warehouse, no fleet. Major non-real-estate asset is the proprietary software platform. <em>Source: org chart inspection; Yelp mailing address.</em></p>
+      <p><strong>Field #19 — % revenue growth YoY</strong> — Computed from teaser table:
+      2022→2023 (7,422,828 − 4,958,853) / 4,958,853 = +49.7%;
+      2023→2024 (8,709,370 − 7,422,828) / 7,422,828 = +17.3%;
+      2024→2025 (16,363,252 − 8,709,370) / 8,709,370 = +87.9%;
+      2025→TTM (18,290,377 − 16,363,252) / 16,363,252 = +11.8%.</p>
+      <p><strong>Field #21 — EBITDA margin</strong> — Computed: 2022 11.5% · 2023 10.5% · 2024 7.7% · 2025 19.6% · TTM 18.4% (matches teaser rounded values 12/11/8/20/18).</p>
+      <p><strong>Field #24 — Customer concentration estimate</strong> — Top customer ≈ 47.6% from 2025 Corporate segment pie share; corroborated by narrative ("doubled in size in 2025 thanks to phenomenal growth of one enterprise client"). Top 10 = 76% and Top 30 = 91% are direct teaser disclosures.</p>
+
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li><strong>ANONYMOUS SELLER TEASER 1322.pdf</strong> (10 pages, Lion People Global) — primary source for financials, segment mix, org, platform tech, buyer criteria.</li>
+        <li><strong>Meet &amp; Greet Linguabee.pdf</strong> (10 pages) — Feb 4 2026 conversation. Source for founder identities, deal-shape preferences ($10M target, $3M cash upfront), timeline (before Oct 2026), tech preferences.</li>
+        <li><strong>Linguabee_Meeting_Guide.docx</strong> — internal prep doc. Source for founder names, key personnel, web-research findings.</li>
+        <li><strong>LOI_AppliedDev_Linguabee_v4.docx</strong> — Mar 17 2026 LOI; definitive source for deal terms.</li>
+      </ul>
+
+      <h3>E. Open questions for the seller / broker</h3>
+      <p><strong>Financials:</strong></p>
+      <ol>
+        <li>What drove the 2024 EBITDA dip ($781K → $674K)? Need 2024 monthly P&amp;L and addback schedule.</li>
+        <li>Itemized Adjusted EBITDA addbacks — confirm normalized run-rate excluding addbacks Applied Dev would not realize.</li>
+        <li>DSO and AR aging — the $1.7M cash-vs-accrual net income spread implies meaningful AR.</li>
+        <li>Top corporate client contract structure — length, renewal, notice, pricing protection, exclusivity.</li>
+        <li>2026 pipeline beyond the TX + FL K-12 RFPs ($1.3M combined).</li>
+        <li>Trailing 12 P&amp;L and balance sheet as of latest month-end.</li>
+      </ol>
+      <p><strong>Operations / personnel:</strong></p>
+      <ol start="7">
+        <li>All four shareholders aligned on $10M / LOI terms?</li>
+        <li>Bucky's RID role — restrictions on ongoing Linguabee involvement?</li>
+        <li>1099 interpreter contracts — lock-in / non-compete terms. Top-20 interpreter retention.</li>
+        <li>Key employee retention agreements (Damon Timm, Ashley Vickers, Emily Cassese, Katie).</li>
+      </ol>
+      <p><strong>Technology:</strong></p>
+      <ol start="11">
+        <li>Platform IP ownership — single owner, open-source license audit, third-party developer claims.</li>
+        <li>Platform hosting cost (AWS + Stripe + Algolia + Firebase + Pusher + AppSignal) — monthly run-rate and where in P&amp;L.</li>
+        <li>Third-party platform commercialization roadmap — prospective customers identified?</li>
+      </ol>
+      <p><strong>Legal:</strong></p>
+      <ol start="14">
+        <li>Pending litigation, regulatory inquiries, employment claims.</li>
+        <li>State interpreter licensure status in every state served.</li>
+        <li>State nexus / sales-tax exposure given 86% onsite mix across multiple states.</li>
+      </ol>
+      <p><strong>Deal-specific:</strong></p>
+      <ol start="17">
+        <li>Are the "few others" in early discussions on the table at closing? Confirm exclusivity is operative.</li>
+        <li>Seller financing collateral — personal guarantees, second-lien, equity backstop?</li>
+        <li>Any physical office requiring lease assumption, beyond the PO Box?</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources. Roll-up add-on context: Applied Development.</footer>
+</div>
+</body>
+</html>

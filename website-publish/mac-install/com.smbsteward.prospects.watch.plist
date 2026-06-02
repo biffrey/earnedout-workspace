@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  SMB Steward — Prospects/ folder watcher
+
+  Runs fswatch (recursive) on the Investments/Prospects/ tree. For every file
+  event, invokes flag-prospect-for-rescore.py which decides whether the file
+  is relevant (CIM, financials, etc.) and if so flips the "Needs Rescore"
+  checkbox on the matching Airtable row.
+
+  Install:
+    bash ~/published-listing-search/website-publish/mac-install/install-prospects-watcher.sh
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.smbsteward.prospects.watch.plist
+    rm ~/Library/LaunchAgents/com.smbsteward.prospects.watch.plist
+
+  Log:  ~/Library/Logs/smbs-rescore.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.smbsteward.prospects.watch</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>exec /opt/homebrew/bin/fswatch -0 -r --event Created --event Updated --event Renamed --latency 5 "/Users/biffreybraxton/Library/CloudStorage/GoogleDrive-bbraxton@applied-dev.com/My Drive/Investments/Prospects" | while IFS= read -r -d '' f; do /usr/bin/env python3 "/Users/biffreybraxton/published-listing-search/website-publish/mac-install/flag-prospect-for-rescore.py" "$f"; done</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/smbs-prospects-watch.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/smbs-prospects-watch.err.log</string>
+</dict>
+</plist>

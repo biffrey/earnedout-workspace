@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Silverfox Inc. — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 240px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; margin-right: 8px; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.ctr, th.ctr { text-align: center; }
+
+  .chip { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px;
+          font-weight: 600; }
+  .chip.pass { background: rgba(47,191,113,.18); color: var(--pass); }
+  .chip.fail { background: rgba(231,76,60,.18); color: var(--fail); }
+  .chip.warn { background: rgba(245,166,35,.18); color: var(--warn); }
+
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 5px 0; }
+
+  .callout { background: rgba(245,166,35,.08); border-left: 3px solid var(--warn);
+             padding: 12px 16px; margin: 14px 0; border-radius: 6px; font-size: 14px; }
+  .callout.bad { background: rgba(231,76,60,.08); border-left-color: var(--fail); }
+  .callout.good { background: rgba(47,191,113,.08); border-left-color: var(--pass); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 700px) { .swot { grid-template-columns: 1fr; } }
+  .swot > div { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px 16px; }
+  .swot h4 { margin: 0 0 8px 0; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 700px) { .twocol { grid-template-columns: 1fr; } }
+
+  footer { color: var(--muted); font-size: 12px; padding: 20px 0; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Silverfox Inc. — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for Biffrey Braxton / EarnedOut · Report date 2026-05-11 · Prepared by Claude (Prospect Evaluation skill)<br>
+        Lead source: Business Lynx International CIM (03/04/2026)
+      </div>
+      <div style="margin-top:10px">
+        <span class="verdict conditional">Buy Box: Conditional</span>
+        <span class="verdict fail">Recommendation: No LOI as structured</span>
+      </div>
+    </div>
+    <div class="score-row">
+      <div class="score-badge">
+        <div class="num">70</div>
+        <div class="label">Score · Business only · /100</div>
+      </div>
+      <div class="score-badge">
+        <div class="num" style="color:var(--warn)">62</div>
+        <div class="label">Score · w/ Waller RE · /100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#score">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals & Leadership</a></li>
+      <li><a href="#products">4. Products & Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers & Revenue</a></li>
+      <li><a href="#fins">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook & Growth</a></li>
+      <li><a href="#conclusion">11. Conclusion</a></li>
+      <li><a href="#appendix">12. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <p>Two scoring scenarios per user direction: <b>Scenario A</b> business only at $24.367M; <b>Scenario B</b> business + Waller real estate bundle at $31.567M. Age (&lt;10 yrs) and EBITDA ceiling (&gt;$4M) flagged as STRETCH per user direction.</p>
+      <table>
+        <thead><tr><th>#</th><th>Criterion</th><th class="ctr">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td class="ctr"><span class="chip pass">PASS</span></td><td>"Full time employees are about 15" (CIM Personnel §1, p.27)</td></tr>
+          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td class="ctr"><span class="chip fail">FAIL · STRETCH</span></td><td>2025 normalized EBITDA = $6,403,708 — $2.4M above ceiling (CIM Financial Summary, p.4)</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td class="ctr"><span class="chip fail">FAIL · STRETCH</span></td><td>Founded 2020 — ~5–6 yrs as of 2026 (CIM Deal Summary, p.2)</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue and profit growth</td><td class="ctr"><span class="chip pass">PASS</span></td><td>Rev $14.94M → $15.12M → $18.56M (+1.24%, +22.71%); EBITDA $1.91M → $4.36M → $6.40M</td></tr>
+          <tr><td>5A</td><td>Asking ≤ 4.0x EBITDA (business only)</td><td class="ctr"><span class="chip pass">PASS</span></td><td>$24,367,000 / $6,403,708 = <b>3.81x</b> trailing 2025 EBITDA</td></tr>
+          <tr><td>5B</td><td>Asking ≤ 4.0x EBITDA (with RE bundle)</td><td class="ctr"><span class="chip fail">FAIL</span></td><td>$31,567,000 / $6,403,708 = <b>4.93x</b> — in 4.0–5.5x negotiation band</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 (informational only)</td><td class="ctr"><span class="chip warn">WARN</span></td><td>Modeled DSCR ~2.1x at trailing EBITDA at 70% LTV / 9% / 10-yr am; drops to ~1.2x if 50% of anchor revenue is lost</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout bad">
+        <b>Bottom line.</b> Passes on FTEs, growth, and multiple (business-only). Stretch-fails on age and EBITDA size (above ceiling). Bigger concerns sit below the header: <b>85% customer concentration</b>, a <b>1099-LLC labor model that is excluded from the sale</b>, an <b>EBITDA spike requiring QofE</b>, and <b>100% O&amp;G cyclical exposure</b> in a 5-year-old company.
+      </div>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th>#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Silverfox Inc.</td><td>CIM cover (BLI, 03/04/2026)</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>Business Lynx International CIM</td><td>CIM cover</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>5–6 yrs (founded 2020)</td><td>CIM Deal Summary p.2</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>$7,200,000 asking — 27.25 ac at 30535 Old Washington Rd, Waller, TX (held by related entity; not on company books)</td><td>Waller RE OM (ISL Commercial)</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>~$4.9M book (est.) — $0.57M buildings + $4.34M "Other assets"</td><td>CIM Balance Sheet p.10</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>15</td><td>CIM Personnel §1 p.27</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>0–3 (est.)</td><td>inferred</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td><b>100+ via 7 separate non-owned LLCs (EXCLUDED from sale)</b></td><td>CIM Personnel §1 p.27</td></tr>
+          <tr><td>9</td><td>Business address</td><td>11973 FM 529, Houston, TX 77041 (leased ops) + 30535 Old Washington Rd, Waller, TX 77484 (owned-related, partial use)</td><td>Brochure p.6; Waller RE OM p.4</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>not provided (est. &lt;$10M)</td><td>inferred</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>$14,936,705</td><td>CIM Normalized P&amp;L p.6</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>$15,121,728</td><td>CIM Normalized P&amp;L p.6</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$18,555,633</td><td>CIM Normalized P&amp;L p.6</td></tr>
+          <tr><td>14</td><td>FCF 2022</td><td>not provided</td><td>—</td></tr>
+          <tr><td>15</td><td>FCF 2023</td><td>EBITDA $1,910,677 / SDE $2,113,177</td><td>CIM 3-Col Recast 2023</td></tr>
+          <tr><td>16</td><td>FCF 2024</td><td>EBITDA $4,356,329</td><td>CIM 3-Col Recast 2024</td></tr>
+          <tr><td>17</td><td>FCF 2025</td><td>EBITDA $6,403,708 (after $4.76M of normalizations)</td><td>CIM 3-Col Recast 2025</td></tr>
+          <tr><td>18</td><td>Asking price</td><td><b>$24,367,000 business only · $31,567,000 with Waller RE</b></td><td>CIM IoV p.15; Waller RE OM p.4</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>+1.24% (2023→24), +22.71% (2024→25)</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Not formally disclosed; PO-based with repeat anchor</td><td>CIM Customers §</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>12.79% → 28.81% → 34.51% (margin tripled in 24 mo)</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><i>BLANK</i></td><td>per skill rule</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><i>BLANK</i></td><td>per skill rule</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td><b>85%</b> in single anchor — high-confidence: <b>Enerflex Group (NYSE: EFXT / TSX: EFX)</b>; Exterran logo on Silverfox roster, acquired by Enerflex Oct 2022 for $735M</td><td>CIM GOAL Analysis p.5; Brochure logos p.2; Hart Energy</td></tr>
+          <tr><td>25</td><td>Link to financials</td><td>Manufacturing/Silverfox/Silverfox Updated CIM.pdf</td><td>local</td></tr>
+          <tr><td>26</td><td><b>Lead Score</b></td><td><b>Scenario A: 70 / 100 · Scenario B: 62 / 100</b></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="score">
+      <h2>Lead Score Breakdown</h2>
+
+      <h3>Scenario A — Business only ($24.367M @ 3.81x trailing 2025 EBITDA)</h3>
+      <table>
+        <thead><tr><th>Item</th><th class="num">Awarded</th><th class="num">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td class="num">10</td><td class="num">20</td><td>Custom metal fab for O&amp;G NOT in target list. Closest analog is Aerospace (precision fab + certs). Not excluded. Scored adjacent/uncertain.</td></tr>
+          <tr><td>EBITDA tier (non-cumulative)</td><td class="num">15</td><td class="num">15</td><td>$6.40M &gt; $3M tier ⇒ full 15. Note: above $4M ceiling — header flagged STRETCH.</td></tr>
+          <tr><td>Years in business ≥10</td><td class="num">0</td><td class="num">10</td><td>5–6 yrs; never tested through an O&amp;G downcycle.</td></tr>
+          <tr><td>3 yrs consistent rev + profit growth</td><td class="num">10</td><td class="num">10</td><td>Both rev and EBITDA grew each of last 2 disclosed years.</td></tr>
+          <tr><td>Recurring revenue</td><td class="num">5</td><td class="num">10</td><td>100% PO-based but repeat customers ⇒ mixed.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td class="num">0</td><td class="num">5</td><td>85% in one customer — far above 20% threshold.</td></tr>
+          <tr><td>Employees ≥10</td><td class="num">10</td><td class="num">10</td><td>15 FT (plus 100+ excluded contractors).</td></tr>
+          <tr><td>Valuation multiple</td><td class="num">15</td><td class="num">15</td><td>3.81x ≤ 4.0x ⇒ full 15. <b>But</b>: on top-of-cycle, post-margin-spike EBITDA.</td></tr>
+          <tr><td>Low owner dependence</td><td class="num">5</td><td class="num">5</td><td>GM and 4 functional managers run day-to-day; founders strategic only.</td></tr>
+          <tr><td>Roll-up bonus</td><td class="num">0</td><td class="num">10</td><td>Standalone — not roll-up for Applied Development or Fambro Waste.</td></tr>
+          <tr><th>Total</th><th class="num">70</th><th class="num">100</th><th>"Pursue with conditions" band (70–84).</th></tr>
+        </tbody>
+      </table>
+
+      <h3>Scenario B — Business + Waller RE ($31.567M @ 4.93x trailing EBITDA)</h3>
+      <table>
+        <thead><tr><th>Item</th><th class="num">Awarded</th><th class="num">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Valuation multiple (changes)</td><td class="num">7</td><td class="num">15</td><td>4.93x — in 4.0–5.5x band ⇒ 7. Memo includes explicit "negotiate to ≤4x or carve out RE" condition.</td></tr>
+          <tr><th>Total</th><th class="num">62</th><th class="num">100</th><th>"Review with partner" band (50–69).</th></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <b>Interpretation.</b> The favorable trailing multiple is doing most of the work. Strip out the multiple line and the underlying business profile scores in the 50s. Any erosion in multiple (paying for RE, QofE true-up, or pricing concentration discount in) pushes this firmly into "pass."
+      </div>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><b>Company overview:</b> 5-year-old custom metal fabrication shop in NW Houston (11973 FM 529, Houston TX 77041) serving the Gulf Coast O&amp;G value chain. ~85–90% skid platforms; ~10% ASME-coded pressure vessels (U-stamp + R-stamp). 100% O&amp;G revenue. 15 FT plus 100+ 1099 contractors via 7 unaffiliated LLCs.</li>
+        <li><b>Financials:</b> Revenue $14.94M → $15.12M → $18.56M. Normalized EBITDA $1.91M → $4.36M → $6.40M (margin 12.8% → 28.8% → 34.5%). 2026 guide: $22–25M revenue.</li>
+        <li><b>Ask:</b> $24.367M business only (3.81x trailing); $31.567M with Waller RE (4.93x trailing).</li>
+        <li><b>Buy Box:</b> CONDITIONAL. Passes FTEs, growth, multiple (biz only). Stretch-fails on age and EBITDA ceiling. Significant concerns: 85% concentration; excluded contractor labor; EBITDA margin spike; cyclical 100% O&amp;G; off target-industry list.</li>
+        <li><b>Recommendation: NO LOI at current $24.4M ask. Pursue conditionally at restructured terms only (see Conclusion).</b></li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <ul>
+        <li><b>Founded:</b> 2020 in NW Houston. Custom fabrication for Gulf Coast O&amp;G, primarily skid platforms for compression packages.</li>
+        <li><b>Transition to turnkey:</b> 2024 — brought fabrication, sandblasting, coating, painting, ASME certification, and delivery in-house. Stated driver of COGS compression (70.7% → 55.9% over 2 years).</li>
+        <li><b>Ownership:</b> Two co-founders (names withheld in CIM). Entity per ZoomInfo: "Partnership." Confirm via TX SOS.</li>
+        <li><b>Leadership:</b> Founders strategic only. GM + Fabrication Mgr + QA Mgr + Project Mgr + Paint Shop Mgr run day-to-day. GM positioned as CEO successor. Multiple managers have prior Baker Hughes tenure.</li>
+        <li><b>Capacity:</b> 85,000 sqft leased production + 8,000 sqft office; 10-acre laydown; multiple overhead cranes (count discrepant between docs); 12×12×20 paint oven; 8×8×8 zinc phosphate; hydro test to 27,000 PSI; NACE I/II/III on staff; in-house trucking.</li>
+        <li><b>Balance sheet:</b> Debt-free; $872K cash and $2.78M AR at 2025 year-end.</li>
+        <li><b>Track record claims:</b> 5,000+ projects, 60+ customers.</li>
+      </ul>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership Team</h2>
+      <p>The CIM is blind. Names not disclosed at this stage. Contact intermediary:</p>
+      <ul>
+        <li><b>Business Lynx International</b> (CBI, CM&amp;AP, BCB) — admin@businesslynx.com · 717-678-1530</li>
+        <li><b>Oren Stephen</b>, Principal at ISL Commercial — Waller RE listing — 407-777-3133 · orenstephenproperties@gmail.com</li>
+      </ul>
+      <p>Roles confirmed in CIM:</p>
+      <ul>
+        <li><b>Two co-founders</b> — strategic only; both retiring</li>
+        <li><b>General Manager</b> — day-to-day operator; potential CEO successor</li>
+        <li><b>Fabrication Manager</b></li>
+        <li><b>Quality Assurance Manager</b> (oversees ASME compliance)</li>
+        <li><b>Project Manager</b></li>
+        <li><b>Paint Shop Manager</b></li>
+      </ul>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <div class="twocol">
+        <div>
+          <h3>Product mix</h3>
+          <ul>
+            <li><b>Skid platforms</b> ~85–90% — structural steel frames for gas compression packages, pumps, separators, dehydrators, etc.</li>
+            <li><b>ASME pressure vessels</b> ~10% — U-stamp new construction; R-stamp repair. Economizers, heat exchangers, scrubbers, separators, dehydration units, contactor towers, filter separators, knockouts, compression skid packages, skidded piping, heater treaters.</li>
+            <li><b>Other fabrication</b> — carbon steel, stainless, aluminum.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Pricing &amp; differentiators</h3>
+          <ul>
+            <li><b>Pricing:</b> PO-based. No MSAs disclosed. Net-30 AR / Net-60 AP. 15-day standard lead time.</li>
+            <li><b>Steel:</b> 95% domestic sourcing (tariff insulation).</li>
+            <li><b>Moat (asserted):</b> ASME U+R certs; turnkey integration; 15-day lead time; only 2 alleged South Texas peers (this claim does NOT survive a Thomasnet check — TexFab, STI Group, Metalforms, Houston Vessel, Professional Projects all compete).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <ul>
+        <li><b>Public OFS/Equipment cohort:</b> ~6–9x EV/EBITDA; Damodaran sector median ~7x (Jan 2025).</li>
+        <li><b>2025 O&amp;G services M&amp;A:</b> only 18 transactions / $8B per Deloitte — subdued.</li>
+        <li><b>Demand drivers:</b> US LNG buildout, Permian/Eagle Ford compression CapEx, gas-fired power generation buildout (sellers' 2026 target).</li>
+        <li><b>Headwinds:</b> oil-price cyclicality (every prior downcycle compressed compression-package CapEx 30–50%), energy-transition pressure on long-cycle gas infrastructure, steel input volatility.</li>
+        <li><b>Peer set in South Texas:</b> TexFab, STI Group, Metalforms, Houston Vessel, Professional Projects Inc. The "only 2 competitors" claim should be considered marketing puffery.</li>
+      </ul>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <ul>
+        <li><b>Segments:</b> 100% O&amp;G — upstream, midstream, downstream operators and service co's headquartered in/around Houston. End-markets touch global gas (US, Qatar, Australia, Canada, Saudi, Norway) via Houston-based operators.</li>
+        <li><b>Named approved clients:</b> Enerflex, Compass, Titan, NWR, GENIS, VGAS, Innovative Compression Equipment, Exterran, TechProcure, Steel Supply LP, Encore Oilfield Services.</li>
+        <li><b>Top customer concentration:</b> <b>85% in a single anchor — high-confidence: Enerflex Group (NYSE: EFXT / TSX: EFX).</b> Enerflex acquired Exterran (also Houston-based) in Oct 2022 for $735M; both Enerflex and Exterran logos appear on Silverfox's roster. Combined, Enerflex Group is the only major dual-listed gas-compression packager in Houston, matching the CIM's "publicly traded on NYSE as well as TSX" descriptor.</li>
+        <li><b>Recurring vs one-time:</b> 0% contractually recurring. 100% PO-based. Customer relationships repeat but engagements project-by-project; no MSAs disclosed.</li>
+        <li><b>Retention:</b> Not quantified. Claimed "long-standing relationships" and "industry referrals."</li>
+      </ul>
+
+      <div class="callout bad">
+        <b>Concentration risk note.</b> PE/financial-buyer guidance typically flags any single customer &gt;15% as a deal concern; deals with &gt;25% concentration carry 15–30% valuation discounts or restructured terms (FOCUS Bankers, GP Ventures, Founders Advisors). At 85%, this becomes a single-account bet on Enerflex's continued vendor preference for Silverfox.
+      </div>
+    </section>
+
+    <section id="fins">
+      <h2>7. Financial Analysis</h2>
+
+      <h3>Historical performance</h3>
+      <table>
+        <thead><tr><th>Year</th><th class="num">Revenue</th><th class="num">EBITDA (norm)</th><th class="num">Margin</th><th class="num">YoY rev growth</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td class="num">not provided</td><td class="num">not provided</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><td>2023</td><td class="num">$14,936,705</td><td class="num">$1,910,677</td><td class="num">12.79%</td><td class="num">—</td></tr>
+          <tr><td>2024</td><td class="num">$15,121,728</td><td class="num">$4,356,329</td><td class="num">28.81%</td><td class="num">+1.24%</td></tr>
+          <tr><td>2025</td><td class="num">$18,555,633</td><td class="num">$6,403,708</td><td class="num">34.51%</td><td class="num">+22.71%</td></tr>
+          <tr><td>2026 guide (sellers)</td><td class="num">$22–25M</td><td class="num">~$6.06M (broker)</td><td class="num">~26–27%</td><td class="num">+19–35%</td></tr>
+        </tbody>
+      </table>
+
+      <h3>The margin spike question</h3>
+      <p>EBITDA margin 12.8% → 28.8% → 34.5% in 24 months. The 2025 normalization required <b>$4.76M of adjustments</b>:</p>
+      <ul>
+        <li>COGS reduction $1.53M — "Set up of Paint bays"</li>
+        <li>Rent reduction $1.97M — "Tax-Saving Strategy" (cash rent $2.44M normalized to $464K via related-party adjustment)</li>
+        <li>Bad debt write-off $421K — "Consultant, Gas processing, write off"</li>
+        <li>Repairs $353K — "One-time Waller Expense"</li>
+        <li>Equipment Rent $61K — "One-time Waller Expense"</li>
+        <li>Salaries $330K — "One Officer Salary"</li>
+        <li>Auto &amp; Truck $100K — "One-time Trailer Expense"</li>
+      </ul>
+      <div class="callout bad">
+        <b>The single most important adjustment is the rent normalization.</b> If the buyer does NOT acquire the Waller real estate, NewCo's rent to the related-party landlord may settle at the higher real number ($2.44M) rather than the broker's normalized $464K, eroding $1.5–2.0M of EBITDA at close. Validate the related-party rent path before signing an LOI.
+      </div>
+
+      <h3>Valuation reasonableness</h3>
+      <table>
+        <thead><tr><th>Multiple basis</th><th class="num">EBITDA</th><th class="num">@3.5x</th><th class="num">@4.0x</th><th class="num">@5.0x</th><th class="num">@6.0x</th></tr></thead>
+        <tbody>
+          <tr><td>Trailing 2025 normalized</td><td class="num">$6.40M</td><td class="num">$22.4M</td><td class="num">$25.6M</td><td class="num">$32.0M</td><td class="num">$38.4M</td></tr>
+          <tr><td>2-yr weighted (50/50 24+25)</td><td class="num">$5.38M</td><td class="num">$18.8M</td><td class="num">$21.5M</td><td class="num">$26.9M</td><td class="num">$32.3M</td></tr>
+          <tr><td>3-yr weighted (broker 10/40/50)</td><td class="num">$5.14M</td><td class="num">$18.0M</td><td class="num">$20.5M</td><td class="num">$25.7M</td><td class="num">$30.8M</td></tr>
+          <tr><td><b>Ask (business only)</b></td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num"><b>$24.367M</b></td></tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>Implied multiple at ask (business only): <b>3.81x trailing</b></li>
+        <li>Implied multiple at ask (with RE): <b>4.93x trailing</b></li>
+        <li>Fair entry range (this analyst): <b>$13.5–19M cash at close</b> on stress-tested EBITDA, with $4–6M earn-out tied to anchor-customer retention. Real estate via lease, not purchase.</li>
+      </ul>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div><h4>Strengths</h4>
+          <ul>
+            <li>ASME U + R + National Board certs</li>
+            <li>Genuine turnkey capability</li>
+            <li>Lean management with succession path</li>
+            <li>Houston metro / global O&amp;G hub</li>
+            <li>Debt-free balance sheet</li>
+            <li>15-day lead time</li>
+            <li>95% domestic steel (tariff insulation)</li>
+            <li>Retiring sellers; transition support offered</li>
+          </ul>
+        </div>
+        <div><h4>Weaknesses</h4>
+          <ul>
+            <li><b>85% single-customer concentration</b></li>
+            <li>Founded 2020 — no down-cycle test</li>
+            <li>100+ labor via 7 non-owned LLCs (excluded)</li>
+            <li>EBITDA margin tripled in 24 mo — QofE needed</li>
+            <li>100% O&amp;G exposure</li>
+            <li>No MSAs / 100% PO-based</li>
+            <li>RE bundle priced at $262K/acre vs $43K Waller avg</li>
+            <li>Off EarnedOut target-industry list</li>
+          </ul>
+        </div>
+        <div><h4>Opportunities</h4>
+          <ul>
+            <li>Power Generation diversification (2026 plan)</li>
+            <li>ISO certification add-on</li>
+            <li>Stand up a sales/BD function</li>
+            <li>Adjacents — petrochemical, LNG, industrial, aerospace, DOD</li>
+            <li>Waller campus build-out (12-building master plan)</li>
+            <li>Government / DOD work</li>
+          </ul>
+        </div>
+        <div><h4>Threats</h4>
+          <ul>
+            <li>Enerflex in-sourcing or vendor switch wipes 85%</li>
+            <li>O&amp;G CapEx downturn (highly oil-price sensitive)</li>
+            <li>Energy transition pressure</li>
+            <li>Steel / labor cost inflation</li>
+            <li>Margin reversion to fab-industry norm (8–15%)</li>
+            <li>IRS 1099-classification scrutiny on LLC labor</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><b>Customer concentration (CRITICAL).</b> 85% from one anchor (likely Enerflex Group). PE/financial-buyer norm rejects deals with single-customer &gt;15–20%. Loss scenario destroys both DSCR and equity returns.</li>
+        <li><b>Customer relationship fragility.</b> PO-based; no MSAs disclosed. Anchor can switch vendors at any PO cycle with no contractual penalty. Diligence must establish: 2026 PO volume, MSA/qualified-vendor status, share-of-anchor-spend, vendor-selection rationale.</li>
+        <li><b>EBITDA quality.</b> $4.76M of 2025 adjustments. Largest single addback is $1.97M of "Tax-Saving Strategy" rent paid to related-party landlord. If buyer doesn't acquire RE and related party charges market rent, add-back may not fully transfer.</li>
+        <li><b>Labor-model risk (HIGH).</b> 100+ contractors through 7 unowned LLCs. IRS reclassification could create 7-figure contingent payroll-tax liability; LLC owners are not selling and could renegotiate post-close; relationships likely concentrate around a small number of operators.</li>
+        <li><b>Cyclicality.</b> Every prior O&amp;G downcycle (2014–16, 2020) compressed compression-package CapEx 30–50%. Silverfox has never been tested.</li>
+        <li><b>Industry-target mismatch.</b> Custom O&amp;G metal fab not in EarnedOut's explicit target list. Closest analog: Aerospace.</li>
+        <li><b>RE bundle math.</b> $262K/acre vs Waller $43K avg, Texas industrial $73K avg. 4 acres improved; balance is raw. Premium hard to justify outright.</li>
+        <li><b>Unaudited financials.</b> Tax-return basis only. QofE essential.</li>
+        <li><b>Discrepancies between collateral.</b> 3× 25-ton vs 4× 40-ton cranes; 85k vs 87k sqft facility; Brookshire vs Houston facility references.</li>
+      </ul>
+
+      <h3>Deal-specific negotiation levers</h3>
+      <ol>
+        <li>Negotiate to ≤3.5x trailing EBITDA ($22.4M) if Enerflex MSA exists; ≤3.0x ($19.2M) if PO-based.</li>
+        <li>Carve out Waller RE — 10-yr triple-net lease at ~$464K/yr.</li>
+        <li>Earn-out 25–40% gated on anchor revenue retention.</li>
+        <li>Seller note 15–25%, 3–5 yr subordinated.</li>
+        <li>R&amp;W insurance with separate 1099-classification retention.</li>
+        <li>Hard close conditions: named Enerflex introduction; QofE confirming $4M+ stress-tested EBITDA; 7 LLC contractor assignments; TX SOS clean; Phase I environmental.</li>
+      </ol>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <ul>
+        <li><b>Expansion:</b> Power Generation diversification (sellers' 2026 priority); petrochemical, LNG, industrial services adjacencies; DOD/government work given ASME credentials; ISO certification.</li>
+        <li><b>Operational upside:</b> install a sales/BD function (revenue is 100% inbound today); pursue 1–2 new anchor customers; convert PO → MSA; migrate 1099-LLC labor to W-2 or single in-house labor co.</li>
+        <li><b>Strategic:</b> tuck-in adjacent fabricators (Beaumont, Corpus, Lake Charles); vertical integration into coatings or testing.</li>
+      </ul>
+
+      <h3>100-day plan sketch (if pursued)</h3>
+      <ol>
+        <li>Lock down Enerflex relationship — visit procurement, document share-of-spend, sign MSA if available.</li>
+        <li>Migrate 7 LLC labor force to W-2 or single consolidated entity.</li>
+        <li>Hire one BD/sales lead for diversification.</li>
+        <li>Audit-quality books and 2026 budget.</li>
+        <li>Tuck-in pipeline development.</li>
+      </ol>
+    </section>
+
+    <section id="conclusion">
+      <h2>11. Conclusion &amp; Pursue / Pass Decision</h2>
+
+      <div class="callout bad">
+        <b>Recommendation: NO LOI at the current $24.367M ask. Conditional pursue at restructured terms only.</b>
+      </div>
+
+      <p>The headline 3.81x trailing multiple looks attractive in isolation, but the underlying business has four overlapping risks that any one of which would normally cool a deal — and they all stack here:</p>
+      <ol>
+        <li><b>85% concentration</b> — single point of failure (Enerflex Group)</li>
+        <li><b>5-year track record</b> — never tested through a downcycle, while sitting in the most cyclical end-market in the US economy</li>
+        <li><b>EBITDA margin tripled in 24 months</b> with $4.76M of normalization adjustments dependent on a related-party rent structure</li>
+        <li><b>Labor delivered by 7 unowned LLCs</b> that are excluded from the sale</li>
+      </ol>
+
+      <p>Favorable items — ASME credentials, lean management, Houston location, growing top line, debt-free balance sheet, retiring sellers — are real and support continued engagement. They do not, in this analyst's view, support paying $24.4M without major structural protections.</p>
+
+      <h3>If pursued, LOI should reflect:</h3>
+      <ul>
+        <li>$13.5–19M cash at close (2.5–3.5x trailing on stress-tested EBITDA)</li>
+        <li>$4–6M earn-out gated on Enerflex revenue retention (≥70% of 2025 anchor revenue retained in each of 2026 and 2027)</li>
+        <li>15–25% seller note (3–5 year subordinated)</li>
+        <li>Waller real estate via 10-yr triple-net lease (~$464K/yr) — NOT outright purchase</li>
+        <li>R&amp;W insurance with separate retention for 1099 misclassification exposure</li>
+        <li>Hard diligence conditions: QofE, named Enerflex introduction, 7 LLC assignments, Phase I, TX SOS clean</li>
+      </ul>
+
+      <p>If the seller will not engage on a structured offer at this profile, the recommendation is <b>pass</b>. The deal as advertised is priced for a clean industrial roll-up by a strategic acquirer (e.g., a PE-backed fabrication platform), not for an independent buyer underwriting concentration risk solo.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>12. Appendix</h2>
+
+      <h3>A. Data sources (web research)</h3>
+      <ul>
+        <li><a href="https://www.silverfoxfab.com/vessels/">Silverfox — Vessels page</a></li>
+        <li><a href="https://silverfoxfab.com/contact-us.html">Silverfox brochure contact (11973 FM 529)</a></li>
+        <li><a href="https://www.zoominfo.com/c/silverfox-inc/1302474404">ZoomInfo company profile</a></li>
+        <li><a href="https://www.wallerchamber.com/list/member/silverfox-inc-3155">Waller Chamber of Commerce listing</a></li>
+        <li><a href="https://www.enerflex.com/">Enerflex Ltd corporate site</a></li>
+        <li><a href="https://www.enerflex.com/location/houston/">Enerflex Houston</a></li>
+        <li><a href="https://www.hartenergy.com/exclusives/enerflex-buy-houston-based-exterran-735-million-all-stock-deal-198493/">Hart Energy — Enerflex/Exterran $735M acquisition</a></li>
+        <li><a href="https://www.globenewswire.com/news-release/2022/01/24/2371561/0/en/Enerflex-Ltd-and-Exterran-Corporation-to-Combine-Creating-a-Premier-Integrated-Global-Provider-of-Energy-Infrastructure.html">Enerflex/Exterran combination announcement</a></li>
+        <li><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/vebitda.html">Damodaran EV/EBITDA by sector</a></li>
+        <li><a href="https://firstpagesage.com/business/ebitda-valuation-multiples-for-oil-and-gas-sector/">First Page Sage — O&amp;G EBITDA multiples 2025</a></li>
+        <li><a href="https://clearlyacquired.com/blog/ebitda-multiples-for-oil-gas-and-renewable-energy-services">Clearly Acquired — O&amp;G EBITDA multiples</a></li>
+        <li><a href="https://www.deloitte.com/us/en/insights/industry/oil-and-gas/mergers-and-acquisitions-in-oil-and-gas.html">Deloitte O&amp;G M&amp;A 2025 outlook</a></li>
+        <li><a href="http://cdn.hl.com/pdf/2025/enr-oil-gas-q4-24.pdf">Houlihan Lokey Q4 2024 O&amp;G update</a></li>
+        <li><a href="https://focusbankers.com/the-perils-of-customer-concentration-in-ma/">FOCUS Bankers — Customer Concentration in M&amp;A</a></li>
+        <li><a href="https://gp-ventures.com/beware-customer-concentration-risk/">GP Ventures — Customer Concentration Risk</a></li>
+        <li><a href="https://www.land.com/Waller-County-TX/">Land.com — Waller County market data</a></li>
+        <li><a href="https://www.landsearch.com/industrial/texas">LandSearch — Texas industrial land averages</a></li>
+        <li><a href="https://texasfarmcredit.com/resources/texas-land-pricing-guide/">Texas Farm Credit — TX Land Pricing Guide 2026</a></li>
+      </ul>
+
+      <h3>B. Assumptions used for estimates</h3>
+      <ul>
+        <li><b>FF&amp;E $4.9M (est.)</b> — $566,741 buildings + $4,338,292 "Other assets" per CIM 2025 balance sheet; book value, not market.</li>
+        <li><b>2022 revenue &lt;$10M (est.)</b> — extrapolated from 2023 baseline + stated in-housing transition timing.</li>
+        <li><b>DSCR ~2.1x (illustrative)</b> — 70% LTV at $24.367M, 9.0% rate, 10-yr am, $0.5M maintenance capex, $0.4M working-capital absorption.</li>
+        <li><b>Market rent ~$464K/yr</b> — taken from broker's own 2025 rent normalization ($2.44M cash → $463,908 normalized). Verify FM 529 corridor at $6–8/sqft NNN.</li>
+        <li><b>Peer EBITDA margin 8–15%</b> — analyst benchmark for small-cap private metal fabricators; verify against RMA NAICS 332710 / 332313.</li>
+      </ul>
+
+      <h3>C. Documents reviewed</h3>
+      <ul>
+        <li><b>Manufacturing/Silverfox/Silverfox Inc - Teaser.pdf</b> — 9-page teaser (03/04/2026)</li>
+        <li><b>Manufacturing/Silverfox/Silverfox Updated CIM.pdf</b> — 35-page full CIM (02/25/2026); P&amp;L, balance sheet, 3-column recast, questionnaire</li>
+        <li><b>Manufacturing/Silverfox/30535OldWashingtonRd.WallerTX77484 (2)[12].pdf</b> — 20-page Waller RE OM (ISL Commercial)</li>
+        <li><b>Manufacturing/Silverfox/SILVERFOX INC Brochure .pdf</b> — 6-page company brochure with capabilities, certifications, client logos</li>
+        <li><b>Manufacturing/Silverfox/Silverfox_Growth_Strategy.pdf</b> — 11-page growth thesis presentation</li>
+      </ul>
+
+      <h3>D. Open questions for the seller / broker</h3>
+
+      <h4>Identity &amp; ownership</h4>
+      <ol>
+        <li>Confirm names of co-founders, entity type, and ownership splits.</li>
+        <li>Confirm related-party entity that owns the Waller real estate.</li>
+      </ol>
+
+      <h4>Customer concentration</h4>
+      <ol start="3">
+        <li>Confirm identity of the 85% anchor and provide trailing 36-month PO history.</li>
+        <li>MSA / qualified-vendor agreement with anchor — term and exclusivity?</li>
+        <li>Silverfox's estimated share of anchor's total fabrication spend?</li>
+        <li>Anchor's vendor consolidation history; 2026 procurement plan?</li>
+        <li>Backlog at signing and at close?</li>
+      </ol>
+
+      <h4>Financial quality</h4>
+      <ol start="8">
+        <li>Audited/reviewed financials or QofE consent.</li>
+        <li>Reconcile 2025 rent normalization (cash $2.44M vs normalized $464K) — go-forward path.</li>
+        <li>Detail the COGS normalization ($1.53M paint-bay setup) — truly one-time or capitalizable?</li>
+        <li>Detail bad-debt and consultant write-off ($421K).</li>
+        <li>2026 YTD revenue and EBITDA.</li>
+      </ol>
+
+      <h4>Labor model</h4>
+      <ol start="13">
+        <li>All seven LLC subcontractor agreements with assignment language and term.</li>
+        <li>Confirm LLC owners are unrelated to founders/related parties.</li>
+        <li>Each LLC's owner and worker count.</li>
+        <li>Stance on IRS 1099 classification scrutiny; opinion letter on file?</li>
+      </ol>
+
+      <h4>Operations</h4>
+      <ol start="17">
+        <li>Reconcile crane count (CIM 3× 25-ton vs Brochure 4× 40-ton).</li>
+        <li>Reconcile facility square footage (87k CIM / 85k Brochure / 45k Brookshire ref).</li>
+        <li>Houston FM 529 lease term, renewal options, and current rent.</li>
+        <li>Open warranty/recall claims on past pressure vessels?</li>
+        <li>ISO certification roadmap.</li>
+      </ol>
+
+      <h4>Real estate (Scenario B only)</h4>
+      <ol start="22">
+        <li>Phase I environmental on Houston operating site.</li>
+        <li>Deeds for the 3 Waller parcels (APN 0422520000023, 24, 26).</li>
+        <li>Easements, restrictions, zoning changes.</li>
+        <li>As-built status and permits on the 4 improved acres (paint bays, 2,900 sqft HQ).</li>
+      </ol>
+    </section>
+
+    <footer>Silverfox Inc. — Prospect Evaluation · Generated 2026-05-11 · Internal use for EarnedOut deal screening</footer>
+  </main>
+
+</div>
+</body>
+</html>

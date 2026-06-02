@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Flying Zebra LLC — Prospect Evaluation (Rev 3)</title>
+<style>
+  :root{
+    --bg:#0f1419;--panel:#171d26;--panel-2:#1f2733;
+    --text:#e7ecf3;--muted:#8a97ab;--border:#2a3342;
+    --accent:#5aa7ff;--pass:#2fbf71;--fail:#e74c3c;--warn:#f5a623;
+    --badge:#0b1019;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.55;font-size:15px}
+  a{color:var(--accent)}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px;
+    display:grid;grid-template-columns:220px 1fr;gap:28px}
+  @media (max-width:900px){.wrap{grid-template-columns:1fr}nav.toc{position:static !important}}
+  header.banner{grid-column:1/-1;
+    background:linear-gradient(180deg,#1a2332 0%,#0f1419 100%);
+    border:1px solid var(--border);border-radius:14px;
+    padding:22px 26px;display:flex;justify-content:space-between;gap:16px;
+    align-items:center;flex-wrap:wrap}
+  header.banner h1{margin:0 0 4px;font-size:26px}
+  header.banner .meta{color:var(--muted);font-size:13px}
+  .verdict{display:inline-block;padding:8px 14px;border-radius:999px;
+    font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+  .verdict.pass{background:rgba(47,191,113,.15);color:var(--pass);border:1px solid rgba(47,191,113,.4)}
+  .verdict.conditional{background:rgba(245,166,35,.15);color:var(--warn);border:1px solid rgba(245,166,35,.4)}
+  .verdict.fail{background:rgba(231,76,60,.15);color:var(--fail);border:1px solid rgba(231,76,60,.4)}
+  .score-badge{background:var(--badge);border:1px solid var(--border);
+    border-radius:12px;padding:12px 18px;min-width:140px;text-align:center}
+  .score-badge .num{font-size:32px;font-weight:800;color:var(--accent);line-height:1}
+  .score-badge .label{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+  nav.toc{position:sticky;top:20px;background:var(--panel);
+    border:1px solid var(--border);border-radius:12px;padding:16px;
+    align-self:start;font-size:13px;height:fit-content}
+  nav.toc h3{margin:0 0 10px;font-size:12px;color:var(--muted);
+    letter-spacing:.08em;text-transform:uppercase}
+  nav.toc ol{list-style:none;padding:0;margin:0}
+  nav.toc li{padding:4px 0}
+  nav.toc a{color:var(--text);text-decoration:none}
+  nav.toc a:hover{color:var(--accent)}
+  main{min-width:0}
+  section{background:var(--panel);border:1px solid var(--border);
+    border-radius:12px;padding:20px 24px;margin-bottom:18px}
+  section h2{margin:0 0 14px;font-size:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+  section h3{font-size:15px;margin:18px 0 8px}
+  section p,section li{color:#cbd3df}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;background:var(--panel-2)}
+  tr:last-child td{border-bottom:none}
+  .chip{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700}
+  .chip.pass{background:rgba(47,191,113,.15);color:var(--pass);border:1px solid rgba(47,191,113,.4)}
+  .chip.fail{background:rgba(231,76,60,.15);color:var(--fail);border:1px solid rgba(231,76,60,.4)}
+  .chip.warn{background:rgba(245,166,35,.15);color:var(--warn);border:1px solid rgba(245,166,35,.4)}
+  .swot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .swot .cell{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px}
+  .swot .cell h4{margin:0 0 6px;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+  .est{color:var(--warn);font-weight:600;font-size:11px;margin-left:4px}
+  .chart{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px;overflow-x:auto}
+  footer{grid-column:1/-1;color:var(--muted);font-size:12px;text-align:center;padding:12px}
+  ul{margin:8px 0;padding-left:20px}
+  .crit{color:var(--fail);font-weight:700}
+  .upd{background:rgba(90,167,255,.1);border-left:3px solid var(--accent);padding:10px 14px;border-radius:4px;margin:12px 0;font-size:13px}
+  .priceBadge{background:rgba(47,191,113,.12);border:1px solid rgba(47,191,113,.4);
+    color:var(--pass);padding:6px 10px;border-radius:8px;font-size:13px;font-weight:700;
+    display:inline-block;margin-left:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Flying Zebra LLC — Prospect Evaluation <span style="color:var(--muted);font-size:14px;font-weight:400">(Rev 3)</span></h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut (Applied Development LLC)</strong> &nbsp;·&nbsp;
+        2026-04-15 &nbsp;·&nbsp;
+        Lead source: Dean Kantis / The Jet Network (Feb 27, 2026)
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict conditional">Buy Box: CONDITIONAL*</span>
+      <div class="score-badge">
+        <div class="num">70</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section>
+      <div class="upd">
+        <strong>Revision 3 changes (vs. Rev 2):</strong>
+        <ol style="margin:8px 0;padding-left:20px;">
+          <li><strong>EBITDA corrected</strong> to <em>Operating EBITDA</em> = NOI + Interest + Income Tax. Prior drafts mislabeled NOI + D&amp;A as EBITDA; that was wrong because NOI in this cash-basis QuickBooks P&amp;L had already subtracted both interest and income taxes. Corrected: <strong>2024 = $1.62M; 2025 = $2.60M</strong>; 2023 = $2.07M.</li>
+          <li><strong>Asking price set to buyer target: $10,420,108</strong> = 4.00x × actual 2025 Operating EBITDA. At Biffrey's 4.0x ceiling. Seller-stated ask is $13.95M @ revised 5.5x.</li>
+          <li><strong>Lead Score 70/100</strong> (up from 55). Valuation-multiple rubric line moves 0 → 15 pts.</li>
+          <li><strong>Buy Box: still FAIL</strong> (3 ✅ / 2 ❌ / 1 ⚠️) but improved from 2 ✅; on the CONDITIONAL border.</li>
+          <li><strong>Interpretation: "Pursue with conditions"</strong> (70–84 band).</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">✅</span></td><td>2024 full-year payroll $609,152; NY SUTA $13,249 ≈ 10.6 wage-base cap-outs; 12+ named W-2 employees; 2025 payroll $847,410. Seller: compensation "on higher end of industry standards."</td></tr>
+          <tr><td>2</td><td>EBITDA $1M–$4M / year</td><td><span class="chip pass">✅</span></td><td>Operating EBITDA: 2023 $2,065,570 · 2024 $1,623,100 · 2025 $2,605,027. In range every year.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip fail">❌</span></td><td>Seller Q&amp;A 4/13/26: "Celine Lukic and Glenn partnered on or around 2018." Business = <strong>8 years</strong>. Glenn personally has 20+ yrs aviation.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY rev &amp; profit growth</td><td><span class="chip fail">❌</span></td><td>Rev: 2023 → 2024 +24.3% → 2025 +12.3% (2 consec. growth yrs). EBITDA: 2023 $2.07M → 2024 $1.62M (<strong>–21.5%</strong>) → 2025 $2.60M (+60.6%). Only 1 consec. profit-growth yr.</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip pass">✅</span></td><td><strong>Buyer target $10,420,108 / 2025 EBITDA $2,605,027 = 4.00x.</strong> At ceiling. <span class="priceBadge">$10,420,108</span> (seller-stated $13.95M @ 5.5x still to be negotiated down $3.53M)</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip pass">✅ (2025)</span><br><span class="chip fail" style="margin-top:4px;">❌ (2024)</span></td><td>CFDF at $10.42M / 90% LTV ($9.378M loan) / 13% / 10-yr amort. Annual DS $1,680,301. <strong>DSCR 2025 = 1.55 ✅</strong>. <strong>DSCR 2024 = 0.97 — below 1.0, cannot service debt.</strong> 3-yr avg DSCR 1.25. Clears only on the bounce-back year.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Overall Buy Box: CONDITIONAL</strong> (4 ✅ / 2 ❌) on 2025 numbers. <strong class="crit">Reverts to FAIL if underwriting uses 2024 or any trailing average.</strong> Remaining ❌: 10-yr rule (hard) and 3-yr consecutive profit growth.</p>
+      <div class="upd" style="border-left-color:var(--fail);background:rgba(231,76,60,.08);">
+        <strong class="crit">Material DSCR fragility:</strong> At the offered 10-yr amortization, annual debt service of $1.68M is <em>above</em> 2024's actual Operating EBITDA of $1.62M. A repeat of 2024 produces a ~$57K annual cash-flow shortfall — the business could not cover debt service from operations and would require equity injection, cash reserves, or a covenant waiver. This isn't a hypothetical — it's the P&amp;L printed 18 months ago. Until the 2024 compression drivers (Corporate Cash Retainer $518K, R&amp;M surge, insurance step-up) are proven one-time, the 10-yr / 13% / 90% structure is financeable but <strong>fragile</strong>. Conditions 7–8 below include structural mitigants (seller carry, cash reserve covenant, EBITDA cure rights) that would harden the deal against a 2024 repeat.
+      </div>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Sea to Sky Air, Inc. d/b/a Flying Zebra (via FZ Corp + 4 sister entities)</td><td>Seller Q&amp;A 4/13/26</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>Broker — Dean Kantis, TJN (Feb 27, 2026)</td><td>Broker email thread</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>8 (partnership ~2018)</td><td>Seller Q&amp;A 4/13/26</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>None (hangar + office <strong>month-to-month</strong> at KHPN Atlantic West)</td><td>Seller Q&amp;A 4/13/26</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>~$4.25M nominal / ~$2.4M market-discounted (aircraft equity + $800K parts + $250K tools)</td><td>Seller Q&amp;A 4/13/26</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>≥10 (est. 10–12 FTE)</td><td>2024 P&amp;L payroll math</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td><em style="color:var(--muted);">"to be provided"</em></td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>2024 $49,901; 2025 $162,799 (+226%)</td><td>Full-year P&amp;Ls</td></tr>
+          <tr><td>9</td><td>Business address</td><td>67 Tower Rd, Hangar T, West Harrison, NY 10604 (KHPN)</td><td>DD report §3.1</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>~$6,140,000 <span class="est">(est.)</span></td><td>Vrolyk derived</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td><strong>$5,925,555 (actual)</strong></td><td>2023 &amp; 2024 Comparative P&amp;L</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td><strong>$7,367,634 (actual)</strong></td><td>2023 &amp; 2024 Comparative P&amp;L</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td><strong>$8,277,095 (actual, multi-entity)</strong></td><td>P&amp;L 2025 Comparative</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>$2,100,000 EBITDA (conf.)</td><td>Vrolyk Capital</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>NI $656,814; NOI $1,735,751; <strong>Op EBITDA $2,065,570</strong></td><td>2023 &amp; 2024 Comparative P&amp;L</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>NI $873,914; NOI $1,285,333; <strong>Op EBITDA $1,623,100</strong></td><td>2023 &amp; 2024 Comparative P&amp;L</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>NI $1,622,148; NOI $1,904,399; <strong>Op EBITDA $2,605,027</strong></td><td>P&amp;L 2025 Comparative</td></tr>
+          <tr><td>18</td><td>Asking price</td><td><strong>Buyer target: $10,420,108</strong> (4.00x × 2025 EBITDA). Seller-stated: $13,950,000 @ 5.5x. Gap: ~$3.53M</td><td>Buyer decision; seller Q&amp;A 4/13/26</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>'22→'23 –3.4%; '23→'24 +24.3%; '24→'25 +12.3%</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td><em style="color:var(--muted);">"to be provided"</em></td><td>—</td></tr>
+          <tr><td>21</td><td>EBITDA margin (operating)</td><td>2023 ~34.9%; 2024 ~<strong>22.0%</strong>; 2025 ~<strong>31.5%</strong></td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td><span class="crit">not disclosed — material open item</span></td><td>—</td></tr>
+          <tr><td>25</td><td>2024 + 2025 financials</td><td>Local: 2023 &amp; 2024 Comparative P&amp;L; P&amp;L 2025 Comparative</td><td>Provided files</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>70 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Aerospace / Part 135 — <strong>TOP PRIORITY</strong>. Cert #891A3240 good standing.</td></tr>
+          <tr><td>EBITDA tier (non-cumulative)</td><td>10</td><td>15</td><td>2025 actual Op EBITDA $2.605M → &gt;$2M tier = 10. Not yet &gt;$3M.</td></tr>
+          <tr><td>Years in business ≥10</td><td>0</td><td>10</td><td>Partnership ~2018 = 8 yrs. Hard fail.</td></tr>
+          <tr><td>3 yrs consistent rev + profit growth</td><td>5</td><td>10</td><td>Revenue grew consistently 2023→24→25. Profit did not — 2024 EBITDA –21.5% YoY. 5 pts for one metric consistent.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>Mixed / repeat-but-not-contracted. Trip-based Avinode/Schedaero.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Insufficient data — not awarded.</td></tr>
+          <tr><td>Employees ≥10</td><td>10</td><td>10</td><td>2024 payroll math supports ≥10 FTE.</td></tr>
+          <tr><td>Valuation multiple</td><td><strong>15</strong></td><td>15</td><td><strong>$10,420,108 / 2025 EBITDA $2,605,027 = 4.00x → ≤4.0x tier = full 15 pts.</strong> At Biffrey's ceiling.</td></tr>
+          <tr><td>Low owner dependence</td><td>5</td><td>5</td><td>Full team in place; Glenn not daily operator.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>70</strong></td><td><strong>100</strong></td><td>Pursue with conditions (70–84 band). +15 vs. Rev 2.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> FAA Part 135 on-demand charter at KHPN; four Pilatus PC-12s; dual FAA + Canadian carrier certs. Celine Lukic + Glenn Allyn partnered ~2018. Multi-entity structure.</li>
+        <li><strong>Financial highlights (actuals):</strong> Rev $5.93M → $7.37M (+24.3%) → $8.28M (+12.3%). <strong>Operating EBITDA $2.07M → $1.62M → $2.60M.</strong> 2025 margin recovered to 31.5% near the historical 32–35% band.</li>
+        <li><strong>Buy Box summary:</strong> <strong>FAIL</strong> (3 ✅ / 2 ❌ / 1 ⚠️) on CONDITIONAL border. EBITDA ✅, employees ✅, asking @ buyer target ✅; fails years (8 not 10) and 3-yr consec. profit growth.</li>
+        <li><strong class="crit">Material debt-service concern:</strong> At the 10-yr amortization being offered (13% / 90% LTV), annual debt service is $1.68M. <strong>2024 Operating EBITDA was $1.62M — below debt service.</strong> A repeat of 2024 would mean the business cannot cover debt service from operations (DSCR 0.97). 3-yr avg DSCR is only 1.25. This deal is financeable <em>only on 2025 figures</em> — a single-year bet on the bounce-back being baseline. Until 2024's compression drivers (Corporate Cash Retainer $518K, R&amp;M $477K surge, insurance $302K step-up) are proven one-time, the structure is fragile. Structural mitigants are required — see conditions 7–8 below.</li>
+        <li><strong>Pursue with conditions:</strong>
+          <ol>
+            <li><strong class="crit">Establish seller motivation</strong> — Glenn has never been asked why he's selling. Must be the opening question before further diligence spend.</li>
+            <li>Negotiate seller $13.95M → <strong>$10.42M</strong> (~25% concession).</li>
+            <li>Partner-level exception on 10-yr rule.</li>
+            <li>Confirm 2024 expense compression was one-time (esp. the unexplained <strong>$518K "Corporate Cash Retainer"</strong>); require accountant walk-through and <strong>seller indemnity against recurrence</strong>.</li>
+            <li><strong>Disclose customer concentration</strong> — top-5 clients last 3 years (never asked).</li>
+            <li>Close other CRITICAL pre-LOI items (hangar written lease, accrual 5-yr financials, org chart + buy-sells).</li>
+            <li><strong>Negotiate seller carry for ≥20% of purchase price</strong> → senior LTV ≤70% → 2025 DSCR 1.99 / 2024-stress DSCR 1.24. Much more survivable. Seller financing is a preferred deal structure per skill regardless.</li>
+            <li><strong>Operating cash reserve covenant</strong> ≥12 months debt service ($1.68M) at close + covenant holiday / EBITDA-cure rights for at least one LTM compression period.</li>
+          </ol>
+        </li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>History:</strong> Glenn Allyn — 20+ yrs aviation. Per Apr 13, 2026: "Celine Lukic and Glenn partnered on or around 2018." Earliest op doc N408FZ spec sheet (Spring 2019). Operated through COVID.</p>
+      <p><strong>Ownership:</strong> Glenn Allyn + Celine Lukic. 100% buyout or percentage buy-in. <strong>Stock transfers of all relevant entities.</strong></p>
+      <h3>Aircraft equity (seller Apr 13)</h3>
+      <table>
+        <thead><tr><th>Aircraft</th><th>Year/Type</th><th>FZ %</th><th>Value</th><th>Financing</th><th>Est. Equity</th></tr></thead>
+        <tbody>
+          <tr><td>N408FZ</td><td>2005 PC-12/45</td><td>100%</td><td>$3.8M</td><td>$2.5M</td><td>~$1.3M</td></tr>
+          <tr><td>N820LB</td><td>2008 PC-12/47 NG</td><td>50%</td><td>$4.2M</td><td>$1.9M</td><td>~$1.15M</td></tr>
+          <tr><td>N409FZ</td><td>2005 PC-12/45</td><td>75% (→ 100%)</td><td>$2.9M</td><td>$1.875M</td><td>~$0.77M</td></tr>
+          <tr><td>N245PE</td><td>2010 PC-12/47E NG</td><td>0% (managed)</td><td>—</td><td>—</td><td>$0</td></tr>
+          <tr><td><strong>Total</strong></td><td></td><td></td><td></td><td></td><td><strong>~$3.2M / ~$1.3M market-discounted</strong></td></tr>
+        </tbody>
+      </table>
+      <p><strong>Included in sale:</strong> FAA + Canadian certs (Sea to Sky Air, Inc.); parts ~$800K; tools ~$250K; Flying Zebra trademark; hangar + office (month-to-month).<br>
+      <strong>Not included:</strong> SG Helicopters tools/parts ~$175K.</p>
+      <p><strong>Key milestones:</strong> ~2018 partnership · Spring 2019 N408FZ · 2020–21 COVID · 2022 rev $6.1M / EBITDA $2.1M · 2023 $5.93M / $2.07M · <strong>2024 $7.37M / $1.62M (profit-compression year)</strong> · 2025 $8.28M / $2.60M (record) · Feb 27 marketed · <strong>Apr 13 seller revised to 5.5x</strong> · <strong>May 11–15, 2026 N408FZ engine OH</strong>.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <h3>Glenn B. Allyn — Principal / Co-Owner</h3>
+      <p>20+ yrs aviation. Partnered with Celine Lukic ~2018. Also operates SG Helicopters (separate). gba@flyingzebra.com · <a href="https://www.linkedin.com/in/glenn-b-allyn-14139023/">LinkedIn</a>.</p>
+      <h3>Celine Lukic — Co-Owner</h3>
+      <p>Co-equity holder since ~2018. ROFR / buy-sell is pre-LOI item.</p>
+      <h3>Tony Desmond — Director of Maintenance</h3>
+      <p>Owner of NexGen. $18K base + hourly — hybrid contractor/W-2 via his shop. Stays post-sale if required.</p>
+      <h3>Broker — Dean A. Kantis, TJN</h3>
+      <p>dk@thejetnetwork.com · (754) 234-9993 · SheltAir Ste. #211, Fort Lauderdale, FL 33315.</p>
+      <h3>Legal counsel (buyer side)</h3>
+      <p>Shelisa Thomas, Esq. — RentFlex360.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Core:</strong> Part 135 charter on four Pilatus PC-12s. 2025 Charter $7.79M + rental $487K. Secondary brokered $877K COGS. No membership/jet-card program.</p>
+      <p><strong>Differentiators:</strong> FAA Part 135 #891A3240 · Canadian Foreign Air Carrier · DCA DASSP + Domestic Waiver · ARGUS Gold · Signature Platinum · Hazmat/Air Ambulance · Jet-Ready D085 · In-House Check Airman. Seller: "certificate has always passed all audits."</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p>Global private charter ~$31.9B (2023), 5.4% CAGR through 2030. KHPN/NY corridor densest globally. Wheels Up collapse compressed multiples; HNWI demand durable.</p>
+      <table>
+        <thead><tr><th>Context</th><th>Low</th><th>High</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Aviation $1–3M EBITDA, non-recurring</td><td>4.1x</td><td>5.5x</td><td>First Page Sage / Vrolyk</td></tr>
+          <tr><td>Aviation $1–3M EBITDA, recurring</td><td>4.6x</td><td>7.3x</td><td>First Page Sage / Vrolyk</td></tr>
+          <tr><td>Change-of-control (outside investor)</td><td>7.0x</td><td>8.0x</td><td>Vrolyk, 2023</td></tr>
+          <tr><td>FZ stated ask (Feb 2026)</td><td>4.5x</td><td>4.5x</td><td>TJN broker</td></tr>
+          <tr><td>FZ seller-revised (Apr 13, 2026)</td><td>5.5x</td><td>5.5x</td><td>Glenn Allyn</td></tr>
+          <tr><td><strong>Buyer target (this report)</strong></td><td><strong>4.00x</strong></td><td><strong>4.00x</strong></td><td>$10.42M / $2.605M</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Segments:</strong> HNWI/family offices; gov/political via DCA DASSP; Northeast corporate; Avinode brokered; potential medical transport.</p>
+      <p><strong>Recurring:</strong> Est. &lt;30%. "Huge broker base." No membership.</p>
+      <p><strong>Top customer concentration:</strong> <span class="crit">not disclosed — CRITICAL open item.</span></p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+
+      <h3>Historical performance — full-year actuals</h3>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>Operating EBITDA</th><th>Margin</th><th>YoY Rev</th><th>YoY EBITDA</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>~$6.14M <span class="est">(est.)</span></td><td>$2.10M (conf.)</td><td>34.2%</td><td>—</td><td>—</td></tr>
+          <tr><td>2023</td><td><strong>$5,925,555</strong></td><td><strong>$2,065,570</strong></td><td>34.9%</td><td>–3.4%</td><td>—</td></tr>
+          <tr><td>2024</td><td><strong>$7,367,634</strong></td><td><strong>$1,623,100</strong></td><td>22.0%</td><td>+24.3%</td><td><strong class="crit">–21.5%</strong></td></tr>
+          <tr><td>2025</td><td><strong>$8,277,095</strong></td><td><strong>$2,605,027</strong></td><td>31.5%</td><td>+12.3%</td><td>+60.6%</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Operating EBITDA = NOI + Interest Paid + Income Tax.</strong> Corrects prior drafts which mislabeled NOI + D&amp;A as EBITDA.</p>
+
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="560" height="200" viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M)</text>
+          </g>
+          <g>
+            <rect x="50"  y="42"  width="70" height="92"  rx="3" fill="#3d6fb8" />
+            <rect x="145" y="45"  width="70" height="89"  rx="3" fill="#3d6fb8" />
+            <rect x="240" y="24"  width="70" height="110" rx="3" fill="#4a86d8" />
+            <rect x="335" y="10"  width="70" height="124" rx="3" fill="#5aa7ff" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="85"  y="153">2022 (est.)</text><text x="85"  y="168">$6.14M</text>
+            <text x="180" y="153">2023</text><text x="180" y="168">$5.93M</text>
+            <text x="275" y="153">2024</text><text x="275" y="168">$7.37M</text>
+            <text x="370" y="153">2025</text><text x="370" y="168">$8.28M</text>
+          </g>
+        </svg>
+      </div>
+
+      <h3>Operating EBITDA trajectory</h3>
+      <div class="chart">
+        <svg width="560" height="200" viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Op EBITDA ($M)</text>
+          </g>
+          <g>
+            <!-- Max 3M = 130px; 2.10, 2.07, 1.62, 2.60 -->
+            <rect x="50"  y="43"  width="70" height="91"  rx="3" fill="#3d6fb8" />
+            <rect x="145" y="44"  width="70" height="90"  rx="3" fill="#3d6fb8" />
+            <rect x="240" y="64"  width="70" height="70"  rx="3" fill="#e74c3c" />
+            <rect x="335" y="21"  width="70" height="113" rx="3" fill="#2fbf71" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="85"  y="153">2022</text><text x="85"  y="168">$2.10M</text>
+            <text x="180" y="153">2023</text><text x="180" y="168">$2.07M</text>
+            <text x="275" y="153">2024 (down)</text><text x="275" y="168">$1.62M</text>
+            <text x="370" y="153">2025 (recov.)</text><text x="370" y="168">$2.60M</text>
+          </g>
+        </svg>
+      </div>
+
+      <h3>Why 2024 EBITDA dropped –21.5% while revenue grew +24.3%</h3>
+      <p>Gross margin actually <strong>improved</strong> in 2024 (67.4% → 70.3%). EBITDA compression was entirely below-the-gross-profit-line opex growth.</p>
+      <table>
+        <thead><tr><th>Line</th><th>2023</th><th>2024</th><th>Change</th><th>Category</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Repairs &amp; Maintenance</strong></td><td>$497,332</td><td>$974,391</td><td><strong>+$477,058</strong></td><td>Likely one-time (fleet work)</td></tr>
+          <tr><td><strong>Corporate Cash Retainer</strong></td><td>$0</td><td><strong>$518,000</strong></td><td class="crit">+$518,000</td><td><strong>Unexplained new line — CRITICAL</strong></td></tr>
+          <tr><td><strong>Insurance (total)</strong></td><td>$151,892</td><td>$453,416</td><td>+$301,524</td><td>Recurring (more coverage / aircraft)</td></tr>
+          <tr><td><strong>Payroll (total incl. named)</strong></td><td>$351,949</td><td>$609,152</td><td>+$257,203</td><td>Recurring (more FTEs)</td></tr>
+          <tr><td><strong>Rent &amp; Lease</strong></td><td>$53,124</td><td>$289,618</td><td>+$236,494</td><td>Recurring (aircraft leases)</td></tr>
+          <tr><td>Interest Paid</td><td>$329,776</td><td>$212,004</td><td>–$117,772</td><td>Debt paydown</td></tr>
+          <tr><td>Profit Sharing</td><td>$133,210</td><td>$0</td><td>–$133,210</td><td>One-time removal</td></tr>
+          <tr><td>Contractors (total)</td><td>$152,913</td><td>$49,901</td><td>–$103,013</td><td>Shifted to W-2</td></tr>
+        </tbody>
+      </table>
+      <p>Net opex growth: +$1.62M on revenue growth of +$1.44M. The <strong class="crit">unexplained $518K "Corporate Cash Retainer"</strong> is the single largest unexplained driver and the most important question for the seller.</p>
+
+      <h3>Why 2025 EBITDA recovered +60.6%</h3>
+      <p>R&amp;M dropped to $735K (–$239K); Corporate Cash Retainer disappeared entirely (–$518K); insurance moderated to $351K (–$103K). Margin recovered to 31.5%, near historical 32–35% band. <strong>2025 looks closer to steady-state than 2024.</strong></p>
+
+      <h3>2024 → 2025 full-year summary</h3>
+      <table>
+        <thead><tr><th>Line</th><th>2025</th><th>2024</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Total Income</td><td>$8,277,095</td><td>$7,367,634</td><td>+12.3%</td></tr>
+          <tr><td>Gross Profit</td><td>$5,875,467</td><td>$5,177,218</td><td>+13.5%</td></tr>
+          <tr><td>Total Expenses</td><td>$3,971,068</td><td>$3,891,886</td><td>+2.0%</td></tr>
+          <tr><td>Net Operating Income</td><td>$1,904,399</td><td>$1,285,333</td><td>+48.2%</td></tr>
+          <tr><td><strong>Net Income</strong></td><td><strong>$1,622,148</strong></td><td>$873,914</td><td><strong>+85.6%</strong></td></tr>
+          <tr><td><strong>Operating EBITDA</strong></td><td><strong>$2,605,027</strong></td><td><strong>$1,623,100</strong></td><td><strong>+60.6%</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Debt Service Coverage (DSCR) — cash-free, debt-free acquisition</h3>
+      <p><strong>Assumed structure:</strong> EV = $10,420,108 buyer target (CFDF; existing aircraft debt ~$6.275M retired at close with seller proceeds). 90% LTV senior loan = <strong>$9,378,097</strong>. Rate <strong>13.0%</strong>, <strong>10-year fully-amortizing</strong> (as offered). Monthly P&amp;I <strong>$140,025</strong>. Annual debt service <strong>$1,680,301</strong>.</p>
+
+      <table>
+        <thead><tr><th>Basis</th><th>EBITDA</th><th>Annual DS</th><th>DSCR</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td>2025 actual (Op EBITDA)</td><td>$2,605,027</td><td>$1,680,301</td><td><strong>1.55</strong></td><td><span class="chip pass">✅ clears 1.4</span></td></tr>
+          <tr><td>2024 actual (Op EBITDA)</td><td>$1,623,100</td><td>$1,680,301</td><td><strong class="crit">0.97</strong></td><td><span class="chip fail">❌ below 1.0 — cannot cover DS</span></td></tr>
+          <tr><td>2023 actual (Op EBITDA)</td><td>$2,065,570</td><td>$1,680,301</td><td>1.23</td><td><span class="chip fail">❌ below 1.4</span></td></tr>
+          <tr><td>3-yr avg (2023–2025)</td><td>$2,097,899</td><td>$1,680,301</td><td>1.25</td><td><span class="chip fail">❌ below 1.4</span></td></tr>
+          <tr><td>2024 stricter (excl. T&amp;L add-back)</td><td>$1,497,337</td><td>$1,680,301</td><td>0.89</td><td><span class="chip fail">❌ below 1.0</span></td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin-top:16px;">Sensitivity — alternate loan structures (stress-tested vs. 2024 EBITDA)</h4>
+      <table>
+        <thead><tr><th>Structure</th><th>Annual DS</th><th>DSCR 2025</th><th>DSCR 2024</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>90% LTV, 13%, <strong>10 yr</strong> (as offered)</td><td>$1,680,301</td><td><strong>1.55</strong></td><td><strong class="crit">0.97</strong></td><td>Current offer. <strong>Fails on a 2024 repeat.</strong></td></tr>
+          <tr><td>90% LTV, 13%, 15 yr</td><td>$1,423,868</td><td>1.83</td><td>1.14</td><td>Longer term heals 2025; still fails 2024.</td></tr>
+          <tr><td>70% LTV, 13%, 10 yr (with 20% seller carry)</td><td>$1,306,390</td><td>1.99</td><td>1.24</td><td>Seller carry is preferred per skill; materially improves 2025 cushion and narrows 2024 gap.</td></tr>
+          <tr><td>90% LTV, 11%, 10 yr (rate cut)</td><td>$1,550,136</td><td>1.68</td><td>1.05</td><td>Rate reduction alone still fragile on 2024 stress.</td></tr>
+          <tr><td>70% LTV, 11%, 10 yr</td><td>$1,205,661</td><td>2.16</td><td>1.35</td><td>Combined structural improvements nearly clear 2024 too.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="upd" style="border-left-color:var(--fail);background:rgba(231,76,60,.08);">
+        <strong class="crit">Key finding:</strong> At the 10-yr / 13% / 90% LTV structure being offered, this deal only cleanly covers debt service on 2025 numbers. A recurrence of 2024's margin compression produces a <strong>~$57K–$183K annual cash-flow shortfall</strong> that would require equity injection, cash reserves, or a covenant waiver. Lenders at 13% cost-of-capital typically want DSCR ≥ 1.5x on trailing 12-month EBITDA and will stress-test against historical lows; on 2024 the deal fails both the underwriting baseline and common trigger covenants (≥1.2x rolling DSCR). <strong>Structural mitigants are required before signing — see conditions 7–8 in the Executive Summary.</strong>
+      </div>
+
+      <h3>Estimated valuation</h3>
+      <ul>
+        <li><strong>Seller-stated ask:</strong> $13,950,000 @ revised 5.5x multiple (Apr 13, 2026).</li>
+        <li><strong>Seller ask / actual 2025 EBITDA:</strong> $13.95M / $2.605M = <strong>5.36x</strong> — in 4.0–5.5x rubric band but above 4.0x ceiling.</li>
+        <li><strong class="crit">Buyer target: $10,420,108 = 4.00x × actual 2025 Op EBITDA $2,605,027.</strong> At Biffrey's 4.0x ceiling.</li>
+        <li><strong>Gap to negotiate:</strong> $13.95M → $10.42M = <strong>$3.53M concession (~25% below stated)</strong>.</li>
+        <li><strong>Industry reference:</strong> 4.1–5.5x non-recurring; 4.6–7.3x recurring. At 4.0x, FZ is at the lower end of non-recurring — justifiable given 2024 compression risk, undisclosed customer concentration, 10-yr rule miss, hangar month-to-month.</li>
+      </ul>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>Aerospace / Part 135 — TOP PRIORITY industry</li>
+          <li>Dual FAA + Canadian Air Carrier Certificates</li>
+          <li>ARGUS Gold, Signature Platinum, DCA DASSP</li>
+          <li>Full Part 135 team; DOM identified</li>
+          <li>Revenue grew +24.3% and +12.3%</li>
+          <li>2025 margin recovered to 31.5% near historical band</li>
+          <li>2025 NI $1.62M — all-time high</li>
+          <li>Certificate audits clean per seller</li>
+          <li>$800K parts + $250K tools + trademark included</li>
+          <li>Seller financing possibility</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>Founded ~2018 (8 yrs) — fails 10-yr threshold</li>
+          <li>Seller raised ask to 5.5x on Apr 13</li>
+          <li>2024 was profit-compression year (EBITDA –21.5%)</li>
+          <li><strong>Hangar lease is month-to-month</strong></li>
+          <li><strong>Unexplained $518K "Corporate Cash Retainer" in 2024</strong></li>
+          <li>Customer concentration undisclosed</li>
+          <li>Many items still "to be provided"</li>
+          <li>Multi-entity stock-transfer complicates deal</li>
+          <li>Broker EBITDA claim vs. actual — credibility flag</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>N409FZ 75%-owned → 2026 revenue step-up</li>
+          <li>Add jet to D085 (no proving runs)</li>
+          <li>Activate air ambulance</li>
+          <li>Block-charter / jet-card → multiple expansion</li>
+          <li>Canadian corridor expansion</li>
+          <li>EOS install post-close</li>
+          <li>2024 R&amp;M likely one-time → margin stability story</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Seller pricing direction unfavorable</li>
+          <li>FAA audit / key-person departure</li>
+          <li>PC-12 single-type fleet risk</li>
+          <li>Hangar month-to-month</li>
+          <li>Co-owner ROFR/consent rights</li>
+          <li>C-corp tax drag</li>
+          <li>Margin compression repeating</li>
+          <li>"Corporate Cash Retainer" may be recurring related-party cost</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong class="crit">Debt-service fragility (material):</strong> At offered 10-yr / 13% / 90% LTV structure, annual DS $1.68M exceeds 2024 actual Op EBITDA $1.62M. <strong>A repeat of 2024 → covenant breach + cash-flow insufficiency.</strong> 3-yr avg DSCR only 1.25. Financeable solely on 2025 figures. Mitigants: seller carry → lower LTV; longer term; operating cash reserve covenant; covenant holiday rights. Without these, one bad fleet-maintenance year triggers default.</li>
+        <li><strong>Pricing/negotiation risk:</strong> Seller at $13.95M @ 5.5x; buyer target $10.42M @ 4.0x. $3.53M gap. Seller may walk.</li>
+        <li><strong>Industry:</strong> PC-12 single-type AD/parts risk; engine OH CapEx ($720K+; N408FZ → May 2026).</li>
+        <li><strong>Financial:</strong>
+          <ul>
+            <li>Undisclosed customer concentration.</li>
+            <li><strong>$518K "Corporate Cash Retainer"</strong> — unexplained 2024 line; resolve before LOI.</li>
+            <li>2024 profit compression — verify one-time via Q of E.</li>
+            <li>Cash-basis → accrual conversion for lender.</li>
+            <li>C-corp tax drag (~$450K+ in 2025).</li>
+            <li>Multi-entity + intra-family trademark royalty.</li>
+          </ul>
+        </li>
+        <li><strong>Operational:</strong>
+          <ul>
+            <li><strong>Hangar month-to-month.</strong> Must secure written long-term w/ assignability.</li>
+            <li>N408FZ engine OH slipped to May 2026.</li>
+            <li>DOM Tony Desmond/NexGen structure — FAA compliance review.</li>
+            <li>"50% capacity" + turnover "to be provided."</li>
+          </ul>
+        </li>
+        <li><strong>Regulatory/legal:</strong>
+          <ul>
+            <li>FAA + Canadian cert transferability.</li>
+            <li>Co-owner ROFR (Glenn/Celine); N820LB 50% co-owner consent.</li>
+            <li>Sister-entity stock transfer.</li>
+            <li>SG Helicopters carve-out.</li>
+          </ul>
+        </li>
+        <li><strong>Conditions to reach stable CONDITIONAL:</strong>
+          <ol>
+            <li><strong class="crit">Establish seller motivation</strong> (never asked — most important qualitative input).</li>
+            <li><strong>Pricing: $13.95M → $10.42M</strong> (~25% concession).</li>
+            <li>Partner-level exception on 10-yr rule.</li>
+            <li><strong class="crit">Debt structure hardened against 2024 repeat:</strong> seller carry ≥20% → LTV ≤70%; 12-mo cash reserve covenant; covenant holiday / EBITDA-cure rights.</li>
+            <li>Close all CRITICAL items: hangar written lease; customer concentration (never asked); accrual 5-yr financials (2021+2022 still missing); org chart + buy-sells; explain $518K Corporate Cash Retainer <strong>with seller indemnity against recurrence</strong>; resolve accountant-deflected variances.</li>
+            <li>Confirm 2024 compression one-time via Q of E.</li>
+            <li>Secure Tony Desmond/NexGen in writing.</li>
+          </ol>
+        </li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Near-term:</strong> 2025 rev $8.28M and EBITDA $2.60M both all-time highs. N409FZ 75%-owned → 2026 revenue step-up per seller. Caveat: N408FZ OH slip (→ May 2026) affects Q1/Q2 2026 capacity.</p>
+      <p><strong>Expansion:</strong> Add jet to D085; activate air ambulance; Canadian corridor; certificate-management fees.</p>
+      <p><strong>Operational upside:</strong> EOS install; accrual migration; block-charter/jet-card (shift multiple band 4.1–5.5x → 4.6–7.3x); simplify multi-entity structure; margin stability at 31–35% on $8.3M+ revenue = $2.6–2.9M EBITDA.</p>
+      <p><strong>100-day plan:</strong></p>
+      <ol>
+        <li>Convert to accrual; Q of E trailing 36 months; resolve 2024 expense anomalies.</li>
+        <li>Lock hangar in writing + assignability.</li>
+        <li>Stay agreements for DO/DM/CP; formalize Tony Desmond/NexGen.</li>
+        <li>Stand up block-charter/jet-card product.</li>
+        <li>Independent aircraft appraisals.</li>
+        <li>Simplify entity structure.</li>
+      </ol>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources — authoritative (Apr 15, 2026)</h3>
+      <ul>
+        <li><strong>2023 &amp; 2024 Comparative P&amp;L.pdf</strong> — full-year cash basis.</li>
+        <li><strong>P&amp;L 2025 Comparative used in returns.pdf</strong> — full-year 2025, multi-entity.</li>
+        <li><strong>Answers eMail ... Flying Zebra Part 135.pdf</strong> — 119 pp; Glenn Allyn Q&amp;A 4/13/26.</li>
+      </ul>
+      <h3>A. Retained context</h3>
+      <ul>
+        <li>Flying Zebra LLC Valuation 2.pdf (Vrolyk Capital, June 2023)</li>
+        <li>7-18-2025 P&amp;L.pdf (superseded)</li>
+        <li>SN683 Bluebook Value.pdf</li>
+        <li>Broker Feb 27 offering email</li>
+        <li>Shelisa Thomas pre-LOI legal review</li>
+      </ul>
+      <h3>A. Web sources fetched</h3>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/glenn-b-allyn-14139023/">Glenn Allyn LinkedIn</a></li>
+        <li><a href="https://about.me/glennallyn">about.me/glennallyn</a></li>
+        <li><a href="https://www.flyingzebra.com/">flyingzebra.com</a></li>
+      </ul>
+
+      <h3>B. Key assumptions</h3>
+      <ul>
+        <li>Revenue 2022 derived from Vrolyk; 2023–2025 actuals.</li>
+        <li><strong>Operating EBITDA = NOI + Interest + Income Tax.</strong> Cash basis; D&amp;A already below NOI in this P&amp;L. FET (excise tax) treated as operating cost, not added back.</li>
+        <li>For 2024, $125,763 "Taxes &amp; Licenses" line interpreted as income tax (vs. $43 in 2023 and explicit $184K + $27K in 2025). If excluded, 2024 Op EBITDA drops to $1,497,337 (~$1.50M).</li>
+        <li>Aircraft equity ~40% haircut per Shelisa Thomas review.</li>
+        <li>FTE ≥10 from NY SUTA $13,249 / $12,500 cap ≈ 10.6 + 12+ named W-2s + $609K payroll / $60K avg.</li>
+      </ul>
+
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #3 — 8 years.</strong> Seller 4/13/26 direct quote.</p>
+      <p><strong>Field #5 — FF&amp;E ~$4.25M nominal / $2.4M discounted.</strong> Aircraft $3.2M (~$1.3M discounted) + $800K parts + $250K tools.</p>
+      <p><strong>Field #6 — ≥10 FTE.</strong> NY SUTA + W-2 + payroll math.</p>
+      <p><strong>Fields #15–17 — Operating EBITDA.</strong><br>
+      2023: $1,735,751 + $329,776 + $43 = <strong>$2,065,570</strong>.<br>
+      2024: $1,285,333 + $212,004 + $125,763 = <strong>$1,623,100</strong>.<br>
+      2025: $1,904,399 + $248,288 + ($183,297 + $27,423 + $241,620 = $452,340) = <strong>$2,605,027</strong>.</p>
+      <p><strong>Field #18 — Buyer target $10,420,108.</strong> = 4.00x × 2025 Op EBITDA $2,605,027. Represents Biffrey's 4.0x ceiling.</p>
+
+      <h3>D. Documents reviewed</h3>
+      <p>Listed under A above.</p>
+
+      <h3>E. Open questions — prioritized and categorized by status</h3>
+      <p style="font-size:13px;color:var(--muted);"><strong>Legend:</strong>
+        <span class="chip pass">🟢 answered</span>
+        <span class="chip warn">🟡 "to be provided"</span>
+        <span class="chip fail">🔴 deflected to accountant</span>
+        <span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫ never asked</span>
+        <span style="background:rgba(90,167,255,.2);color:var(--accent);border:1px solid rgba(90,167,255,.4);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">🆕 new from review</span>
+      </p>
+
+      <h3>E.1 CRITICAL (required pre-LOI)</h3>
+      <table>
+        <thead><tr><th style="width:30px;">#</th><th>Question</th><th style="width:80px;">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Why is Glenn selling?</strong> Retirement, partner split, roll-up into SG Helicopters, pre-cyclical exit? Timeline? Post-close involvement?</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫ never asked</span></td><td><strong>Most important qualitative question.</strong> Skill prioritizes retirement sellers, avoids turnarounds. Narrative "best operator in Country" positions as thriving — but separate buy-sell provisions for Celine &amp; Glenn + willingness to entertain percentage buy-in hint at possible partner-motivated exit.</td></tr>
+          <tr><td>2</td><td><strong>$518,000 "Corporate Cash Retainer"</strong> — what is it, why only in 2024, is it recurring?</td><td><span style="background:rgba(90,167,255,.2);color:var(--accent);border:1px solid rgba(90,167,255,.4);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">🆕 new</span></td><td>Single largest unexplained driver of 2024 margin compression.</td></tr>
+          <tr><td>3</td><td><strong>Customer concentration</strong> — top 1 / 5 / 10 clients as % of revenue, last 3 years.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫ never asked</span></td><td>Material. If any client ≥20%, seller financing becomes structural requirement.</td></tr>
+          <tr><td>4</td><td><strong>Pricing:</strong> Accept $10,420,108 (4.00x × 2025 Op EBITDA $2.605M) or counter. Seller at $13.95M @ 5.5x; gap ~$3.53M.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫ never asked</span></td><td>Buyer target not yet communicated to seller.</td></tr>
+          <tr><td>5</td><td><strong>Hangar lease:</strong> written long-term with assignability, replacing current month-to-month.</td><td><span class="chip pass">🟢 answered</span></td><td>Month-to-month confirmed; extension not yet secured.</td></tr>
+          <tr><td>6</td><td><strong>2024 margin compression</strong> — R&amp;M + insurance + rent one-time? Walk-through with seller's accountant.</td><td><span class="chip fail">🔴 deflected</span></td><td>Glenn: "Please address these directly with our accountant." Accountant contact not yet made.</td></tr>
+          <tr><td>7</td><td><strong>Full 5-year accrual financials</strong> + consolidating multi-entity BS / IS / CF for 2021–2025.</td><td><span class="chip warn">🟡 partial</span></td><td>2023, 2024, 2025 cash-basis P&amp;Ls provided. <strong>Still missing: 2021 + 2022; BS; CF; accrual conversion.</strong></td></tr>
+          <tr><td>8</td><td><strong>Complete org chart</strong> — all 5+ entities with ownership %, buy-sells, ROFR/drag.</td><td><span class="chip warn">🟡 partial</span></td><td>Chart said "attached" in Apr 13 email. Verify receipt and completeness.</td></tr>
+          <tr><td>9</td><td><strong>Staffing composition/tenure/roles</strong> — full roster with FT/PT, FAA certs, tenure, comp. DO/DM/CP identified.</td><td><span class="chip warn">🟡 to be provided</span></td><td>Only Tony Desmond (DOM) identified so far.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>E.2 HIGH (needed during LOI or early diligence)</h3>
+      <table>
+        <thead><tr><th style="width:30px;">#</th><th>Question</th><th style="width:80px;">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>10</td><td>Turnover rate + acquisition/retention strategies.</td><td><span class="chip warn">🟡</span></td><td></td></tr>
+          <tr><td>11</td><td>50% capacity + turnover — choice or external?</td><td><span class="chip warn">🟡</span></td><td>Raised by Vrolyk; unresolved.</td></tr>
+          <tr><td>12</td><td>R&amp;M history vs. industry norms; upcoming overhauls.</td><td><span class="chip warn">🟡</span></td><td></td></tr>
+          <tr><td>13</td><td>Sales reports list more than 4 aircraft — discrepancy?</td><td><span class="chip warn">🟡</span></td><td></td></tr>
+          <tr><td>14</td><td>Historical insurance premium trends + loss runs (3–5 yrs).</td><td><span class="chip warn">🟡</span></td><td></td></tr>
+          <tr><td>15</td><td>Fleet concentration strategy (PC-12 single-type).</td><td><span class="chip warn">🟡</span></td><td></td></tr>
+          <tr><td>16</td><td>Equipment rental expense detail ($143K 2024; $78K 2025).</td><td><span class="chip fail">🔴</span></td><td>Deflected to accountant.</td></tr>
+          <tr><td>17</td><td>Fuel expense large YoY variance — is N409FZ-owned the full explanation?</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫</span></td><td>Never asked.</td></tr>
+          <tr><td>18</td><td>N408FZ engine OH completion (May 11–15, 2026) and final cost.</td><td><span class="chip pass">🟢</span></td><td>Timing confirmed; cost pending.</td></tr>
+          <tr><td>19</td><td>Tony Desmond / NexGen DOM arrangement — FAA compliance; related-party P&amp;L impact.</td><td><span style="background:rgba(90,167,255,.2);color:var(--accent);border:1px solid rgba(90,167,255,.4);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">🆕</span></td><td>Surfaced by this review.</td></tr>
+          <tr><td>20</td><td>2026 YTD revenue and expense run-rate.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫</span></td><td>N408FZ OH slip affects Q1/Q2 2026.</td></tr>
+          <tr><td>21</td><td>Canadian Foreign Air Carrier transferability — Canadian counsel review.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫</span></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>E.3 MEDIUM (confirmatory diligence)</h3>
+      <table>
+        <thead><tr><th style="width:30px;">#</th><th>Question</th><th style="width:80px;">Status</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>22</td><td>Sister-entity asset/revenue allocation; SG Helicopters carve-out clarity.</td><td><span class="chip warn">🟡</span></td><td>Chart promised; detail pending.</td></tr>
+          <tr><td>23</td><td>Trademark income/royalty intra-family ($150K / $125K in 2025): terms, assignability, tax treatment.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫</span></td><td>Surfaced by 2025 P&amp;L.</td></tr>
+          <tr><td>24</td><td>Customer LTV / CAC / retention; S&amp;M spend by channel.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫</span></td><td>Not asked in Biffrey's email.</td></tr>
+          <tr><td>25</td><td>N820LB 50% co-owner consent rights on change of control.</td><td><span style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;">⚫</span></td><td></td></tr>
+          <tr><td>26</td><td>Verify pilot shortage claim — pilot roster + industry benchmarks.</td><td><span class="chip warn">🟢→🟡</span></td><td>Answered qualitatively; needs verification.</td></tr>
+          <tr><td>27</td><td>Verify "higher end of industry" compensation claim — industry comp surveys.</td><td><span class="chip warn">🟢→🟡</span></td><td>Answered qualitatively; needs verification.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Summary of unanswered questions</h3>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px;">
+        <p><strong>Of 27 items, 22 are not yet fully resolved:</strong></p>
+        <ul>
+          <li><strong class="chip warn" style="margin-right:6px;">🟡</strong>Promised but not delivered (9): #7, #8, #9, #10, #11, #12, #13, #14, #15.</li>
+          <li><strong class="chip fail" style="margin-right:6px;">🔴</strong>Deflected to accountant (2): #6, #16.</li>
+          <li><strong style="background:rgba(138,151,171,.2);color:var(--muted);border:1px solid var(--border);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;margin-right:6px;">⚫</strong>Never asked (9): <strong>#1 (seller motivation — CRITICAL)</strong>, <strong>#3 (customer concentration — CRITICAL)</strong>, #4, #17, #20, #21, #23, #24, #25.</li>
+          <li><strong style="background:rgba(90,167,255,.2);color:var(--accent);border:1px solid rgba(90,167,255,.4);padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700;margin-right:6px;">🆕</strong>Surfaced by this review (2): #2, #19.</li>
+          <li>Answered qualitatively but need verification (2): #26, #27.</li>
+        </ul>
+        <p style="margin-top:10px;"><strong class="crit">Pattern:</strong> Glenn answered easy questions substantively and deflected or punted on anything requiring document production. The two most important questions — <em>why are you selling?</em> and <em>what's your customer concentration?</em> — have <strong>never been asked</strong>. Both should go in the next email to Glenn before any LOI is discussed.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut / Applied Development · 2026-04-15 · Revision 3 · Operating EBITDA methodology: NOI + Interest + Income Tax · Buyer target $10,420,108 = 4.00x × 2025 Op EBITDA.</footer>
+</div>
+</body>
+</html>

@@ -24,6 +24,11 @@
 
 set -uo pipefail
 
+# launchd runs scripts with a minimal PATH that doesn't include /opt/homebrew/bin,
+# so lftp (installed via brew) isn't found when this script is fired by an agent.
+# Set PATH explicitly so all invocations — manual or launchd — find the same tools.
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+
 # ============ CONFIG — FILL THESE IN ============
 SFTP_HOST="FTP_HOST_HERE"            # e.g. ftp.tzt.mlg.mybluehost.me
 SFTP_PORT="21"                        # 21 for FTP/FTPS, 22 for SFTP (not used here)
