@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet"/>
+<title>EarnedOut — Master Deal Pipeline</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg:#0f1419; --panel:#171d26; --panel-2:#1f2733; --text:#e7ecf3;
+  --muted:#8a97ab; --border:#2a3342; --accent:#5aa7ff;
+  --pass:#2fbf71; --fail:#e74c3c; --warn:#f5a623;
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size:14px; }
+.wrap { max-width:1180px; margin:0 auto; padding:20px; }
+.confidential {
+  display:inline-block; padding:5px 11px; margin-bottom:12px;
+  font-size:10px; font-weight:800; letter-spacing:.10em; text-transform:uppercase;
+  color:var(--warn); background:rgba(245,166,35,.10);
+  border:1px solid rgba(245,166,35,.45); border-radius:6px;
+}
+header.banner { background:linear-gradient(180deg,#1a2332 0%,#0f1419 100%);
+  border:1px solid var(--border); border-radius:14px; padding:18px 22px; }
+header.banner h1 { margin:0 0 3px; font-size:21px; }
+header.banner p { margin:0; color:var(--muted); font-size:13px; }
+.cards { display:flex; gap:12px; flex-wrap:wrap; margin:16px 0; }
+.card { background:var(--panel); border:1px solid var(--border); border-radius:12px;
+  padding:13px 17px; min-width:118px; flex:1; }
+.card .n { font-size:28px; font-weight:800; line-height:1; color:var(--accent); }
+.card .l { font-size:11px; color:var(--muted); margin-top:5px; letter-spacing:.06em; text-transform:uppercase; }
+.card.off .n { color:var(--pass); }
+.controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+.controls input[type=text], .controls select {
+  padding:8px 11px; border:1px solid var(--border); border-radius:8px; font-size:13px;
+  background:var(--panel-2); color:var(--text); }
+.controls input[type=text] { flex:1; min-width:200px; }
+.controls input::placeholder { color:var(--muted); }
+.seg { display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+.seg button { border:0; background:var(--panel-2); padding:8px 13px; font-size:13px; cursor:pointer; color:var(--muted); }
+.seg button + button { border-left:1px solid var(--border); }
+.seg button.on { background:var(--accent); color:#0b1019; font-weight:700; }
+.refresh { padding:8px 13px; border:1px solid var(--border); border-radius:8px;
+  font-size:13px; background:var(--panel-2); color:var(--text); cursor:pointer; }
+.refresh:hover:not(:disabled) { color:var(--accent); border-color:var(--accent); }
+.refresh:disabled { opacity:.5; cursor:wait; }
+.cnt { color:var(--muted); font-size:12px; margin:8px 2px; }
+table { width:100%; border-collapse:collapse; background:var(--panel);
+  border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+th, td { padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top; }
+th { font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted);
+  cursor:pointer; user-select:none; white-space:nowrap; position:sticky; top:0; background:var(--panel-2); }
+th.num, td.num { text-align:right; }
+th .ar { color:var(--accent); }
+tbody tr:last-child td { border-bottom:0; }
+tbody tr:hover { background:rgba(90,167,255,.05); }
+tbody tr.clickable { cursor:pointer; }
+tbody tr.clickable:hover { background:rgba(90,167,255,.10); }
+td.score { font-weight:800; font-size:15px; }
+td.score.high { color:var(--pass); }
+td.score.mid  { color:var(--accent); }
+td.score.low  { color:var(--fail); }
+.badge { display:inline-block; font-size:9px; font-weight:800; letter-spacing:.05em;
+  color:#46d18a; background:rgba(47,191,113,.16); border:1px solid rgba(47,191,113,.4);
+  border-radius:5px; padding:2px 6px; margin-left:7px; vertical-align:middle; }
+.muted { color:#5c6675; }
+.name { font-weight:600; }
+.web { display:inline-flex; align-items:center; vertical-align:middle; margin-left:7px;
+  color:var(--muted); text-decoration:none; }
+.web:hover { color:var(--accent); }
+.web svg { width:13px; height:13px; display:block; }
+#status { padding:44px 20px; text-align:center; color:var(--muted); }
+#status.err { color:var(--fail); }
+footer { margin:14px 2px; color:#5c6675; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="confidential">Confidential — Internal Use Only</div>
+  <header class="banner">
+    <h1>EarnedOut — Master Deal Pipeline</h1>
+    <p>Live view · on-market and off-market leads together · pulled fresh from Airtable each time you open this · click a row to open its report</p>
+  </header>
+  <div id="status">Loading the pipeline from Airtable…</div>
+  <div id="app" style="display:none">
+    <div class="cards" id="cards"></div>
+    <div class="controls">
+      <input type="text" id="q" placeholder="Search business, industry, location, source…"/>
+      <span class="seg" id="segMarket">
+        <button data-v="all" class="on">All</button>
+        <button data-v="on">On-market</button>
+        <button data-v="off">Off-market</button>
+      </span>
+      <select id="dispo"><option value="">All dispositions</option></select>
+      <button class="refresh" id="refresh" title="Re-fetch live data from Airtable">Refresh</button>
+    </div>
+    <div class="cnt" id="cnt"></div>
+    <table>
+      <thead><tr id="hrow"></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <footer id="foot"></footer>
+</div>
+<script>
+// ===== Endpoint and rewrite config =====
+const RELAY_URL = './airtable.php';
+
+// Optional shared secret. Must match RELAY_SHARED_SECRET in config.php.
+// Leave empty to skip (relies on Basic Auth folder password only).
+const RELAY_SHARED_SECRET = '';
+
+// The Airtable "Prospect Eval Report" field stores file:// URLs from Biffrey's Mac.
+// Rewrite that prefix to the public web path on every load.
+const REPORT_LOCAL_PREFIX = 'file:///Users/biffreybraxton/published-listing-search/output/reports/';
+const REPORT_WEB_PREFIX   = './reports/';   // relative to /SMBSSearch001/
+
+// ===== Airtable field IDs (must match relay) =====
+const F = {
+  name:'fldquYtYnHJ1YzUR7', score:'fld2ipICYNLjaDm39', industry:'fldyJH0ZsOJD29wEg',
+  addr:'fldkVBunWYKdXkgpB', ask:'fldhqAXiAWh2ktXln', dispo:'fldw0xk1YBkmP7sBD',
+  source:'fldiGyXTk6Ybb6J1L', web:'fldTRaz0PzBYS9ICl', report:'fld9InVXs4RqgtNDo'
+};
+const COLS = [
+  {k:'name',     t:'Business'},
+  {k:'score',    t:'Score',         num:true},
+  {k:'industry', t:'Industry'},
+  {k:'location', t:'Location'},
+  {k:'ask',      t:'Asking Price',  num:true},
+  {k:'dispo',    t:'Disposition'},
+  {k:'source',   t:'Source'}
+];
+const WEB_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+  'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path>' +
+  '<path d="M12 3a14.5 14.5 0 0 1 0 18 14.5 14.5 0 0 1 0-18z"></path></svg>';
+
+// ===== helpers =====
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"]/g, m => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]
+  ));
+}
+function selName(v){ return (v && typeof v === 'object') ? (v.name||'') : (v==null ? '' : v); }
+function money(n){ return n==null ? '—' : '$' + Math.round(n).toLocaleString(); }
+function scoreCls(s){ return s==null ? '' : (s>=75 ? 'high' : (s>=50 ? 'mid' : 'low')); }
+function openUrl(url){
+  if(!url) return;
+  const a = document.createElement('a');
+  a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function reportUrl(raw){
+  if(!raw) return '';
+  if(raw.indexOf(REPORT_LOCAL_PREFIX) === 0) return REPORT_WEB_PREFIX + raw.slice(REPORT_LOCAL_PREFIX.length);
+  if(/^https?:/i.test(raw)) return raw;
+  return raw;
+}
+
+// ===== Data fetch (via PHP relay; token stays server-side) =====
+async function fetchAll(){
+  const headers = {};
+  if(RELAY_SHARED_SECRET) headers['X-Relay-Secret'] = RELAY_SHARED_SECRET;
+  const resp = await fetch(RELAY_URL, {
+    headers: headers,
+    credentials: 'same-origin',
+    cache: 'no-store'
+  });
+  if(!resp.ok) throw new Error('Relay HTTP ' + resp.status);
+  const data = await resp.json();
+  if(data && data.error) throw new Error('Relay: ' + (data.detail || data.error));
+  return (data && Array.isArray(data.records)) ? data.records : [];
+}
+
+function toRow(rec){
+  const c = rec.cellValuesByFieldId || {};
+  const source = selName(c[F.source]);
+  return {
+    name:     c[F.name] || '(unnamed)',
+    score:    (typeof c[F.score]==='number') ? c[F.score] : null,
+    industry: selName(c[F.industry]),
+    location: c[F.addr] || '',
+    ask:      (typeof c[F.ask]==='number' && c[F.ask]>0) ? c[F.ask] : null,
+    dispo:    selName(c[F.dispo]),
+    source:   source,
+    web:      (typeof c[F.web]==='string') ? c[F.web] : '',
+    report:   reportUrl((typeof c[F.report]==='string') ? c[F.report] : ''),
+    off:      /^off-market/i.test(source||'')
+  };
+}
+
+let ROWS = [], sortKey = 'score', sortDir = -1, market = 'all';
+
+function filtered(){
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const d = document.getElementById('dispo').value;
+  return ROWS.filter(r => {
+    if(market==='on'  && r.off)  return false;
+    if(market==='off' && !r.off) return false;
+    if(d && r.dispo !== d) return false;
+    if(q){
+      const hay = (r.name+' '+r.industry+' '+r.location+' '+r.source).toLowerCase();
+      if(hay.indexOf(q) < 0) return false;
+    }
+    return true;
+  });
+}
+
+function renderHead(){
+  document.getElementById('hrow').innerHTML = COLS.map(c => {
+    const ar = (c.k === sortKey) ? (' <span class="ar">' + (sortDir<0 ? '▼' : '▲') + '</span>') : '';
+    return '<th data-k="' + c.k + '"' + (c.num ? ' class="num"' : '') + '>' + esc(c.t) + ar + '</th>';
+  }).join('');
+}
+
+function render(){
+  const rows = filtered().slice();
+  rows.sort((a,b) => {
+    if(sortKey==='score' || sortKey==='ask'){
+      const x=a[sortKey], y=b[sortKey];
+      if(x==null && y==null) return 0;
+      if(x==null) return 1;
+      if(y==null) return -1;
+      return (x-y) * sortDir;
+    }
+    return String(a[sortKey]||'').localeCompare(String(b[sortKey]||'')) * sortDir;
+  });
+  document.getElementById('rows').innerHTML = rows.map(r => {
+    const webIcon = r.web
+      ? '<a class="web" href="' + esc(r.web) + '" target="_blank" rel="noopener" title="Company website" aria-label="Company website">' + WEB_ICON + '</a>'
+      : '';
+    const trAttrs = r.report
+      ? ' class="clickable" data-report="' + esc(r.report) + '" title="Open Prospect Eval Report"'
+      : '';
+    return '<tr' + trAttrs + '>' +
+      '<td class="name">' + esc(r.name) + (r.off ? '<span class="badge">OFF-MARKET</span>' : '') + webIcon + '</td>' +
+      '<td class="num score ' + scoreCls(r.score) + '">' + (r.score==null ? '<span class="muted">—</span>' : r.score) + '</td>' +
+      '<td>' + (r.industry ? esc(r.industry) : '<span class="muted">—</span>') + '</td>' +
+      '<td>' + (r.location ? esc(r.location) : '<span class="muted">—</span>') + '</td>' +
+      '<td class="num">' + (r.ask==null ? '<span class="muted">—</span>' : esc(money(r.ask))) + '</td>' +
+      '<td>' + (r.dispo ? esc(r.dispo) : '<span class="muted">—</span>') + '</td>' +
+      '<td>' + (r.source ? esc(r.source) : '<span class="muted">—</span>') + '</td>' +
+    '</tr>';
+  }).join('');
+  document.getElementById('cnt').textContent = rows.length + ' of ' + ROWS.length + ' leads shown';
+}
+
+function renderCards(){
+  const on = ROWS.filter(r => !r.off).length, off = ROWS.length - on;
+  const active  = ROWS.filter(r => /^active$/i.test(r.dispo)).length;
+  const revisit = ROWS.filter(r => /revisit/i.test(r.dispo)).length;
+  const cards = [
+    ['Total leads', ROWS.length, ''],
+    ['On-market',   on,          ''],
+    ['Off-market',  off,         'off'],
+    ['Active',      active,      ''],
+    ['Revisit / roll-up', revisit, '']
+  ];
+  document.getElementById('cards').innerHTML = cards.map(c =>
+    '<div class="card ' + c[2] + '"><div class="n">' + c[1] + '</div><div class="l">' + esc(c[0]) + '</div></div>'
+  ).join('');
+}
+
+function buildDispo(){
+  const ds = [...new Set(ROWS.map(r => r.dispo).filter(Boolean))].sort();
+  const sel = document.getElementById('dispo');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">All dispositions</option>' +
+    ds.map(d => '<option' + (d===prev ? ' selected' : '') + '>' + esc(d) + '</option>').join('');
+}
+
+function setFoot(msg){
+  document.getElementById('foot').textContent = msg;
+}
+
+let WIRED = false;
+function wire(){
+  if(WIRED) return; WIRED = true;
+  document.getElementById('q').addEventListener('input', render);
+  document.getElementById('dispo').addEventListener('change', render);
+  document.getElementById('segMarket').addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    market = b.dataset.v;
+    [...document.querySelectorAll('#segMarket button')].forEach(x => x.classList.toggle('on', x === b));
+    render();
+  });
+  document.getElementById('hrow').addEventListener('click', e => {
+    const th = e.target.closest('th'); if(!th) return;
+    const k = th.dataset.k;
+    if(k === sortKey) { sortDir = -sortDir; }
+    else { sortKey = k; sortDir = (k==='score' || k==='ask') ? -1 : 1; }
+    renderHead(); render();
+  });
+  // Clicking anywhere on a row opens that business's Prospect Eval Report.
+  // Clicks on the website icon (an <a>) navigate to the website instead.
+  document.getElementById('rows').addEventListener('click', e => {
+    if(e.target.closest('a')) return;
+    const tr = e.target.closest('tr'); if(!tr) return;
+    const url = tr.dataset.report;
+    if(url) openUrl(url);
+  });
+  document.getElementById('refresh').addEventListener('click', () => loadAndRender(false));
+}
+
+async function loadAndRender(firstLoad){
+  const btn = document.getElementById('refresh');
+  const statusEl = document.getElementById('status');
+  if(btn) btn.disabled = true;
+  if(firstLoad){
+    statusEl.className = '';
+    statusEl.style.display = '';
+    statusEl.textContent = 'Loading the pipeline from Airtable…';
+  } else {
+    setFoot('Refreshing from Airtable…');
+  }
+  try {
+    const recs = await fetchAll();
+    ROWS = recs.map(toRow);
+    if(!ROWS.length) throw new Error('Airtable returned no records.');
+    statusEl.style.display = 'none';
+    document.getElementById('app').style.display = '';
+    renderCards(); buildDispo(); renderHead(); render(); wire();
+    const withReport = ROWS.filter(r => r.report).length;
+    setFoot('Loaded ' + ROWS.length + ' leads from the Airtable Master Deal Pipeline · '
+          + withReport + ' have a linked report · ' + new Date().toLocaleString());
+  } catch(e){
+    if(firstLoad){
+      statusEl.className = 'err';
+      statusEl.style.display = '';
+      statusEl.textContent = 'Could not load the pipeline: ' + ((e && e.message) ? e.message : String(e));
+    } else {
+      setFoot('Refresh failed: ' + ((e && e.message) ? e.message : String(e)));
+    }
+  } finally {
+    if(btn) btn.disabled = false;
+  }
+}
+
+loadAndRender(true);
+</script>
+</body>
+</html>

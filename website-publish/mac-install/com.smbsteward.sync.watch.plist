@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  SMB Steward — file-watch sync agent
+  Fires sync-reports.sh whenever anything changes under output/reports/.
+  ThrottleInterval coalesces bursts into a single run.
+
+  Install:
+    cp com.smbsteward.sync.watch.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.smbsteward.sync.watch.plist
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.smbsteward.sync.watch.plist
+    rm ~/Library/LaunchAgents/com.smbsteward.sync.watch.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.smbsteward.sync.watch</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/biffreybraxton/published-listing-search/website-publish/mac-install/sync-reports.sh</string>
+  </array>
+
+  <key>WatchPaths</key>
+  <array>
+    <string>/Users/biffreybraxton/published-listing-search/output/reports</string>
+  </array>
+
+  <!-- Don't fire more often than every 30s, no matter how busy the folder is. -->
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/smbs-sync-watch.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/smbs-sync-watch.err.log</string>
+</dict>
+</plist>

@@ -1,0 +1,110 @@
+#!/bin/bash
+# ============================================================================
+# SMB Steward — Report sync to Bluehost  (TEMPLATE — credentials get filled
+# in by install-mac-sync.sh into the real file `sync-reports.sh` which is
+# gitignored).
+# ----------------------------------------------------------------------------
+# Mirrors  /Users/biffreybraxton/published-listing-search/output/reports/
+# to       smbsteward.com:/public_html/SMBSSearch001/reports/
+#
+# Behavior chosen during planning:
+#   - Trigger:        macOS launchd file-watcher on output/reports/ (debounced),
+#                     plus a nightly catch-up at 3 AM.
+#   - Mirror policy:  additive only — does NOT delete files on the server when
+#                     they're removed locally.
+#   - File filter:    uploads everything under output/reports/ EXCEPT system
+#                     junk (.DS_Store, Thumbs.db). Adjust EXCLUDES below if you
+#                     want even those uploaded.
+#   - Protocol:       FTP with explicit TLS (FTPS) on port 21, using the
+#                     reportsync per-folder FTP account from cPanel.
+#
+# Manual one-off run:   bash ~/published-listing-search/website-publish/mac-install/sync-reports.sh
+# Log file:             ~/Library/Logs/smbs-sync.log
+# ============================================================================
+
+set -uo pipefail
+
+# ============ CONFIG — FILL THESE IN ============
+SFTP_HOST="FTP_HOST_HERE"            # e.g. ftp.tzt.mlg.mybluehost.me
+SFTP_PORT="21"                        # 21 for FTP/FTPS, 22 for SFTP (not used here)
+SFTP_USER="FTP_USERNAME_HERE"
+SFTP_PASS="FTP_PASSWORD_HERE"
+PROTOCOL="ftp"                        # "ftp" with TLS, or "sftp" if your plan supports it
+
+LOCAL_DIR="/Users/biffreybraxton/published-listing-search/output/reports"
+# The reportsync FTP user is chrooted INTO /public_html/SMBSSearch001/reports,
+# so "/" is the correct remote root for uploads — not "/public_html/...".
+REMOTE_DIR="/"
+
+# Patterns to skip. Add more globs separated by spaces if needed.
+EXCLUDES=(".DS_Store" "Thumbs.db" "._*")
+# ================================================
+
+LOG="$HOME/Library/Logs/smbs-sync.log"
+LOCK="/tmp/smbs-sync.lock"
+mkdir -p "$(dirname "$LOG")"
+exec >>"$LOG" 2>&1
+
+# Concurrency guard. If a lock from a crashed run is older than 30 min, drop it.
+if [ -e "$LOCK" ]; then
+  if find "$LOCK" -mmin +30 -print -quit | grep -q .; then
+    echo "$(date '+%F %T'): stale lock removed"
+    rm -f "$LOCK"
+  else
+    echo "$(date '+%F %T'): another sync is in progress — skipping this trigger"
+    exit 0
+  fi
+fi
+touch "$LOCK"
+trap 'rm -f "$LOCK"' EXIT
+
+echo
+echo "===== $(date '+%F %T'): sync starting ($PROTOCOL://$SFTP_HOST$REMOTE_DIR) ====="
+
+if ! command -v lftp >/dev/null 2>&1; then
+  echo "ERROR: lftp is not installed."
+  echo "Install it with:  brew install lftp"
+  /usr/bin/osascript -e 'display notification "lftp not installed. Run: brew install lftp" with title "SMB Steward report sync"' 2>/dev/null || true
+  exit 1
+fi
+
+if [ ! -d "$LOCAL_DIR" ]; then
+  echo "ERROR: local source folder does not exist: $LOCAL_DIR"
+  exit 1
+fi
+
+# Build --exclude-glob flags for lftp.
+EXCL_FLAGS=()
+for e in "${EXCLUDES[@]}"; do
+  EXCL_FLAGS+=("--exclude-glob" "$e")
+done
+
+# Compose the lftp command stream. mirror --reverse uploads; --only-newer skips
+# files whose remote copy is already at-or-newer; we do NOT pass --delete so
+# server-side files stay even if removed locally (per planning decision).
+lftp -u "$SFTP_USER","$SFTP_PASS" -p "$SFTP_PORT" "$PROTOCOL://$SFTP_HOST" <<LFTP_EOF
+set ssl:verify-certificate no
+set sftp:auto-confirm yes
+set net:max-retries 3
+set net:reconnect-interval-base 5
+set net:timeout 20
+set xfer:clobber yes
+mkdir -p "$REMOTE_DIR"
+mirror --reverse \\
+       --only-newer \\
+       --no-perms \\
+       --parallel=4 \\
+       --verbose=1 \\
+       ${EXCL_FLAGS[@]} \\
+       "$LOCAL_DIR" "$REMOTE_DIR"
+bye
+LFTP_EOF
+RC=$?
+
+if [ "$RC" -ne 0 ]; then
+  echo "ERROR: lftp exited with code $RC"
+  /usr/bin/osascript -e 'display notification "Report sync failed. Check ~/Library/Logs/smbs-sync.log" with title "SMB Steward report sync"' 2>/dev/null || true
+  exit "$RC"
+fi
+
+echo "$(date '+%F %T'): sync completed OK"

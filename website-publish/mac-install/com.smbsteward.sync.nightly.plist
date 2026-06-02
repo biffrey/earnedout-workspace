@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  SMB Steward — nightly catch-up sync agent
+  Safety net in case the file-watch trigger ever silently misses something.
+  Runs sync-reports.sh once a day at 3:00 AM local time.
+
+  Install:
+    cp com.smbsteward.sync.nightly.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.smbsteward.sync.nightly.plist
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.smbsteward.sync.nightly.plist
+    rm ~/Library/LaunchAgents/com.smbsteward.sync.nightly.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.smbsteward.sync.nightly</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/biffreybraxton/published-listing-search/website-publish/mac-install/sync-reports.sh</string>
+  </array>
+
+  <!-- 03:00 every day. launchd catches up missed runs on next wake. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>3</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/smbs-sync-nightly.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/smbs-sync-nightly.err.log</string>
+</dict>
+</plist>

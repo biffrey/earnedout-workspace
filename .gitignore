@@ -1,3 +1,13 @@
 .playwright-mcp/
 .fuse_hidden*
 .DS_Store
+
+# Live SMB Steward sync configuration — contains FTP password; keep local-only.
+# The committed template is website-publish/mac-install/sync-reports.sh.example.
+website-publish/mac-install/sync-reports.sh
+
+# Per-machine Claude state
+.claude/settings.local.json
+
+# Runtime logs
+output/logs/*.log

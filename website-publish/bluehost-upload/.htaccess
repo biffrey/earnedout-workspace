@@ -1,0 +1,25 @@
+# SMB Steward — /SMBSSearch001/ access controls
+# Minimal version, written to match what cPanel Directory Privacy generates.
+
+# Reclaim error pages from WordPress's ErrorDocument that otherwise hijacks 401
+ErrorDocument 401 default
+ErrorDocument 403 default
+ErrorDocument 404 default
+ErrorDocument 500 default
+
+# Password protection
+AuthType Basic
+AuthName "SMB Steward - Restricted"
+AuthUserFile "/home2/tztmlgmy/.htpasswds/public_html/SMBSSearch001/passwd"
+Require valid-user
+
+# Use index.html as the default file
+DirectoryIndex index.html
+
+# Keep search engines and archivers out
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+</IfModule>
+
+# No directory listings
+Options -Indexes
