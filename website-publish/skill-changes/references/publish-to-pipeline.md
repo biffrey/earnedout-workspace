@@ -11,6 +11,15 @@ This step is **EarnedOut-specific**. It only runs if **all** of the following ar
 
 If any of those is false, skip this entire reference and stop after Step 8 of SKILL.md.
 
+### Rescore mode
+
+If the caller signals a **rescore** (the `process-pending-rescores` runner re-evaluating an already-flagged prospect against its updated working folder), this whole flow still runs, with two differences:
+
+- **Step B is skipped** — do not prompt for a Disposition. The row already exists with a Disposition that reflects the latest human decision; reuse it unchanged.
+- **Working Folder Path** (Step C/D) is set/refreshed to the folder the runner evaluated, so the link between the row and its source documents stays current.
+
+Everything else is identical to a normal single-mode publish (refresh Lead Score and report path, append to Notes).
+
 ---
 
 ## Step A — Copy the HTML report into the consolidated reports folder
@@ -53,6 +62,8 @@ When the file lands in `output/reports/`, the macOS `launchd` watcher (`com.smbs
 ---
 
 ## Step B — Ask the user for the disposition
+
+> **Rescore mode:** skip this step entirely. Do not prompt. Leave the existing Disposition untouched and go straight to Step C → Step D (update path).
 
 Stop and ask the user to pick the deal's current disposition. Present the Airtable options as a numbered list:
 
@@ -102,6 +113,7 @@ If the user wants to add a new disposition option not in this list, suggest they
 | Source | `fldiGyXTk6Ybb6J1L` | `"Manual Submission"` (singleSelect) |
 | Website | `fldTRaz0PzBYS9ICl` | Primary company URL |
 | Prospect Eval Report | `fld9InVXs4RqgtNDo` | `file:///Users/biffreybraxton/published-listing-search/output/reports/name-<slug>[-<state>]/<slug>-report.html` |
+| Working Folder Path | `fldJCqHDRnpbVPaZa` | Absolute path to the prospect's working folder under `My Drive/Investments/Prospects/…` if one exists (the folder of CIMs/financials this evaluation read). Leave blank if the prospect has no document folder (e.g. an off-market fund sourced purely from web research). |
 | Notes | `fldbEqYoyoPNthNoV` | One short paragraph: lead source, report date, anything notable. Example: `"Lead source: Lion People Global (Anonymous Teaser 1322). Report 2026-05-11, score 95/110. ASL interpreting agency in Arvada, CO; active LOI work."` |
 
 **Industry Match selection.** This is a singleSelect with a finite list of options. Before writing, call `mcp__airtable__get_table_schema` for `fldyJH0ZsOJD29wEg` to see the current choices. Pick the closest fit. Common existing options:
@@ -134,7 +146,8 @@ Update with care:
 
 - **Lead Score** — always update to this run's score.
 - **Prospect Eval Report** — always update to the new path (this run's report supersedes the prior one).
-- **Disposition** — do NOT change unless the user explicitly told you to. The disposition on file is more likely to reflect the latest decision than this run's evaluation context.
+- **Disposition** — do NOT change unless the user explicitly told you to. The disposition on file is more likely to reflect the latest decision than this run's evaluation context. (In **rescore mode** this is mandatory — never touch it.)
+- **Working Folder Path** (`fldJCqHDRnpbVPaZa`) — set/refresh to the absolute path of the working folder this evaluation read, if known. In a rescore this is the folder the runner handed you; on a manual re-publish, fill it if it's currently empty.
 - **Notes** — APPEND, don't replace. Read the current Notes value first, then write back: `<existing notes>\n\nRe-evaluated YYYY-MM-DD: score now XX/100. <One-line delta from prior eval.>`
 - **Business Name / Address / Website / Industry Match** — update only if the existing value is empty OR clearly wrong. Otherwise leave alone.
 
