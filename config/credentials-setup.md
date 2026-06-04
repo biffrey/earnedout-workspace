@@ -74,8 +74,11 @@ the missing or blocked step, exit non-zero, and **stop**. It must never:
   incomplete or zero results, silently degrading the search; or
 - fall back to cached, blank, or hard-coded credentials.
 
-The skill checks authentication at startup (`op whoami`, or a trial `op read`)
-and aborts immediately if authentication is unavailable rather than continuing.
+The skill checks authentication at startup by confirming the runner-provided
+`$DEALSTREAM_USERNAME` / `$DEALSTREAM_PASSWORD` are non-empty (Keychain-backed; see
+below). It must **never** gate on `op whoami` — under desktop-app integration that
+always reports "not signed in" even when credentials are valid. It aborts only if
+the credentials themselves are missing/empty.
 
 ## Troubleshooting
 
@@ -86,3 +89,46 @@ and aborts immediately if authentication is unavailable rather than continuing.
 - **`op: command not found`:** the CLI is not installed or not on `PATH`. Install
   it and ensure the Homebrew bin directory is on `PATH` (`/opt/homebrew/bin` on
   Apple Silicon, `/usr/local/bin` on Intel).
+
+## Unattended (scheduled launchd) auth — macOS Keychain  [method as of 2026-06-04]
+
+**Why not `op` for the scheduled run:** the 1Password desktop-app integration only
+works while the app is **unlocked and able to surface a biometric prompt**. A
+detached launchd/`claude -p` process can't answer that prompt, so `op read` returns
+`authorization timeout` (and `op whoami` always reports "not signed in" regardless).
+This — combined with the skill formerly gating on `op whoami` — caused the
+2026-05-23 → 06-04 dark period where every nightly run aborted at the auth gate.
+
+**Why not a service-account token:** 1Password service accounts (and shared vaults)
+are a **Business/Teams** feature. This account is **Individual** (`op account get` →
+`Type: INDIVIDUAL`), so service accounts are unavailable.
+
+**Chosen mechanism: the macOS login Keychain.** A launchd LaunchAgent runs as the
+user with the login keychain unlocked (whenever the user is logged in), so it reads
+secrets **non-interactively — no Touch ID prompt, no 1Password dependency**.
+
+The DealStream credentials are stored as two generic-password items (created with
+`-A` so the launchd job reads them without a prompt):
+
+```bash
+# one-time install (values sourced from 1Password):
+U="$(op read 'op://Personal/dealstream.com/username')"
+P="$(op read 'op://Personal/dealstream.com/password')"
+security add-generic-password -U -s earnedout-dealstream-username -a dealstream -w "$U" -A -D "EarnedOut DealStream username"
+security add-generic-password -U -s earnedout-dealstream-password -a dealstream -w "$P" -A -D "EarnedOut DealStream password"
+
+# read back (this is what the runner does):
+security find-generic-password -s earnedout-dealstream-username -w
+security find-generic-password -s earnedout-dealstream-password -w
+```
+
+`run-overnight-search.sh` resolves these into `$DEALSTREAM_USERNAME` /
+`$DEALSTREAM_PASSWORD`, exports them, and the skill authenticates from those env
+vars. If the Keychain items are ever missing, the runner falls back to `op read`
+(desktop integration, daytime only). **Rotating the DealStream password:** update
+1Password, then re-run the two `security add-generic-password -U …` commands above.
+
+1Password (`op`) remains the source of truth and the daytime/manual fallback; the
+Keychain is only the headless cache for the scheduled run. (The Keychain items are
+unlocked with the login session; if the Mac is fully logged out — not just
+screen-locked — the login keychain is locked and the run would fall back to `op`.)

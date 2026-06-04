@@ -2,7 +2,7 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest"]
+      "args": ["@playwright/mcp@latest", "--config", "/Users/biffreybraxton/published-listing-search/config/playwright-mcp.json"]
     }
   }
 }

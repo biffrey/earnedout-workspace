@@ -29,10 +29,12 @@ not a `/schedule` remote routine. This is deliberate:
 ## Cadence
 
 - **Label:** `ai.earnedout.overnight-search`
-- **Schedule:** every day at **02:37 local time** (`StartCalendarInterval`
-  `Hour=2`, `Minute=37`). Early-morning so results are ready before the workday;
-  off-minute by design.
-- `RunAtLoad` is `false` — it fires only on the 02:37 calendar trigger, never on
+- **Schedule:** every day at **10:00 America/New_York (Eastern)** (`StartCalendarInterval`
+  `Hour=10`, `Minute=0`). This is **11:00 AM Atlantic** — chosen as a time the
+  operator is typically at the Mac. (Changed 2026-06-04 from the original 02:37;
+  auth is now headless via Keychain, so an unattended overnight slot is no longer
+  required — a daytime slot is preferred so a human can intervene if needed.)
+- `RunAtLoad` is `false` — it fires only on the 10:00 calendar trigger, never on
   load/reboot.
 
 ## Trigger prompt
@@ -45,7 +47,8 @@ claude -p "<trigger prompt>" --dangerously-skip-permissions
 
 The trigger prompt (full text lives in `run-overnight-search.sh`) instructs Claude
 to run the **overnight-search skill** (`.claude/skills/overnight-search/skill.md`):
-retrieve DealStream credentials via `op` (fail loud if not signed in); log into
+authenticate to DealStream from the Keychain-backed `$DEALSTREAM_USERNAME` /
+`$DEALSTREAM_PASSWORD` env vars the runner provides (fail loud if either is empty); log into
 DealStream with Playwright and search every active platform for buy-box matches;
 extract each listing's direct URL, listing ID, and 2024/2025 financials; validate
 links and capture screenshots; deduplicate against the Airtable Master Deal
