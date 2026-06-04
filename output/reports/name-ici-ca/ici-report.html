@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Integrated Consultants, Inc. (ICI) — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border);
+                border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted);
+                   letter-spacing: .08em; text-transform: uppercase; }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+  .callout { background: var(--panel-2); border: 1px solid rgba(90,167,255,.4);
+             border-left: 3px solid var(--accent); border-radius: 8px; padding: 14px 16px; }
+
+  .chart { background: var(--panel-2); border: 1px solid var(--border);
+           border-radius: 8px; padding: 12px; overflow-x: auto; }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px;
+           text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Integrated Consultants, Inc. (ICI) — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-06-03 &nbsp;·&nbsp;
+        Lead source: Proprietary / Direct — intro call (Aberizk, Hill, Fraccinault) &nbsp;·&nbsp;
+        Standalone defense platform
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict conditional">Buy Box: Conditional</span>
+      <div class="score-badge">
+        <div class="num">70</div>
+        <div class="label">Lead Score / 100</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#whatchanged">What Changed</a></li>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals & Leadership</a></li>
+      <li><a href="#products">4. Products & Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers & Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook & Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="whatchanged">
+      <h2>What Changed Since the 2026-06-02 Evaluation</h2>
+      <div class="callout">
+        <p>The prior report was <strong>data-starved</strong> — no financials, no confirmed seller motivation. Today's intro call (Granola, 2026-06-03) supplied the missing core:</p>
+        <ul>
+          <li><strong>Audited, "100% defensible" financials</strong> — fractional CFO Frank Fraccinault ran a third-party audit with <strong>zero findings</strong>.</li>
+          <li><strong>~$15M revenue, $8–9M EBITDA, ~57–60%+ margin</strong> — a multi-year continuation, not a one-off.</li>
+          <li><strong>Motivated, organized seller</strong> — SIM assembled, shared right after NDA; owner (78–79) stays 12–18 mo, then advisory.</li>
+          <li><strong>Real 2IC team</strong> — CSO Brian Hill + VP Jonathan Surmi run day-to-day, de-risking founder dependence.</li>
+        </ul>
+        <p>Moves from "cannot be scored" to <strong>70/100 — Conditional (Pursue with conditions)</strong>, with clear upside to ~90 once the SIM confirms documented 3-yr growth and an asking price ≤4x EBITDA.</p>
+      </div>
+    </section>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:90px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">PASS</span></td><td>Named team confirmed: Aberizk (CEO), Hill (CSO/FSO), Surmi (VP), ops manager, 3 TS-cleared staff, + job-shop consultants. ~17 FTE (est.); exact count pending SIM.</td></tr>
+          <tr><td>2</td><td>EBITDA ≥ $1M / year (no upper cap)</td><td><span class="chip pass">PASS</span></td><td><strong>$8–9M EBITDA</strong>, audited (zero-findings). Far above the $1M floor.</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>Founded 1979 — <strong>47 years</strong>.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue & profit growth</td><td><span class="chip warn">PENDING</span></td><td>CFO: a "continuation… not a new intersection" over "a number of years"; ~$15M → ~$17M projected. Per-year figures not yet documented — confirm from audited statements.</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip warn">PENDING</span></td><td>No price disclosed yet (SIM follows NDA). Reference: 4.0x × $8–9M ≈ <strong>$32–36M</strong> EV.</td></tr>
+          <tr><td>6</td><td>DSCR > 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">PENDING</span></td><td>Depends on final price/structure. Seller-note potential supports financeability.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Overall Buy Box: CONDITIONAL</strong> — size, profitability, and tenure pass decisively; the three pending items all resolve to the financial package now being shared under NDA.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Integrated Consultants, Inc. (d/b/a ICI)</td><td>Website; CAGE</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>Proprietary / Direct — intro call via shared fractional CFO</td><td>Call 2026-06-03</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>47 years (founded 1979, D. Aberizk, P.E.)</td><td>Call; website</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>~17,300 sq ft HQ, San Diego (owned, Dec 2023). Est. $3M–$7M <span class="est">(est.)</span></td><td>ICI news; call</td></tr>
+          <tr><td>5</td><td>FF&E value</td><td>Moderate — fabless fabricator; in-house MIL-STD test. No book value disclosed.</td><td>Call; website</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>~17 <span class="est">(est.)</span> — multi-person team corroborated; exact pending SIM</td><td>Call</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td><em style="color:var(--muted);">unknown</em></td><td>—</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>Several long-tenured job-shop consultants (some since 2000)</td><td>Call</td></tr>
+          <tr><td>9</td><td>Business address</td><td>3043 4th Avenue, San Diego, CA 92103 (owned HQ)</td><td>Website; call</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td>Not separately disclosed (multi-yr continuation per CFO)</td><td>Call</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>Not separately disclosed — pending SIM</td><td>Call</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>Not separately disclosed — pending SIM</td><td>Call</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td><strong>~$15M</strong>; ~$17M projected FY2026 <span class="est">(est.)</span></td><td>Call (CFO)</td></tr>
+          <tr><td>14</td><td>Net / FCF 2022</td><td>Not disclosed — pending SIM</td><td>—</td></tr>
+          <tr><td>15</td><td>Net / FCF 2023</td><td>Not disclosed — pending SIM</td><td>—</td></tr>
+          <tr><td>16</td><td>Net / FCF 2024</td><td>Not disclosed — pending SIM</td><td>—</td></tr>
+          <tr><td>17</td><td>Net / FCF 2025</td><td>EBITDA $8–9M (proxy)</td><td>Call (CFO)</td></tr>
+          <tr><td>18</td><td>Asking price</td><td><strong>Not yet disclosed</strong> — SIM follows NDA</td><td>Call</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>~+13% projected (~$15M→~$17M); multi-yr pending SIM</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>High within programs (follow-on to 2029); ~100% DoD-concentrated</td><td>Call</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td><strong>~57–60%+</strong> (CFO: "north of 60%")</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td>~100% U.S. DoD/Navy, concentrated in PMA-272</td><td>Call; research</td></tr>
+          <tr><td>25</td><td>2024 financials + YTD link</td><td>Pending — SIM + audited statements after NDA</td><td>Call</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>70 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>20</td><td>20</td><td>Aerospace — TOP PRIORITY. Defensive aircraft-survivability / EW electronics + DoD support; not a weapons manufacturer.</td></tr>
+          <tr><td>EBITDA tier</td><td>15</td><td>15</td><td>$8–9M → &gt;$3M tier (max).</td></tr>
+          <tr><td>Years in business ≥10</td><td>10</td><td>10</td><td>47 years.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>5</td><td>10</td><td>CFO indicates multi-yr continuation/growth; per-year rev+profit not yet documented. Re-rates to 10 on audited statements.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>FFP govt programs; follow-on to 2029 + POM embedment, but annually appropriated/milestone — mixed. Upside to 10 on funded-backlog confirmation.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>~100% DoD / single-PMA. Mitigants: 2029 follow-on, seller stays, Biffrey's DoD relationships, seller financing.</td></tr>
+          <tr><td>Employees ≥10</td><td>10</td><td>10</td><td>~17 FTE (est.), corroborated team.</td></tr>
+          <tr><td>Valuation multiple</td><td>0</td><td>15</td><td><strong>Insufficient data — not awarded.</strong> No asking price yet. At ≤4x → 15 (largest swing factor).</td></tr>
+          <tr><td>Low owner dependence</td><td>5</td><td>5</td><td>Real 2IC structure (Hill + Surmi) runs day-to-day; founder is "maestro," staying 12–18 mo then advisory.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>0</td><td>10</td><td>N/A — standalone defense platform.</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>70</strong></td><td><strong>100</strong></td><td></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Sensitivity:</strong> Confirming 3-yr growth (+5) and an ask ≤4.0x EBITDA (+15) lifts the score to <strong>~90/100 — "Strong pursue."</strong> A &gt;5.5x ask keeps the valuation line at 0 and forces negotiate-or-pass.</p>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> 47-yr-old San Diego defense-electronics firm building ruggedized hardware for military aircraft survivability (countermeasure/jammer programmers, MOB Hub, iASE), primarily for NAVAIR PMA-272. "Lean-forward," firm-fixed-price design partner that helps author the requirement pre-PO.</li>
+        <li><strong>Financial highlights:</strong> ~$15M revenue, $8–9M EBITDA, ~57–60%+ margin — audited, zero findings, multi-year continuation. ~$17M projected. Owns its HQ.</li>
+        <li><strong>Buy Box summary:</strong> CONDITIONAL — size/profitability/tenure pass decisively; documented growth and asking multiple are the open items, both in the SIM.</li>
+        <li><strong>Why pursue:</strong> Rare ~60% margin + audited books + long incumbency + exclusive MOB Hub patent license + motivated retirement seller willing to stay; strong fit with Biffrey's DoD footprint.</li>
+        <li><strong>Why be careful:</strong> ~100% Navy/single-PMA concentration; founder/technical key-person risk (mitigated, not erased); ~$32–36M EV deal size; novation/FOCI/ITAR transfer.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>History:</strong> Founded 1979 by David Aberizk, P.E. Began in New England federal work — pressure vessels, nuclear power, then cryogenics (GE program / Helix). Relocated to San Diego in the late 1990s; rebuilt around Navy procurement support after 9/11 by embedding in the local defense community (NDIA, SPAWAR buying center). Evolved into a hardware design/qualification partner for aircraft survivability.</p>
+      <p><strong>Ownership:</strong> Founder-owned; David Aberizk is founder, President & CEO and controlling owner. First-ever M&A process (began ~12–18 months ago).</p>
+      <p><strong>Milestones:</strong> 1979 founded · late-1990s San Diego pivot · 2017 MOB Hub/survivability deepening (NAWCWD China Lake) · Dec 2023 HQ purchase · 2024 senior hires (Hill, Surmi) · Jul 2025 exclusive MOB Hub patent license (only non-DoD licensee) · 2025 early EMD delivery to PMA-272 + follow-on SOW through 2029 · 2025–26 fractional CFO, zero-findings audit, SIM, sale process.</p>
+      <p><strong>Org:</strong> Decentralized by design — Aberizk is the technical "maestro"; Hill (CSO/FSO) owns contracts + security; Surmi (VP Military Products) owns client/government relationships; an operations manager runs ops; Fraccinault is fractional CFO. Three TS-cleared staff. Family-culture workforce.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals & Leadership</h2>
+      <h3>David Aberizk, P.E. — Founder, President & CEO</h3>
+      <p>Mechanical engineer; 47 yrs across pressure vessels, nuclear, cryogenics, defense electronics. Technical vision + client-credibility anchor; intentionally a step back ("maestro standing back"). 78–79; wants to stay <strong>12–18 months</strong> (potentially managing), then an advisory/technical role indefinitely (lives one block from HQ). Contact: daberizk@icpoc.com</p>
+      <h3>Brian Hill — Chief Strategy Officer / FSO</h3>
+      <p>~25-yr government/defense career (civil service 2001, NAVAIR China Lake); special-access/tiger-team pedigree; ~2 yrs full-time at ICI. <strong>TS/SCI, all six caveats.</strong> Led the 7-month MOB Hub patent-license negotiation. The operational 2IC. Contact: bhill@icpoc.com</p>
+      <h3>Jonathan ("John") Surmi — VP, Military Products / Sales</h3>
+      <p>~2.5 yrs at ICI; worked with Aberizk on the government side ~8–9 yrs prior. Deep PMA-272 / MOB Hub domain knowledge; owns client/government relationships.</p>
+      <h3>Frank Fraccinault — Fractional CFO</h3>
+      <p>Led the zero-findings third-party audit; on-site ~3 days/week for 6 months. Also Biffrey's fractional CFO (~2 yrs) — the shared, trusted advisor who originated this introduction.</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products & Services</h2>
+      <p><strong>What they sell:</strong> Ruggedized defense electronics + engineering for aircraft survivability — countermeasure dispensing / programmer hardware, the MOB Hub interface (new-to-legacy integration), directional jammer units, and the next-gen iASE programmer.</p>
+      <p><strong>Pricing model:</strong> Firm-fixed-price with healthy margins; notably <strong>pre-PO "lean forward"</strong> — ICI helps author the SOW it later bids.</p>
+      <p><strong>Delivery:</strong> Fabless fabricator — in-house design, kitting, and MIL-STD test; machining/board fab/assembly outsourced to trusted SoCal job shops (relationships since 2000). Capital-light, quality-controlled.</p>
+      <p><strong>Differentiators:</strong> Exclusive non-DoD license to four Navy MOB Hub patents; in-house MIL-STD test lab; "speed to fleet" tiger-team agility vs. primes; 47-yr incumbent PMA-272 trust; P.E.-led engineering.</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Industry:</strong> Defense electronics / electronic warfare & aircraft survivability — a priority, well-funded mission area driven by near-peer threat modernization; counter-cyclical to commercial downturns but exposed to federal appropriations timing.</p>
+      <p><strong>Drivers:</strong> Survivability modernization, obsolescence re-engineering, MOB Hub integration demand, POM-cycle embedment (visibility into 2029), new product lines.</p>
+      <p><strong>Barriers / headwinds:</strong> Annual appropriation risk; clearance + ITAR barriers (also a moat); single-PMA concentration.</p>
+      <p><strong>Competitive landscape:</strong> Competes against primes via tiger-team speed and the fabless model; edge is pre-PO problem-shaping + reliable hardware delivery. ICI's ~60% margin profile is well above typical services-firm norms and should be diligence-verified against audited statements.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers & Revenue Model</h2>
+      <p><strong>Segments:</strong> ~100% U.S. DoD/Navy, anchored by NAVAIR PMA-272. Historical commercial/lab clients are immaterial today.</p>
+      <p><strong>Retention:</strong> High within active programs — follow-on contract authored through 2029; ICI embedded in the customer's POM/budget planning. Risk is concentration, not churn.</p>
+      <p><strong>Recurring vs one-time:</strong> Firm-fixed-price program/hardware deliveries — contracted and repeat, but annually appropriated and milestone-based (not subscription). Scored as mixed.</p>
+      <p><strong>Concentration:</strong> ~100% single-agency, single-PMA — the dominant risk; partially mitigated by multi-year coverage and the seller's continued involvement.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>Margin</th><th>YoY</th></tr></thead>
+        <tbody>
+          <tr><td>2022</td><td>n/d (multi-yr continuation)</td><td>—</td><td>~60%</td><td>—</td></tr>
+          <tr><td>2023</td><td>n/d</td><td>—</td><td>~60%</td><td>—</td></tr>
+          <tr><td>2024</td><td>n/d</td><td>—</td><td>~60%</td><td>—</td></tr>
+          <tr><td>2025</td><td>~$15M</td><td>$8–9M</td><td>~57–60%+</td><td>—</td></tr>
+          <tr><td>2026 (proj.)</td><td>~$17M <span class="est">(est.)</span></td><td>—</td><td>~60%</td><td>~+13%</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;"><em>All figures from the CFO on the 2026-06-03 call, described as audited (zero findings). Per-year 2022–2024 detail to come from the SIM/audited statements under NDA — request to confirm the 3-yr growth line.</em></p>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="190" viewBox="0 0 520 190" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab">
+            <text x="10" y="15">Revenue ($M) — 2025 disclosed; 2026 projected; earlier years pending SIM</text>
+          </g>
+          <g fill="#2a3342">
+            <rect x="60"  y="95" width="60" height="70" rx="3" />
+            <rect x="160" y="95" width="60" height="70" rx="3" />
+            <rect x="260" y="95" width="60" height="70" rx="3" />
+          </g>
+          <g fill="#5aa7ff">
+            <rect x="360" y="60"  width="60" height="105" rx="3" />
+          </g>
+          <g fill="#2fbf71">
+            <rect x="460" y="40"  width="40" height="125" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="90"  y="182">2022</text>
+            <text x="190" y="182">2023</text>
+            <text x="290" y="182">2024</text>
+            <text x="390" y="182">2025</text>
+            <text x="480" y="182">2026e</text>
+          </g>
+          <g font-family="sans-serif" font-size="10" fill="#8a97ab" text-anchor="middle">
+            <text x="90"  y="90">n/d</text>
+            <text x="190" y="90">n/d</text>
+            <text x="290" y="90">n/d</text>
+            <text x="390" y="55">~$15M</text>
+            <text x="480" y="35">~$17M</text>
+          </g>
+        </svg>
+      </div>
+      <h3>Estimated valuation</h3>
+      <p>Implied multiple at ask: <strong>unknown</strong> — no asking price disclosed. Reference: 4.0x × $8–9M ≈ <strong>$32–36M</strong> EV; 5.5x ≈ $44–50M. Target ≤4.0x as a closing condition; the founder's willingness to stay supports a <strong>seller note / earnout</strong> structure that also shares concentration risk.</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>~60% EBITDA margin; $8–9M EBITDA; audited zero-findings books</li>
+          <li>47-yr incumbent; exclusive MOB Hub patent license (only non-DoD licensee)</li>
+          <li>Real 2IC team (Hill/Surmi) + motivated seller willing to stay</li>
+          <li>Capital-light fabless model; in-house MIL-STD test; "speed to fleet"</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>~100% DoD / single-PMA concentration</li>
+          <li>Founder/technical key-person centrality (mitigated, not erased)</li>
+          <li>Small headcount — buying a team; attrition is existential</li>
+          <li>~60% margin far above norms — must be diligence-verified</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>Follow-on through 2029 + POM embedment; new product lines</li>
+          <li>Cross-sell into Biffrey's 17-agency / DoD footprint</li>
+          <li>MOB Hub license → adjacent platforms/other branches</li>
+          <li>Seller-financed/earnout structure aligns founder transition</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Federal budget/appropriation risk (CR, sequestration, rescope)</li>
+          <li>Novation / FOCI / ITAR transfer on change of control</li>
+          <li>Loss of key cleared staff or PMA-272 sponsor relationships</li>
+          <li>Only a single externally-audited period confirmed so far</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry / dual-use:</strong> ICI builds aircraft <em>survivability</em> / EW hardware — defensive systems protecting aircraft, classified as DoD/aerospace support, <strong>not</strong> an excluded weapons manufacturer. Flagged explicitly per skill rule 9; on the facts it passes the gate.</li>
+        <li><strong>Financial:</strong> ~100% Navy / single-PMA concentration → revenue-cliff risk. ~60% margin is exceptional — validate against audited statements + add-back schedule. Confirm multi-year (only one audited period confirmed so far).</li>
+        <li><strong>Operational:</strong> Founder centrality (sole-P.E. heritage, 47 yrs of judgment, anchor relationships). Mitigated by Hill/Surmi 2IC, decentralized model, 12–18 mo + advisory transition — but cleared-staff retention is existential given small headcount.</li>
+        <li><strong>Regulatory / legal:</strong> DoD contract <strong>novation</strong> (FAR 42.1204), <strong>TS facility clearance / FOCI</strong> review, and <strong>ITAR</strong> obligations all trigger on change of control. Build into closing timeline.</li>
+        <li><strong>Deal conditions:</strong> (1) Get SIM + audited 2022–2025 financials; confirm 3-yr rev+profit growth. (2) Establish price; <strong>negotiate to ≤4.0x EBITDA</strong>. (3) Lock founder + Hill/Surmi retention and P.E. continuity. (4) Structure seller note/earnout for concentration. (5) Resolve RE treatment + clearance/novation path early.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook & Growth Opportunities</h2>
+      <p><strong>Expansion:</strong> Extend MOB Hub license/derivatives to more aircraft platforms and other branches; broaden the widened 2025 follow-on aperture.</p>
+      <p><strong>Operational upside:</strong> Already lean/high-margin — EarnedOut's value-add is de-risking the founder transition, institutionalizing BD/process, and financing/structuring (not a turnaround). Cross-sell with Biffrey's communications/geospatial DoD relationships.</p>
+      <p><strong>Strategic fit:</strong> Adds a high-margin, IP-backed defense-hardware platform alongside Applied Development (DoD communications access) and the geospatial firm — a coherent "serve the warfighter" portfolio sharing clearance infrastructure.</p>
+      <p><strong>100-day plan sketch:</strong> (1) Execute NDA; ingest SIM + audited financials; validate margin/growth/concentration. (2) Map novation + FOCI + ITAR timeline with counsel pre-LOI. (3) LOI at ≤4x with seller note/earnout + founder transition + Hill/Surmi retention. (4) Confirm P.E.-of-record continuity. (5) On-site visit to assess team/facility/culture.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><strong>Granola call transcript, 2026-06-03</strong> — "Initial Introduction: Biffrey Braxton: Integrated Consultants" (Aberizk, Hill, Fraccinault). Primary source for financials, seller motivation, team, transition.</li>
+        <li><a href="https://www.integratedconsultants.com/">integratedconsultants.com</a> — home / who-we-are / pricing / news.</li>
+        <li><a href="https://www.integratedconsultants.com/2025/09/04/early-delivery-of-hardware-to-pma-272-demonstrates-success-of-utilizing-small-business-to-support-navy-acquisition/">PMA-272 early delivery release</a></li>
+        <li><a href="https://www.integratedconsultants.com/2025/07/18/nawcwd-cl-patent-license-agreement-with-integrated-consultants-inc/">NAWCWD CL MOB Hub patent license</a></li>
+        <li><a href="https://www.integratedconsultants.com/2024/05/05/brian-hill-joins-ici-as-chief-strategy-officer/">Brian Hill CSO announcement</a></li>
+        <li><a href="https://www.integratedconsultants.com/2023/12/17/ici-closes-escrow-on-new-state-of-the-art-corporate-headquarters-facility-in-san-diego/">HQ acquisition release</a></li>
+        <li><a href="https://cage.report/CAGE/1QXX1">CAGE record 1QXX1</a></li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>Revenue/EBITDA/margin taken directly from the CFO on the call (audited). Transcript disambiguated by math where garbled.</li>
+        <li>HQ value $3M–$7M from Banker's Hill commercial comps; purchase price not disclosed.</li>
+        <li>~17 FTE from prior aggregator floor, corroborated by the named team on the call.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p><strong>Field #13 — Revenue 2025/2026</strong> — ~$15M current, ~$17M projected.<br>
+         Method: CFO stated revenue "just north of $15M," EBITDA "$8–9M," margin "north of 60%." Cross-check $9M ÷ 0.60 = $15M. The transcript "70 million" is treated as a transcription artifact for ~$17M — a $70M figure is incompatible with $8–9M EBITDA at ~60% margin (would imply ~7–9% margin). Projected YoY ≈ +13%.<br>
+         Sources: Granola call 2026-06-03.</p>
+      <p><strong>Field #21 — EBITDA margin ~57–60%+</strong> — Method: $8M/$15M = 53%; $9M/$15M = 60%; CFO "north of 60%." Confirm against audited statements.<br>
+         Sources: Granola call 2026-06-03.</p>
+      <p><strong>Field #4 — HQ real estate $3M–$7M</strong> — Method: ~17,300 sq ft owned commercial in Banker's Hill/Midtown at ~$175–$400/sq ft. Purchase price (Dec 2023) not disclosed.<br>
+         Sources: ICI news 12/17/2023; San Diego commercial comps.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li><code>ici-report.md</code> (prior 2026-06-02 evaluation) — public-source baseline; superseded for financial/seller fields.</li>
+        <li>Granola transcript <code>c7afe5b8-6208-4fbd-8c24-0a7bd16d2f6e</code> — primary new source.</li>
+      </ul>
+      <h3>E. Open questions for the seller / broker (send with NDA)</h3>
+      <ul>
+        <li>SIM + audited financials FY2022–FY2025 (P&L + BS) and YTD 2026.</li>
+        <li>Per-year revenue + EBITDA — confirm 3 consecutive growth years.</li>
+        <li><strong>Asking price / target multiple</strong> and what's included (esp. HQ real estate).</li>
+        <li>Funded backlog vs. unfunded ceiling on the 2029 follow-on; % under firm funding.</li>
+        <li>Exact FTE count, cleared-staff roster, 1099/job-shop dependency.</li>
+        <li>P.E.-of-record arrangement and engineering sign-off continuity post-close.</li>
+        <li>Customer concentration detail (PMA-272 % of revenue; other programs).</li>
+        <li>Novation / FOCI / ITAR posture and any prior government change-of-control guidance.</li>
+        <li>EBITDA add-back schedule supporting the ~60% margin.</li>
+        <li>Seller's structure preferences (seller note / earnout / rollover equity).</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources (primarily the 2026-06-03 intro call).</footer>
+</div>
+</body>
+</html>

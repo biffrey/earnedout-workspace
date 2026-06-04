@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fig Tree Energy Services — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419; --panel: #171d26; --panel-2: #1f2733; --text: #e7ecf3;
+    --muted: #8a97ab; --border: #2a3342; --accent: #5aa7ff;
+    --pass: #2fbf71; --fail: #e74c3c; --warn: #f5a623; --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55; font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+  header.banner { grid-column: 1 / -1; background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; display: flex;
+    justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px; font-weight: 700;
+             font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .score-badge { background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center; }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+  .score-badge .delta { font-size: 11px; color: var(--pass); margin-top: 3px; font-weight: 700; }
+  nav.toc { position: sticky; top: 20px; background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 16px; align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text); padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .swot .cell { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .swot .cell h4 { margin: 0 0 6px 0; font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+  .rescore { grid-column: 1 / -1; background: rgba(245,166,35,.08); border: 1px solid rgba(245,166,35,.4);
+             border-radius: 12px; padding: 16px 20px; }
+  .rescore h3 { margin: 0 0 8px 0; color: var(--warn); font-size: 15px; }
+  .rescore p, .rescore li { color: #cbd3df; font-size: 13.5px; }
+  .chart { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; overflow-x: auto; }
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>Fig Tree Energy Services — Prospect Evaluation</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        2026-06-04 · <strong style="color:var(--warn);">RESCORE</strong> (supersedes 2026-05-08) &nbsp;·&nbsp;
+        Lead source: Nedrow Business Advisors (Waxahachie, TX)
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="verdict conditional">Buy Box: Conditional</span>
+      <div class="score-badge">
+        <div class="num">80</div>
+        <div class="label">Lead Score / 100</div>
+        <div class="delta">▲ +15 vs. 5/8</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="rescore">
+    <h3>🔄 What changed on this rescore (vs. 2026-05-08)</h3>
+    <p><strong>Lead Score 65 → 80 / 100. Buy Box verdict FAIL → CONDITIONAL.</strong> Two drivers:</p>
+    <ol>
+      <li><strong>Rubric updated.</strong> The EBITDA Buy Box criterion no longer carries a $1M–$4M ceiling — it is now <strong>≥ $1M with no upper cap</strong>. Fig Tree's $18.5M EBITDA was the prior FAIL reason; that ceiling is gone, so criterion 2 flips ✅.</li>
+      <li><strong>An indicative price now exists.</strong> The 5/8 seller meeting produced <strong>"Cash at close $40–45M"</strong> — the prior report had no price (valuation line scored 0/15). On the $18.5M TTM EBITDA basis that implies ≤ ~3.2×, so the valuation line now earns full credit (15/15). <em>Caveat: verbal meeting figure, not a written EV.</em></li>
+    </ol>
+    <p><strong>Other new facts from the meeting notes:</strong> audited financials exist for 2023 &amp; 2024; "100% W-2" is qualified — Fig Tree "contract[s] out some ditching sometimes" (some civil scope is pass-through); 2026 YTD pending from Allison Slovak. Remaining gates: <strong>a written EV and the customer-concentration split.</strong></p>
+  </div>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#buybox">Buy Box Screening</a></li>
+      <li><a href="#scorecard">Scorecard (26 fields)</a></li>
+      <li><a href="#breakdown">Score Breakdown</a></li>
+      <li><a href="#exec">1. Executive Summary</a></li>
+      <li><a href="#company">2. Company Overview</a></li>
+      <li><a href="#principals">3. Principals &amp; Leadership</a></li>
+      <li><a href="#products">4. Products &amp; Services</a></li>
+      <li><a href="#market">5. Market Analysis</a></li>
+      <li><a href="#customers">6. Customers &amp; Revenue</a></li>
+      <li><a href="#financials">7. Financial Analysis</a></li>
+      <li><a href="#swot">8. SWOT</a></li>
+      <li><a href="#risks">9. Risk Factors</a></li>
+      <li><a href="#outlook">10. Outlook &amp; Growth</a></li>
+      <li><a href="#appendix">11. Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="buybox">
+      <h2>Buy Box Screening</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">PASS</span></td><td>"300+ W-2 employees at peak periods" (CIM p.6, 7, 21). Some ditching subcontracted — see field 8.</td></tr>
+          <tr><td>2</td><td>EBITDA ≥ $1M / year (no upper cap)</td><td><span class="chip pass">PASS</span></td><td><strong>2025 EBITDA $18.50M</strong>; 2024 $7.98M; 2023 $3.55M. Far above the $1M floor. (Prior report failed this on a now-removed $4M ceiling.)</td></tr>
+          <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>TX SOS — formed 02/08/2016; ~10.3 years as of June 2026.</td></tr>
+          <tr><td>4</td><td>3+ yrs YoY revenue &amp; profit growth</td><td><span class="chip pass">PASS</span></td><td>Revenue $11.18M → $26.71M → $77.99M; EBITDA $3.55M → $7.98M → $18.50M. Both up all 3 years.</td></tr>
+          <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip warn">INDICATIVE</span></td><td><strong>"Cash at close $40–45M"</strong> (5/8 notes). On TTM EBITDA ($18.5M): ≤3.2× even if that's only the 75% cash portion (implied EV $53–60M) → clears 4×. On normalized 3-yr-avg EBITDA ($10M): 4.0–6.0× → would not clear. Verbal figure; written EV not yet provided.</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip pass">PASS</span></td><td>~1.62× at 4× TTM ($74M EV) / 10-yr amort / mid-FCF; more comfortable at the indicated cash-at-close level.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;"><strong>Overall Buy Box: CONDITIONAL.</strong> Five of six checks clear outright; criterion 5 (price) is met only on the indicative TTM-basis reading and stays soft until a written EV and the customer-concentration split are disclosed — matching the meeting-prep "get price + concentration" conclusion.</p>
+    </section>
+
+    <section id="scorecard">
+      <h2>Scorecard (26 fields)</h2>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Field</th><th>Value</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Business Name</td><td>Fig Tree Welding LLC dba Fig Tree Energy Services (→ S-corp in '26)</td><td>CIM p.6</td></tr>
+          <tr><td>2</td><td>Lead Source</td><td>Nedrow Business Advisors (Waxahachie, TX)</td><td>CIM p.30</td></tr>
+          <tr><td>3</td><td>Years in business</td><td>10.3 (formed 02/08/2016)</td><td>TX SOS / CorporationWiki</td></tr>
+          <tr><td>4</td><td>Real estate owned</td><td>Held in <strong>separate</strong> Hinton RE Holdings, LLC — Waxahachie HQ + Midland &amp; Victoria yards. Not in deal unless valuation supports.</td><td>CIM p.16, 25</td></tr>
+          <tr><td>5</td><td>FF&amp;E value</td><td>Not disclosed; 2025 depreciation $867K. Owned-vs-rented fleet an open item (interest ~$0).</td><td>CIM p.29</td></tr>
+          <tr><td>6</td><td>Full-time employees</td><td>300+ at peak, ~100% W-2</td><td>CIM p.6, 7, 21</td></tr>
+          <tr><td>7</td><td>Part-time employees</td><td>0 stated</td><td>CIM p.21</td></tr>
+          <tr><td>8</td><td>Contractors / 1099</td><td>CIM claims "100% W-2," but seller confirmed they <strong>"contract out some ditching sometimes"</strong> — some civil scope is pass-through. Quantum unknown.</td><td>5/8 meeting notes</td></tr>
+          <tr><td>9</td><td>Business address</td><td>501 N College St, Waxahachie, TX 75165; yards in Midland (Stanton) &amp; Victoria</td><td>CIM p.16, 17</td></tr>
+          <tr><td>10</td><td>Revenue 2022</td><td><em style="color:var(--muted);">not disclosed (requested)</em></td><td>(request)</td></tr>
+          <tr><td>11</td><td>Revenue 2023</td><td>$11,182,674</td><td>CIM p.27, 29</td></tr>
+          <tr><td>12</td><td>Revenue 2024</td><td>$26,708,945 (+139%)</td><td>CIM p.29</td></tr>
+          <tr><td>13</td><td>Revenue 2025</td><td>$77,989,299 (+192%)</td><td>CIM p.29</td></tr>
+          <tr><td>14</td><td>Net cash flow 2022</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>15</td><td>NOI after officer payroll 2023</td><td>$3,295,932</td><td>CIM p.29</td></tr>
+          <tr><td>16</td><td>NOI after officer payroll 2024</td><td>$7,505,409</td><td>CIM p.29</td></tr>
+          <tr><td>17</td><td>NOI after officer payroll 2025</td><td>$17,529,898</td><td>CIM p.29</td></tr>
+          <tr><td>18</td><td>Asking price</td><td><strong>Indicative: ~$40–45M cash at close</strong> (5/8 notes). ~75% sale to a growth-capital partner; no written EV yet; basis (cash vs. EV) unconfirmed.</td><td>5/8 notes; CIM p.25</td></tr>
+          <tr><td>19</td><td>% revenue growth YoY</td><td>+139% (2024), +192% (2025); 2-yr CAGR ~164%</td><td>computed</td></tr>
+          <tr><td>20</td><td>Yearly revenue retention</td><td>Repeat blue-chip base; project-bid model — no contracted metric disclosed</td><td>CIM p.5, 13</td></tr>
+          <tr><td>21</td><td>EBITDA margin</td><td>32% → 30% → 24% (compressing)</td><td>computed</td></tr>
+          <tr><td>22</td><td>Customer LTV</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>23</td><td>Customer CAC</td><td><em style="color:var(--muted);">not disclosed</em></td><td>—</td></tr>
+          <tr><td>24</td><td>Client concentration</td><td><strong>Still not disclosed.</strong> Logos shown, no revenue split. 2020 Pinnacle inflection implies top-3 plausibly &gt;50%. #1 open gate.</td><td>CIM (gap)</td></tr>
+          <tr><td>25</td><td>Financials link</td><td><code>Investments/Prospects/Energy/Fig Tree Energy Services/</code> (audited 23/24 referenced at meeting)</td><td>User Drive</td></tr>
+          <tr><td>26</td><td><strong>Lead Score</strong></td><td><strong>80 / 100</strong></td><td>computed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="breakdown">
+      <h2>Score Breakdown</h2>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>10</td><td>20</td><td>Pipeline/facility construction GC for energy infrastructure — adjacent, not on the target list, not excluded → 10.</td></tr>
+          <tr><td>EBITDA tier</td><td>15</td><td>15</td><td>$18.5M &gt;&gt; $3M tier → 15.</td></tr>
+          <tr><td>Years in business ≥10</td><td>10</td><td>10</td><td>10.3 years since 02/08/2016.</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>10</td><td>10</td><td>Revenue and EBITDA up every year, at extreme rates.</td></tr>
+          <tr><td>Recurring revenue</td><td>5</td><td>10</td><td>Project-based GC; strong repeat "land &amp; expand" but no contracted MRR/MSAs confirmed → 5.</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>0</td><td>5</td><td>Not disclosed → "insufficient data — not awarded."</td></tr>
+          <tr><td>Employees ≥10</td><td>10</td><td>10</td><td>300+ W-2 at peak.</td></tr>
+          <tr style="background:rgba(47,191,113,.08);"><td>Valuation multiple</td><td><strong>15</strong></td><td>15</td><td><strong>Changed 0 → 15.</strong> Indicative price now in hand (~$40–45M cash at close); ≤3.2× TTM even under the conservative "75% cash" reading → ≤4× → 15. <em>Sensitivity:</em> on normalized $10M EBITDA the multiple is 4.0–6.0× (would score 7, or 0 if &gt;5.5×) → total ~72 (or 65). Carried as a live negotiation tension.</td></tr>
+          <tr><td>Low owner dependence</td><td>5</td><td>5</td><td>Bench in place (CFO, Accounting Dir, GM, Construction Mgr, Business Mgr). Brody stays — key-person risk noted, but day-to-day doesn't require him alone → 5.</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up / add-on strategic fit <span class="est">(BONUS)</span></td><td>0</td><td>10</td><td>N/A — standalone target (not Applied Development or Fambro Waste).</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>80</strong></td><td><strong>100</strong></td><td>"Pursue with conditions" band (70–84), up from 65.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="exec">
+      <h2>1. Executive Summary</h2>
+      <ul>
+        <li><strong>Company overview:</strong> ~10-year-old Texas pipeline + facility construction GC serving Permian + Eagle Ford midstream operators. Founded 2016 by Brody Hinton (100%); LLC → S-corp in 2026. HQ Waxahachie; yards in Midland (Stanton) and Victoria. 300+ W-2 at peak; mainline capability 36–48"; turnkey civil + mechanical, often as GC.</li>
+        <li><strong>Financial highlights:</strong> 2025 revenue $78.0M, EBITDA $18.5M (24% margin). Revenue 7× and EBITDA 5.2× over two years. Margin compressed 32% → 24% with scale.</li>
+        <li><strong>Buy Box summary:</strong> CONDITIONAL (was FAIL on 5/8). EBITDA ceiling removed; indicative price (~$40–45M cash at close) clears 4× on a TTM basis. Soft spots: no written EV yet, concentration undisclosed.</li>
+        <li><strong>Why pursue (or not):</strong> Pursue with conditions — eyes open on size and structure. Operationally A-grade, but a ~75% growth recap with Brody staying is closer to lower-middle-market growth equity than EarnedOut's classic control LBO, and larger than the usual envelope. The meeting-prep three-layer structure (conservative cash at close + EBITDA earn-out + concentration-forgivable note) is the bankable path. Resolve concentration and a written EV before LOI.</li>
+      </ul>
+    </section>
+
+    <section id="company">
+      <h2>2. Company Overview</h2>
+      <p><strong>History:</strong> Founded 2016 as a welding-focused contractor. 2019 first major West TX pipeline opportunity validated the model; 2020 "breakthrough" Pinnacle Pipeline relationship triggered the inflection; 2021+ ran a "land &amp; expand" motion. 2024 scaled corporate infrastructure, added senior accounting (Allison Slovak from the third-party CPA firm), and acquired the Waxahachie HQ. 2025 added "game-changing" construction leadership (David Wolmack) and expanded Midland — "best financial year ever."</p>
+      <p><strong>Ownership:</strong> Brody Hinton 100%; LLC → S-corp in 2026. Real estate held separately in Hinton RE Holdings, LLC (expected retained by the family).</p>
+      <p><strong>Org structure (CIM p.20):</strong> Exec — Brody Hinton (CEO), Jennifer Hinton (CFO), Allison Slovak (Accounting Director). Oscar Munoz (GM). Construction Mgmt — David Wolmack. Business Mgmt — Mauro Minimantez. Corporate Support — Finance/Accounting, Safety, QA/QC, Purchasing, HR, Marketing &amp; Biz Dev.</p>
+    </section>
+
+    <section id="principals">
+      <h2>3. Principals &amp; Leadership</h2>
+      <h3>Brody Hinton — Owner / CEO</h3>
+      <p>Founder, 100% owner; charismatic operator-leader ("Pipeline &amp; Purpose" podcast). Intends to remain post-transaction — the recap thesis depends on his continuity. Confirm commitment length, title, rollover %, non-compete. <a href="https://www.linkedin.com/in/brody-hinton-0b9040287/">LinkedIn</a></p>
+      <h3>Jennifer Hinton — CFO</h3>
+      <p>Finance/treasury; recruited 2024. Likely Brody's spouse (confirm).</p>
+      <h3>Allison Slovak — Director of Accounting</h3>
+      <p>Recruited 2024 from the third-party CPA firm. Point person for 2026 YTD financials per meeting notes.</p>
+      <h3>David Wolmack — Construction Manager</h3>
+      <p>2025 "game-changing" hire with migrated customer relationships — "half the growth thesis." Prior employer, migrated relationships, and retention are priority diligence items.</p>
+      <h3>Mauro Minimantez — Business Manager</h3>
+      <p>Oversees Superintendents and Project Managers.</p>
+      <h3>Oscar Munoz — General Manager</h3>
+      <p>GM-level operational oversight (clarify scope vs. Wolmack and Minimantez).</p>
+    </section>
+
+    <section id="products">
+      <h2>4. Products &amp; Services</h2>
+      <p><strong>Competencies (CIM p.10):</strong> Turnkey pipeline construction (36–48" mainline, multi-spread); facilities &amp; compressor stations (mechanical piping, tie-ins, commissioning); civil/ROW/site prep; maintenance/repairs/specialty welding (emergency leak response, R-Stamp vessel repair, hot work).</p>
+      <p><strong>2025 revenue mix:</strong> Pipeline 68% / Facilities 28% / Misc-maintenance 4%. <strong>Geography:</strong> TX 81% / NM 17% / OK 2%.</p>
+      <p><strong>Project profile:</strong> $1–3M specialty jobs (2–4 weeks) up to multi-month, multi-crew builds (up to 6 months; revenue into the $100M's); 8–10 simultaneous sites at peak.</p>
+      <p><strong>Pricing:</strong> GC bid (lump-sum or T&amp;M); contract-type mix is an open item bearing on margin compression. Some ditching subcontracted.</p>
+      <p><strong>Differentiators:</strong> Operator-led safety/quality/speed; blue-chip repeat relationships; institutionalized back office; drone/podcast marketing engine; repeatable elite-superintendent recruiting playbook. Website claims "5 years zero recordable" (verify OSHA 300A / EMR / TRIR).</p>
+    </section>
+
+    <section id="market">
+      <h2>5. Market Analysis</h2>
+      <p><strong>Context:</strong> US midstream pipeline construction is in a multi-year tailwind — Permian gas takeaway, LNG export buildout, gas-fired (incl. AI/data-center) power demand. Recent basin projects: Energy Transfer/WTG (~$3.25B), ONEOK Delaware Basin JV (~$941M), Plains/EPIC, Targa Permian. (<a href="https://www.ogj.com/general-interest/economics-markets/news/55342807/morningstar-strong-natural-gas-demand-accelerates-us-pipeline-construction">OGJ</a>)</p>
+      <p><strong>Risks:</strong> Commodity cyclicality; skilled-welder scarcity; safety as a vendor gate; CapEx intensity.</p>
+      <p><strong>Peer multiples (public, NTM EV/EBITDA):</strong> Quanta ~32.6×, MasTec ~23.6×, EMCOR ~19.9×, Primoris ~18.1×, Dycom ~15.6×. Private $50–100M-revenue pipeline GCs ~4–7× in M&amp;A — Fig Tree's pricing band. <strong>Named competitors:</strong> Troy Construction, WHC Energy Services, PumpCo.</p>
+    </section>
+
+    <section id="customers">
+      <h2>6. Customers &amp; Revenue Model</h2>
+      <p><strong>Customers:</strong> Permian + Eagle Ford operators — Pinnacle Midstream (2020 breakthrough), Phillips 66, Targa, Enterprise Products, ONEOK/Magellan, BPX, Comstock, Elendil, Titus, plus "TE" (likely Energy Transfer).</p>
+      <p><strong>Model:</strong> Project bid (lump-sum + T&amp;M); GC on most engagements; repeat customers, each project independently bid. MSA-vs-PO structure on top customers is an open item.</p>
+      <p><strong>Concentration:</strong> <strong>NOT DISCLOSED — the critical gate.</strong> 2020 single-relationship inflection implies top-3 plausibly &gt;50%. Sizes senior-debt capacity and the forgivable seller note.</p>
+    </section>
+
+    <section id="financials">
+      <h2>7. Financial Analysis</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Revenue</th><th>EBITDA</th><th>Margin</th><th>YoY (Rev)</th></tr></thead>
+        <tbody>
+          <tr><td>2023</td><td>$11.18M</td><td>$3.55M</td><td>32%</td><td>—</td></tr>
+          <tr><td>2024</td><td>$26.71M</td><td>$7.98M</td><td>30%</td><td>+139%</td></tr>
+          <tr><td>2025</td><td>$77.99M</td><td>$18.50M</td><td>24%</td><td>+192%</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--muted); font-size:13px;">CIM p.29 — "no interest nor amortization expense." Per 5/8 meeting, 2023 &amp; 2024 are audited.</p>
+      <h3>Revenue trajectory</h3>
+      <div class="chart">
+        <svg width="520" height="180" viewBox="0 0 520 180" xmlns="http://www.w3.org/2000/svg">
+          <g font-family="sans-serif" font-size="11" fill="#8a97ab"><text x="10" y="15">Revenue ($M)</text></g>
+          <g fill="#5aa7ff">
+            <rect x="120" y="142" width="70" height="18" rx="3" />
+            <rect x="240" y="118" width="70" height="42" rx="3" />
+            <rect x="360" y="38"  width="70" height="122" rx="3" />
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#e7ecf3" text-anchor="middle">
+            <text x="155" y="135">$11.2M</text>
+            <text x="275" y="111">$26.7M</text>
+            <text x="395" y="31">$78.0M</text>
+          </g>
+          <g font-family="sans-serif" font-size="11" fill="#cbd3df" text-anchor="middle">
+            <text x="155" y="175">2023</text>
+            <text x="275" y="175">2024</text>
+            <text x="395" y="175">2025</text>
+          </g>
+        </svg>
+      </div>
+      <h3>Valuation — indicative price now in hand</h3>
+      <p><strong>Indicated:</strong> ~$40–45M cash at close (5/8 notes). If that's the 75% cash portion → implied EV ≈ $53–60M → <strong>2.9–3.2× TTM</strong> / 5.3–6.0× normalized ($10M). If full EV → 2.2–2.4× TTM / 4.0–4.5× normalized. Rubric line 8 scores on TTM ($18.5M): ≤4× → 15. <strong>Sensitivity flagged</strong> against the normalized $10M base (4.0–6.0×), the honest negotiating anchor given 2025 may be a peak.</p>
+      <p><strong>Meeting-prep three-layer structure:</strong> (1) cash at close anchored to the 3-yr average (~$40–50M EV); (2) EBITDA-tied earn-out up to $40–60M over 3–5 years; (3) $5–10M forgivable seller note tied to top-customer retention. WC funded by a separate $20–30M ABL revolver, not term debt. 10-year amortization is load-bearing. DSCR ~1.62× at 4× TTM / 10-yr / mid-FCF.</p>
+      <h3>Working capital</h3>
+      <p>Growth "constrained primarily by financing timing (mobilization/AP precede AR collections)." Peak WC swings likely $5–15M+; size an ABL revolver to peak need. Interest ~$0 raises a CapEx question — confirm owned-vs-rented fleet and cash-funded CapEx (EBITDA may overstate FCF).</p>
+    </section>
+
+    <section id="swot">
+      <h2>8. SWOT Analysis</h2>
+      <div class="swot">
+        <div class="cell"><h4>Strengths</h4><ul>
+          <li>Explosive 3-yr growth (7× revenue, 5× EBITDA).</li>
+          <li>Blue-chip customers; repeat "land &amp; expand."</li>
+          <li>300+ W-2 workforce; strong field/safety culture.</li>
+          <li>Real management bench (CFO, Construction Mgr, Business Mgr, GM).</li>
+          <li>Repeatable elite-superintendent recruiting playbook.</li>
+        </ul></div>
+        <div class="cell"><h4>Weaknesses</h4><ul>
+          <li>Project-bid revenue — no contracted MRR confirmed.</li>
+          <li>Customer concentration undisclosed — likely meaningful.</li>
+          <li>Margin compression 32% → 24%.</li>
+          <li>WC-constrained; needs revolver for larger awards.</li>
+          <li>"100% W-2" qualified — some ditching subcontracted.</li>
+          <li>~75% recap with Brody staying — not a clean exit.</li>
+        </ul></div>
+        <div class="cell"><h4>Opportunities</h4><ul>
+          <li>Permian + LNG buildout = multi-year tailwind.</li>
+          <li>Move up-market into 36–48" mainline awards.</li>
+          <li>Repeat the recruiting playbook 4–5×.</li>
+          <li>Geographic expansion (Bakken, Marcellus, Haynesville).</li>
+          <li>Earn-out + forgivable-note structure bridges the price gap.</li>
+        </ul></div>
+        <div class="cell"><h4>Threats</h4><ul>
+          <li>Commodity cyclicality cuts operator CapEx.</li>
+          <li>Larger competitors (Troy, WHC, PumpCo) on the same jobs.</li>
+          <li>Skilled-welder scarcity; wage inflation.</li>
+          <li>Single OSHA event could impair vendor status.</li>
+          <li>2025 may be a peak — normalized EBITDA reframes value.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="risks">
+      <h2>9. Risk Factors</h2>
+      <ul>
+        <li><strong>Industry:</strong> Commodity cyclicality (pipeline construction leads operator CapEx cuts); skilled-welder scarcity; safety as a vendor gate.</li>
+        <li><strong>Financial:</strong> <em>Concentration undisclosed</em> (top-3 plausibly &gt;50%) — gates debt + note design. <em>Peak-earnings risk</em> — explain the 2025 $51M jump (mega-project vs. structural share gain). <em>Margin compression</em> — confirm bid-environment vs. front-loaded investment; 2026 budget margin is the tell. <em>"100% W-2" qualified</em> — subcontracted ditching = pass-through; normalize EBITDA. <em>Officer payroll light</em> ($525K on $78M) — total Hinton comp drives the add-back. <em>CapEx/FCF</em> — interest ~$0 implies cash-funded CapEx or rented fleet. <em>Basis</em> — reconcile CIM to audited 23/24 + tax returns (the "Spectrum" lesson).</li>
+        <li><strong>Operational:</strong> Brody is the relationship anchor and stays — key-person risk softened, not eliminated; David Wolmack carries migrated relationships. Verify subcontractor classification.</li>
+        <li><strong>Regulatory / legal:</strong> OSHA/PHMSA exposure; new-ROW environmental review. None surfaced in search. Recommend SAFER USDOT 3622907 + OSHA 300A review.</li>
+        <li><strong>Deal conditions:</strong> (1) get a <strong>written EV</strong> — $40–45M cash-at-close is verbal; confirm cash-portion vs. EV. (2) <strong>concentration disclosure</strong> (mandatory). (3) <strong>anchor value to normalized EBITDA</strong> where peak risk is unresolved; cap cash at close near the 3-yr average and bridge via earn-out. (4) Hinton RE related-party lease at fair-market with appraisal. (5) retention packages for Brody/Wolmack/Minimantez/Slovak/J. Hinton. (6) S-corp conversion timing/tax basis.</li>
+      </ul>
+    </section>
+
+    <section id="outlook">
+      <h2>10. Outlook &amp; Growth Opportunities</h2>
+      <p><strong>Expansion:</strong> Up-market 36–48" mainline; geographic extension (Bakken/Marcellus/Haynesville); more facility/compressor EPC and a larger maintenance book (adds recurring, stabler EBITDA).</p>
+      <p><strong>Operational upside:</strong> Process/cadence install (EOS, project-controls dashboards); pricing/margin discipline as growth moderates; revolver removes the bid-size constraint.</p>
+      <p><strong>Strategic:</strong> Bolt-on smaller TX/NM/OK pipeline GCs; cross-sell maintenance contracts for stability.</p>
+      <p><strong>100-day plan (if pursued):</strong> lock key people on retention + rollover; QofE on revenue recognition, concentration, WC seasonality, subcontracted pass-through; size ABL revolver to peak WC; install process/controls; document the safety record; formalize the BD pipeline beyond Brody.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>11. Appendix</h2>
+      <h3>A. Data sources</h3>
+      <ul>
+        <li><code>Fig Tree Energy Services -- CIM.pdf</code> — 31-page CIM (Nedrow Business Advisors): financials 23–25, customers, org chart, locations, ~75% growth-capital structure; no written asking price.</li>
+        <li><code>fig-tree-meeting-prep.md</code> — partner-reviewed (Shelisa) deal-structure limits + 3-yr-average EBITDA gut-check.</li>
+        <li><code>fig-tree-prioritized-questions.docx</code> — 47 prioritized questions with embedded 5/8 meeting answers (price, subcontracting, audited 23/24, 2026 YTD owner).</li>
+        <li><a href="https://www.corporationwiki.com/p/2mphjx/fig-tree-welding-llc/">CorporationWiki</a> — TX LLC formed 02/08/2016 · <a href="https://www.figtreeenergyservices.com/">Company website</a> · <a href="https://www.linkedin.com/in/brody-hinton-0b9040287/">Brody Hinton LinkedIn</a> · <a href="https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&query_string=3622907">SAFER USDOT 3622907</a></li>
+      </ul>
+      <h3>B. Assumptions</h3>
+      <ul>
+        <li>Private mid-market pipeline-GC comps 4–7× EBITDA (public peers 15–32× NTM discounted ~60%).</li>
+        <li>Customer concentration likely meaningful (2020 Pinnacle inflection) — marked as gap, not estimated.</li>
+        <li>Indicative price ($40–45M cash at close) is a verbal meeting figure; EV basis unconfirmed.</li>
+      </ul>
+      <h3>C. Estimation calculations</h3>
+      <p>No estimated values were used for the scorecard's financial fields — all figures are from the CIM; the price is an indicative figure from the 5/8 meeting notes. Valuation multiples in §7 are computed from that price against stated EBITDA.</p>
+      <h3>D. Documents reviewed</h3>
+      <ul>
+        <li><code>…CIM.pdf</code> — primary source.</li>
+        <li><code>fig-tree-meeting-prep.md</code> — structure limits + normalized-EBITDA cross-check.</li>
+        <li><code>fig-tree-prioritized-questions.docx</code> — 47 questions + 5/8 answers.</li>
+        <li><code>fig-tree-document-request-list.docx</code> / <code>…questions-updated.docx</code> — would not extract cleanly; recommend re-save / integrity check.</li>
+      </ul>
+      <h3>E. Open questions for the seller / broker (priority)</h3>
+      <ol>
+        <li>Customer concentration — #1, top-3, top-5, top-10 (2023–25).</li>
+        <li>Written EV — is "$40–45M cash at close" the 75% portion or full EV? Cash vs. rollover vs. earn-out split.</li>
+        <li>2026 YTD revenue + EBITDA (from Allison) — is the pace holding or is 2025 the peak?</li>
+        <li>What drove the 2025 $51M jump — single mega-project vs. structural share gain?</li>
+        <li>Margin trajectory — 2026 budget margin; bid-compression vs. front-loaded investment.</li>
+        <li>Cash vs. accrual basis — reconcile CIM to audited 2023/24 + tax returns.</li>
+        <li>Subcontracting — quantify ditching/civil pass-through under "100% W-2."</li>
+        <li>Hinton family total comp 2023–25 (normalized-EBITDA add-back).</li>
+        <li>CapEx detail 2021–25; owned-vs-rented; why interest ~$0.</li>
+        <li>5 years of financials (2021–25) for the pre-inflection baseline.</li>
+        <li>Real estate related-party lease terms + third-party appraisal.</li>
+        <li>Brody &amp; David Wolmack commitment, rollover %, non-compete, migrated relationships.</li>
+        <li>Existing capital partners / consents at change of control.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut · Rescore 2026-06-04 · All figures not marked <span class="est">(est.)</span> are from stated sources.</footer>
+</div>
+</body>
+</html>
