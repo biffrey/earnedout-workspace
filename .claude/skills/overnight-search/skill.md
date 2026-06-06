@@ -72,6 +72,16 @@ For each active industry in `config/search_config.md`:
   session.) If a category page is still challenged, mark BizBuySell **"blocked — coverage
   incomplete"** and process forwarded listings via the submit-url skill (detail pages still
   validate) — never report a block as "0 candidates available."
+- **Pace requests + back off on the anti-bot block (added 2026-06-06).** The block trips
+  under sustained paging (it triggered after ~50 listings on 2026-06-06). Two defenses:
+  1. **Throttle** to look human and avoid tripping it at all — wait a randomized **3–8 s
+     between category pages** and **2–5 s between detail-page fetches**.
+  2. **Backoff-retry when a page returns the 403 / "Powered and protected" challenge** —
+     do NOT give up immediately and do NOT hammer it: wait **~30 s** and reload once; if
+     still blocked, wait **~90 s** and reload once more. **Max 3 attempts per page**
+     (~30 s → 90 s backoff). Faster retries make the block worse, so respect the waits.
+  After 3 failed attempts, stop retrying that page/category, record how many
+  pages/categories were skipped, and move on — then resume normal pacing.
 - For each active vertical, open its BizBuySell **category page(s)** per the slug map in
   `config/search_config.md` (`https://www.bizbuysell.com/{state}/{category-slug}/`),
   priority states first then all-states; paginate through `/2/`, `/3/`, ….
@@ -82,9 +92,10 @@ For each active industry in `config/search_config.md`:
   false-category noise (see the ASL keep/drop lists in `config/search_config.md`).
 - For each kept listing, extract the **direct detail URL** and **listing ID** (numeric ID
   at end of URL); validate the detail page in Step 3 (detail pages load fine).
-- **A bot-challenged or unreachable category page must be logged as "blocked — coverage
-  incomplete", never as "0 candidates available."** Never let an anti-bot block masquerade
-  as "no matching businesses exist" — that is the failure that hid listing 2455028.
+- **After the backoff-retry above is exhausted**, a still-challenged or unreachable category
+  page must be logged as **"blocked — coverage incomplete"** (with the count of skipped
+  pages/categories), never as "0 candidates available." Never let an anti-bot block
+  masquerade as "no matching businesses exist" — that is the failure that hid listing 2455028.
 
 ### 2c. BizQuest (Public)
 - Same approach as BizBuySell. Listing URL pattern: `bizquest.com/listing/{listing-id}/`.

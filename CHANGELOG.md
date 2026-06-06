@@ -61,6 +61,11 @@ the forwarded listing to the pipeline.
   listing `2455028`, correctly excluding the sign-making listings around it.
 - Required that a bot-challenged/unreachable page be logged **"blocked — coverage
   incomplete,"** never "0 available."
+- Added **request pacing + backoff-retry** for the anti-bot block (skill + config):
+  throttle 3–8 s between category pages / 2–5 s between detail fetches, and on a
+  "Powered and protected" 403 back off ~30 s → ~90 s (max 3 attempts) before marking
+  blocked. (The block tripped after ~50 listings on 2026-06-06; pacing avoids it and
+  backoff recovers from transient throttles.)
 - Hardened the "config not found" path with a `.claude/skills/overnight-search/config`
   symlink (the files were always present under `config/`; failed runs guessed a wrong path).
 

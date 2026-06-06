@@ -122,6 +122,11 @@ op read "op://Personal/dealstream.com/password"
   signs, signage, banners, vinyl, awnings, vehicle wraps, recognition awards).
 - **Never silently report 0:** if a category page returns a bot challenge/interstitial or
   fails to load, log it as "blocked — coverage incomplete", **not** "0 listings available".
+- **Pacing + backoff (anti-bot), tunable:** throttle **3–8 s between category pages** and
+  **2–5 s between detail fetches**; on a 403 / "Powered and protected" challenge, back off
+  and retry the page — **~30 s then ~90 s, max 3 attempts** — before marking it blocked.
+  (The block tripped after ~50 listings on 2026-06-06; pacing avoids it, backoff recovers
+  from transient throttles. Full anti-bot durability is the planned paid-scraper path.)
 
 ### BizQuest (Public)
 - **Search URL:** `https://www.bizquest.com/businesses-for-sale/`
