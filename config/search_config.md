@@ -85,9 +85,48 @@ op read "op://Personal/dealstream.com/password"
 - **Listing ID extraction:** Last segment of the URL path
 
 ### BizBuySell (Public)
-- **Search URL:** `https://www.bizbuysell.com/businesses-for-sale/`
-- **Listing URL pattern:** `bizbuysell.com/Business-Opportunity/{slug}/{listing-id}/`
-- **Listing ID extraction:** Numeric ID at end of URL
+- **Search method:** Navigate **category pages** with the browser — do **NOT** use the
+  `?q=` keyword search or generic `site:bizbuysell.com` web search. BizBuySell
+  bot-protects the `?q=` search endpoint (returns HTTP 403 / a "Powered and protected"
+  challenge); `site:` web search returns category pages, not detail URLs.
+- **⚠ Headless automation is also blocked.** Category pages load in a **real browser**
+  (full Chrome fingerprint — verified in the connected Claude-in-Chrome browser
+  2026-06-04), but a **headless** `chrome-headless-shell` request to the same category
+  page is **403-challenged** (also verified). Detail pages are more lenient (headless
+  Playwright reached listing 2455028's detail page fine). **Resolution (in place
+  2026-06-04):** the Playwright MCP is now configured (`config/playwright-mcp.json`) to
+  launch **real Google Chrome** — `channel: "chrome"`, **headed**,
+  `--disable-blink-features=AutomationControlled`, `ignoreDefaultArgs:
+  ["--enable-automation"]`, persistent `userDataDir` — which is **not** challenged on
+  category pages (verified: HTTP 200, surfaced listing 2455028). So the normal Playwright
+  browser session can sweep BizBuySell category pages directly. Because it is **headed**,
+  the run must execute in the logged-in GUI session (the 10:00 ET slot, operator present).
+  If a category page is ever still challenged, mark BizBuySell **"blocked — coverage
+  incomplete"** and use manual submission (`submit-url`) for forwarded listings — never
+  report a block as "0 available." (A paid anti-bot scraper is planned as the durable
+  long-term path.)
+- **Category page pattern:** `https://www.bizbuysell.com/{state}/{category-slug}/`
+  (omit `{state}/` for all states). Paginate via the trailing `/2/`, `/3/`, … path.
+- **Listing URL pattern:** `bizbuysell.com/business-opportunity/{slug}/{listing-id}/`
+- **Listing ID extraction:** Numeric ID at end of URL.
+- **⚠ Taxonomy trap — ASL / sign language:** BizBuySell files sign-**language** /
+  interpreting businesses under **Manufacturing › Signs** — category
+  "Sign Manufacturers and Businesses", slug `sign-manufacturers-and-businesses-for-sale`
+  — mixed in with sign-**making** companies. The ASL vertical MUST scan that category
+  (plus `other-communication-and-media-businesses-for-sale` and generic service
+  categories) and disambiguate by title/description, never by category alone. Verified:
+  listing 2455028 ("ASL Interpretation Service", Oregon) sits in *Manufacturing › Signs*.
+- **Keyword disambiguation (ASL vertical):** KEEP listings whose title/description contain
+  ASL, sign language, interpreting, interpreter, deaf, hard of hearing, VRI, CART,
+  captioning, translation, or language access. DROP pure signage/sign-making (custom
+  signs, signage, banners, vinyl, awnings, vehicle wraps, recognition awards).
+- **Never silently report 0:** if a category page returns a bot challenge/interstitial or
+  fails to load, log it as "blocked — coverage incomplete", **not** "0 listings available".
+- **Pacing + backoff (anti-bot), tunable:** throttle **3–8 s between category pages** and
+  **2–5 s between detail fetches**; on a 403 / "Powered and protected" challenge, back off
+  and retry the page — **~30 s then ~90 s, max 3 attempts** — before marking it blocked.
+  (The block tripped after ~50 listings on 2026-06-06; pacing avoids it, backoff recovers
+  from transient throttles. Full anti-bot durability is the planned paid-scraper path.)
 
 ### BizQuest (Public)
 - **Search URL:** `https://www.bizquest.com/businesses-for-sale/`

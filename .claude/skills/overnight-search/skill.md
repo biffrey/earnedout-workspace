@@ -18,16 +18,32 @@ You are running the EarnedOut overnight published-listing search pipeline. This 
 
 ## Step 1: Authenticate (plan Step 2a — Authenticate)
 
-### 1Password credential retrieval
+### Credential retrieval — environment variables (Keychain-backed)
 
-Retrieve the DealStream login at runtime via the 1Password CLI. The **canonical item path** (per `REVAMP_PLAN.md` Step 0 and `config/credentials-setup.md`) is:
+The runner (`run-overnight-search.sh`) resolves the DealStream credentials **before**
+invoking this skill and passes them in via environment variables:
 
 ```bash
-op read "op://Personal/dealstream.com/username"
-op read "op://Personal/dealstream.com/password"
+$DEALSTREAM_USERNAME   # resolved from macOS Keychain (item: earnedout-dealstream-username)
+$DEALSTREAM_PASSWORD   # resolved from macOS Keychain (item: earnedout-dealstream-password)
 ```
 
-**Fail loudly.** Before searching, check authentication (`op whoami`, or a trial `op read`). If `op` is not installed, not signed in, or the item cannot be read, **stop immediately**: print a clear error naming the missing/blocked step, exit non-zero, and do not continue. NEVER proceed to DealStream unauthenticated and NEVER fall back to cached, blank, or hard-coded credentials — unauthenticated access silently returns incomplete results.
+This is the **headless** auth path: the macOS login Keychain is unlocked whenever the
+user is logged in, so the scheduled run authenticates with **no Touch ID prompt and no
+1Password dependency**. (Service-account tokens are a 1Password Business feature; this is
+an Individual account, so Keychain is the mechanism — see `config/credentials-setup.md`.)
+If `$DEALSTREAM_USERNAME`/`$DEALSTREAM_PASSWORD` are empty, the runner has already tried
+the `op read` fallback; on first-time/bootstrap you may also read directly with
+`op read "op://Personal/dealstream.com/username"` (desktop integration, daytime only).
+
+**Fail loudly — gate on the credentials, not on `op whoami`.** Authentication is
+satisfied when **both** `$DEALSTREAM_USERNAME` and `$DEALSTREAM_PASSWORD` are non-empty —
+proceed. **Do NOT call `op whoami`** (under desktop-app integration it always reports
+"account is not signed in" even when credentials are valid; gating on it caused the
+2026-05-23 → 06-04 dark period). Only **stop immediately** if either credential is empty:
+print a clear error naming the blocked step, exit non-zero, and do not continue. NEVER
+proceed to DealStream unauthenticated and NEVER fall back to blank or hard-coded
+credentials — unauthenticated access silently returns incomplete results.
 
 ### Playwright browser session
 
@@ -43,8 +59,43 @@ For each active industry in `config/search_config.md`:
 - For each listing extract the **direct listing URL** (e.g., `dealstream.com/d/biz-sale/trade-contractor/6a89ka`) and the **listing ID** (e.g., `6a89ka`, the last path segment).
 
 ### 2b. BizBuySell (Public)
-- Web search: `site:bizbuysell.com [INDUSTRY_KEYWORDS] [STATE]`, or navigate `bizbuysell.com/businesses-for-sale/` with filters.
-- Extract the direct listing URL and the listing ID (numeric ID at the end of the URL).
+- **Method: navigate category pages with the browser — NOT the `?q=` keyword search.**
+  BizBuySell bot-protects its `?q=` search endpoint (returns HTTP 403 / a "Powered and
+  protected" challenge), so keyword search and generic `site:bizbuysell.com` web search
+  are unreliable and silently return nothing usable.
+- **Real-Chrome browser session (already configured).** Headless browsers are 403-blocked
+  on BizBuySell category pages, so the Playwright MCP is configured (`config/playwright-mcp.json`)
+  to launch **real headed Google Chrome** (`channel: chrome`, anti-automation flags,
+  persistent profile), which passes (verified 2026-06-04). Just use the normal Playwright
+  browser session to navigate the category pages — no special tool needed. (This is why the
+  run is scheduled at 10:00 ET with the operator present: a headed browser needs the GUI
+  session.) If a category page is still challenged, mark BizBuySell **"blocked — coverage
+  incomplete"** and process forwarded listings via the submit-url skill (detail pages still
+  validate) — never report a block as "0 candidates available."
+- **Pace requests + back off on the anti-bot block (added 2026-06-06).** The block trips
+  under sustained paging (it triggered after ~50 listings on 2026-06-06). Two defenses:
+  1. **Throttle** to look human and avoid tripping it at all — wait a randomized **3–8 s
+     between category pages** and **2–5 s between detail-page fetches**.
+  2. **Backoff-retry when a page returns the 403 / "Powered and protected" challenge** —
+     do NOT give up immediately and do NOT hammer it: wait **~30 s** and reload once; if
+     still blocked, wait **~90 s** and reload once more. **Max 3 attempts per page**
+     (~30 s → 90 s backoff). Faster retries make the block worse, so respect the waits.
+  After 3 failed attempts, stop retrying that page/category, record how many
+  pages/categories were skipped, and move on — then resume normal pacing.
+- For each active vertical, open its BizBuySell **category page(s)** per the slug map in
+  `config/search_config.md` (`https://www.bizbuysell.com/{state}/{category-slug}/`),
+  priority states first then all-states; paginate through `/2/`, `/3/`, ….
+- **Disambiguate by title/description, not by category.** BizBuySell mis-files some
+  verticals: e.g. ASL / sign-language / interpreting businesses live under **"Sign
+  Manufacturers and Businesses"** (Manufacturing › Signs), mixed with sign-**making**
+  firms. Keep only listings matching the vertical's keep-keywords and drop the
+  false-category noise (see the ASL keep/drop lists in `config/search_config.md`).
+- For each kept listing, extract the **direct detail URL** and **listing ID** (numeric ID
+  at end of URL); validate the detail page in Step 3 (detail pages load fine).
+- **After the backoff-retry above is exhausted**, a still-challenged or unreachable category
+  page must be logged as **"blocked — coverage incomplete"** (with the count of skipped
+  pages/categories), never as "0 candidates available." Never let an anti-bot block
+  masquerade as "no matching businesses exist" — that is the failure that hid listing 2455028.
 
 ### 2c. BizQuest (Public)
 - Same approach as BizBuySell. Listing URL pattern: `bizquest.com/listing/{listing-id}/`.

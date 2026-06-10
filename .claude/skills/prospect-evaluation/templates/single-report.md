@@ -12,7 +12,7 @@
 | # | Criterion | Status | Evidence |
 |---|-----------|:------:|----------|
 | 1 | ≥ 10 full-time employees | ✅ / ❌ / ⚠️ | {{e.g., "LinkedIn shows 24 employees"}} |
-| 2 | EBITDA ≥ $1M / year | ✅ / ❌ / ⚠️ | {{e.g., "CIM: $2.3M EBITDA FY24"}} |
+| 2 | EBITDA ≥ $1M / year (no upper cap) | ✅ / ❌ / ⚠️ | {{e.g., "CIM: $2.3M EBITDA FY24"}} |
 | 3 | 10+ years in business | ✅ / ❌ / ⚠️ | {{e.g., "TX SOS registration 2009"}} |
 | 4 | 3+ yrs YoY revenue and profit growth | ✅ / ❌ / ⚠️ | {{e.g., "FY22→23→24: $8.1M→$9.4M→$11.2M; EBITDA $1.6M→$1.9M→$2.3M"}} |
 | 5 | Asking price ≤ 4.0x EBITDA | ✅ / ❌ / ⚠️ | {{e.g., "Listed at $9.2M ≈ 4.0x EBITDA"}} |
@@ -20,8 +20,7 @@
 
 **Overall Buy Box:** **PASS / CONDITIONAL / CONDITIONAL (add-on) / FAIL**
 **Lead Score:** **{{XX}} / {{100 or 110}}**
-{{If roll-up add-on: **Roll-up add-on for: {{Applied Development or Fambro Waste Management}}** — Applied Development add-ons have no size floor; Fambro Waste add-ons use relaxed floors (≥5 FTE / ≥$500K EBITDA / ≥5 yrs).}}
-{{If SBIC: **SBIC target** — screened on SBA license good standing; standard financial criteria and the 0–100 score are informational only.}}
+{{If roll-up add-on: **Roll-up add-on for: {{Applied Development or Fambro Waste Management}}** — relaxed thresholds apply (≥5 FTE / ≥$500K EBITDA / ≥5 yrs).}}
 
 {{If CONDITIONAL: one-line summary of what's conditional and how to resolve it.}}
 {{If CONDITIONAL (add-on): "Does not meet standalone thresholds but qualifies as a roll-up add-on for {{platform company}}."}}

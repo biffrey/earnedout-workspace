@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{Business Name}} — Valuation Estimate</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+    --est-bg: rgba(245,166,35,.12);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55;
+               font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+  header.banner {
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap; margin-bottom: 18px;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 150px; text-align: center;
+  }
+  .score-badge .num { font-size: 30px; font-weight: 800; color: var(--accent); line-height: 1.1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+  .score-badge.valuation .num { color: var(--pass); }
+
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border);
+           vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em;
+       text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+  tr.total td { font-weight: 700; background: var(--panel-2); }
+
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px;
+          font-size: 12px; font-weight: 700; }
+  .chip.yes { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.no  { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.basis { background: rgba(90,167,255,.15); color: var(--accent); border: 1px solid rgba(90,167,255,.4); }
+
+  /* Estimated-value highlighting: distinct background + badge. Documented values cite a source instead. */
+  .estimated { background: var(--est-bg); border-radius: 4px; padding: 1px 5px; }
+  .badge-est { display: inline-block; background: rgba(245,166,35,.2); color: var(--warn);
+               border: 1px solid rgba(245,166,35,.45); border-radius: 999px;
+               font-size: 10px; font-weight: 800; letter-spacing: .06em;
+               text-transform: uppercase; padding: 1px 7px; margin-left: 6px; vertical-align: middle; }
+  .badge-lowconf { display: inline-block; background: rgba(231,76,60,.18); color: var(--fail);
+               border: 1px solid rgba(231,76,60,.45); border-radius: 999px;
+               font-size: 10px; font-weight: 800; letter-spacing: .06em;
+               text-transform: uppercase; padding: 1px 7px; margin-left: 4px; vertical-align: middle; }
+  .src { color: var(--muted); font-size: 12px; }
+  .rationale { color: var(--muted); font-size: 12.5px; font-style: italic; }
+
+  .equation { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+              padding: 12px 16px; font-size: 15px; margin: 8px 0; }
+  .equation .result { color: var(--pass); font-weight: 800; }
+
+  .lookup { max-width: 380px; }
+
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="banner">
+    <div>
+      <h1>{{Business Name}} — Valuation Estimate</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        Evaluation date: {{YYYY-MM-DD}} &nbsp;·&nbsp;
+        <span class="chip basis">Basis: {{T24M average | FY{{YYYY}} | Annualized YTD ({{n}} mo × {{12/n}})}}</span>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="score-badge">
+        <div class="num">{{X.X}}x</div>
+        <div class="label">Multiple Score</div>
+      </div>
+      <div class="score-badge valuation">
+        <div class="num">{{$X,XXX,XXX}}</div>
+        <div class="label">Estimated Valuation</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="basis">
+    <h2>Financial Basis</h2>
+    <p><strong>Basis used:</strong> {{Trailing-24-month average / Most recent complete fiscal year (FY{{YYYY}}) / Annualized partial year}}.</p>
+    <p>{{Plain-words math, e.g. "Revenue and EBITDA are YTD through March 2025 × 4 (3 months elapsed, 12 ÷ 3 = 4)." or "Sum of Apr 2023–Mar 2025 ÷ 2."}}</p>
+    <p class="rationale">{{Why this basis: which documents made it possible / why the preferred bases were unavailable.}}</p>
+  </section>
+
+  <section id="baseline">
+    <h2>Baseline Value</h2>
+    <table>
+      <thead><tr><th>Input</th><th>Value</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Revenue ({{basis}})</td>
+          <td>{{$X,XXX,XXX}}<!-- if estimated: <span class="estimated">$X,XXX,XXX</span><span class="badge-est">Estimated</span> --></td>
+          <td class="src">{{document, location}}<!-- or rationale line for estimates --></td>
+        </tr>
+        <tr>
+          <td>EBITDA ({{basis}})</td>
+          <td>{{$X,XXX,XXX}}</td>
+          <td class="src">{{document, location}}</td>
+        </tr>
+        <tr class="total">
+          <td>Baseline EBITDA Multiple</td>
+          <td>{{N}}x</td>
+          <td class="src">From lookup table — EBITDA falls in the {{band}} band</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Baseline range lookup</h3>
+    <table class="lookup">
+      <thead><tr><th>EBITDA $</th><th>EBITDA Multiple</th></tr></thead>
+      <tbody>
+        <tr><td>&lt;$1M</td><td>2x</td></tr>
+        <tr><td>$1M–$3M</td><td>3x</td></tr>
+        <tr><td>$3M–$5M</td><td>4x</td></tr>
+        <tr><td>$5M–$10M</td><td>5x</td></tr>
+        <tr><td>$10M+</td><td>6x</td></tr>
+        <!-- Highlight the applicable row with style="background:var(--est-bg);" or bold -->
+      </tbody>
+    </table>
+  </section>
+
+  <section id="adders">
+    <h2>Value Adders</h2>
+    <table>
+      <thead><tr><th>Line</th><th>Input value</th><th>Rubric</th><th style="width:80px;">Points</th><th>Source / rationale</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Revenue Growth %</td>
+          <td>{{X.X%}} <span class="src">(vs. {{prior comparable period}})</span></td>
+          <td>0 if 0–30% · +1 if 30–100% · +2 if 100%+</td>
+          <td>{{0/1/2}}</td>
+          <td class="src">{{source or estimate rationale}}</td>
+        </tr>
+        <tr>
+          <td>Yearly Revenue Retention %</td>
+          <td>{{XX%}}</td>
+          <td>0 if &lt;80% · +2 if &gt;80%</td>
+          <td>{{0/2}}</td>
+          <td class="src">{{source or estimate rationale}}</td>
+        </tr>
+        <tr>
+          <td>EBITDA Margin</td>
+          <td>{{XX.X%}}</td>
+          <td>0 if &lt;30% · +0.5 if 30%+</td>
+          <td>{{0/0.5}}</td>
+          <td class="src">Computed: EBITDA ÷ Revenue ({{basis}})</td>
+        </tr>
+        <tr>
+          <td>LTV:CAC Ratio</td>
+          <td>{{XX.X}}</td>
+          <td>0 if &lt;10 · +1 if &gt;10</td>
+          <td>{{0/1}}</td>
+          <td class="src">From unit-economics block below</td>
+        </tr>
+        <tr>
+          <td>TS Clearance</td>
+          <td>{{Yes/No}}</td>
+          <td>+1 if Top Secret-cleared contracts, facility clearance, or cleared staff · 0 otherwise</td>
+          <td>{{0/1}}</td>
+          <td class="src">{{evidence or "non-govcon — no clearances"}}</td>
+        </tr>
+        <tr class="total">
+          <td colspan="3">TOTAL VALUE ADDERS</td>
+          <td>{{X}}</td>
+          <td class="src">Sum of the five lines above</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="subtractors">
+    <h2>Value Subtractors</h2>
+    <table>
+      <thead><tr><th>Line</th><th style="width:70px;">Call</th><th>Rubric</th><th style="width:80px;">Points</th><th>Reasoning</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Key Man Risk</td>
+          <td><span class="chip {{yes/no}}">{{Y/N}}</span></td>
+          <td>Risk (−3) · No Risk (0)</td>
+          <td>{{0/−3}}</td>
+          <td class="rationale">{{Written reasoning from the documentation.}}</td>
+        </tr>
+        <tr>
+          <td>Key Client Risk</td>
+          <td><span class="chip {{yes/no}}">{{Y/N}}</span></td>
+          <td>Risk (−2) · No Risk (0)</td>
+          <td>{{0/−2}}</td>
+          <td class="rationale">{{Written reasoning.}}</td>
+        </tr>
+        <tr>
+          <td>Single Channel Risk</td>
+          <td><span class="chip {{yes/no}}">{{Y/N}}</span></td>
+          <td>Risk (−1) · No Risk (0)</td>
+          <td>{{0/−1}}</td>
+          <td class="rationale">{{Written reasoning.}}</td>
+        </tr>
+        <tr>
+          <td>Market Risk</td>
+          <td><span class="chip {{yes/no}}">{{Y/N}}</span></td>
+          <td>Risk (−1) · No Risk (0)</td>
+          <td>{{0/−1}}</td>
+          <td class="rationale">{{Written reasoning.}}</td>
+        </tr>
+        <tr>
+          <td>Data Risk</td>
+          <td><span class="chip {{yes/no}}">{{Y/N}}</span></td>
+          <td>Risk (−1) · No Risk (0) — unreliable, incomplete, or unauditable financial records/books/systems</td>
+          <td>{{0/−1}}</td>
+          <td class="rationale">{{Written reasoning.}}</td>
+        </tr>
+        <tr class="total">
+          <td colspan="3">TOTAL VALUE SUBTRACTORS</td>
+          <td>{{X}}</td>
+          <td class="src">Sum of the five lines above (shown as a positive number, subtracted in the Multiple Score)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="rationale">These five calls were made by the skill from the documentation. Override any of them and the Multiple Score and Estimated Valuation update accordingly.</p>
+  </section>
+
+  <section id="unit-economics">
+    <h2>Unit Economics</h2>
+    <table>
+      <thead><tr><th>Metric</th><th>Value</th><th>Definition</th><th>Source / rationale</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Customers Acquired Last Period</td>
+          <td>{{N}}</td>
+          <td>Count of new customers/contracts won in the last period</td>
+          <td class="src">{{source or estimate rationale}}</td>
+        </tr>
+        <tr>
+          <td>LTV</td>
+          <td>{{$XXX,XXX}}</td>
+          <td>(Total contract value ÷ # of contracts) ÷ customers acquired last period</td>
+          <td class="src">{{source or estimate rationale}}</td>
+        </tr>
+        <tr>
+          <td>CAC</td>
+          <td>{{$XX,XXX}}</td>
+          <td>(GA Business Development + B&amp;P/proposal expenses) ÷ customers acquired last period{{; or for non-govcon: sales &amp; marketing + biz-dev spend ÷ customers acquired}}</td>
+          <td class="src">{{source or estimate rationale}}</td>
+        </tr>
+        <tr>
+          <td>LTGP</td>
+          <td>{{$XXX,XXX}}</td>
+          <td>Gross profit ÷ customers acquired last period</td>
+          <td class="src">{{source or estimate rationale}}</td>
+        </tr>
+        <tr class="total">
+          <td>LTV:CAC Ratio</td>
+          <td>{{XX.X}}</td>
+          <td>LTV ÷ CAC — feeds the LTV:CAC value adder</td>
+          <td class="src">Computed</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="rationale">LTV, CAC, and LTGP are display-only; only the LTV:CAC ratio affects the score. LTGP never affects the score.</p>
+  </section>
+
+  <section id="valuation">
+    <h2>Valuation</h2>
+    <div class="equation">
+      Multiple Score = Baseline Multiple + Total Value Adders − Total Value Subtractors
+      = {{N}} + {{X}} − {{X}} = <span class="result">{{X.X}}x</span>
+    </div>
+    <div class="equation">
+      Estimated Valuation = EBITDA ({{basis}}) × Multiple Score
+      = {{$X,XXX,XXX}} × {{X.X}} = <span class="result">{{$XX,XXX,XXX}}</span>
+    </div>
+  </section>
+
+  <section id="inputs-appendix">
+    <h2>Appendix — Inputs &amp; Sources</h2>
+    <table>
+      <thead><tr><th>Input</th><th>Value</th><th style="width:110px;">Status</th><th>Source / rationale</th></tr></thead>
+      <tbody>
+        <!-- One row per scorecard input. For documented values: -->
+        <tr>
+          <td>{{Input name}}</td>
+          <td>{{value}}</td>
+          <td><span class="chip no">Documented</span></td>
+          <td class="src">{{document, page/tab/section}}</td>
+        </tr>
+        <!-- For estimated values: -->
+        <tr>
+          <td>{{Input name}}</td>
+          <td><span class="estimated">{{value}}</span><span class="badge-est">Estimated</span></td>
+          <td><span class="chip yes">Estimated</span></td>
+          <td class="rationale">{{one-line rationale grounded in the documents}}</td>
+        </tr>
+        <!-- For conservative defaults with no documentary support, add: <span class="badge-lowconf">Low confidence</span> -->
+      </tbody>
+    </table>
+    <h3>Documents reviewed</h3>
+    <ul>
+      <li>{{path/to/file}} — {{what it provided}}</li>
+    </ul>
+  </section>
+
+  <footer>Generated by the Valuation Estimate skill for EarnedOut. Estimated values are highlighted <span class="estimated">like this</span><span class="badge-est">Estimated</span>; all other figures are from cited sources.</footer>
+</div>
+</body>
+</html>

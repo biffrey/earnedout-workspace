@@ -9,6 +9,14 @@ Evaluates US-based businesses as acquisition targets for Biffrey Braxton (Earned
 
 > **Path note.** Every `references/…` and `templates/…` path in this skill is relative to **this skill's own directory** — the folder that contains this `skill.md`. Load those files from beside this file. Do not resolve them against the caller's working directory, and never fall back to a copy under `~/.claude/` or any other location. The rubric in `references/buy-box-and-scoring.md` is the single source of truth — read it from disk and apply it verbatim; never score from memory or approximation.
 
+> **Skill copies & sync policy.** This skill exists in THREE places on this machine. If they disagree, the PRIMARY wins.
+>
+> 1. **PRIMARY — make all edits here:** `/Users/biffreybraxton/.claude/skills/prospect-evaluation/` (user-level installed copy; the one Claude Code executes in most sessions).
+> 2. **Git/GitHub mirror:** `/Users/biffreybraxton/Library/CloudStorage/GoogleDrive-bbraxton@applied-dev.com/My Drive/Investments/Prospect Evaluation/Prospect-Evaluation-Skill/.claude/skills/prospect-evaluation/` (repo `github.com/biffrey/Prospect-Evaluation-Skill`). Never edit directly. To publish to GitHub: `rsync -a --delete` from the PRIMARY into this folder, then commit — commits must only ever contain content synced out of the PRIMARY.
+> 3. **Project mirror:** `/Users/biffreybraxton/published-listing-search/.claude/skills/prospect-evaluation/` (used by sessions rooted in `published-listing-search`, e.g. overnight-search). Never edit directly; refresh from the PRIMARY.
+>
+> Additional clones of the git repo exist at `/Users/biffreybraxton/Prospect-Evaluation-Skill/` and `/Users/biffreybraxton/Code/Prospect-Evaluation-Skill/` — treat them as pull-only: never edit or commit from them (uncommitted work there has been lost to drift before). The same policy applies to the sibling `valuation-estimate` skill. Note the project mirror (location 3) is additionally tracked in the `earnedout-workspace` GitHub repo — commits there must also contain only PRIMARY-synced content.
+
 ## Core outputs (always, in this order)
 
 1. **Buy Box Screening Header** — six ✅/❌ checks, each with a cited data point.
@@ -29,6 +37,8 @@ Also detect **roll-up add-on** context:
 - If the target is in translation or interpretation services (NAICS 541930) — sign language interpreting, CART/captioning, VRI, deaf services, or spoken/foreign-language translation & interpreting → it's a potential **add-on for Applied Development**. There is **no size floor** for Applied Development add-ons — evaluate every such business regardless of size. Include the +10 bonus scoring line.
 - If the target is in commercial waste, construction waste, dumpster rental, C&D hauling, or debris recycling → it's a potential **add-on for Fambro Waste Management**. Apply the relaxed add-on thresholds (5 FTE / $500K EBITDA / 5 yrs) and the +10 bonus line.
 - For all other target industries → evaluate as **standalone** with standard thresholds and max score of 100. SBIC targets are standalone — see rule 13 below.
+
+Also detect **rescore mode**: if the caller states "this is a rescore" / "rescore mode" (e.g. the `process-pending-rescores` runner re-evaluating a flagged prospect against its updated working folder), this is always **single mode**. Carry the rescore flag through to Step 9, where it changes the publish behavior (no disposition prompt; existing Disposition preserved). See Step 9 and `references/publish-to-pipeline.md`.
 
 Ask the user for clarification only if the mode or roll-up context is genuinely ambiguous.
 
@@ -78,7 +88,7 @@ Apply the rubric from `references/buy-box-and-scoring.md`. Show the per-line mat
 
 ### Step 7 — Write the report
 - **Single mode**: instantiate `templates/single-report.md` AND `templates/single-report.html` with the collected data. Write both files to the current working directory. File names: `<company-slug>-report.md` and `<company-slug>-report.html`.
-- **Batch mode**: instantiate `templates/batch-screen.md` sorted by score descending, with bucketed lists (Top/Review/Pass/Excluded). After writing, offer to generate full single-business reports for the top candidates.
+- **Batch mode**: instantiate `templates/batch-screen.md` AND `templates/batch-screen.html`, sorted by score descending, with bucketed lists (Top/Review/Pass/Excluded). Write both files to the current working directory. File names: `<batch-slug>-batch-screen.md` and `<batch-slug>-batch-screen.html`. After writing, offer to generate full single-business reports for the top candidates.
 
 ### Step 8 — Self-check before finishing
 Verify all of:
@@ -87,8 +97,27 @@ Verify all of:
 - [ ] The score math sums correctly and matches the header number.
 - [ ] The appendix lists every URL actually fetched (not a generic "research sources" list).
 - [ ] Every `(est.)` value has an appendix entry showing the method.
-- [ ] Both `.md` and `.html` outputs exist in single mode.
+- [ ] Both `.md` and `.html` outputs exist (single mode AND batch mode).
 - [ ] For law-firm targets, the state of domicile is named and the legality rationale (AZ/PR rule, UT sandbox, or Brandon Thornton jurisdictions MD/DC/VA) is stated.
+
+### Step 9 — Publish to the EarnedOut dashboard (single mode only, EarnedOut-specific)
+
+After Step 8 self-checks pass and only when running in single mode, check whether the EarnedOut publish pipeline is set up on this machine. The full procedure is in `references/publish-to-pipeline.md`. Summary:
+
+- **Skip this step entirely** if any of these is false: the folder `/Users/biffreybraxton/published-listing-search/output/reports/` exists, the user did not opt out, the Airtable MCP tools (`mcp__airtable__*`) are available, and this is single mode (not batch).
+- **Otherwise**, load `references/publish-to-pipeline.md` and follow steps A → F (the row is created BEFORE the copy so the report can embed a deep link to its own Airtable record):
+  - **A**: Ask the user to pick a Disposition from the Airtable single-select list (Active, Contacted, Maybe Later, Revisit for Roll-up, Passed, Dead Link). Wait for their answer — this is a deliberate gate. **Rescore-mode exception:** if this run is a rescore, do **not** prompt; reuse the row's existing Disposition unchanged.
+  - **B**: Search the Master Deal Pipeline Airtable for an existing row matching the company name. Create a new row OR update the matching one (don't make duplicates). Capture the record ID.
+  - **C**: Embed the Airtable deep link (`https://airtable.com/{base}/{table}/{recordId}`) into the report HTML — fill the `{{Airtable Record ID}}` placeholder in the `airtable-deep-link` block.
+  - **D**: Copy `<slug>-report.html` into `~/published-listing-search/output/reports/name-<slug>[-<state>]/`. The `.md` and the cwd `.html` stay where they are as the working source.
+  - **E**: When updating an existing row, leave existing Disposition alone unless the user explicitly says otherwise; append to Notes instead of replacing; and set/refresh the **Working Folder Path** field to the absolute path of the prospect's working folder when known.
+  - **F**: Confirm to the user — print the Airtable record ID, the path of the published HTML, and the live dashboard URL.
+
+The launchd file-watcher will sync the new HTML to smbsteward.com within ~30 seconds. The new/updated row appears on the dashboard on the next page load.
+
+### Step 10 — Offer to chain into Valuation Estimate (single mode only)
+
+After the single-prospect report is finished (and published, when Step 9 applies), offer to run the **valuation-estimate** skill on the same prospect: it computes an EBITDA multiple score and an estimated valuation from the report you just wrote plus the supporting documents in the working folder, and writes `<company-slug>-value-estimate.html` alongside the deal memo. If the user accepts, invoke valuation-estimate pointed at this prospect's working folder — it reuses everything already gathered. Skip this offer in batch mode (offer it instead for any top candidates the user asks to deep-dive).
 
 ## Behavioral rules (always)
 
@@ -107,6 +136,7 @@ Verify all of:
     - **Applied Development** — communications access, sign language interpretation, CART.
     - **Fambro Waste Management** — construction and commercial trash management.
 13. **SBIC targets.** An SBIC acquisition is the purchase of the GP / management entity holding an SBA SBIC license. The sole gating criterion is that the license is **active and in good standing**; the standard EBITDA / FTE / growth / valuation criteria are reported but non-gating, and the 0–100 score is informational only. Any change of control of a licensed SBIC requires SBA approval (closing condition). See `references/buy-box-and-scoring.md` → "SBIC (Small Business Investment Company) targets".
+14. **Rescore mode.** When the caller signals a rescore (the `process-pending-rescores` runner re-evaluating a flagged prospect against its updated working folder), behave exactly as a normal single-mode evaluation **except** at Step 9: do not prompt for a Disposition — preserve the existing one — and refresh the Working Folder Path. Everything else (full scorecard, fresh score, appended Notes) is unchanged.
 
 ## Reference files (load only when needed)
 
@@ -115,9 +145,11 @@ These live in this skill's own `references/` directory, beside this `skill.md` (
 - `references/buy-box-and-scoring.md` — Buy Box criteria, full financial/operational criteria, deal structure prefs, and the exact 0–100 rubric.
 - `references/industries-and-geography.md` — Target industries with keyword lists, exclusions, geography priorities, law-firm jurisdiction rules.
 - `references/research-playbook.md` — Field-by-field source playbook for the 26 scorecard items.
+- `references/publish-to-pipeline.md` — EarnedOut publish flow (single mode): copy to `output/reports/`, prompt for Disposition (skipped in rescore mode), create/update Airtable row, set Working Folder Path. Loaded only at Step 9.
 
 ## Templates (instantiate on output)
 
 - `templates/single-report.md` — Full Markdown deal memo.
 - `templates/single-report.html` — Styled HTML single page.
-- `templates/batch-screen.md` — Batch ranked screen table.
+- `templates/batch-screen.md` — Batch ranked screen (Markdown).
+- `templates/batch-screen.html` — Batch ranked screen (styled HTML; mirrors single-report.html visual language).

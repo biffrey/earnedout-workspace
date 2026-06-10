@@ -139,7 +139,7 @@ Always show the math in the Appendix when estimating.
 - **UNOS / OPO partnership disclosures.**
 - **DOT / FMCSA registration** for the vehicles/drivers.
 
-### Sign language, CART & translation/interpretation services (roll-up add-on for Applied Development)
+### Sign language interpretation / CART (roll-up add-on for Applied Development)
 - **RID (Registry of Interpreters for the Deaf)** — search for certified interpreters affiliated with the company; indicates bench depth and quality.
 - **State interpreter licensure databases** — many states require ASL interpreter licensing; verify active status.
 - **USASpending.gov / SAM.gov** — federal contracts for interpreting services (courts, VA, Social Security, etc.).
@@ -150,7 +150,6 @@ Always show the math in the Appendix when estimating.
 - **LinkedIn** — interpreter headcount, company size, key personnel.
 - **Google Business Profile / Yelp** — coverage area and reviews from deaf community members.
 - **National Association of the Deaf (NAD)** and **Conference of Interpreter Trainers (CIT)** — membership and community standing.
-- **ATA (American Translators Association)** — for spoken/foreign-language translation & interpreting agencies (all of NAICS 541930 is in scope); membership and certified-translator counts. (Verify against the association's current directory.)
 
 ### Commercial waste management (roll-up add-on for Fambro Waste Management)
 - **State solid-waste hauler permits / transporter licenses** — required to operate; confirms legitimacy and geographic coverage.
@@ -163,17 +162,6 @@ Always show the math in the Appendix when estimating.
 - **Construction & Demolition Recycling Association (CDRA)** member directory.
 - **Google Business Profile** — service area, reviews, fleet photos (estimate truck count).
 - **BizBuySell / BizQuest** — asking price and listing details for waste haulers for sale.
-
-### SBIC GP / management-company targets
-- **SBA SBIC Program Office** — the SBA licenses and regulates SBICs; use SBA records to confirm the SBIC license exists, is active, and is **in good standing**. This good-standing confirmation is the central screening step. (Verify the current SBA SBIC directory / licensee-lookup URL — the SBA reorganizes its site periodically.)
-- **SBIC license number** — confirm against SBA records; note license type and issue date.
-- **SBA enforcement / capital-impairment status** — check for any SBA enforcement action, transfer-of-control restriction, or capital impairment that would break "good standing".
-- **SBA Form 468** — the SBIC's audited annual financial report, which includes the independent public accountant's report on the audited annual financial statements. Use it for fund-level financials. (Informational.)
-- **Form ADV / SEC IAPD** — if the management entity is also a registered investment adviser, its Form ADV (SEC Investment Adviser Public Disclosure database) discloses AUM, ownership, and disciplinary history. (Informational.)
-- **Outstanding SBA leverage** — amount and tier of SBA-guaranteed debentures; relevant to the change-of-control analysis. (Informational.)
-- **Change-of-control review** — confirm with SBA counsel that a buyer can obtain SBA approval to transfer control of the license; this is a closing condition.
-- **SBIC industry associations** — e.g., the Small Business Investor Alliance (SBIA) — for membership and standing.
-- **State business registries** — for the GP / management legal entity, officers, and registered agent.
 
 ---
 

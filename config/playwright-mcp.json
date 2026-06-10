@@ -1,0 +1,15 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "userDataDir": "/Users/biffreybraxton/.cache/earnedout-chrome-profile",
+    "launchOptions": {
+      "channel": "chrome",
+      "headless": false,
+      "args": ["--disable-blink-features=AutomationControlled"],
+      "ignoreDefaultArgs": ["--enable-automation"]
+    },
+    "contextOptions": {
+      "viewport": { "width": 1366, "height": 900 }
+    }
+  }
+}
