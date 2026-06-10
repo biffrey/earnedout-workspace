@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{Batch title}} — Prospect Evaluation</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #171d26;
+    --panel-2: #1f2733;
+    --text: #e7ecf3;
+    --muted: #8a97ab;
+    --border: #2a3342;
+    --accent: #5aa7ff;
+    --pass: #2fbf71;
+    --fail: #e74c3c;
+    --warn: #f5a623;
+    --badge: #0b1019;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif; line-height: 1.55; font-size: 15px; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid;
+          grid-template-columns: 220px 1fr; gap: 28px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav.toc { position: static !important; } }
+
+  /* Banner */
+  header.banner {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px 26px; display: flex; justify-content: space-between; gap: 16px;
+    align-items: center; flex-wrap: wrap;
+  }
+  header.banner h1 { margin: 0 0 4px 0; font-size: 26px; }
+  header.banner .meta { color: var(--muted); font-size: 13px; }
+  .verdict { display: inline-block; padding: 8px 14px; border-radius: 999px;
+             font-weight: 700; font-size: 13px; letter-spacing: .04em;
+             text-transform: uppercase; }
+  .verdict.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .verdict.conditional { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+  .verdict.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+
+  .score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 18px; min-width: 140px; text-align: center;
+  }
+  .score-badge .num { font-size: 32px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .score-badge .label { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
+
+  /* TOC */
+  nav.toc { position: sticky; top: 20px; background: var(--panel);
+            border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+            align-self: start; font-size: 13px; height: fit-content; }
+  nav.toc h3 { margin: 0 0 10px 0; font-size: 12px; color: var(--muted);
+               letter-spacing: .08em; text-transform: uppercase; }
+  nav.toc ol { list-style: none; padding: 0; margin: 0; }
+  nav.toc li { padding: 4px 0; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); }
+
+  main { min-width: 0; }
+  section { background: var(--panel); border: 1px solid var(--border);
+            border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  section h2 { margin: 0 0 14px 0; font-size: 18px; color: var(--text);
+               padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  section h3 { font-size: 15px; color: var(--text); margin: 18px 0 8px; }
+  section p, section li { color: #cbd3df; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; background: var(--panel-2); }
+  tr:last-child td { border-bottom: none; }
+
+  /* Chips */
+  .chip { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .chip.pass { background: rgba(47,191,113,.15); color: var(--pass); border: 1px solid rgba(47,191,113,.4); }
+  .chip.fail { background: rgba(231,76,60,.15); color: var(--fail); border: 1px solid rgba(231,76,60,.4); }
+  .chip.warn { background: rgba(245,166,35,.15); color: var(--warn); border: 1px solid rgba(245,166,35,.4); }
+
+  .est { color: var(--warn); font-weight: 600; font-size: 11px; margin-left: 4px; }
+
+  /* Per-listing card header */
+  .listing-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; margin: -20px -24px 14px -24px; padding: 14px 24px;
+    background: var(--panel-2); border-bottom: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+  }
+  .listing-card-header h2 { border: none; padding: 0; margin: 0; font-size: 16px; }
+  .small-score-badge {
+    background: var(--badge); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 12px; min-width: 90px; text-align: center;
+  }
+  .small-score-badge .num { font-size: 22px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .small-score-badge .label { font-size: 9px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+
+  .alert {
+    background: rgba(245,166,35,.08); border: 1px solid rgba(245,166,35,.4);
+    border-radius: 8px; padding: 10px 14px; margin: 8px 0 14px; color: var(--warn); font-size: 13px;
+  }
+  .alert.fail { background: rgba(231,76,60,.08); border-color: rgba(231,76,60,.4); color: var(--fail); }
+  .alert.pass { background: rgba(47,191,113,.08); border-color: rgba(47,191,113,.4); color: var(--pass); }
+  .alert strong { color: inherit; }
+
+  .listing-link { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .listing-link a { color: var(--accent); }
+
+  footer { grid-column: 1 / -1; color: var(--muted); font-size: 12px; text-align: center; padding: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===================== Banner ===================== -->
+  <header class="banner">
+    <div>
+      <h1>{{Batch title — e.g., "BizBuySell Batch Screen — N Prospects"}}</h1>
+      <div class="meta">
+        Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
+        {{YYYY-MM-DD}} &nbsp;·&nbsp;
+        Source: {{e.g., "BizBuySell live pulls" / "Provided spreadsheet" / "Broker teasers"}}
+      </div>
+      <!-- Optional rule-modification disclosure line. Delete if standard rules used. -->
+      <div class="meta" style="margin-top:6px;">
+        <strong style="color:var(--warn);">Modified rule:</strong> {{e.g., "$4M EBITDA upper cap removed at user direction. All other criteria unchanged."}}
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <!-- Top-line tally: change chip class to fail/pass/conditional and update label as needed. -->
+      <span class="verdict fail">Top fit: {{X PASS · Y CONDITIONAL · Z FAIL}}</span>
+    </div>
+  </header>
+
+  <!-- ===================== TOC ===================== -->
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#summary">Ranked summary</a></li>
+      <li><a href="#buckets">Buckets (Top / Review / Pass / Excluded)</a></li>
+      <li><a href="#listing1">#1 {{Short name}}</a></li>
+      <li><a href="#listing2">#2 {{Short name}}</a></li>
+      <li><a href="#listing3">#3 {{Short name}}</a></li>
+      <!-- Repeat as needed -->
+      <li><a href="#datagaps">Data gaps</a></li>
+      <li><a href="#nextstep">Next step</a></li>
+      <li><a href="#appendix">Appendix</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ===================== Ranked summary ===================== -->
+    <section id="summary">
+      <h2>Ranked summary</h2>
+      <p style="color:var(--muted); font-size:13px;">
+        Sorted by lead score. Buy Box uses the strict ✅-count rule:
+        <strong>PASS = all 6 ✅</strong> · <strong>CONDITIONAL = 4–5 ✅</strong> · <strong>FAIL = ≤3 ✅</strong>.
+        ⚠️ items are insufficient-data and could move the verdict up if confirmed.
+        Roll-up add-on targets are scored out of 110 (max +10 strategic-fit bonus).
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Listing</th>
+            <th>Industry</th>
+            <th>State</th>
+            <th>FTE</th>
+            <th>EBITDA</th>
+            <th>Mult</th>
+            <th>Buy Box</th>
+            <th>Score</th>
+            <th>Add-on</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Repeat one row per listing, sorted by score desc -->
+          <tr>
+            <td>1</td>
+            <td>{{Company A}} (#{{listing id}})</td>
+            <td>{{Industry}}</td>
+            <td>{{ST}}</td>
+            <td>{{N}}</td>
+            <td>{{$X.XM}}</td>
+            <td>{{X.Xx}}</td>
+            <td><span class="chip pass">PASS</span></td>
+            <td><strong>{{XX}} / {{100 or 110}}</strong></td>
+            <td>{{Applied Dev / Fambro / —}}</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>{{Company B}} (#{{listing id}})</td>
+            <td>{{Industry}}</td>
+            <td>{{ST}}</td>
+            <td>{{N}}</td>
+            <td>{{$X.XM}}</td>
+            <td>{{X.Xx}}</td>
+            <td><span class="chip warn">CONDITIONAL</span></td>
+            <td><strong>{{XX}} / {{100 or 110}}</strong></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>{{Company C}} (#{{listing id}})</td>
+            <td>{{Industry}}</td>
+            <td>{{ST}}</td>
+            <td>{{N}}</td>
+            <td>{{$X.XM}}</td>
+            <td>{{X.Xx}}</td>
+            <td><span class="chip fail">FAIL</span></td>
+            <td><strong>{{XX}} / 100</strong></td>
+            <td>—</td>
+          </tr>
+          <!-- Add a row for excluded targets with just listing + reason; mark Score "—". -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===================== Buckets ===================== -->
+    <section id="buckets">
+      <h2>Buckets</h2>
+
+      <h3>Top candidates (score ≥ 75 standalone, ≥ 80 add-on) — pursue immediately</h3>
+      <ul>
+        <li><strong>{{Company A}} — {{XX}}</strong> — {{one-line pursuit rationale}}</li>
+        <!-- If none, write: <li>None.</li> -->
+      </ul>
+
+      <h3>Needs review (50–74 standalone, 60–79 add-on) — partner discussion before allocating time</h3>
+      <ul>
+        <li><strong>{{Company B}} — {{XX}}</strong> — {{what needs resolving, e.g., "negotiate multiple to ≤4×; confirm customer concentration"}}</li>
+      </ul>
+
+      <h3>Likely pass (&lt; 50 standalone, &lt; 60 add-on)</h3>
+      <ul>
+        <li><strong>{{Company C}} — {{XX}}</strong> — {{deal-killer rationale}}</li>
+      </ul>
+
+      <h3>Excluded (industry / geography / hard rules) — do not pursue</h3>
+      <ul>
+        <li><strong>{{Company E}}</strong> — {{e.g., "Restaurant chain — excluded industry."}}</li>
+        <li><strong>{{Company F}}</strong> — {{e.g., "PI law firm in CA — outside allowed jurisdictions (AZ, PR, UT, MD, DC, VA)."}}</li>
+      </ul>
+    </section>
+
+    <!-- ===================== Per-listing cards ===================== -->
+    <!-- Repeat one of these <section> blocks per listing. -->
+
+    <section id="listing1">
+      <div class="listing-card-header">
+        <div>
+          <h2>#1 — {{Company A full name}}</h2>
+          <div class="listing-link">
+            {{e.g., "BizBuySell #1234567"}} · {{City, ST}} · Listed by {{Broker / firm}} ·
+            <a href="{{listing URL}}">listing link</a>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <!-- Replace verdict class as needed -->
+          <span class="verdict pass">Buy Box: PASS</span>
+          <div class="small-score-badge">
+            <div class="num">{{XX}}</div>
+            <div class="label">/ {{100 or 110}}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional alert callout — pick one variant or delete -->
+      <div class="alert pass">
+        <strong>{{One-sentence headline takeaway.}}</strong> {{e.g., "Strongest fit in this batch — clean Buy Box and clean economics."}}
+      </div>
+
+      <h3>Buy Box header</h3>
+      <table>
+        <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>≥10 FTE</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>2</td><td>EBITDA ≥ $1M (no upper cap)</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>3</td><td>≥10 years in business</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>4</td><td>3-yr revenue + profit growth</td><td><span class="chip warn">⚠️</span></td><td>{{evidence}}</td></tr>
+          <tr><td>5</td><td>Asking ≤ 4x EBITDA</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>6</td><td>DSCR &gt; 1.4 <em style="color:var(--muted);">(informational)</em></td><td><span class="chip warn">⚠️</span></td><td>{{evidence}}</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Score breakdown — {{XX}} / {{100 or 110}}</h3>
+      <table>
+        <thead><tr><th>Item</th><th style="width:80px;">Awarded</th><th style="width:60px;">Max</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Industry match</td><td>{{}}</td><td>20</td><td>{{}}</td></tr>
+          <tr><td>EBITDA tier</td><td>{{}}</td><td>15</td><td>{{}}</td></tr>
+          <tr><td>Years in business ≥10</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>3 yrs consistent growth</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>Recurring revenue</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>Customer concentration &lt;20%</td><td>{{}}</td><td>5</td><td>{{}}</td></tr>
+          <tr><td>Employees ≥10</td><td>{{}}</td><td>10</td><td>{{}}</td></tr>
+          <tr><td>Valuation multiple</td><td>{{}}</td><td>15</td><td>{{}}</td></tr>
+          <tr><td>Low owner dependence</td><td>{{}}</td><td>5</td><td>{{}}</td></tr>
+          <tr style="background:var(--panel-2);"><td>Roll-up bonus</td><td>{{}}</td><td>10</td><td>{{e.g., "Direct add-on for Applied Development" or "Standalone — N/A"}}</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>{{XX}}</strong></td><td><strong>{{100 or 110}}</strong></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Other key facts</h3>
+      <ul>
+        <li><strong>Asking:</strong> {{$X,XXX,XXX}} ({{what's included: inventory, FF&amp;E, real estate}}).</li>
+        <li><strong>Revenue:</strong> {{$X.XM}}. <strong>Margin:</strong> {{X%}} EBITDA.</li>
+        <li><strong>Reason for selling:</strong> {{e.g., "Retirement"}}.</li>
+        <li><strong>Owner role:</strong> {{e.g., "GM willing to stay; owner currently part-time"}}.</li>
+        <li><strong>Financing:</strong> {{e.g., "Seller financing available"}}.</li>
+      </ul>
+
+      <h3>Recommendation</h3>
+      <p>{{2–4 sentences. Conclude with concrete next-step asks for the broker / seller.}}</p>
+    </section>
+
+    <!-- Duplicate the section block above for each additional listing (id=listing2, listing3, …) -->
+
+    <!-- ===================== Data gaps ===================== -->
+    <section id="datagaps">
+      <h2>Data gaps flagged during screening</h2>
+      <p>Items the broker would need to surface to move any of these between buckets:</p>
+      <ul>
+        <li><strong>{{Company A}}</strong> — {{specific data point needed}}</li>
+        <li><strong>{{Company B}}</strong> — {{specific data point needed}}</li>
+      </ul>
+    </section>
+
+    <!-- ===================== Next step ===================== -->
+    <section id="nextstep">
+      <h2>Next step</h2>
+      <ol>
+        <li>{{Concrete next action #1}}</li>
+        <li>{{Concrete next action #2}}</li>
+      </ol>
+      <p style="color:var(--muted); font-size:13px;">Reply with the candidate(s) to deep-dive and the Prospect Evaluation skill will produce a full single-business report (Markdown + HTML) for each.</p>
+    </section>
+
+    <!-- ===================== Appendix ===================== -->
+    <section id="appendix">
+      <h2>Appendix</h2>
+
+      <h3>A. Sources</h3>
+      <ul>
+        <li><a href="{{URL}}">{{Listing or document title}}</a> — {{what it provided / pulled date}}</li>
+      </ul>
+
+      <h3>B. Estimation method log</h3>
+      <p><strong>{{Field — e.g., "Listing #X EBITDA (est.)"}}</strong> — {{value}}.<br>
+         Method: {{step-by-step math}}.<br>
+         Sources: {{URLs}}.</p>
+
+      <h3>C. Fields intentionally left blank</h3>
+      <ul>
+        <li>LTV and CAC — not provided, not estimated per spec.</li>
+        <li>{{Other fields blank with reason}}.</li>
+      </ul>
+
+      <h3>D. Modification disclosure</h3>
+      <p>{{If any Buy Box rule was modified for this run, name the modification, the date, and who authorized it. Otherwise: "No modifications — all standard skill rules applied."}}</p>
+    </section>
+
+  </main>
+
+  <footer>Generated by the Prospect Evaluation skill for EarnedOut. All figures not marked <span class="est">(est.)</span> are from stated sources.</footer>
+</div>
+</body>
+</html>

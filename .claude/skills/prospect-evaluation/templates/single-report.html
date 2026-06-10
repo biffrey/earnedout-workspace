@@ -106,6 +106,10 @@
   <header class="banner">
     <div>
       <h1>{{Business Name}} — Prospect Evaluation</h1>
+      <!-- airtable-deep-link --><div style="margin-top:8px;"><a href="https://airtable.com/appOsvuyy5eK43QTx/tblSmNrHROMLm7vOS/{{Airtable Record ID}}" target="_blank" rel="noopener" style="display:inline-block;font-size:12.5px;font-weight:600;color:var(--accent,#1283da);border:1px solid var(--accent,#1283da);background:transparent;padding:4px 12px;border-radius:999px;text-decoration:none;">Update Disposition in Airtable ↗</a></div><!-- /airtable-deep-link -->
+      <!-- {{Airtable Record ID}} is filled by the publish step (references/publish-to-pipeline.md),
+           which finds/creates the pipeline row BEFORE the report is copied to the publish folder.
+           If this report will not be published to the pipeline, delete the airtable-deep-link block. -->
       <div class="meta">
         Prepared for <strong>Biffrey Braxton / EarnedOut</strong> &nbsp;·&nbsp;
         {{YYYY-MM-DD}} &nbsp;·&nbsp;
@@ -151,7 +155,7 @@
         <thead><tr><th style="width:40px;">#</th><th>Criterion</th><th style="width:80px;">Status</th><th>Evidence</th></tr></thead>
         <tbody>
           <tr><td>1</td><td>≥ 10 full-time employees</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
-          <tr><td>2</td><td>EBITDA ≥ $1M / year</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
+          <tr><td>2</td><td>EBITDA ≥ $1M / year (no upper cap)</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
           <tr><td>3</td><td>10+ years in business</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
           <tr><td>4</td><td>3+ yrs YoY revenue & profit growth</td><td><span class="chip pass">PASS</span></td><td>{{evidence}}</td></tr>
           <tr><td>5</td><td>Asking price ≤ 4.0x EBITDA</td><td><span class="chip fail">FAIL</span></td><td>{{evidence}}</td></tr>
