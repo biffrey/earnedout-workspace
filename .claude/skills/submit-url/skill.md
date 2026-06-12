@@ -124,13 +124,11 @@ If no broker info is available, note in the record that outreach is pending brok
 
 ## Step 8: Regenerate the Daily Dashboard (plan Step 7; overnight-search skill Step 10)
 
-Regenerate `output/dashboards/dashboard_YYYY-MM-DD.html` from the template `templates/daily-dashboard.html` so this lead appears:
+**Never emit dashboard HTML from the model.** Update today's dashboard **context JSON** at `output/run_state/dashboard_data_YYYY-MM-DD.json` (create it if missing — the context contract is documented in the header comment of `templates/daily-dashboard.html`), then run `python3 scripts/build_dashboard_html.py output/run_state/dashboard_data_YYYY-MM-DD.json` to re-render `output/dashboards/dashboard_YYYY-MM-DD.html` so this lead appears:
 
-- **Section A — Last Night's New Finds (+ Price Drops):** this manual submission appears here (with a "PRICE DROP" badge if it was a price-drop update).
+- **Section A — Last Night's New Finds (+ Price Drops):** this manual submission appears here with `source = "Manual Submission"` (and `price_drop: true` if it was a price-drop update).
 - **Section B — Running Queue:** the lead joins all `Disposition = "Active"` records.
-- **Section C — Revisit Bucket** and **Section D — Run Summary** re-render from current Airtable data.
-
-If no dashboard exists for today, generate a new one.
+- **Section C — Revisit Bucket** and **Section D — Run Summary** refresh from current Airtable data in the JSON.
 
 ## Step 9: Report to the User
 

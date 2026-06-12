@@ -1,5 +1,41 @@
 # Changelog
 
+## 2026-06-11 — Token-usage reduction: subagent isolation + model routing + deterministic HTML
+
+### Summary
+Restructured the overnight-search pipeline to cut per-run token usage. Three changes,
+each tested headless (`claude -p … --dangerously-skip-permissions`) before the next:
+
+1. **Per-listing loop isolated into a Haiku subagent.** New
+   `.claude/agents/listing-processor.md` handles overnight Steps 3–4 (navigate,
+   validate, screenshot, extract) for one listing per invocation and returns only a
+   compact JSON record — Playwright noise and raw page text stay in the child context.
+   Invoked **sequentially** (the headed-Chrome Playwright session is shared). Verified
+   end-to-end on BizBuySell listing 2480446 (validation, 911×4913 screenshot, full
+   field extraction).
+2. **Model routing — Opus only where it earns it.** New
+   `.claude/agents/prospect-scorer.md` (model: opus, preloads prospect-evaluation)
+   scores one lead per invocation and returns compact JSON; the deal memo goes to
+   disk. `run-overnight-search.sh` now passes `--model sonnet` so orchestration
+   (search, dedup, Airtable, outreach templating) runs on Sonnet; extraction is Haiku.
+   Verified by scoring listing 2480446 (35/100, Buy Box FAIL, correct rubric).
+3. **Models no longer emit HTML.** `scripts/build_report_html.py` generalized with an
+   `--any` flag (default off-market-only behavior unchanged — regression-checked:
+   261 rendered / 129 skipped). New `scripts/build_dashboard_html.py` renders
+   `templates/daily-dashboard.html` (already a Jinja2 template) from a small context
+   JSON (`output/run_state/dashboard_data_<date>.json`). The prospect-scorer writes
+   the report **.md only**; overnight Step 6 renders the HTML via script, Step 10 and
+   submit-url Step 8 write context JSON and run the dashboard renderer.
+
+### Files
+- Added: `.claude/agents/listing-processor.md`, `.claude/agents/prospect-scorer.md`,
+  `scripts/build_dashboard_html.py`
+- Modified: `.claude/skills/overnight-search/SKILL.md` (Steps 3+4 merged into
+  subagent delegation; Step 6 rewired; Step 10 rewired),
+  `.claude/skills/submit-url/SKILL.md` (Step 8 rewired),
+  `scripts/build_report_html.py` (`--any` flag, source-aware chip/footer),
+  `run-overnight-search.sh` (`--model sonnet`)
+
 ## 2026-06-04 — Overnight-search auth fix + BizBuySell coverage hardening
 
 ### Summary

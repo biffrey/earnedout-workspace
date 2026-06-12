@@ -106,35 +106,17 @@ For each active industry in `config/search_config.md`:
 ### Critical rule — never store a search-results page URL
 **NEVER store a search-results page URL as a listing link.** Every lead must have a URL that resolves to a single business detail page. If a search result does not link to a detail page, **skip it**.
 
-## Step 3: Validate Each URL + Screenshot — Playwright (plan Step 2c)
+## Steps 3 + 4: Validate, Screenshot, and Extract — via the `listing-processor` subagent (plan Steps 2c–2d)
 
-For each candidate URL:
+**Do NOT open candidate detail pages in this (main) context.** For each candidate URL, invoke the **`listing-processor`** subagent (`.claude/agents/listing-processor.md`, Haiku) via the Agent tool with: `platform`, `url`, `listing_id` (and `known_price` for price-rechecks). The subagent navigates, validates per the Step-3 rules, captures the screenshot to `output/screenshots/{listing-id}.png`, extracts the full Step-4 field set, and returns ONE compact JSON record — that record is all that enters this context.
 
-1. **Navigate** to the URL in Playwright.
-2. **Validate content:** confirm the page has listing-specific content — specific business name, asking price, location, description. Negative signals: "listing removed", "no longer available", "page not found", a generic search-results grid, or a login wall.
-3. **If valid:** capture a full-page screenshot → `output/screenshots/{listing-id}.png`. Record `Link Health Status = Live` and `Link Last Checked = [today]`.
-4. **If dead/removed/generic:** log the URL and reason, record `Link Health Status = Dead`, and skip to the next listing.
-5. **If redirect:** record `Link Health Status = Redirect`, follow the redirect, and validate the destination — proceed only if the destination is a valid listing.
+- **Sequential only — never invoke listing-processor in parallel.** The Playwright browser session (headed Chrome, persistent profile, DealStream auth) is shared; concurrent subagents would fight over it.
+- The returned JSON may arrive wrapped in a markdown code fence — strip the fence before parsing.
+- Map the record's `status` to `Link Health Status` (`Live` / `Dead` / `Redirect`); set `Link Last Checked = [today]`. `Blocked` is NOT a link-health value — a Blocked listing goes to the carry-forward queue (`output/run_state/next_run_queue.json`) and is logged as "blocked — coverage incomplete", never as dead.
+- `null` fields in the record mean "needs broker follow-up" — **never fabricate values** for them.
+- Dead listings: log URL + `status_reason`, record `Link Health Status = Dead`, continue to the next listing.
 
-## Step 4: Extract Structured Data (plan Step 2d)
-
-From each validated listing page, extract every available field:
-
-| Field | Where to find |
-|-------|---------------|
-| Business Name | Page title, heading, listing header |
-| Industry | Category tags, description |
-| Location (City, State) | Address or location field |
-| Asking Price | Price field, financial summary |
-| Revenue (latest year) | Financial details section |
-| EBITDA or SDE | Financial details section |
-| Years in Business | Established date or "years" field |
-| Employee Count | Staffing section |
-| Broker Name / Contact | Contact section, listing agent |
-| 2024 Revenue / 2024 Cash Flow | Financial details |
-| 2025 Revenue / 2025 Cash Flow | Financial details (if disclosed) |
-
-For any field not present on the listing page, mark it "needs broker follow-up" — **do not fabricate values**.
+The detailed validation rules (negative signals, redirect handling, BizBuySell 30 s → 90 s backoff, max 3 attempts) and the extraction field table now live in the subagent definition — keep them in sync there, not here.
 
 ## Step 5: Deduplicate Against Airtable — with Price-Drop Detection (plan Step 2e)
 
@@ -165,9 +147,10 @@ Query existing records from table `tblSmNrHROMLm7vOS` (base `appOsvuyy5eK43QTx`)
 For EVERY new lead and EVERY price-drop update:
 
 1. **Create the output directory:** `output/reports/{listing-id}/`. Save the extracted structured data as JSON and copy in the screenshot.
-2. **Invoke the prospect-evaluation skill** (`.claude/skills/prospect-evaluation/skill.md`) with the lead data — business name, industry, location, financials, employee count, asking price, broker info, direct listing URL, screenshot path. It runs: Buy Box screening (6 hard criteria) → 26-field scorecard → 0–100 lead score with per-line math → full deal memo.
-3. **Capture outputs:** `output/reports/{listing-id}/{slug}-report.md` and `output/reports/{listing-id}/{slug}-report.html`.
-4. **Extract the lead score** from the generated report header.
+2. **Invoke the `prospect-scorer` subagent** (`.claude/agents/prospect-scorer.md`, Opus — it preloads the prospect-evaluation skill) via the Agent tool with the lead record JSON, the screenshot path, and `output_dir`. It runs the full evaluation — Buy Box screening (6 hard criteria) → 26-field scorecard → 0–100 lead score with per-line math → full deal memo — and writes the **Markdown report only**. **Do not load the prospect-evaluation skill or write deal memos in this (main) context.** Scoring is the one deliberately-expensive step; everything else in this pipeline stays on the cheaper orchestrator/extractor models.
+3. **Parse the subagent's JSON return** (strip any code fence or one-line preamble — take the JSON object): `lead_score`, `score_denominator`, `buy_box`, `suggested_disposition`, `report_md`, `one_line_summary`. Verify `report_md` exists on disk; if missing, re-invoke once before flagging the lead for manual review.
+3b. **Render the HTML report deterministically** — never write report HTML from a model: run `python3 scripts/build_report_html.py --any output/reports/{listing-id}/` and verify `{slug}-report.html` now exists next to the `.md`. That HTML path is what goes into the Airtable `Prospect Eval Report` field.
+4. **Use the returned `lead_score` and `one_line_summary`** for the Airtable record and Notes — never re-derive them from the report body in this context.
 
 Every lead now enters the pipeline already evaluated — no raw, unscored leads.
 
@@ -238,7 +221,13 @@ The daily dashboard filters on `Disposition`: Section B shows `Active` leads; Se
 
 ## Step 10: Generate the Daily HTML Dashboard (plan Step 7)
 
-Generate `output/dashboards/dashboard_YYYY-MM-DD.html` from the template at `templates/daily-dashboard.html`.
+**Never emit dashboard HTML from the model.** Instead:
+
+1. Write the dashboard **context JSON** to `output/run_state/dashboard_data_YYYY-MM-DD.json`. The exact context contract (keys, per-lead fields, pre-formatted price strings) is documented in the header comment of `templates/daily-dashboard.html` — follow it precisely. Lead lists may be written in any order; the renderer sorts by score descending.
+2. Run `python3 scripts/build_dashboard_html.py output/run_state/dashboard_data_YYYY-MM-DD.json` — it renders the Jinja2 template to `output/dashboards/dashboard_YYYY-MM-DD.html`.
+3. Verify the script printed its success line and the HTML file exists.
+
+The four sections below describe what belongs in the context JSON:
 
 - **Section A — Last Night's New Finds (+ Price Drops):** all new leads from this run plus all price-drop updates, sorted by lead score descending. Columns: Rank, Score, Business Name, Industry, State, Asking Price, EBITDA, Source, Report Link. Price drops show a "PRICE DROP" badge with "was $X → now $Y". Manual submissions from the same day also appear here.
 - **Section B — Running Queue:** all Airtable records where `Disposition = "Active"`, regardless of when added, sorted by score descending, with a `Date Added` column for age.

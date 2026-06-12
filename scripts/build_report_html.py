@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 """
-build_report_html.py -- deterministic renderer for off-market prospect-evaluation reports.
+build_report_html.py -- deterministic renderer for prospect-evaluation reports.
 
 Converts every {slug}-report.md under a directory into a dark-themed
 {slug}-report.html: header banner, value-colored score badge, a contents
 sidebar, properly rendered tables.
 
-This file is the SINGLE SOURCE OF TRUTH for off-market report styling. The
-off-market-search pipeline writes the markdown (.md); this script -- run by
-run-offmarket-search.sh after every pipeline run -- produces the .html. Report
-styling is therefore deterministic code, not something an LLM run formats by
-hand. To change report styling, edit CSS / TEMPLATE here and re-run.
+This file is the SINGLE SOURCE OF TRUTH for report styling. The pipelines
+write the markdown (.md); this script produces the .html. Report styling is
+therefore deterministic code, not something an LLM run formats by hand. To
+change report styling, edit CSS / TEMPLATE here and re-run.
 
-Usage:  python3 scripts/build_report_html.py [path]
+Two callers, two modes:
+  - run-offmarket-search.sh (no flag): renders ONLY off-market reports and
+    skips the rest -- the original behavior, unchanged.
+  - overnight-search pipeline (--any): renders any report .md regardless of
+    source; off-market reports get the OFF-MARKET chip, others get none.
+
+Usage:  python3 scripts/build_report_html.py [--any] [path]
         path defaults to output/reports; may be a directory or a single .md file
 """
 import sys, os, re, glob, html
@@ -102,9 +107,10 @@ def score_class(s):
     return 'high' if s >= 75 else ('mid' if s >= 50 else 'low')
 
 
-def render_md(md_path):
+def render_md(md_path, any_source=False):
     text = open(md_path, encoding='utf-8').read()
-    if 'off-market' not in text.lower():
+    is_offmarket = 'off-market' in text.lower()
+    if not is_offmarket and not any_source:
         return 'skip'
     lines = text.split('\n')
     title = os.path.basename(md_path)
@@ -149,15 +155,19 @@ def render_md(md_path):
     else:
         scorebox = ''
 
+    chip = (' <span class="chip offmarket">OFF-MARKET</span>'
+            if is_offmarket else '')
+    foot = ('EarnedOut &mdash; %sprospect evaluation '
+            '&middot; rendered by scripts/build_report_html.py'
+            % ('off-market ' if is_offmarket else ''))
     out = TEMPLATE
     for tok, val in [('{{CSS}}', CSS),
                      ('{{TITLE}}', html.escape(title)),
-                     ('{{CHIP}}', ' <span class="chip offmarket">OFF-MARKET</span>'),
+                     ('{{CHIP}}', chip),
                      ('{{META}}', metaline),
                      ('{{SCOREBOX}}', scorebox),
                      ('{{NAV}}', nav or '<span class="toc-empty">&mdash;</span>'),
-                     ('{{FOOT}}', 'EarnedOut &mdash; off-market prospect evaluation '
-                                  '&middot; rendered by scripts/build_report_html.py'),
+                     ('{{FOOT}}', foot),
                      ('{{BODY}}', body_html)]:
         out = out.replace(tok, val)
 
@@ -167,7 +177,10 @@ def render_md(md_path):
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else 'output/reports'
+    args = sys.argv[1:]
+    any_source = '--any' in args
+    args = [a for a in args if a != '--any']
+    path = args[0] if args else 'output/reports'
     if os.path.isfile(path) and path.endswith('.md'):
         mds = [path]
     else:
@@ -175,7 +188,7 @@ def main():
     ok = skip = err = 0
     for p in sorted(mds):
         try:
-            r = render_md(p)
+            r = render_md(p, any_source=any_source)
         except Exception as e:
             print('  ERROR %s: %s' % (p, e))
             err += 1
@@ -184,7 +197,7 @@ def main():
             ok += 1
         else:
             skip += 1
-    print('build_report_html: rendered %d off-market report(s); '
+    print('build_report_html: rendered %d report(s); '
           'skipped %d non-off-market; %d error(s); %d .md file(s) seen'
           % (ok, skip, err, len(mds)))
 

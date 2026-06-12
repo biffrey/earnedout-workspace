@@ -52,7 +52,11 @@ PROMPT='Run the EarnedOut overnight published-listing search now. Use the overni
 
 {
   echo "=== overnight-search run started $(date -u +%FT%TZ) ==="
-  claude -p "$PROMPT" --dangerously-skip-permissions
+  # Model routing: the orchestrator (search, dedup, Airtable writes, outreach
+  # templating) runs on Sonnet; per-listing extraction is delegated to the Haiku
+  # listing-processor agent and scoring to the Opus prospect-scorer agent (see
+  # .claude/agents/). Scoring is the only step that earns the strong model.
+  claude -p "$PROMPT" --model sonnet --dangerously-skip-permissions
   rc=$?
   echo "=== overnight-search run finished $(date -u +%FT%TZ) (exit $rc) ==="
 } >> "$LOG" 2>&1
